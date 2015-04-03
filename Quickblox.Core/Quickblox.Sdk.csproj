@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Quickblox.Sdk</RootNamespace>
+    <AssemblyName>Quickblox.Sdk</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
+    <TargetPlatform Include="Windows, Version=8.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Builder\DateTimeBuilder.cs" />
+    <Compile Include="Builder\HmacshaBuilder.cs" />
+    <Compile Include="Builder\RequestHeadersBuilder.cs" />
+    <Compile Include="Builder\UrlBuilder.cs" />
+    <Compile Include="GeneralDataModel\PagedResponse.cs" />
+    <Compile Include="Modules\ChatModule\ChatClient.cs" />
+    <Compile Include="Modules\ChatModule\Models\DialogType.cs" />
+    <Compile Include="Modules\ChatModule\Requests\CreateDialogRequest.cs" />
+    <Compile Include="Modules\ChatModule\Requests\CreateMessageRequest.cs" />
+    <Compile Include="Modules\ChatModule\Requests\UpdateDialogRequest.cs" />
+    <Compile Include="Modules\ChatModule\Requests\UpdateMessageRequest.cs" />
+    <Compile Include="Modules\ChatModule\Models\Attachment.cs" />
+    <Compile Include="Modules\ChatModule\Responses\CreateDialogResponse.cs" />
+    <Compile Include="Modules\ChatModule\Responses\CreateMessageResponse.cs" />
+    <Compile Include="Modules\ChatModule\Models\Dialog.cs" />
+    <Compile Include="GeneralDataModel\ListResponse.cs" />
+    <Compile Include="Modules\ChatModule\Models\Message.cs" />
+    <Compile Include="Modules\ChatModule\Responses\RetrieveDialogsResponse.cs" />
+    <Compile Include="Modules\ChatModule\Responses\RetrieveMessagesResponse.cs" />
+    <Compile Include="Modules\ChatModule\Responses\UpdateDialogResponse.cs" />
+    <Compile Include="Modules\CoreModule\CoreClient.cs" />
+    <Compile Include="Modules\CoreModule\Models\SocialScope.cs" />
+    <Compile Include="Modules\CoreModule\Response\AccountResponse.cs" />
+    <Compile Include="Modules\CoreModule\Response\LoginResponse.cs" />
+    <Compile Include="Modules\CoreModule\Models\Session.cs" />
+    <Compile Include="Modules\CoreModule\Response\SessionResponse.cs" />
+    <Compile Include="Modules\CoreModule\Models\Device.cs" />
+    <Compile Include="Modules\CoreModule\Requests\LoginRequest.cs" />
+    <Compile Include="Modules\CoreModule\Requests\SessionRequest.cs" />
+    <Compile Include="Modules\CoreModule\Models\SocialNetworkKey.cs" />
+    <Compile Include="Modules\CoreModule\Models\User.cs" />
+    <Compile Include="GeneralDataModel\Error.cs" />
+    <Compile Include="GeneralDataModel\ErrorResponse.cs" />
+    <Compile Include="Http\HttpBase.cs" />
+    <Compile Include="Http\HttpHeadersExtensions.cs" />
+    <Compile Include="GeneralDataModel\HttpResponse.cs" />
+    <Compile Include="Http\HttpService.cs" />
+    <Compile Include="Modules\MessagesModule\Models\Device.cs" />
+    <Compile Include="Modules\MessagesModule\Models\Event.cs" />
+    <Compile Include="Modules\MessagesModule\Models\EventItem.cs" />
+    <Compile Include="Modules\MessagesModule\Models\EventType.cs" />
+    <Compile Include="Modules\MessagesModule\Models\NotificationChannel.cs" />
+    <Compile Include="Modules\MessagesModule\Models\NotificationChannelType.cs" />
+    <Compile Include="Modules\MessagesModule\Models\NotificationType.cs" />
+    <Compile Include="Modules\MessagesModule\Models\PushToken.cs" />
+    <Compile Include="Modules\MessagesModule\MessagesClient.cs" />
+    <Compile Include="Modules\MessagesModule\Models\PushType.cs" />
+    <Compile Include="Modules\MessagesModule\Models\SubscribersSelector.cs" />
+    <Compile Include="Modules\MessagesModule\Requests\CreateEventRequest.cs" />
+    <Compile Include="Modules\MessagesModule\Requests\CreatePushTokenRequest.cs" />
+    <Compile Include="Modules\MessagesModule\Requests\CreateSubscriptionsRequest.cs" />
+    <Compile Include="Modules\MessagesModule\Models\CreateEvent.cs" />
+    <Compile Include="Modules\MessagesModule\Models\User.cs" />
+    <Compile Include="Modules\MessagesModule\Response\CreateEventResponse.cs" />
+    <Compile Include="Modules\MessagesModule\Response\CreatePushTokenResponse.cs" />
+    <Compile Include="Modules\MessagesModule\Response\CreateSubscriptionResponse.cs" />
+    <Compile Include="Modules\MessagesModule\Models\Subscription.cs" />
+    <Compile Include="Modules\MessagesModule\Response\GetEventsResponse.cs" />
+    <Compile Include="Modules\UsersModule\Responses\RetrieveUsersResponse.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuickbloxClient.cs" />
+    <Compile Include="QuickbloxMethods.cs" />
+    <Compile Include="Serializer\ISerializer.cs" />
+    <Compile Include="Serializer\JsonSerializer.cs" />
+    <Compile Include="Serializer\NewtonsoftJsonSerializer.cs" />
+    <Compile Include="BaseRequestSettings.cs" />
+    <Compile Include="Modules\UsersModule\Requests\User.cs" />
+    <Compile Include="Modules\UsersModule\Requests\UserSignUpRequest.cs" />
+    <Compile Include="Modules\UsersModule\Responses\User.cs" />
+    <Compile Include="Modules\UsersModule\Responses\UserResponse.cs" />
+    <Compile Include="Modules\UsersModule\UsersClient.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
