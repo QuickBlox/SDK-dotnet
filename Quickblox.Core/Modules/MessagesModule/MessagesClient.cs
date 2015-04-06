@@ -103,10 +103,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return resultPushTokenResponse;
         }
 
-        public async Task<HttpResponse<PagedResponse<EventItem>>> GetEvents()
+        public async Task<HttpResponse<GetSubscriptionsResponse>> GetEvents()
         {
             this.quickbloxClient.CheckIsInitialized();
-            var resultPushTokenResponse = await HttpService.GetAsync<PagedResponse<EventItem>>(this.quickbloxClient.ApiEndPoint,
+            var resultPushTokenResponse = await HttpService.GetAsync<GetSubscriptionsResponse>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.EventMethod,
                                                                                                         new NewtonsoftJsonSerializer(),
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
