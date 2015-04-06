@@ -5,6 +5,7 @@ using Windows.UI.Xaml.Media;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Serializer;
+using Quickblox.Sdk.GeneralDataModel;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Requests;
@@ -102,10 +103,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return resultPushTokenResponse;
         }
 
-        public async Task<HttpResponse<GetEventsResponse>> GetEvents()
+        public async Task<HttpResponse<PagedResponse<EventItem>>> GetEvents()
         {
             this.quickbloxClient.CheckIsInitialized();
-            var resultPushTokenResponse = await HttpService.GetAsync<GetEventsResponse>(this.quickbloxClient.ApiEndPoint,
+            var resultPushTokenResponse = await HttpService.GetAsync<PagedResponse<EventItem>>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.EventMethod,
                                                                                                         new NewtonsoftJsonSerializer(),
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));

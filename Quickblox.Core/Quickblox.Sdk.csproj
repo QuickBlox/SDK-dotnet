@@ -95,7 +95,6 @@
     <Compile Include="Modules\MessagesModule\Response\CreatePushTokenResponse.cs" />
     <Compile Include="Modules\MessagesModule\Response\CreateSubscriptionResponse.cs" />
     <Compile Include="Modules\MessagesModule\Models\Subscription.cs" />
-    <Compile Include="Modules\MessagesModule\Response\GetEventsResponse.cs" />
     <Compile Include="Modules\UsersModule\Responses\RetrieveUsersResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuickbloxClient.cs" />
