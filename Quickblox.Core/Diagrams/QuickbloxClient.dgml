@@ -324,7 +324,7 @@
     <Alias n="5" Id="Namespace=Quickblox.Sdk.Modules.AuthModule" />
     <Alias n="6" Id="Type=CoreClient" />
     <Alias n="7" Id="(@1 @5 @6)" />
-    <Alias n="8" Id="Namespace=Quickblox.Sdk.Modules.MessagesModule" />
+    <Alias n="8" Id="Namespace=Quickblox.Sdk.Modules.NotificationModule" />
     <Alias n="9" Id="Type=MessagesClient" />
     <Alias n="10" Id="(@1 @8 @9)" />
     <Alias n="11" Id="Namespace=Quickblox.Sdk" />
@@ -336,7 +336,7 @@
     <Alias n="17" Id="(@1 @15 @16)" />
     <Alias n="18" Id="(@1 Namespace=Quickblox.Sdk.Modules.UsersModule Type=UsersClient)" />
     <Alias n="19" Id="(@1 @2 @3 Member=(Name=CreateMessage OverloadingParameters=[(@1 Namespace=Quickblox.Sdk.Modules.ChatModule.Requests Type=CreateMessageRequest)]))" />
-    <Alias n="20" Id="Namespace=Quickblox.Sdk.Modules.MessagesModule.Models" />
+    <Alias n="20" Id="Namespace=Quickblox.Sdk.Modules.NotificationModule.Models" />
     <Alias n="21" Id="(@1 @8 @9 Member=(Name=CreateSubscriptions OverloadingParameters=[(@1 @20 Type=NotificationChannelType)]))" />
     <Alias n="22" Id="(@1 @2 @3 Member=(Name=.ctor OverloadingParameters=[@14]))" />
     <Alias n="23" Id="(@1 @5 @6 Member=(Name=.ctor OverloadingParameters=[@14]))" />

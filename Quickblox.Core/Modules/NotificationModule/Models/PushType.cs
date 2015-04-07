@@ -1,4 +1,4 @@
-﻿namespace Quickblox.Sdk.Modules.MessagesModule.Models
+﻿namespace Quickblox.Sdk.Modules.NotificationModule.Models
 {
     public enum PushType
     {
