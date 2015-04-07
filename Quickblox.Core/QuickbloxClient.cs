@@ -8,7 +8,7 @@ using Quickblox.Sdk.Core.Http;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.Http;
-using Quickblox.Sdk.Modules.MessagesModule;
+using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 
 namespace Quickblox.Sdk
@@ -37,7 +37,7 @@ namespace Quickblox.Sdk
             this.CoreClient = new AuthorizationClient(this);
             this.ChatClient = new ChatClient(this);
             this.UsersClient = new UsersClient(this);
-            this.MessagesClient = new MessagesClient(this);
+            this.NotificationClient = new NotificationClient(this);
         }
 
         #endregion
@@ -56,7 +56,7 @@ namespace Quickblox.Sdk
 
         public UsersClient UsersClient { get; private set; }
 
-        public MessagesClient MessagesClient { get; private set; }
+        public NotificationClient NotificationClient { get; private set; }
 
         /// <summary>
         /// Возварщает время последнего запроса в UTC.

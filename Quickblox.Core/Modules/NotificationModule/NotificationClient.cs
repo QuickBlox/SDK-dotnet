@@ -4,18 +4,18 @@ using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Serializer;
 using Quickblox.Sdk.Http;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Requests;
-using Quickblox.Sdk.Modules.MessagesModule.Response;
-using Environment = Quickblox.Sdk.Modules.MessagesModule.Models.Environment;
+using Quickblox.Sdk.Modules.NotificationModule.Models;
+using Quickblox.Sdk.Modules.NotificationModule.Requests;
+using Quickblox.Sdk.Modules.NotificationModule.Response;
+using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 
-namespace Quickblox.Sdk.Modules.MessagesModule
+namespace Quickblox.Sdk.Modules.NotificationModule
 {
-    public class MessagesClient
+    public class NotificationClient
     {
         private readonly QuickbloxClient quickbloxClient;
 
-        public MessagesClient(QuickbloxClient client)
+        public NotificationClient(QuickbloxClient client)
         {
             this.quickbloxClient = client;
         }

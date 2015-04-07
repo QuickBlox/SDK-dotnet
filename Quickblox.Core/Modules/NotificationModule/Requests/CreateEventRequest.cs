@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.NotificationModule.Models;
 
-namespace Quickblox.Sdk.Modules.MessagesModule.Requests
+namespace Quickblox.Sdk.Modules.NotificationModule.Requests
 {
     public class CreateEventRequest : BaseRequestSettings
     {
