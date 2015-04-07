@@ -119,6 +119,7 @@
   <ItemGroup>
     <None Include="Diagrams\CoreClient.dgml" />
     <None Include="Diagrams\HttpService.dgml" />
+    <None Include="Diagrams\MessagesClient.cd" />
     <None Include="Diagrams\QuickbloxClient.dgml" />
     <None Include="Diagrams\UserClient.dgml" />
     <None Include="packages.config" />
