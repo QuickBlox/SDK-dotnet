@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Quickblox.Sdk.Modules.CoreModule.Models;
+using Quickblox.Sdk.Modules.AuthModule.Models;
 
-namespace Quickblox.Sdk.Modules.CoreModule.Requests
+namespace Quickblox.Sdk.Modules.AuthModule.Requests
 {
     public class SessionRequest : BaseRequestSettings
     {

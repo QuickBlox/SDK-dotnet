@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Quickblox.Sdk.Modules.CoreModule.Models;
+using Quickblox.Sdk.Modules.AuthModule.Models;
 
-namespace Quickblox.Sdk.Modules.CoreModule.Response
+namespace Quickblox.Sdk.Modules.AuthModule.Response
 {
     public class SessionResponse
     {

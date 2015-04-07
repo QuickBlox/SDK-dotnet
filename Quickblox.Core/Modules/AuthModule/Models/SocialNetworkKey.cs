@@ -1,4 +1,4 @@
-﻿namespace Quickblox.Sdk.Modules.CoreModule.Models
+﻿namespace Quickblox.Sdk.Modules.AuthModule.Models
 {
     using System;
     using Newtonsoft.Json;

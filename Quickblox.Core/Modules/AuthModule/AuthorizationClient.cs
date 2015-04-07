@@ -4,21 +4,21 @@ using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Serializer;
-using Quickblox.Sdk.Modules.CoreModule.Requests;
-using Quickblox.Sdk.Modules.CoreModule.Response;
+using Quickblox.Sdk.Modules.AuthModule.Requests;
+using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.Http;
-using Quickblox.Sdk.Modules.CoreModule.Models;
+using Quickblox.Sdk.Modules.AuthModule.Models;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Quickblox.Sdk.Modules.CoreModule
+namespace Quickblox.Sdk.Modules.AuthModule
 {
-    public class CoreClient
+    public class AuthorizationClient
     {
         private readonly QuickbloxClient quickbloxClient;
 
-        public CoreClient(QuickbloxClient client)
+        public AuthorizationClient(QuickbloxClient client)
         {
             this.quickbloxClient = client;
         }

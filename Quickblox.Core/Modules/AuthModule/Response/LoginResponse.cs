@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Quickblox.Sdk.Modules.CoreModule.Response
+namespace Quickblox.Sdk.Modules.AuthModule.Response
 {
     public class LoginResponse
     {

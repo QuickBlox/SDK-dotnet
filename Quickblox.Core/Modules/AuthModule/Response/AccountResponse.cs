@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Quickblox.Sdk.Modules.CoreModule.Response
+namespace Quickblox.Sdk.Modules.AuthModule.Response
 {
     [DataContract]
     public class AccountResponse 

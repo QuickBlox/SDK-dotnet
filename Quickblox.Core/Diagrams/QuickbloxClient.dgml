@@ -321,7 +321,7 @@
     <Alias n="2" Id="Namespace=Quickblox.Sdk.Modules.ChatModule" />
     <Alias n="3" Id="Type=ChatClient" />
     <Alias n="4" Id="(@1 @2 @3)" />
-    <Alias n="5" Id="Namespace=Quickblox.Sdk.Modules.CoreModule" />
+    <Alias n="5" Id="Namespace=Quickblox.Sdk.Modules.AuthModule" />
     <Alias n="6" Id="Type=CoreClient" />
     <Alias n="7" Id="(@1 @5 @6)" />
     <Alias n="8" Id="Namespace=Quickblox.Sdk.Modules.MessagesModule" />
@@ -349,7 +349,7 @@
     <Alias n="30" Id="(@1 @5 @6 Member=(Name=DeleteSession @27))" />
     <Alias n="31" Id="(@1 @8 @9 Member=(Name=DeleteSubscriptions @27))" />
     <Alias n="32" Id="(@1 @8 @9 Member=(Name=CreateEvent OverloadingParameters=[(@1 @20 Type=NotificationType),(@1 @20 Type=Environment)]))" />
-    <Alias n="33" Id="(@1 @5 @6 Member=(Name=BuildSignatureFromJsonAttribute OverloadingParameters=[@26,(@1 Namespace=Quickblox.Sdk.Modules.CoreModule.Requests Type=SessionRequest)]))" />
+    <Alias n="33" Id="(@1 @5 @6 Member=(Name=BuildSignatureFromJsonAttribute OverloadingParameters=[@26,(@1 Namespace=Quickblox.Sdk.Modules.AuthModule.Requests Type=SessionRequest)]))" />
     <Alias n="34" Id="(@1 @11 @13 Member=(Name=.ctor OverloadingParameters=[@26,@26]))" />
     <Alias n="35" Id="(@1 @5 @6 Member=(Name=CreateSessionRequest OverloadingParameters=[@26,@26]))" />
     <Alias n="36" Id="(@1 @8 @9 Member=(Name=EditEvent OverloadingParameters=[@26,@26,(@25 Namespace=System Type=Boolean)]))" />
@@ -358,8 +358,8 @@
     <Alias n="39" Id="(@1 @2 @3 Member=(Name=CreateDialog OverloadingParameters=[@26,(@1 Namespace=Quickblox.Sdk.Modules.ChatModule.Models Type=DialogType),@26,@26]))" />
     <Alias n="40" Id="(@1 @5 @6 Member=(Name=ByEmail OverloadingParameters=[@26,@26,@26,@26]))" />
     <Alias n="41" Id="(@1 @5 @6 Member=(Name=ByLogin OverloadingParameters=[@26,@26,@26,@26]))" />
-    <Alias n="42" Id="(@1 @5 @6 Member=(Name=CreateSessionWithEmail OverloadingParameters=[@26,@26,@26,@26,@26,@26,(@25 Namespace=System Type=(Name=Nullable GenericParameterCount=1 GenericArguments=[(@1 Namespace=Quickblox.Sdk.Modules.CoreModule.Models Type=SocialScope)])),@26,@26]))" />
-    <Alias n="43" Id="(@1 @5 @6 Member=(Name=CreateSessionWithLogin OverloadingParameters=[@26,@26,@26,@26,@26,@26,(@25 Namespace=System Type=(Name=Nullable GenericParameterCount=1 GenericArguments=[(@1 Namespace=Quickblox.Sdk.Modules.CoreModule.Models Type=SocialScope)])),@26,@26]))" />
+    <Alias n="42" Id="(@1 @5 @6 Member=(Name=CreateSessionWithEmail OverloadingParameters=[@26,@26,@26,@26,@26,@26,(@25 Namespace=System Type=(Name=Nullable GenericParameterCount=1 GenericArguments=[(@1 Namespace=Quickblox.Sdk.Modules.AuthModule.Models Type=SocialScope)])),@26,@26]))" />
+    <Alias n="43" Id="(@1 @5 @6 Member=(Name=CreateSessionWithLogin OverloadingParameters=[@26,@26,@26,@26,@26,@26,(@25 Namespace=System Type=(Name=Nullable GenericParameterCount=1 GenericArguments=[(@1 Namespace=Quickblox.Sdk.Modules.AuthModule.Models Type=SocialScope)])),@26,@26]))" />
     <Alias n="44" Id="(@1 @11 Type=NotInitializedException Member=.ctor)" />
     <Alias n="45" Id="(@1 @11 @13 Member=accountKey)" />
     <Alias n="46" Id="(@1 @11 @13 Member=ApiEndPoint)" />

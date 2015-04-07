@@ -1,7 +1,7 @@
 ﻿using System;
-using Quickblox.Sdk.Modules.CoreModule.Models;
+using Quickblox.Sdk.Modules.AuthModule.Models;
 
-namespace Quickblox.Sdk.Modules.CoreModule.Requests
+namespace Quickblox.Sdk.Modules.AuthModule.Requests
 {
     using Newtonsoft.Json;
 

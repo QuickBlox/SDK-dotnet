@@ -5,8 +5,8 @@ using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Modules.ChatModule;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Http;
-using Quickblox.Sdk.Modules.CoreModule;
-using Quickblox.Sdk.Modules.CoreModule.Response;
+using Quickblox.Sdk.Modules.AuthModule;
+using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.MessagesModule;
 using Quickblox.Sdk.Modules.UsersModule;
@@ -34,7 +34,7 @@ namespace Quickblox.Sdk
             this.baseUri = baseUri;
             this.accountKey = accountKey;
 
-            this.CoreClient = new CoreClient(this);
+            this.CoreClient = new AuthorizationClient(this);
             this.ChatClient = new ChatClient(this);
             this.UsersClient = new UsersClient(this);
             this.MessagesClient = new MessagesClient(this);
@@ -50,7 +50,7 @@ namespace Quickblox.Sdk
 
         #region Properties
 
-        public CoreClient CoreClient { get; private set; }
+        public AuthorizationClient CoreClient { get; private set; }
 
         public ChatClient ChatClient { get; private set; }
 
