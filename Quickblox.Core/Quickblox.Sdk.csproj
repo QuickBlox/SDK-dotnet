@@ -43,6 +43,7 @@
     <Compile Include="Builder\RequestHeadersBuilder.cs" />
     <Compile Include="Builder\UrlBuilder.cs" />
     <Compile Include="GeneralDataModel\PagedResponse.cs" />
+    <Compile Include="Modules\AuthModule\Models\FullUser.cs" />
     <Compile Include="Modules\ChatModule\ChatClient.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogType.cs" />
     <Compile Include="Modules\ChatModule\Requests\CreateDialogRequest.cs" />
