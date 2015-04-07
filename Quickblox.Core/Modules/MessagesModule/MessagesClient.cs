@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Media;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Serializer;
-using Quickblox.Sdk.GeneralDataModel;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Requests;

@@ -104,9 +104,9 @@
     <Compile Include="Serializer\JsonSerializer.cs" />
     <Compile Include="Serializer\NewtonsoftJsonSerializer.cs" />
     <Compile Include="BaseRequestSettings.cs" />
-    <Compile Include="Modules\UsersModule\Requests\User.cs" />
+    <Compile Include="Modules\UsersModule\Requests\UserRequest.cs" />
     <Compile Include="Modules\UsersModule\Requests\UserSignUpRequest.cs" />
-    <Compile Include="Modules\UsersModule\Responses\User.cs" />
+    <Compile Include="Modules\UsersModule\Models\User.cs" />
     <Compile Include="Modules\UsersModule\Responses\UserResponse.cs" />
     <Compile Include="Modules\UsersModule\UsersClient.cs" />
   </ItemGroup>

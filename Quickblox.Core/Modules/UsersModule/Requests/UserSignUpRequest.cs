@@ -10,6 +10,6 @@ namespace Quickblox.Sdk.Modules.UsersModule.Requests
     public class UserSignUpRequest : BaseRequestSettings
     {
         [JsonProperty("user")]
-        public User User { get; set; }
+        public UserRequest User { get; set; }
     }
 }

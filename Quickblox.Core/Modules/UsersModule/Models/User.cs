@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Quickblox.Sdk.Modules.UsersModule.Responses
+namespace Quickblox.Sdk.Modules.UsersModule.Models
 {
     /// <summary>
     /// User that is returned in response for user sign up.
