@@ -2,7 +2,7 @@
 
 namespace Quickblox.Sdk.Modules.ChatModule.Responses
 {
-    public class CreateDialogResponse
+    public class DialogResponse
     {
         [JsonProperty("_id")]
         public string Id { get; set; }

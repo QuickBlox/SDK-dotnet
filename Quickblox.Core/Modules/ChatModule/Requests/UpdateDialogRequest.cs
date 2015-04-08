@@ -4,6 +4,9 @@ namespace Quickblox.Sdk.Modules.ChatModule.Requests
 {
     public class UpdateDialogRequest
     {
+        [JsonIgnore()]
+        public string DialogId { get; set; }
+
         [JsonProperty("name")]
         public string Name { get; set; }
 

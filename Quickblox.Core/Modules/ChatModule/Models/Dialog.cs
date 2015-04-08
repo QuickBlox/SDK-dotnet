@@ -14,7 +14,7 @@ namespace Quickblox.Sdk.Modules.Models
         public string LastMessageDateSent { get; set; }
 
         [JsonProperty("last_message_user_id")]
-        public int LastMessageUserId { get; set; }
+        public int? LastMessageUserId { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -29,7 +29,7 @@ namespace Quickblox.Sdk.Modules.Models
         public int Type { get; set; }
 
         [JsonProperty("unread_messages_count")]
-        public int UnreadMessagesCount { get; set; }
+        public int? UnreadMessagesCount { get; set; }
 
         [JsonProperty("xmpp_room_jid")]
         public string XmppRoomJid { get; set; }

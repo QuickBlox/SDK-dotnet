@@ -53,7 +53,7 @@
     <Compile Include="Modules\ChatModule\Requests\UpdateDialogRequest.cs" />
     <Compile Include="Modules\ChatModule\Requests\UpdateMessageRequest.cs" />
     <Compile Include="Modules\ChatModule\Models\Attachment.cs" />
-    <Compile Include="Modules\ChatModule\Responses\CreateDialogResponse.cs" />
+    <Compile Include="Modules\ChatModule\Responses\DialogResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\CreateMessageResponse.cs" />
     <Compile Include="Modules\ChatModule\Models\Dialog.cs" />
     <Compile Include="GeneralDataModel\ListResponse.cs" />
