@@ -13,11 +13,6 @@ namespace Quickblox.Sdk
         [JsonIgnore]
         [IgnoreDataMember]
         public IDictionary<String, String> Headers { get; set; }
-
-        
-        [JsonIgnore]
-        [IgnoreDataMember]
-        public IDictionary<String, String> Parameters { get; set; }
     }
 
    

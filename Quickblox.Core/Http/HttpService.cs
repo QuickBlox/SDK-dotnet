@@ -29,15 +29,25 @@ namespace Quickblox.Sdk.Http
             return await ParseResult<TResult>(serializer, response);
         }
 
-        public static async Task<HttpResponse<TResult>> GetAsync<TResult, TSettings>(String baseAddress,
-            String requestUri, ISerializer serializer, TSettings requestSettings,
-            IDictionary<String, IEnumerable<String>> headers = null,
-            CancellationToken token = default(CancellationToken)) where TSettings : BaseRequestSettings
+        public static async Task<HttpResponse<TResult>> GetAsync<TResult, TSettings>(String baseAddress, String requestUri, ISerializer serializer, TSettings requestSettings, 
+            IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken)) where TSettings : BaseRequestSettings
         {
-            if (requestSettings != null && requestSettings.Parameters != null)
+            if (requestSettings != null)
             {
                 if (requestUri == null) requestUri = "";
                 requestUri += "?" + UrlBuilder.Build(requestSettings);
+            }
+            var response = await GetBaseAsync(baseAddress, requestUri, headers, token).ConfigureAwait(false);
+            return await ParseResult<TResult>(serializer, response);
+        }
+
+        public static async Task<HttpResponse<TResult>> GetAsync<TResult>(String baseAddress, String requestUri, ISerializer serializer, IEnumerable<KeyValuePair<String, String>> nameValueCollection,
+            IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken))
+        {
+            if (nameValueCollection != null)
+            {
+                if (requestUri == null) requestUri = "";
+                requestUri += "?" + UrlBuilder.Build(nameValueCollection);
             }
             var response = await GetBaseAsync(baseAddress, requestUri, headers, token).ConfigureAwait(false);
             return await ParseResult<TResult>(serializer, response);

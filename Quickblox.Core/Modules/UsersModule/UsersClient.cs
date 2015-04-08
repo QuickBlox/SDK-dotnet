@@ -167,7 +167,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var byEmail = new UserRequest() { Email = email };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, new NewtonsoftJsonSerializer(), byEmail, headers);
+            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByEmailMethod, new NewtonsoftJsonSerializer(), byEmail, headers);
         }
 
         /// <summary>
