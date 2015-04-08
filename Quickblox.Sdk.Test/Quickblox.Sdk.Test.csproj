@@ -115,6 +115,7 @@
   <ItemGroup>
     <Compile Include="AssertEx.cs" />
     <Compile Include="GlobalConstant.cs" />
+    <Compile Include="Modules\UsersModule\UsersClientTest.cs" />
     <Compile Include="QuickbloxClientTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
