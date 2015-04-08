@@ -5,14 +5,14 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 
-namespace Quickblox.Sdk.Test.ChatModule
+namespace Quickblox.Sdk.Test.Modules.ChatModule
 {
     [TestClass]
-    public class ChatModuleTest
+    public class ChatClientTest
     {
         private QuickbloxClient client;
 
-        public ChatModuleTest()
+        public ChatClientTest()
         {
             client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey);
         }
