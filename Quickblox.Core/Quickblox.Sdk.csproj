@@ -100,6 +100,7 @@
     <Compile Include="Modules\NotificationModule\Response\CreateSubscriptionResponse.cs" />
     <Compile Include="Modules\NotificationModule\Models\Subscription.cs" />
     <Compile Include="Modules\NotificationModule\Response\GetSubscriptionsResponse.cs" />
+    <Compile Include="Modules\UsersModule\Requests\UpdateUserRequest.cs" />
     <Compile Include="Modules\UsersModule\Requests\UserRequest.cs" />
     <Compile Include="Modules\UsersModule\Responses\RetrieveUsersResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

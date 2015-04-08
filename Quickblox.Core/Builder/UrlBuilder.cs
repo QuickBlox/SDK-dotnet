@@ -41,6 +41,7 @@ namespace Quickblox.Sdk.Builder
 
         public static String Build(BaseRequestSettings settings)
         {
+            if (settings == null) throw new ArgumentNullException("settings");
             var properties = settings.GetType().GetRuntimeProperties();
             var navBody = new StringBuilder();
             foreach (

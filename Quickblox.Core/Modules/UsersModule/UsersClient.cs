@@ -96,7 +96,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> GetUser(Int32 userId)
+        public async Task<HttpResponse<UserResponse>> GetUserById(Int32 userId)
         {
             var uriBuilder = String.Format(QuickbloxMethods.GetUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -139,7 +139,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="facebookId">API User Facebook ID</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> GetUserByFacebookId(Int32 facebookId)
+        public async Task<HttpResponse<UserResponse>> GetUserByFacebookId(Int64 facebookId)
         {
             var byFacebook = new UserRequest() { FacebookId = facebookId };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -205,34 +205,13 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// <summary>
         /// Update API User by identifier
         /// </summary>
-        /// <param name="login">API User login.</param>
-        /// <param name="blobId">ID of associated blob (for example, API User photo)</param>
-        /// <param name="email">API User e-mail</param>
-        /// <param name="externalUserId">ID of API User in external system</param>
-        /// <param name="facebookId">ID of API User in Facebook</param>
-        /// <param name="twitterId">ID of API User in Twitter.</param>
-        /// <param name="fullName">The full name.</param>
-        /// <param name="phone">The phone.</param>
-        /// <param name="website">The website.</param>
-        /// <param name="tagList">The tag list.</param>
-        /// <param name="customData">User's additional information.</param>
-        /// <param name="password">New password</param>
-        /// <param name="oldPassword">Old user password (required only if new password provided).</param>
+        /// <param name="userRequest">Agregate all user parameters</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> UpdateUser(String login, Int32 blobId, String email, Int32 externalUserId, Int32 facebookId, Int32 twitterId, String fullName, String phone, String website, String[] tagList, String customData, String password, String oldPassword)
+        public async Task<HttpResponse<UserResponse>> UpdateUser(Int32 userId, UpdateUserRequest userRequest)
         {
-            var userRequest = new UserRequest()
-            {
-                Email = email,
-                ExternalUserId = externalUserId,
-                FacebookId = facebookId,
-                FullName = fullName,
-                Login = login,
-                Password = password
-            };
-            
+            var uriMethod = string.Format(QuickbloxMethods.UpdateUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UpdateUserMethod, new NewtonsoftJsonSerializer(), userRequest, headers);
+            return await HttpService.PutAsync<UserResponse, UpdateUserRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), userRequest, headers);
         }
 
         /// <summary>
