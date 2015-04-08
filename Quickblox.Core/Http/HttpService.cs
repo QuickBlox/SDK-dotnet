@@ -113,7 +113,7 @@ namespace Quickblox.Sdk.Http
 
         public static async Task<HttpResponse<TResult>> PutAsync<TResult>(String baseAddress, String requestUri,
             ISerializer serializer, IEnumerable<KeyValuePair<String, String>> nameValueCollection,
-            IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers, CancellationToken token)
+            IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers, CancellationToken token = default(CancellationToken))
         {
             HttpResponseMessage response;
             using (var httpContent = new FormUrlEncodedContent(nameValueCollection))
@@ -125,10 +125,24 @@ namespace Quickblox.Sdk.Http
             return await ParseResult<TResult>(serializer, response);
         }
 
+        public static async Task<HttpResponse<TResult>> PutAsync<TResult, TSettings>(String baseAddress, String requestUri,
+            ISerializer serializer, TSettings settings,
+            IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers, CancellationToken token = default(CancellationToken))
+        {
+            HttpResponseMessage response;
+            var body = serializer.Serialize(settings);
+            using (var httpContent = new StringContent(body, Encoding.UTF8, serializer.ContentType))
+            {
+                response = await PutBaseAsync(baseAddress, requestUri, httpContent, headers, token).ConfigureAwait(false);
+            }
+
+            return await ParseResult<TResult>(serializer, response);
+        }
+
         #endregion
 
         #endregion
-        
+
         private static async Task<HttpResponse<TResult>> ParseResult<TResult>(ISerializer serializer, HttpResponseMessage response)
         {
             var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

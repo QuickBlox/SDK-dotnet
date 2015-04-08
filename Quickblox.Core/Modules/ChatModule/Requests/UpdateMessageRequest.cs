@@ -6,5 +6,8 @@ namespace Quickblox.Sdk.Modules.ChatModule.Requests
     {
         [JsonProperty("read")]
         public string Read { get; set; }
+
+        [JsonProperty("chat_dialog_id")]
+        public string ChatDialogId { get; set; }
     }
 }

@@ -16,7 +16,19 @@
 
         public const string CreateDialogMethod = "/chat/Dialog.json";
 
-        public const string MessageMethod = "/chat/Message.json";
+        public const string GetDialogsMethod = "/chat/Dialog.json";
+
+        public const string UpdateDialogMethod = "/chat/Dialog/{0}.json";
+
+        public const string DeleteDialogMethod = "/chat/Dialog/{0}.json";
+        
+        public const string GetMessagesMethod = "/chat/Message.json?chat_dialog_id={0}";
+
+        public const string CreateMessageMethod = "/chat/Message.json";
+
+        public const string UpdateMessageMethod = "/chat/Message/{0}.json";
+
+        public const string DeleteMessageMethod = "/chat/Message/{0}.json";
 
         #endregion
 
