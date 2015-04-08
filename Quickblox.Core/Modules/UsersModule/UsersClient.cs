@@ -75,7 +75,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
                 FullName = fullName,
                 Phone = phone,
                 Website = website,
-                TagList = String.Join(",", tagList),
+                TagList = tagList == null ? null : String.Join(",", tagList),
                 CustomData = customData,
                 Password = password
             };
