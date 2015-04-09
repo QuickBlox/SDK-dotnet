@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Quickblox.Sdk.GeneralDataModel
+namespace Quickblox.Sdk.GeneralDataModel.Response
 {
     public class Error
     {

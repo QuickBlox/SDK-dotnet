@@ -6,7 +6,7 @@ using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Serializer;
 using Quickblox.Sdk.Modules.AuthModule.Requests;
 using Quickblox.Sdk.Modules.AuthModule.Response;
-using Quickblox.Sdk.Http;
+using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Modules.AuthModule.Models;
 using System.Reflection;
 using System.Text;

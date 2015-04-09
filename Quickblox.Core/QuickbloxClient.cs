@@ -7,7 +7,7 @@ using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Http;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
-using Quickblox.Sdk.Http;
+using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 

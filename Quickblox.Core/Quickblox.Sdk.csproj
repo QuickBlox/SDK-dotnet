@@ -42,7 +42,7 @@
     <Compile Include="Builder\HmacshaBuilder.cs" />
     <Compile Include="Builder\RequestHeadersBuilder.cs" />
     <Compile Include="Builder\UrlBuilder.cs" />
-    <Compile Include="GeneralDataModel\PagedResponse.cs" />
+    <Compile Include="GeneralDataModel\Response\PagedResponse.cs" />
     <Compile Include="Modules\MessagesModule\GroupChatManager.cs" />
     <Compile Include="Modules\MessagesModule\MessagesClient.cs" />
     <Compile Include="Modules\AuthModule\Models\FullUser.cs" />
@@ -56,7 +56,7 @@
     <Compile Include="Modules\ChatModule\Responses\DialogResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\CreateMessageResponse.cs" />
     <Compile Include="Modules\ChatModule\Models\Dialog.cs" />
-    <Compile Include="GeneralDataModel\ListResponse.cs" />
+    <Compile Include="GeneralDataModel\Response\ListResponse.cs" />
     <Compile Include="Modules\ChatModule\Models\Message.cs" />
     <Compile Include="Modules\ChatModule\Responses\RetrieveDialogsResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\RetrieveMessagesResponse.cs" />
@@ -72,11 +72,11 @@
     <Compile Include="Modules\AuthModule\Requests\SessionRequest.cs" />
     <Compile Include="Modules\AuthModule\Models\SocialNetworkKey.cs" />
     <Compile Include="Modules\AuthModule\Models\User.cs" />
-    <Compile Include="GeneralDataModel\Error.cs" />
-    <Compile Include="GeneralDataModel\ErrorResponse.cs" />
+    <Compile Include="GeneralDataModel\Response\Error.cs" />
+    <Compile Include="GeneralDataModel\Response\ErrorResponse.cs" />
     <Compile Include="Http\HttpBase.cs" />
     <Compile Include="Http\HttpHeadersExtensions.cs" />
-    <Compile Include="GeneralDataModel\HttpResponse.cs" />
+    <Compile Include="GeneralDataModel\Response\HttpResponse.cs" />
     <Compile Include="Http\HttpService.cs" />
     <Compile Include="Modules\MessagesModule\PrivateChatManager.cs" />
     <Compile Include="Modules\NotificationModule\Models\Device.cs" />

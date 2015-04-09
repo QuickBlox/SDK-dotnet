@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Serializer;
-using Quickblox.Sdk.GeneralDataModel;
-using Quickblox.Sdk.Http;
+using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Modules.UsersModule.Requests;
 using Quickblox.Sdk.Modules.UsersModule.Responses;
 
@@ -39,8 +38,10 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// <summary>
         /// Retrieve all Users for current account
         /// </summary>
+        /// <param name="page">Page number of the book of the results that you want to get. By default: 1</param>
+        /// <param name="perPage">The maximum number of results per page. Min: 1. Max: 100. By default: 10</param>
         /// <returns></returns>
-        public async Task<HttpResponse<RetrieveUsersResponse>> RetrieveUsers()
+        public async Task<HttpResponse<RetrieveUsersResponse>> RetrieveUsers(UInt32? page = null, UInt32? perPage = null)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.GetAsync<RetrieveUsersResponse>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UsersMethod, new NewtonsoftJsonSerializer(), headers);

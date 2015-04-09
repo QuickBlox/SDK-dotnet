@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Http;
-using Quickblox.Sdk.GeneralDataModel;
+using Quickblox.Sdk.GeneralDataModel.Response;
 
-namespace Quickblox.Sdk.Http
+namespace Quickblox.Sdk.GeneralDataModel.Response
 {
     public class HttpService : HttpBase
     {

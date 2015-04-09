@@ -1,7 +1,6 @@
-﻿using Quickblox.Sdk.GeneralDataModel;
-using System.Net;
+﻿using System.Net;
 
-namespace Quickblox.Sdk.Http
+namespace Quickblox.Sdk.GeneralDataModel.Response
 {
     public class HttpResponse
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace Quickblox.Sdk.Http
+namespace Quickblox.Sdk.GeneralDataModel.Response
 {
     /// <summary>
     /// HttpHeadersExtensions class.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Quickblox.Sdk.GeneralDataModel;
+using Quickblox.Sdk.GeneralDataModel.Response;
 
 namespace Quickblox.Sdk.Modules.UsersModule.Responses
 {
