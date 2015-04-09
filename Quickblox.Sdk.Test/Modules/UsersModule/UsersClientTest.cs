@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Quickblox.Sdk.Modules.UsersModule.Requests;
 
 namespace Quickblox.Sdk.Test.Modules.UsersModule
 {
@@ -24,21 +25,40 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         {
             client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey);
             await client.InitializeClient();
-            await client.CoreClient.CreateSessionWithLogin(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
+            await client.CoreClient.CreateSessionBase(ApplicationId, AuthorizationKey, AuthorizationSecret);
         }
-
+        
         [TestMethod]
-        public async Task RetrieveUsersUnauthorizedTest()
+        public async Task GetUserByLoginSuccess()
         {
-            Quickblox.Sdk.QuickbloxClient client2 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey);
-            await client2.InitializeClient();
-            var  response = await client2.UsersClient.RetrieveUsers();
-
-            Assert.IsTrue(response.StatusCode == HttpStatusCode.Unauthorized);
+            await client.CoreClient.ByLogin(Login, Password);
+            var response = await client.UsersClient.GetUserByLogin("Test654321");
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
         }
 
         [TestMethod]
-        public async Task RetrieveUsersTest()
+        public async Task GetUserByEmailSuccess()
+        {
+            var response = await client.UsersClient.GetUserByEmail("dark_angel2891@mail.ru");
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task GetUserByFacebookIdSuccess()
+        {
+            var response = await client.UsersClient.GetUserByFacebookId(100007825392773);
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task GetUserByTwitterIdSuccess()
+        {
+            var response = await client.UsersClient.GetUserByTwitterId(158564);
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task RetrieveUsersSuccess()
         {
             var response = await client.UsersClient.RetrieveUsers();
 
@@ -46,78 +66,61 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         }
 
         [TestMethod]
-        public async Task SignUpUserTest()
+        public async Task SignUpUserSuccess()
         {
-
-            var response = await client.UsersClient.SignUpUser("Test654321", "Test12345");
-
-            Assert.IsTrue((int)response.StatusCode == 422); // login is aready taken
+            var response = await client.UsersClient.SignUpUser("Test1234567", "qwerty123456", email:"test2@mail.ru");
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.Created); // login is aready taken
         }
 
         [TestMethod]
-        public async Task GetUserTest()
+        public async Task GetUserByIdSuccess()
         {
-            var response = await client.UsersClient.GetUser(2766517);
-
+            var response = await client.UsersClient.GetUserById(2766517);
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
         }
 
         [TestMethod]
-        public async Task GetUserByLoginTest()
+        public async Task GetUserByFullNameSuccess()
         {
-
-            var response = await client.UsersClient.GetUserByLogin("Test654321");
-
+            var response = await client.UsersClient.GetUserByFullName("Eduardo", null, null);
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+        }
+        
+        [TestMethod]
+        public async Task UpdateUserSuccess()
+        {
+            var loginResponse = await client.CoreClient.ByLogin("Test654321", Password);
+            Assert.IsTrue(loginResponse.StatusCode == HttpStatusCode.Accepted);
+
+            var updateUserRequest = new UpdateUserRequest();
+            updateUserRequest.User = new UserRequest()
+            {
+                Email = "test3@mail.ru",
+                FullName = "Eduardo2",
+            };
+
+            var responseUpdateUser = await client.UsersClient.UpdateUser(loginResponse.Result.User.Id, updateUserRequest);
+
+            Assert.IsTrue(responseUpdateUser.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(responseUpdateUser.Result.User.FullName == updateUserRequest.User.FullName);
+            Assert.IsTrue(responseUpdateUser.Result.User.Email == updateUserRequest.User.Email);
         }
 
         [TestMethod]
-        public async Task GetUserByFullNameTest()
+        public async Task ResetUserPasswordByEmailSuccess()
         {
-            var response = await client.UsersClient.GetUserByFullName("Test", null, null);
-
+            var response = await client.UsersClient.ResetUserPasswordByEmail("test2@mail.ru");
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
         }
-
+        
         [TestMethod]
-        public async Task GetUserByFacebookTest()
+        public async Task RetrieveUsersUnauthorizedTest()
         {
-            var response = await client.UsersClient.GetUserByFacebookId(145);
+            Quickblox.Sdk.QuickbloxClient client2 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey);
+            await client2.InitializeClient();
+            var response = await client2.UsersClient.RetrieveUsers();
 
-            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.Unauthorized);
         }
-
-        [TestMethod]
-        public async Task GetUserByEmail()
-        {
-            var response = await client.UsersClient.GetUserByEmail("test@test.com");
-
-            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
-        }
-
-
-        [TestMethod]
-        public async Task GetUserByTwitterTest()
-        {
-            var response = await client.UsersClient.GetUserByTwitterId(158564);
-
-            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
-        }
-
-        [TestMethod]
-        public async Task UpdateUserTest()
-        {
-            var response = await client.UsersClient.UpdateUser("Test654321", 0, "test@test.com", 123, 145, 158, "Test", "0504654654", "SomeSite", null, null, null, null);
-
-            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
-        }
-
-        [TestMethod]
-        public async Task ResetUserPasswordByEmailTest()
-        {
-            var response = await client.UsersClient.ResetUserPasswordByEmail("test@test.com");
-            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
-        }
-
     }
 }

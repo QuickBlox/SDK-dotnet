@@ -17,7 +17,7 @@ namespace Quickblox.Sdk.Modules.UsersModule.Requests
         /// <summary>
         /// API User password.
         /// </summary>
-        [JsonProperty("password")]
+        [JsonProperty("password", NullValueHandling = NullValueHandling.Ignore)]
         public String Password { get; set; }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Quickblox.Sdk.Modules.UsersModule.Requests
         /// ID of API User in Facebook.
         /// </summary>
         [JsonProperty("facebook_id", NullValueHandling = NullValueHandling.Ignore)]
-        public Int32? FacebookId { get; set; }
+        public Int64? FacebookId { get; set; }
 
         /// <summary>
         /// ID of API User in Twitter.
