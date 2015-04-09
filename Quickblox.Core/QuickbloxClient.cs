@@ -5,6 +5,7 @@ using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Modules.ChatModule;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Http;
+using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.GeneralDataModel.Response;

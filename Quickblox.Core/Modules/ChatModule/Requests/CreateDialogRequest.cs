@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Quickblox.Sdk.GeneralDataModel.Request;
 
 namespace Quickblox.Sdk.Modules.ChatModule.Requests
 {

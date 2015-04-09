@@ -5,6 +5,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
+using Quickblox.Sdk.GeneralDataModel.Request;
 
 namespace Quickblox.Sdk.Builder
 {

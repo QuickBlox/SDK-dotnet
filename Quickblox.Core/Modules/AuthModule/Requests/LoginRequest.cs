@@ -1,4 +1,5 @@
 ﻿using System;
+using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.AuthModule.Models;
 
 namespace Quickblox.Sdk.Modules.AuthModule.Requests

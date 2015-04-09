@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
-namespace Quickblox.Sdk
+namespace Quickblox.Sdk.GeneralDataModel.Request
 {
     public abstract class BaseRequestSettings
     {

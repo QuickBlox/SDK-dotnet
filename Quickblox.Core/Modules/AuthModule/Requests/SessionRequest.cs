@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.AuthModule.Models;
 
 namespace Quickblox.Sdk.Modules.AuthModule.Requests

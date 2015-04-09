@@ -38,6 +38,7 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
     <Compile Include="Builder\DateTimeBuilder.cs" />
     <Compile Include="Builder\HmacshaBuilder.cs" />
     <Compile Include="Builder\RequestHeadersBuilder.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="Serializer\ISerializer.cs" />
     <Compile Include="Serializer\JsonSerializer.cs" />
     <Compile Include="Serializer\NewtonsoftJsonSerializer.cs" />
-    <Compile Include="BaseRequestSettings.cs" />
     <Compile Include="Modules\UsersModule\Requests\UserSignUpRequest.cs" />
     <Compile Include="Modules\UsersModule\Models\User.cs" />
     <Compile Include="Modules\UsersModule\Responses\UserResponse.cs" />

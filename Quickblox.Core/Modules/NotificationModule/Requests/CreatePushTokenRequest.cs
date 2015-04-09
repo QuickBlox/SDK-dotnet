@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.NotificationModule.Models;
 
 namespace Quickblox.Sdk.Modules.NotificationModule.Requests
