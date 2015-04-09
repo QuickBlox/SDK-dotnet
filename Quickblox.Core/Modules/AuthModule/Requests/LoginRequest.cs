@@ -7,13 +7,13 @@ namespace Quickblox.Sdk.Modules.AuthModule.Requests
 
     public class LoginRequest : BaseRequestSettings
     {
-        [JsonProperty("login")]
+        [JsonProperty("login", NullValueHandling = NullValueHandling.Ignore)]
         public String Login { get; set; }
 
         [JsonProperty("password")]
         public String Password { get; set; }
 
-        [JsonProperty("email")]
+        [JsonProperty("email", NullValueHandling = NullValueHandling.Ignore)]
         public String Email { get; set; }
 
         [JsonProperty("provider", NullValueHandling = NullValueHandling.Ignore)]

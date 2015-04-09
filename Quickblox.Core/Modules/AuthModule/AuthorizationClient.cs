@@ -82,7 +82,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         new NewtonsoftJsonSerializer(),
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
-
+            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null)
             this.quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
             return resultSessionResponse;
         }
@@ -126,7 +126,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return loginResponse;
         }
 
-        public async Task<HttpResponse<LoginResponse>> ByEmail(String email, String password, String provider, String scope)
+        public async Task<HttpResponse<LoginResponse>> ByEmail(String email, String password, String provider = null, String scope = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var request = new LoginRequest();
