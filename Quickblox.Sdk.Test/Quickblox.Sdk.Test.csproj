@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssertEx.cs" />
+    <Compile Include="Http\HttpServiceTest.cs" />
     <Compile Include="Modules\AuthModule\AuthorizationClientTest.cs" />
     <Compile Include="Modules\ChatModule\ChatClientTest.cs" />
     <Compile Include="GlobalConstant.cs" />
