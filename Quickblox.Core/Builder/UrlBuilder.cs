@@ -37,6 +37,7 @@ namespace Quickblox.Sdk.Builder
                 builder.Append(String.Format("{0}={1}", property.Key, WebUtility.UrlEncode(property.Value)));
                 flag = true;
             }
+            
             return String.Format(builder.ToString());
         }
 
@@ -60,8 +61,10 @@ namespace Quickblox.Sdk.Builder
                 }
             }
 
-            return navBody.ToString();
+            if (settings.Filter != null)
+                navBody.Append(settings.Filter.BuildFilter());
 
+            return navBody.ToString();
         }
     
 

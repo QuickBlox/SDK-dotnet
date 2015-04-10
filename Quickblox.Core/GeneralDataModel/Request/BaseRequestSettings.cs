@@ -13,8 +13,10 @@ namespace Quickblox.Sdk.GeneralDataModel.Request
         [JsonIgnore]
         [IgnoreDataMember]
         public IDictionary<String, String> Headers { get; set; }
-    }
 
-   
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public Filter Filter { get; set; }
+    }
 }
 

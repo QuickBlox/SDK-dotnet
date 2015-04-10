@@ -38,11 +38,16 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneralDataModel\Request\FilterAggregator.cs" />
+    <Compile Include="GeneralDataModel\Request\SortAttribute.cs" />
+    <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
     <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
     <Compile Include="Builder\DateTimeBuilder.cs" />
     <Compile Include="Builder\HmacshaBuilder.cs" />
     <Compile Include="Builder\RequestHeadersBuilder.cs" />
     <Compile Include="Builder\UrlBuilder.cs" />
+    <Compile Include="GeneralDataModel\Request\Filter.cs" />
+    <Compile Include="GeneralDataModel\Request\PagedRequestSettings.cs" />
     <Compile Include="GeneralDataModel\Response\PagedResponse.cs" />
     <Compile Include="Modules\MessagesModule\GroupChatManager.cs" />
     <Compile Include="Modules\MessagesModule\MessagesClient.cs" />
@@ -101,6 +106,8 @@
     <Compile Include="Modules\NotificationModule\Response\CreateSubscriptionResponse.cs" />
     <Compile Include="Modules\NotificationModule\Models\Subscription.cs" />
     <Compile Include="Modules\NotificationModule\Response\GetSubscriptionsResponse.cs" />
+    <Compile Include="Modules\UsersModule\Models\RetriveUserFilter.cs" />
+    <Compile Include="Modules\UsersModule\Requests\RetriveUsersRequest.cs" />
     <Compile Include="Modules\UsersModule\Requests\UpdateUserRequest.cs" />
     <Compile Include="Modules\UsersModule\Requests\UserRequest.cs" />
     <Compile Include="Modules\UsersModule\Responses\RetrieveUsersResponse.cs" />

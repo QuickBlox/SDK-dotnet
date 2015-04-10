@@ -7,7 +7,7 @@ namespace Quickblox.Sdk.Modules.UsersModule.Requests
     /// <summary>
     /// User to be used in User sign up request.
     /// </summary>
-    public class UserRequest : BaseRequestSettings
+    public class UserRequest : PagedRequestSettings
     {
         /// <summary>
         /// API User login.
@@ -80,18 +80,5 @@ namespace Quickblox.Sdk.Modules.UsersModule.Requests
         /// </summary>
         [JsonProperty("custom_data", NullValueHandling = NullValueHandling.Ignore)]
         public String CustomData { get; set; }
-
-        /// <summary>
-        /// page No  Unsigned Integer	3	Page number of the book of the results that you want to get.By default: 1
-        /// </summary>
-        [JsonProperty("page", NullValueHandling = NullValueHandling.Ignore)]
-        public UInt32? Page { get; set; }
-
-        /// <summary>
-        /// per_page No  Unsigned Integer	15	The maximum number of results per page.Min: 1. Max: 100. By default: 10 
-        /// </summary>
-        [JsonProperty("per_page", NullValueHandling = NullValueHandling.Ignore)]
-        public UInt32? PerPage { get; set; }
-
     }
 }
