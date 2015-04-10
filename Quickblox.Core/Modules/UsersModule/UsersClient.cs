@@ -38,12 +38,12 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// <summary>
         /// Retrieve all Users for current account
         /// </summary>
-        /// <param name="retriveUsersesRequest">Filter settings</param>
+        /// <param name="retrieveUsersesRequest">Filter settings</param>
         /// <returns></returns>
-        public async Task<HttpResponse<RetrieveUsersResponse>> RetrieveUsers(RetriveUsersRequest retriveUsersesRequest = null)
+        public async Task<HttpResponse<RetrieveUsersResponse>> RetrieveUsers(RetrieveUsersRequest retrieveUsersesRequest = null)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<RetrieveUsersResponse, RetriveUsersRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UsersMethod, new NewtonsoftJsonSerializer(), retriveUsersesRequest, headers);
+            return await HttpService.GetAsync<RetrieveUsersResponse, RetrieveUsersRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UsersMethod, new NewtonsoftJsonSerializer(), retrieveUsersesRequest, headers);
         }
 
         /// <summary>

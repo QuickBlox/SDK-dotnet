@@ -69,9 +69,9 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         public async Task RetrieveUsersWithFilterSuccess()
         {
             var filterAgregator = new FilterAggregator();
-            filterAgregator.Filters.Add(new RetriveUserFilter<String>(UserOperator.Eq, () => new User().FullName, "Eduardo"));
+            filterAgregator.Filters.Add(new RetrieveUserFilter<String>(UserOperator.Eq, () => new User().FullName, "Eduardo"));
             filterAgregator.Filters.Add(new UserSortFilter<String>(SortOperator.Asc, () => new User().FullName));
-            var retriveUserRequest = new RetriveUsersRequest()
+            var retriveUserRequest = new RetrieveUsersRequest()
             {
                 Filter = filterAgregator
             };

@@ -2,7 +2,7 @@
 
 namespace Quickblox.Sdk.Modules.UsersModule.Requests
 {
-    public class RetriveUsersRequest : PagedRequestSettings
+    public class RetrieveUsersRequest : PagedRequestSettings
     {
     }
 }

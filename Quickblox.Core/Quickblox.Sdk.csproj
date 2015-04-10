@@ -43,9 +43,9 @@
     <Compile Include="GeneralDataModel\Request\SortOperator.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSearchOperator.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSortFilter.cs" />
-    <Compile Include="Modules\ChatModule\Models\RetriveDialogsFilterWithOperator.cs" />
-    <Compile Include="Modules\ChatModule\Models\RetriveDialogsFilter.cs" />
-    <Compile Include="Modules\ChatModule\Requests\RetriveDialogsRequest.cs" />
+    <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs" />
+    <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilter.cs" />
+    <Compile Include="Modules\ChatModule\Requests\RetrieveDialogsRequest.cs" />
     <Compile Include="Modules\UsersModule\Models\UserSortFilter.cs" />
     <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
     <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
@@ -113,8 +113,8 @@
     <Compile Include="Modules\NotificationModule\Response\CreateSubscriptionResponse.cs" />
     <Compile Include="Modules\NotificationModule\Models\Subscription.cs" />
     <Compile Include="Modules\NotificationModule\Response\GetSubscriptionsResponse.cs" />
-    <Compile Include="Modules\UsersModule\Models\RetriveUserFilter.cs" />
-    <Compile Include="Modules\UsersModule\Requests\RetriveUsersRequest.cs" />
+    <Compile Include="Modules\UsersModule\Models\RetrieveUserFilter.cs" />
+    <Compile Include="Modules\UsersModule\Requests\RetrieveUsersRequest.cs" />
     <Compile Include="Modules\UsersModule\Requests\UpdateUserRequest.cs" />
     <Compile Include="Modules\UsersModule\Requests\UserRequest.cs" />
     <Compile Include="Modules\UsersModule\Responses\RetrieveUsersResponse.cs" />

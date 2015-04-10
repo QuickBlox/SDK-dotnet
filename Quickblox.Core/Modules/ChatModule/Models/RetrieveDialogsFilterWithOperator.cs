@@ -6,8 +6,9 @@ using Quickblox.Sdk.GeneralDataModel.Request;
 
 namespace Quickblox.Sdk.Modules.ChatModule.Models
 {
-    public class RetriveDialogsFilter<T> : Filter
+    public class RetrieveDialogsFilterWithOperator<T> : Filter
     {
+        private readonly DialogSearchOperator dialogSearchOperator;
         private readonly Expression<Func<T>> selectFieldExpression;
         private readonly object findValue;
 
@@ -15,12 +16,13 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
         {
             get
             {
-                return "{0}={1}";
+                return "{0}[{1}]={2}";
             }
         }
 
-        public RetriveDialogsFilter(Expression<Func<T>> selectFieldExpression, object findValue)
+        public RetrieveDialogsFilterWithOperator(DialogSearchOperator dialogSearchOperator, Expression<Func<T>> selectFieldExpression, object findValue)
         {
+            this.dialogSearchOperator = dialogSearchOperator;
             this.selectFieldExpression = selectFieldExpression;
             this.findValue = findValue;
         }
@@ -35,7 +37,8 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
             var propertyInfo = (PropertyInfo)memberExpression.Member;
 
             var jsonPropertyAttribute = propertyInfo.GetCustomAttribute<JsonPropertyAttribute>();
-            return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, this.findValue);
+
+            return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, this.dialogSearchOperator.ToString().ToLower(), this.findValue);
         }
     }
 }

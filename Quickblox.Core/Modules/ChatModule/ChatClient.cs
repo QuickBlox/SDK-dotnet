@@ -42,11 +42,11 @@ namespace Quickblox.Sdk.Modules.ChatModule
                         QuickbloxMethods.CreateDialogMethod, new NewtonsoftJsonSerializer(), createDialogRequest, headers);
         }
 
-        public async Task<HttpResponse<RetrieveDialogsResponse>> GetDialogs(RetriveDialogsRequest retriveDialogsRequest = null)
+        public async Task<HttpResponse<RetrieveDialogsResponse>> GetDialogs(RetrieveDialogsRequest retrieveDialogsRequest = null)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<RetrieveDialogsResponse, RetriveDialogsRequest>(this.quickbloxClient.ApiEndPoint,
-                        QuickbloxMethods.GetDialogsMethod, new NewtonsoftJsonSerializer(), retriveDialogsRequest, headers);
+            return await HttpService.GetAsync<RetrieveDialogsResponse, RetrieveDialogsRequest>(this.quickbloxClient.ApiEndPoint,
+                        QuickbloxMethods.GetDialogsMethod, new NewtonsoftJsonSerializer(), retrieveDialogsRequest, headers);
         }
 
         public async Task<HttpResponse<Dialog>> UpdateDialog(UpdateDialogRequest updateDialogRequest)

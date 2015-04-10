@@ -51,11 +51,11 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         [TestMethod]
         public async Task GetDialogsWithFiltersSuccess()
         {
-            var retriveDialogsRequest = new RetriveDialogsRequest();
+            var retriveDialogsRequest = new RetrieveDialogsRequest();
 
             var aggregator = new FilterAggregator();
             aggregator.Filters.Add(new DialogSortFilter<int>(SortOperator.Asc, () => new DialogResponse().Type));
-            aggregator.Filters.Add(new RetriveDialogsFilter<String>(() => new DialogResponse().Id, "551d50bd535c123fc50260db"));
+            aggregator.Filters.Add(new RetrieveDialogsFilter<String>(() => new DialogResponse().Id, "551d50bd535c123fc50260db"));
 
             retriveDialogsRequest.Filter = aggregator;
             var response = await this.client.ChatClient.GetDialogs(retriveDialogsRequest);
@@ -65,11 +65,11 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         [TestMethod]
         public async Task GetDialogsWithOperationFiltersSuccess()
         {
-            var retriveDialogsRequest = new RetriveDialogsRequest();
+            var retriveDialogsRequest = new RetrieveDialogsRequest();
 
             var aggregator = new FilterAggregator();
             aggregator.Filters.Add(new DialogSortFilter<int>(SortOperator.Asc, () => new DialogResponse().Type));
-            aggregator.Filters.Add(new RetriveDialogsFilterWithOperator<String>(DialogSearchOperator.Lte, () => new DialogResponse().Id, "551d50bd535c123fc50260db"));
+            aggregator.Filters.Add(new RetrieveDialogsFilterWithOperator<String>(DialogSearchOperator.Lte, () => new DialogResponse().Id, "551d50bd535c123fc50260db"));
 
             retriveDialogsRequest.Filter = aggregator;
             var response = await this.client.ChatClient.GetDialogs(retriveDialogsRequest);

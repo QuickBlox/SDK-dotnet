@@ -2,7 +2,7 @@
 
 namespace Quickblox.Sdk.Modules.ChatModule.Requests
 {
-    public class RetriveDialogsRequest : ListRequest
+    public class RetrieveDialogsRequest : ListRequest
     {
     }
 }
