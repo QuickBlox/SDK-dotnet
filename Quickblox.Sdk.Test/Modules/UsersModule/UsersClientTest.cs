@@ -70,6 +70,7 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         {
             var filterAgregator = new FilterAggregator();
             filterAgregator.Filters.Add(new RetriveUserFilter<String>(UserOperator.Eq, () => new User().FullName, "Eduardo"));
+            filterAgregator.Filters.Add(new SortFilter<String>(SortOperator.Asc, () => new User().FullName));
             var retriveUserRequest = new RetriveUsersRequest()
             {
                 Filter = filterAgregator
