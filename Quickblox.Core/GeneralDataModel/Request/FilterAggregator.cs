@@ -12,7 +12,7 @@ namespace Quickblox.Sdk.GeneralDataModel.Request
 
         public IList<Filter> Filters { get; private set; }
 
-        public string BuildFilters()
+        internal string BuildFilters()
         {
             var stringBuilder = new StringBuilder();
 
@@ -25,7 +25,7 @@ namespace Quickblox.Sdk.GeneralDataModel.Request
             return stringBuilder.ToString();
         }
 
-        public override string BuildFilter()
+        internal override string BuildFilter()
         {
             return this.BuildFilters();
         }

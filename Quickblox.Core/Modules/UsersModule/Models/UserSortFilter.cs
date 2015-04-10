@@ -2,10 +2,11 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json;
+using Quickblox.Sdk.GeneralDataModel.Request;
 
-namespace Quickblox.Sdk.GeneralDataModel.Request
+namespace Quickblox.Sdk.Modules.UsersModule.Models
 {
-    public class SortFilter<T> : Filter
+    public class UserSortFilter<T> : Filter
     {
         private readonly SortOperator sortOperator;
         private readonly Expression<Func<T>> selectFieldExpression;
@@ -26,13 +27,13 @@ namespace Quickblox.Sdk.GeneralDataModel.Request
             }
         }
 
-        public SortFilter(SortOperator sortOperator, Expression<Func<T>> selectFieldExpression)
+        public UserSortFilter(SortOperator sortOperator, Expression<Func<T>> selectFieldExpression)
         {
             this.sortOperator = sortOperator;
             this.selectFieldExpression = selectFieldExpression;
         }
 
-        public override string BuildFilter()
+        internal override string BuildFilter()
         {
             var memberExpression = (MemberExpression)this.selectFieldExpression.Body;
             var propertyInfo = (PropertyInfo)memberExpression.Member;
@@ -42,11 +43,5 @@ namespace Quickblox.Sdk.GeneralDataModel.Request
 
             return String.Format(this.FormatString, this.ParameterName, this.sortOperator.ToString().ToLower(), filedTypeString, jsonPropertyAttribute.PropertyName);
         }
-    }
-
-    public enum SortOperator
-    {
-        Asc,
-        Desc
     }
 }

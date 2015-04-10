@@ -24,6 +24,6 @@ namespace Quickblox.Sdk.GeneralDataModel.Request
             return filedTypeString;
         }
 
-        public abstract string BuildFilter();
+        internal abstract string BuildFilter();
     }
 }

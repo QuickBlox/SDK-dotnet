@@ -39,7 +39,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GeneralDataModel\Request\FilterAggregator.cs" />
-    <Compile Include="GeneralDataModel\Request\SortFilter.cs" />
+    <Compile Include="GeneralDataModel\Request\ListRequest.cs" />
+    <Compile Include="GeneralDataModel\Request\SortOperator.cs" />
+    <Compile Include="Modules\ChatModule\Models\DialogSearchOperator.cs" />
+    <Compile Include="Modules\ChatModule\Models\DialogSortFilter.cs" />
+    <Compile Include="Modules\ChatModule\Models\RetriveDialogsFilterWithOperator.cs" />
+    <Compile Include="Modules\ChatModule\Models\RetriveDialogsFilter.cs" />
+    <Compile Include="Modules\ChatModule\Requests\RetriveDialogsRequest.cs" />
+    <Compile Include="Modules\UsersModule\Models\UserSortFilter.cs" />
     <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
     <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
     <Compile Include="Builder\DateTimeBuilder.cs" />

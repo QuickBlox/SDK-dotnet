@@ -2,36 +2,27 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json;
-using Quickblox.Sdk.GeneralDataModel.Filter;
 using Quickblox.Sdk.GeneralDataModel.Request;
 
-namespace Quickblox.Sdk.Modules.UsersModule.Models
+namespace Quickblox.Sdk.Modules.ChatModule.Models
 {
-    public class RetriveUserFilter<T> : Filter
+    public class RetriveDialogsFilterWithOperator<T> : Filter
     {
-        private readonly UserOperator userOperator;
+        private readonly DialogSearchOperator dialogSearchOperator;
         private readonly Expression<Func<T>> selectFieldExpression;
         private readonly object findValue;
-
-        public string ParameterName
-        {
-            get
-            {
-                return "filter[]";
-            }
-        }
 
         public string FormatString
         {
             get
             {
-                return "{0}={1}+{2}+{3}+{4}";
+                return "{0}[{1}]={2}";
             }
         }
 
-        public RetriveUserFilter(UserOperator userOperator, Expression<Func<T>> selectFieldExpression, String findValue)
+        public RetriveDialogsFilterWithOperator(DialogSearchOperator dialogSearchOperator, Expression<Func<T>> selectFieldExpression, object findValue)
         {
-            this.userOperator = userOperator;
+            this.dialogSearchOperator = dialogSearchOperator;
             this.selectFieldExpression = selectFieldExpression;
             this.findValue = findValue;
         }
@@ -46,9 +37,8 @@ namespace Quickblox.Sdk.Modules.UsersModule.Models
             var propertyInfo = (PropertyInfo)memberExpression.Member;
 
             var jsonPropertyAttribute = propertyInfo.GetCustomAttribute<JsonPropertyAttribute>();
-            var filedTypeString = GetFilterFieldTypeString(propertyInfo);
 
-            return String.Format(this.FormatString, this.ParameterName, filedTypeString, jsonPropertyAttribute.PropertyName, this.userOperator.ToString().ToLower(), this.findValue);
+            return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, this.dialogSearchOperator.ToString().ToLower(), this.findValue);
         }
     }
 }
