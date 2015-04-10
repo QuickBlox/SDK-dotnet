@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Quickblox.Sdk.GeneralDataModel.Request
@@ -14,9 +10,21 @@ namespace Quickblox.Sdk.GeneralDataModel.Request
         private readonly SortOperator sortOperator;
         private readonly Expression<Func<T>> selectFieldExpression;
 
-        public string ParameterName => "order";
+        public string ParameterName
+        {
+            get
+            {
+                return "order";
+            }
+        }
 
-        public string FormatString => "{0}={1}+{2}+{3}";
+        public string FormatString
+        {
+            get
+            {
+                return "{0}={1}+{2}+{3}";
+            }
+        }
 
         public SortFilter(SortOperator sortOperator, Expression<Func<T>> selectFieldExpression)
         {

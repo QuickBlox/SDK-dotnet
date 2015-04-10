@@ -13,9 +13,21 @@ namespace Quickblox.Sdk.Modules.UsersModule.Models
         private readonly Expression<Func<T>> selectFieldExpression;
         private readonly object findValue;
 
-        public string ParameterName => "filter[]";
+        public string ParameterName
+        {
+            get
+            {
+                return "filter[]";
+            }
+        }
 
-        public string FormatString => "{0}={1}+{2}+{3}+{4}";
+        public string FormatString
+        {
+            get
+            {
+                return "{0}={1}+{2}+{3}+{4}";
+            }
+        }
 
         public RetriveUserFilter(UserOperator userOperator, Expression<Func<T>> selectFieldExpression, String findValue)
         {
