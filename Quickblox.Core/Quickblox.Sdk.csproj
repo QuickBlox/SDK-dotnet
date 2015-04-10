@@ -138,6 +138,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Diagrams\ChatClient.dgml" />
     <None Include="Diagrams\CoreClient.dgml" />
     <None Include="Diagrams\HttpService.dgml" />
     <None Include="Diagrams\MessagesModule.cd" />
