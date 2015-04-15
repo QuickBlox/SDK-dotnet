@@ -13,7 +13,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile151</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
-    <TargetPlatform Include="Windows, Version=8.1" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="GeneralDataModel\Request\FilterAggregator.cs" />
     <Compile Include="GeneralDataModel\Request\ListRequest.cs" />
     <Compile Include="GeneralDataModel\Request\SortOperator.cs" />
@@ -50,7 +46,6 @@
     <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
     <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
     <Compile Include="Builder\DateTimeBuilder.cs" />
-    <Compile Include="Builder\HmacshaBuilder.cs" />
     <Compile Include="Builder\RequestHeadersBuilder.cs" />
     <Compile Include="Builder\UrlBuilder.cs" />
     <Compile Include="GeneralDataModel\Request\Filter.cs" />
@@ -146,7 +141,12 @@
     <None Include="Diagrams\UserClient.dgml" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj">
+      <Project>{b9ff8451-9750-4b80-bcf6-8d151b10486b}</Project>
+      <Name>Quickblox.Sdk.Cryptographic</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

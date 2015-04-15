@@ -5,6 +5,7 @@ using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Modules.ChatModule;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Http;
+using Quickblox.Sdk.Cryptographic;
 using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
@@ -21,6 +22,7 @@ namespace Quickblox.Sdk
     {
         private readonly String baseUri;
         private readonly String accountKey;
+        private readonly ICryptographicProvider cryptographicProvider;
         private Boolean isClientInitialized;
 
         #region Ctor
@@ -30,10 +32,12 @@ namespace Quickblox.Sdk
         /// </summary>
         /// <param name="baseUri">Начальный урл.</param>
         /// <param name="accountKey">Ключ аккаунта</param>
-        public QuickbloxClient(String baseUri, String accountKey)
+        /// <param name="cryptographicProvider"></param>
+        public QuickbloxClient(String baseUri, String accountKey, ICryptographicProvider cryptographicProvider)
         {
             this.baseUri = baseUri;
             this.accountKey = accountKey;
+            this.CryptographicProvider = cryptographicProvider;
 
             this.CoreClient = new AuthorizationClient(this);
             this.ChatClient = new ChatClient(this);
@@ -50,6 +54,9 @@ namespace Quickblox.Sdk
         #endregion
 
         #region Properties
+
+        public ICryptographicProvider CryptographicProvider { get; private set; }
+
 
         public AuthorizationClient CoreClient { get; private set; }
 

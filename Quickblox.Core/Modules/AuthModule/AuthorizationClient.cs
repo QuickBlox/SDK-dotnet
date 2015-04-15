@@ -201,7 +201,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
                 }
             }
 
-            return HmacshaBuilder.Encrypt(navBody.ToString(), authSecret);
+            return quickbloxClient.CryptographicProvider.Encrypt(navBody.ToString(), authSecret);
         }
     }
 }

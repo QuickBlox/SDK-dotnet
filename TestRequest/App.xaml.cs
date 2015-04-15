@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using Quickblox.Sdk;
+using Quickblox.Sdk.Hmacsha;
 using TestRequest.Views;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
@@ -47,7 +48,7 @@ namespace TestRequest
 
             this.SetupNavigation();
             
-            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.AccountKey);
+            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.AccountKey, new HmacSha1CryptographicProvider());
             await quickbloxClient.InitializeClient();
             //await quickbloxClient.CoreClient.CreateSessionWithLogin(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, "Test654321", "Test12345");
             await quickbloxClient.CoreClient.CreateSessionBase(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret);

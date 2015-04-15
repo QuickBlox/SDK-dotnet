@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Quickblox.Sdk.Hmacsha;
 
 namespace Quickblox.Sdk.Test.Modules.AuthModule
 {
@@ -23,7 +25,7 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey);
+            client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             await client.InitializeClient();
         }
 
