@@ -10,6 +10,7 @@ using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Modules.MessagesModule;
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 
@@ -43,6 +44,7 @@ namespace Quickblox.Sdk
             this.ChatClient = new ChatClient(this);
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
+            this.MessagesClient = new MessagesClient(this);
         }
 
         #endregion
@@ -65,6 +67,8 @@ namespace Quickblox.Sdk
         public UsersClient UsersClient { get; private set; }
 
         public NotificationClient NotificationClient { get; private set; }
+
+        public MessagesClient MessagesClient { get; private set; }
 
         /// <summary>
         /// Возварщает время последнего запроса в UTC.
@@ -123,6 +127,7 @@ namespace Quickblox.Sdk
             if (accountResponse.StatusCode == HttpStatusCode.OK)
             {
                 this.ApiEndPoint = accountResponse.Result.ApiEndPoint;
+                this.MessagesClient.ChatEndpoint = accountResponse.Result.ChatEndPoint;
                 this.IsClientInitialized = true;
             }
         }

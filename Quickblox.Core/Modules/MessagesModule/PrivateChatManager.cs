@@ -22,11 +22,13 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public PrivateChatManager(string userId, string password, string otherUserId, string appId, string chatEndpoint)
         {
-            otherUserJid = string.Format("{0}-{1}@chat.quickblox.com ", otherUserId, appId);
+            otherUserJid = string.Format("{0}-{1}@chat.quickblox.com", otherUserId, appId);
 
             XmppClientConnection xmpp = new XmppClientConnection(chatEndpoint);
             xmpp.OnLogin += XmppOnOnLogin;
-            xmpp.Open(userId, password); 
+            xmpp.OnAuthError += (sender, element) => { };
+
+            xmpp.Open(string.Format("{0}-{1}", userId, appId), password); 
         }
 
         private void XmppOnOnLogin(object sender)
