@@ -22,10 +22,10 @@ namespace TestRequest.ViewModel
         public void OnNavigated()
         {
             var a = quickbloxClient.MessagesClient.InitPrivateChatManager("2766517");
-            a.OnLogin += AOnOnLogin;
+            a.OnInitialized += AOnOnInitialized;
         }
 
-        private void AOnOnLogin(object sender, EventArgs eventArgs)
+        private void AOnOnInitialized(object sender, EventArgs eventArgs)
         {
 
         }

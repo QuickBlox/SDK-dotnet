@@ -64,7 +64,7 @@ namespace TestRequest.ViewModel
                 if (response.StatusCode == HttpStatusCode.Accepted)
                 {
                     QuickbloxClient.MessagesClient.AppId = ApplicationKeys.ApplicationId;
-                    QuickbloxClient.MessagesClient.Login = "2701456";
+                    QuickbloxClient.MessagesClient.UserId = response.Result.User.Id;
                     QuickbloxClient.MessagesClient.Password = Password;
                     this.NavigationService.NavigateTo("Chats");
                 }

@@ -23,7 +23,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             this.quickbloxClient = client;
         }
         
-        public async Task<HttpResponse<SessionResponse>> CreateSessionBase(String applicationId, String authKey, String authSecret)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionBase(int applicationId, String authKey, String authSecret)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
@@ -39,7 +39,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
         }
 
 
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLogin(String applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLogin(int applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
@@ -63,7 +63,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return resultSessionResponse;
         }
 
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmail(String applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmail(int applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
@@ -143,7 +143,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return loginResponse;
         }
 
-        private SessionRequest CreateSessionRequest(String applicationId, String authKey)
+        private SessionRequest CreateSessionRequest(int applicationId, String authKey)
         {
             var settings = new SessionRequest();
             settings.ApplicationId = applicationId;

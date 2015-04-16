@@ -13,7 +13,7 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
     [TestClass]
     public class AuthorizationClientTest
     {
-        private const string ApplicationId = "21183";
+        private const int ApplicationId = 21183;
         private const string AuthorizationKey = "LxnQksQJsXA2NLU";
         private const string AuthorizationSecret = "7v2Jkrc7e-99JJX";
         private const string Login = "Test654321";

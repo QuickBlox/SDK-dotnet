@@ -16,11 +16,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public event EventHandler OnMessageReceived;
 
-        public event EventHandler OnLogin;
+        public event EventHandler OnInitialized;
 
         public event EventHandler OnPresense;
 
-        public PrivateChatManager(string userId, string password, string otherUserId, string appId, string chatEndpoint)
+        public PrivateChatManager(int userId, string password, string otherUserId, int appId, string chatEndpoint)
         {
             otherUserJid = string.Format("{0}-{1}@chat.quickblox.com", otherUserId, appId);
 
@@ -34,7 +34,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private void XmppOnOnLogin(object sender)
         {
             isInitialized = true;
-            var handler = OnLogin;
+            var handler = OnInitialized;
             if (handler != null)
                 handler(this, new EventArgs());
         }

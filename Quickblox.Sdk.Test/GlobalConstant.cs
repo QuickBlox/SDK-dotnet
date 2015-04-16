@@ -11,7 +11,7 @@
 
         #region Application
 
-        public const string ApplicationId = "21183";
+        public const int ApplicationId = 21183;
         public const string AuthorizationKey = "LxnQksQJsXA2NLU";
         public const string AuthorizationSecret = "7v2Jkrc7e-99JJX";
 
