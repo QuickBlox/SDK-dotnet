@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -16,10 +17,19 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         public int AppId { get; set; }
         public string ChatEndpoint { get; set; }
 
-        public PrivateChatManager InitPrivateChatManager(string otherUserId)
+        public PrivateChatManager InitPrivateChatManager(int otherUserId)
         {
-            if(UserId == null || Password == null || AppId == null || ChatEndpoint == null)
-                throw new Exception("Login, password, appId, Chatendpoints must be not null");
+            if(UserId == 0)
+                Debug.WriteLine("User ID is 0 when creating private chat manager.");
+
+            if (Password == null)
+                Debug.WriteLine("Password is null when creating private chat manager.");
+
+            if (AppId == 0)
+                Debug.WriteLine("App ID is 0 when creating private chat manager.");
+
+            if(ChatEndpoint == null)
+                throw new Exception("ChatEndpoint must be not null");
 
             return new PrivateChatManager(UserId, Password, otherUserId, AppId, ChatEndpoint);
         }

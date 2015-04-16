@@ -21,7 +21,7 @@ namespace TestRequest.ViewModel
 
         public void OnNavigated()
         {
-            var a = quickbloxClient.MessagesClient.InitPrivateChatManager("2766517");
+            var a = quickbloxClient.MessagesClient.InitPrivateChatManager(2766517);
             a.OnInitialized += AOnOnInitialized;
         }
 
