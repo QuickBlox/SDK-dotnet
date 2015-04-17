@@ -3,7 +3,7 @@
 namespace Quickblox.Sdk.Modules.NotificationModule.Models
 {
 
-    public class CreateEventResponse
+    public class EventResponse
     {
         [JsonProperty("event")]
         public Event Event { get; set; }

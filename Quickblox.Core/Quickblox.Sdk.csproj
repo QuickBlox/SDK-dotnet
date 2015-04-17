@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GeneralDataModel\Models\Device.cs" />
     <Compile Include="GeneralDataModel\Request\FilterAggregator.cs" />
     <Compile Include="GeneralDataModel\Request\ListRequest.cs" />
     <Compile Include="GeneralDataModel\Request\SortOperator.cs" />
@@ -42,6 +43,11 @@
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs" />
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilter.cs" />
     <Compile Include="Modules\ChatModule\Requests\RetrieveDialogsRequest.cs" />
+    <Compile Include="Modules\NotificationModule\Models\EditEvent.cs" />
+    <Compile Include="Modules\NotificationModule\Models\Tags.cs" />
+    <Compile Include="Modules\NotificationModule\Models\TagsAny.cs" />
+    <Compile Include="Modules\NotificationModule\Models\UserWithTags.cs" />
+    <Compile Include="Modules\NotificationModule\Requests\EditEventRequest.cs" />
     <Compile Include="Modules\UsersModule\Models\UserSortFilter.cs" />
     <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
     <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
@@ -75,7 +81,6 @@
     <Compile Include="Modules\AuthModule\Response\LoginResponse.cs" />
     <Compile Include="Modules\AuthModule\Models\Session.cs" />
     <Compile Include="Modules\AuthModule\Response\SessionResponse.cs" />
-    <Compile Include="Modules\AuthModule\Models\Device.cs" />
     <Compile Include="Modules\AuthModule\Requests\LoginRequest.cs" />
     <Compile Include="Modules\AuthModule\Requests\SessionRequest.cs" />
     <Compile Include="Modules\AuthModule\Models\SocialNetworkKey.cs" />
@@ -87,7 +92,6 @@
     <Compile Include="GeneralDataModel\Response\HttpResponse.cs" />
     <Compile Include="Http\HttpService.cs" />
     <Compile Include="Modules\MessagesModule\PrivateChatManager.cs" />
-    <Compile Include="Modules\NotificationModule\Models\Device.cs" />
     <Compile Include="Modules\NotificationModule\Models\Event.cs" />
     <Compile Include="Modules\NotificationModule\Models\EventItem.cs" />
     <Compile Include="Modules\NotificationModule\Models\EventType.cs" />
@@ -103,9 +107,9 @@
     <Compile Include="Modules\NotificationModule\Requests\CreateSubscriptionsRequest.cs" />
     <Compile Include="Modules\NotificationModule\Models\CreateEvent.cs" />
     <Compile Include="Modules\NotificationModule\Models\User.cs" />
-    <Compile Include="Modules\NotificationModule\Response\CreateEventResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Response\EventResponse.cs" />
     <Compile Include="Modules\NotificationModule\Response\CreatePushTokenResponse.cs" />
-    <Compile Include="Modules\NotificationModule\Response\CreateSubscriptionResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Response\GetSubscriptionResponse.cs" />
     <Compile Include="Modules\NotificationModule\Models\Subscription.cs" />
     <Compile Include="Modules\NotificationModule\Response\GetSubscriptionsResponse.cs" />
     <Compile Include="Modules\UsersModule\Models\RetrieveUserFilter.cs" />

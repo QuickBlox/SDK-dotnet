@@ -40,7 +40,7 @@ namespace TestRequest.ViewModel
                 this.LoginCommand.RaiseCanExecuteChanged();
             }
         }
-
+        
         private string password;
 
         public string Password

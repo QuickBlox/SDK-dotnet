@@ -234,6 +234,7 @@ namespace Quickblox.Sdk.Core.Http
                     client.DefaultRequestHeaders.SetRequestHeaders(headers);
 
                     Debug.WriteLine(String.Concat("==> PUT REQUEST: ", baseAddress, requestUri));
+                    Debug.WriteLine(String.Concat("==> PUT CONTENT: ", await content.ReadAsStringAsync()));
                     try
                     {
                         response = await client.PutAsync(requestUri, content, token).ConfigureAwait(false);

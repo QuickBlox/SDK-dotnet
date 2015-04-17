@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using Quickblox.Sdk;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Hmacsha;
 using TestRequest.Views;
 
@@ -51,7 +52,7 @@ namespace TestRequest
             var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.AccountKey, new HmacSha1CryptographicProvider());
             await quickbloxClient.InitializeClient();
             //await quickbloxClient.CoreClient.CreateSessionWithLogin(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, "Test654321", "Test12345");
-            await quickbloxClient.CoreClient.CreateSessionBase(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret);
+            await quickbloxClient.CoreClient.CreateSessionBase(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helper.Helpers.GetHardwareId()});
             SimpleIoc.Default.Register<QuickbloxClient>(() => quickbloxClient);
 
             Frame rootFrame = Window.Current.Content as Frame;

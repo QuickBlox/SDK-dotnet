@@ -26,7 +26,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule.Models
         public EventType EventType { get; set; }
 
         [JsonProperty("id")]
-        public int Id { get; set; }
+        public UInt32 Id { get; set; }
 
         [JsonProperty("message")]
         public string Message { get; set; }

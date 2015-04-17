@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.AuthModule.Models;
 
@@ -32,7 +33,7 @@ namespace Quickblox.Sdk.Modules.AuthModule.Requests
         public User User { get; set; }
 
         [JsonProperty("device", NullValueHandling = NullValueHandling.Ignore)]
-        public Device Device { get; set; }
+        public DeviceRequest DeviceRequest { get; set; }
 
         [JsonProperty("provider", NullValueHandling = NullValueHandling.Ignore)]
         public String Provider { get; set; }

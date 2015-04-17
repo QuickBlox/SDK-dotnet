@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace Quickblox.Sdk.Modules.NotificationModule.Models
 {
@@ -11,6 +12,6 @@ namespace Quickblox.Sdk.Modules.NotificationModule.Models
         public NotificationChannel NotificationChannel { get; set; }
 
         [JsonProperty("device")]
-        public Device Device { get; set; }
+        public DeviceResponse DeviceRequest { get; set; }
     }
 }
