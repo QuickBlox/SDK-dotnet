@@ -24,7 +24,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             this.quickbloxClient = client;
         }
         
-        public async Task<HttpResponse<SessionResponse>> CreateSessionBase(String applicationId, String authKey, String authSecret, DeviceRequest deviceRequestRequest = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionBase(UInt32 applicationId, String authKey, String authSecret, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
@@ -40,7 +40,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return resultSessionResponse;
         }
 
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLogin(String applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLogin(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
@@ -65,7 +65,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return resultSessionResponse;
         }
 
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmail(String applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmail(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
@@ -146,7 +146,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return loginResponse;
         }
 
-        private SessionRequest CreateSessionRequest(int applicationId, String authKey)
+        private SessionRequest CreateSessionRequest(UInt32 applicationId, String authKey)
         {
             var settings = new SessionRequest();
             settings.ApplicationId = applicationId;

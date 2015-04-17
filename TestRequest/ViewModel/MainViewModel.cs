@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
@@ -63,7 +64,8 @@ namespace TestRequest.ViewModel
                 var response = await this.QuickbloxClient.CoreClient.ByLogin(this.Login, this.Password);
                 if (response.StatusCode == HttpStatusCode.Accepted)
                 {
-                    QuickbloxClient.MessagesClient.AppId = ApplicationKeys.ApplicationId;
+                    /// TODO: change to uint32 in all code messageClient
+                    QuickbloxClient.MessagesClient.AppId = Convert.ToInt32(ApplicationKeys.ApplicationId);
                     QuickbloxClient.MessagesClient.UserId = response.Result.User.Id;
                     QuickbloxClient.MessagesClient.Password = Password;
                     this.NavigationService.NavigateTo("Chats");

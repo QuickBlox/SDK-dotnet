@@ -1,4 +1,6 @@
-﻿namespace Quickblox.Sdk.Test
+﻿using System;
+
+namespace Quickblox.Sdk.Test
 {
     public class GlobalConstant
     {
@@ -11,7 +13,7 @@
 
         #region Application
 
-        public const int ApplicationId = 21183;
+        public const UInt32 ApplicationId = 21183;
         public const string AuthorizationKey = "LxnQksQJsXA2NLU";
         public const string AuthorizationSecret = "7v2Jkrc7e-99JJX";
 
