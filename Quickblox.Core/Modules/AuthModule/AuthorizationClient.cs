@@ -39,7 +39,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             this.quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
             return resultSessionResponse;
         }
-        
+
         public async Task<HttpResponse<SessionResponse>> CreateSessionWithLogin(String applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
@@ -146,7 +146,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return loginResponse;
         }
 
-        private SessionRequest CreateSessionRequest(String applicationId, String authKey)
+        private SessionRequest CreateSessionRequest(int applicationId, String authKey)
         {
             var settings = new SessionRequest();
             settings.ApplicationId = applicationId;

@@ -25,7 +25,7 @@ namespace Quickblox.Sdk.Test
             var ex = AssertEx.ThrowsAsync<NotInitializedException>(
                 async () =>
                 {
-                    await client.CoreClient.CreateSessionBase("", "", "");
+                    await client.CoreClient.CreateSessionBase(0, "", "");
                 });
         }
     }

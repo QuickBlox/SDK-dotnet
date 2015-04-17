@@ -14,25 +14,35 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private string otherUserJid;
         private bool isInitialized;
 
-        public event EventHandler OnMessageReceived;
+        public event MessageHandler OnMessageReceived;
 
-        public event EventHandler OnLogin;
+        public event EventHandler OnInitialized;
 
         public event EventHandler OnPresense;
 
-        public PrivateChatManager(string userId, string password, string otherUserId, string appId, string chatEndpoint)
+        public PrivateChatManager(int userId, string password, int otherUserId, int appId, string chatEndpoint)
         {
-            otherUserJid = string.Format("{0}-{1}@chat.quickblox.com ", otherUserId, appId);
+            otherUserJid = string.Format("{0}-{1}@chat.quickblox.com", otherUserId, appId);
 
             XmppClientConnection xmpp = new XmppClientConnection(chatEndpoint);
             xmpp.OnLogin += XmppOnOnLogin;
-            xmpp.Open(userId, password); 
+            xmpp.OnAuthError += (sender, element) => { };
+            xmpp.OnMessage += XmppOnOnMessage;
+
+            xmpp.Open(string.Format("{0}-{1}", userId, appId), password); 
+        }
+
+        private void XmppOnOnMessage(object sender, Message msg)
+        {
+            var handler = OnMessageReceived;
+            if (handler != null)
+                handler(this, msg);
         }
 
         private void XmppOnOnLogin(object sender)
         {
             isInitialized = true;
-            var handler = OnLogin;
+            var handler = OnInitialized;
             if (handler != null)
                 handler(this, new EventArgs());
         }

@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="ApplicationKeys.cs" />
     <Compile Include="Helper\Helpers.cs" />
+    <Compile Include="INavigatable.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\ChatsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

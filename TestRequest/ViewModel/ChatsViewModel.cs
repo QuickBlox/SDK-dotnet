@@ -2,35 +2,31 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Views;
 using Quickblox.Sdk;
-using Quickblox.Sdk.GeneralDataModel.Response;
-using Quickblox.Sdk.Modules.NotificationModule.Models;
-using Quickblox.Sdk.Modules.NotificationModule.Requests;
 
 namespace TestRequest.ViewModel
 {
-    public class ChatsViewModel : ViewModel
+    public class ChatsViewModel : ViewModel, INavigatable
     {
-        private readonly QuickbloxClient client;
-        private HttpResponse<EventResponse> createSubscriptionsResponse;
-        private CreateEventRequest createEventRequest;
+        private INavigationService navigationService;
+        private QuickbloxClient quickbloxClient;
 
-        public ChatsViewModel(QuickbloxClient client)
+        public ChatsViewModel(INavigationService navigationService, QuickbloxClient quickbloxClient)
         {
-            this.client = client;
-            this.Load();
+            this.navigationService = navigationService;
+            this.quickbloxClient = quickbloxClient;
         }
 
-        private async Task Load()
+        public void OnNavigated()
         {
-            createEventRequest = new CreateEventRequest();
-            createEventRequest.Event = new CreateEvent()
-            {
-                NotificationType = NotificationType.push,
-                Environment = Environment.production,
-                Message = "I love quickblox"
-            };
-            createSubscriptionsResponse = await this.client.NotificationClient.CreateEvent(createEventRequest);
+            var a = quickbloxClient.MessagesClient.InitPrivateChatManager(2766517);
+            a.OnInitialized += AOnOnInitialized;
+        }
+
+        private void AOnOnInitialized(object sender, EventArgs eventArgs)
+    {
+
         }
     }
 }
