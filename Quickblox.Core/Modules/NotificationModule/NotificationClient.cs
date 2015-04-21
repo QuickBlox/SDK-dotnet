@@ -6,7 +6,7 @@ using Quickblox.Sdk.Core.Serializer;
 using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Modules.NotificationModule.Models;
 using Quickblox.Sdk.Modules.NotificationModule.Requests;
-using Quickblox.Sdk.Modules.NotificationModule.Response;
+using Quickblox.Sdk.Modules.NotificationModule.Responses;
 
 namespace Quickblox.Sdk.Modules.NotificationModule
 {

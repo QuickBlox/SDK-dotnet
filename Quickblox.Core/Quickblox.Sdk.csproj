@@ -112,11 +112,11 @@
     <Compile Include="Modules\NotificationModule\Requests\CreateSubscriptionsRequest.cs" />
     <Compile Include="Modules\NotificationModule\Models\CreateEvent.cs" />
     <Compile Include="Modules\NotificationModule\Models\User.cs" />
-    <Compile Include="Modules\NotificationModule\Response\EventResponse.cs" />
-    <Compile Include="Modules\NotificationModule\Response\CreatePushTokenResponse.cs" />
-    <Compile Include="Modules\NotificationModule\Response\GetSubscriptionResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\EventResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\CreatePushTokenResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\GetSubscriptionResponse.cs" />
     <Compile Include="Modules\NotificationModule\Models\Subscription.cs" />
-    <Compile Include="Modules\NotificationModule\Response\GetSubscriptionsResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\GetSubscriptionsResponse.cs" />
     <Compile Include="Modules\UsersModule\Models\RetrieveUserFilter.cs" />
     <Compile Include="Modules\UsersModule\Requests\RetrieveUsersRequest.cs" />
     <Compile Include="Modules\UsersModule\Requests\UpdateUserRequest.cs" />
