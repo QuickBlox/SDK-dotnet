@@ -23,7 +23,7 @@ namespace TestRequest.Views
             base.OnNavigatedTo(e);
             var viewModel = this.DataContext as INavigatable;
             if(viewModel != null)
-                viewModel.OnNavigated();
+                viewModel.OnNavigated(e.Parameter);
         }
     }
 }

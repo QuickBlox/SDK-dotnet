@@ -42,6 +42,7 @@
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs" />
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilter.cs" />
     <Compile Include="Modules\ChatModule\Requests\RetrieveDialogsRequest.cs" />
+    <Compile Include="Modules\MessagesModule\Models\Message.cs" />
     <Compile Include="Modules\UsersModule\Models\UserSortFilter.cs" />
     <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
     <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />

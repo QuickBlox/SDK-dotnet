@@ -1,42 +1,55 @@
 ﻿using System;
 using System.Diagnostics;
+using agsXMPP;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
     public class MessagesClient
     {
         private QuickbloxClient quickbloxClient;
+        private XmppClientConnection xmpp;
+        private int appId;
+
+
+        public event EventHandler OnInitialized;
+
+
+        public bool IsConnected { get; private set; }
 
         public MessagesClient(QuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
         }
 
-        public int UserId { get; set; }
-        public string Password { get; set; }
-        public int AppId { get; set; }
-        public string ChatEndpoint { get; set; }
-
-        public PrivateChatManager InitPrivateChatManager(int otherUserId)
+        public void Connect(int userId, string password, int appId, string chatEndpoint)
         {
-            if(UserId == 0)
-                Debug.WriteLine("User ID is 0 when creating private chat manager.");
+            xmpp = new XmppClientConnection(chatEndpoint);
+            xmpp.OnLogin += XmppOnOnLogin;
+            xmpp.OnAuthError += (sender, element) => { };
+            this.appId = appId;
 
-            if (Password == null)
-                Debug.WriteLine("Password is null when creating private chat manager.");
-
-            if (AppId == 0)
-                Debug.WriteLine("App ID is 0 when creating private chat manager.");
-
-            if(ChatEndpoint == null)
-                throw new Exception("ChatEndpoint must be not null");
-
-            return new PrivateChatManager(UserId, Password, otherUserId, AppId, ChatEndpoint);
+            xmpp.Open(string.Format("{0}-{1}", userId, appId), password); 
         }
 
-        public GroupChatManager InitGroupChatManager(string groupId)
+        public PrivateChatManager GetPrivateChatManager(int otherUserId)
+        {
+            if(xmpp == null || !xmpp.Authenticated)
+                throw new Exception("Xmpp connection is not ready.");
+
+            return new PrivateChatManager(xmpp, otherUserId, appId);
+        }
+
+        public GroupChatManager GetGroupChatManager(string groupId)
         {
             throw new NotImplementedException();
+        }
+
+        private void XmppOnOnLogin(object sender)
+        {
+            IsConnected = true;
+            var handler = OnInitialized;
+            if (handler != null)
+                handler(this, new EventArgs());
         }
     }
 }

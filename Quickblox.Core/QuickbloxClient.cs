@@ -90,6 +90,8 @@ namespace Quickblox.Sdk
 
         public string ApiEndPoint { get; private set; }
 
+        public string ChatEndpoint { get; private set; }
+
         public string Token { get; internal set; }
 
         #endregion
@@ -127,7 +129,7 @@ namespace Quickblox.Sdk
             if (accountResponse.StatusCode == HttpStatusCode.OK)
             {
                 this.ApiEndPoint = accountResponse.Result.ApiEndPoint;
-                this.MessagesClient.ChatEndpoint = accountResponse.Result.ChatEndPoint;
+                this.ChatEndpoint = accountResponse.Result.ChatEndPoint;
                 this.IsClientInitialized = true;
             }
         }
