@@ -44,6 +44,10 @@
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilter.cs" />
     <Compile Include="Modules\ChatModule\Requests\RetrieveDialogsRequest.cs" />
     <Compile Include="Modules\NotificationModule\Models\EditEvent.cs" />
+    <Compile Include="Modules\NotificationModule\Models\IMessage.cs" />
+    <Compile Include="Modules\NotificationModule\Models\PushMessage.cs" />
+    <Compile Include="Modules\NotificationModule\Models\MessageConverter.cs" />
+    <Compile Include="Modules\NotificationModule\Models\SimplePushMessage.cs" />
     <Compile Include="Modules\NotificationModule\Models\Tags.cs" />
     <Compile Include="Modules\NotificationModule\Models\TagsAny.cs" />
     <Compile Include="Modules\NotificationModule\Models\UserWithTags.cs" />
@@ -132,6 +136,9 @@
   <ItemGroup>
     <Reference Include="agsXMPP">
       <HintPath>..\External\agsXMPP.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.UnitTestFramework">
+      <HintPath>C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0\ExtensionSDKs\MSTestFramework\11.0\References\CommonConfiguration\Neutral\Microsoft.VisualStudio.TestPlatform.UnitTestFramework.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
