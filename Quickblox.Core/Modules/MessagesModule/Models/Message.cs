@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestRequest
+namespace Quickblox.Sdk.Modules.MessagesModule
 {
-    public interface INavigatable
+    public class Message
     {
-        void OnNavigated(object parameter);
+        public string MessageText { get; set; }
     }
 }

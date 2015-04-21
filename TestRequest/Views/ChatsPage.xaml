@@ -23,6 +23,8 @@
          <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="200"/>
+                
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
@@ -31,11 +33,32 @@
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <Rectangle VerticalAlignment="Bottom" Height="6" Margin="0,0" Fill="DarkCyan" Grid.ColumnSpan="2"/>
-            <TextBlock Text="Chats" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1"  Foreground="DarkGreen"
+            <Rectangle VerticalAlignment="Bottom" Height="6" Margin="0,0" Fill="DarkCyan" Grid.ColumnSpan="3"/>
+             <TextBlock Grid.Column="1" Text="{Binding UserId}" VerticalAlignment="Center" FontSize="40"/>
+            <TextBlock Text="Chats" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="2"  Foreground="DarkGreen"
                        FontFamily="Comic Sans Ms"
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
+        
+        <StackPanel Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                
+            </StackPanel>
+            <ListBox ItemsSource="{Binding Messages}" Height="300">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding MessageText}"></TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Orientation="Horizontal" >
+                <TextBox Header="Other user ID:" Text="{Binding OtherUserId, Mode=TwoWay}" Height="60" Width="200" HorizontalAlignment="Left" Margin="12" />
+                <TextBox Header="Message text:" Text="{Binding MessageText, Mode=TwoWay}" Height="60" Width="200" HorizontalAlignment="Left" Margin="12" />
+                <Button Content="Send" Margin="12" Command="{Binding SendCommand}"/>
+            </StackPanel>
+            
+            
+        </StackPanel>
         
         
     </Grid>
