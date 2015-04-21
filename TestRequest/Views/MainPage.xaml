@@ -36,8 +36,8 @@
                         HorizontalAlignment="Left"
                         Width="300"
                         Margin="0,20,0,0">
-                <TextBox Header="Login" Text="{Binding Login}" />
-                <TextBox Header="Password" Text="{Binding Password}"/>
+                <TextBox Header="Login" Text="{Binding Login, Mode=TwoWay}" />
+                <TextBox Header="Password" Text="{Binding Password, Mode=TwoWay}"/>
 
                 <Button Content="login" Margin="-6,12" Command="{Binding LoginCommand}"></Button>
             </StackPanel>

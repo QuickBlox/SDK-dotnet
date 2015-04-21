@@ -3,6 +3,8 @@ using Quickblox.Sdk;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 using GalaSoft.MvvmLight.Command;
 using Quickblox.Sdk.Modules.MessagesModule;
 
@@ -84,7 +86,11 @@ namespace TestRequest.ViewModel
 
         private void PrivateChatManagerOnOnMessageReceived(object sender, Message msg)
         {
-            Messages.Add(msg);
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                () =>
+                {
+                    Messages.Add(msg);
+                });
         }
 
         private void SendCommandExecute()
