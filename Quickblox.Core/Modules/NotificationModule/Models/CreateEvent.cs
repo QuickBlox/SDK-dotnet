@@ -1,7 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace Quickblox.Sdk.Modules.NotificationModule.Models
 {
@@ -9,7 +8,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule.Models
     {
         public CreateEvent()
         {
-            
+            this.PushType = PushType.mpns;
         }
 
         [JsonProperty("active", NullValueHandling = NullValueHandling.Ignore)]
@@ -19,9 +18,9 @@ namespace Quickblox.Sdk.Modules.NotificationModule.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public NotificationType NotificationType { get; set; }
 
-        [JsonProperty("push_type", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("push_type")]
         [JsonConverter(typeof(StringEnumConverter))]
-        public PushType? PushType { get; set; }
+        public PushType PushType { get; set; }
 
         [JsonProperty("environment")]
         [JsonConverter(typeof(StringEnumConverter))]
@@ -31,16 +30,17 @@ namespace Quickblox.Sdk.Modules.NotificationModule.Models
         public UserWithTags User { get; set; }
 
         [JsonProperty("message")]
-        public string Message { get; set; }
+        [JsonConverter(typeof(MessageConverter))]
+        public IMessage Message { get; set; }
 
         [JsonProperty("date", NullValueHandling = NullValueHandling.Ignore)]
-        public TimeSpan? Date { get; set; }
+        public Int64? Date { get; set; }
 
         [JsonProperty("end_date", NullValueHandling = NullValueHandling.Ignore)]
-        public TimeSpan? EndDate { get; set; }
+        public Int64? EndDate { get; set; }
 
         [JsonProperty("period", NullValueHandling = NullValueHandling.Ignore)]
-        public TimeSpan? Period { get; set; }
+        public Int64? Period { get; set; }
 
         [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
         public String EventName { get; set; }

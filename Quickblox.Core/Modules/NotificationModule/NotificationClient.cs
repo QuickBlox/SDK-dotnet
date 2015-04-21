@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;

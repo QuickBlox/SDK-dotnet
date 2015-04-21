@@ -85,7 +85,7 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
         }
 
         [TestMethod]
-        public async Task CreateEventSuccessTest()
+        public async Task CreateEventFullSuccessTest()
         {
             var createEventRequest = new CreateEventRequest();
             createEventRequest.Event = new CreateEvent()
@@ -93,12 +93,27 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
                 NotificationType = NotificationType.push,
                 Environment = Environment.production,
                 PushType = PushType.mpns,
-                Message = Convert.ToBase64String(Encoding.UTF8.GetBytes("I love quickblox")),
+                Message = new PushMessage("Title", Convert.ToBase64String(Encoding.UTF8.GetBytes("I love quickblox"))),
                 User = new UserWithTags() {  Ids = "2701456" }
             };
             var createEventResponse = await this.client.NotificationClient.CreateEvent(createEventRequest);
             Assert.AreEqual(createEventResponse.StatusCode, HttpStatusCode.Created);
+        }
 
+        [TestMethod]
+        public async Task CreateEventSimpleSuccessTest()
+        {
+            var createEventRequest = new CreateEventRequest();
+            createEventRequest.Event = new CreateEvent()
+            {
+                NotificationType = NotificationType.push,
+                Environment = Environment.production,
+                PushType = PushType.mpns,
+                Message = new SimplePushMessage("I love quickblox"),
+                User = new UserWithTags() { Ids = "2701456" }
+            };
+            var createEventResponse = await this.client.NotificationClient.CreateEvent(createEventRequest);
+            Assert.AreEqual(createEventResponse.StatusCode, HttpStatusCode.Created);
         }
 
         [TestMethod]
@@ -130,7 +145,7 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
             {
                 EditEvent = new EditEvent()
                 {
-                    Message = Convert.ToBase64String(Encoding.UTF8.GetBytes("I love quickblox 2")),
+                    Message = new PushMessage("Title", "I love quickblox 3"),
                 }
             };
 

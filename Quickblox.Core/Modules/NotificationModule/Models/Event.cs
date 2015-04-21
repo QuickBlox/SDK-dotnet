@@ -29,7 +29,8 @@ namespace Quickblox.Sdk.Modules.NotificationModule.Models
         public UInt32 Id { get; set; }
 
         [JsonProperty("message")]
-        public string Message { get; set; }
+        [JsonConverter(typeof(MessageConverter))]
+        public IMessage Message { get; set; }
 
         [JsonProperty("name")]
         public object Name { get; set; }
