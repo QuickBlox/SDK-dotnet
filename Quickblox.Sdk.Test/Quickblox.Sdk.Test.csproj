@@ -114,10 +114,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssertEx.cs" />
+    <Compile Include="Helper\Helpers.cs" />
     <Compile Include="Http\HttpServiceTest.cs" />
     <Compile Include="Modules\AuthModule\AuthorizationClientTest.cs" />
     <Compile Include="Modules\ChatModule\ChatClientTest.cs" />
     <Compile Include="GlobalConstant.cs" />
+    <Compile Include="Modules\NotificationModule\NotificationClientTest.cs" />
     <Compile Include="Modules\UsersModule\UsersClientTest.cs" />
     <Compile Include="QuickbloxClientTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

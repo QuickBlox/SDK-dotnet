@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;

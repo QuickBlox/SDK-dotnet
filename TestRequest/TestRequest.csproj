@@ -121,6 +121,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="ApplicationKeys.cs" />
+    <Compile Include="Helper\Helpers.cs" />
     <Compile Include="INavigatable.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\ChatsViewModel.cs" />

@@ -8,5 +8,4 @@ namespace Quickblox.Sdk.Modules.NotificationModule.Models
         [JsonProperty("ids")]
         public string Ids { get; set; }
     }
-
 }

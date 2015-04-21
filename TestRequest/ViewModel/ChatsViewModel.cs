@@ -90,7 +90,7 @@ namespace TestRequest.ViewModel
         private void SendCommandExecute()
         {
             if (privateChatManager == null)
-            {
+        {
                 privateChatManager = quickbloxClient.MessagesClient.GetPrivateChatManager(OtherUserId);
                 privateChatManager.OnMessageReceived += PrivateChatManagerOnOnMessageReceived;
             }

@@ -42,7 +42,11 @@
 
         public const string DeleteSubscriptionsMethod = "/subscriptions/{0}.json";
 
-        public const string EventMethod = "/events.json";
+        public const string EventsMethod = "/events.json";
+
+        public const string GetEventByIdMethod = "/events/{0}.json";
+
+        public const string EditEventMethod = "/events/{0}.json";
 
         public const string DeleteEventMethod = "/events/{0}.json";
 

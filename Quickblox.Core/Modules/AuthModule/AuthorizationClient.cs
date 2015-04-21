@@ -11,6 +11,7 @@ using Quickblox.Sdk.Modules.AuthModule.Models;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace Quickblox.Sdk.Modules.AuthModule
 {
@@ -23,10 +24,11 @@ namespace Quickblox.Sdk.Modules.AuthModule
             this.quickbloxClient = client;
         }
         
-        public async Task<HttpResponse<SessionResponse>> CreateSessionBase(int applicationId, String authKey, String authSecret)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionBase(UInt32 applicationId, String authKey, String authSecret, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
+            settings.DeviceRequest = deviceRequestRequest;
             settings.Signature = this.BuildSignatureFromJsonAttribute(authSecret, settings);
             var resultSessionResponse = await HttpService.PostAsync<SessionResponse, SessionRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.SessionMethod,
@@ -38,11 +40,11 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return resultSessionResponse;
         }
 
-
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLogin(int applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLogin(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
+            settings.DeviceRequest = deviceRequestRequest;
             settings.User = new User() { Login = userLogin, Password = userPassword };
             settings.Scope = scope;
 
@@ -63,10 +65,11 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return resultSessionResponse;
         }
 
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmail(int applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmail(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
+            settings.DeviceRequest = deviceRequestRequest;
             settings.User = new User() { Email = userLogin, Password = userPassword };
             settings.Scope = scope;
 
@@ -143,7 +146,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return loginResponse;
         }
 
-        private SessionRequest CreateSessionRequest(int applicationId, String authKey)
+        private SessionRequest CreateSessionRequest(UInt32 applicationId, String authKey)
         {
             var settings = new SessionRequest();
             settings.ApplicationId = applicationId;

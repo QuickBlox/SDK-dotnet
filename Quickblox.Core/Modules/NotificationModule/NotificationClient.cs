@@ -20,18 +20,15 @@ namespace Quickblox.Sdk.Modules.NotificationModule
             this.quickbloxClient = client;
         }
 
-        public async Task<HttpResponse<CreatePushTokenResponse>> CreatePushToken(Environment environment, String clientIdentificationSequence, Platform platform, String uid)
+        public async Task<HttpResponse<CreatePushTokenResponse>> CreatePushToken(CreatePushTokenRequest сreatePushTokenRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
-            var settings = new CreatePushTokenRequest();
-            settings.Device = new Device() { Platform = platform, Udid = uid };
-            settings.PushToken = new PushToken() { Environment = environment, ClientIdentificationSequence = clientIdentificationSequence };
-
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var resultPushTokenResponse = await HttpService.PostAsync<CreatePushTokenResponse, CreatePushTokenRequest>(this.quickbloxClient.ApiEndPoint,
-                                                                                                        QuickbloxMethods.SessionMethod,
+                                                                                                        QuickbloxMethods.PushTokenMethod,
                                                                                                         new NewtonsoftJsonSerializer(),
-                                                                                                        settings,
-                                                                                                        RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
+                                                                                                        сreatePushTokenRequest,
+                                                                                                        headers);
 
             return resultPushTokenResponse;
         }
@@ -40,61 +37,57 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         {
             this.quickbloxClient.CheckIsInitialized();
             var methodUrl = String.Format(QuickbloxMethods.DeletePushTokenMethod, pushTokenId);
-            this.quickbloxClient.CheckIsInitialized();
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var resultPushTokenResponse = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, methodUrl, 
-                                                                                new NewtonsoftJsonSerializer(), 
-                                                                                RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
+                                                                                new NewtonsoftJsonSerializer(),
+                                                                                headers);
 
             return resultPushTokenResponse;
         }
 
-        public async Task<HttpResponse<CreateSubscriptionResponse>> CreateSubscriptions(NotificationChannelType type)
+        public async Task<HttpResponse> CreateSubscriptions(NotificationChannelType type)
         {
             this.quickbloxClient.CheckIsInitialized();
-            var createSubscriptions = new CreateSubscriptionsRequest();
-            createSubscriptions.Channel = new NotificationChannel() { Name = type };
-            var resultSubscriptionResponse = await HttpService.PostAsync<CreateSubscriptionResponse, CreateSubscriptionsRequest>(this.quickbloxClient.ApiEndPoint,
+            var createSubscriptions = new CreateSubscriptionsRequest {Name = type};
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+            var resultSubscriptionResponse = await HttpService.PostAsync<Object, CreateSubscriptionsRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.SubscriptionsMethod,
                                                                                                         new NewtonsoftJsonSerializer(),
                                                                                                         createSubscriptions,
-                                                                                                        RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
+                                                                                                        headers);
             return resultSubscriptionResponse;
         }
 
-        public async Task<HttpResponse<CreateSubscriptionResponse>> GetSubscriptions()
+        public async Task<HttpResponse<GetSubscriptionResponse[]>> GetSubscriptions()
         {
             this.quickbloxClient.CheckIsInitialized();
-            var resultSubscriptionResponse = await HttpService.GetAsync<CreateSubscriptionResponse>(this.quickbloxClient.ApiEndPoint,
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+            var resultSubscriptionResponse = await HttpService.GetAsync<GetSubscriptionResponse[]>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.SubscriptionsMethod,
                                                                                                         new NewtonsoftJsonSerializer(),
-                                                                                                        RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
+                                                                                                        headers);
             return resultSubscriptionResponse;
         }
 
-        public async Task<HttpResponse> DeleteSubscriptions(String subscriptionId)
+        public async Task<HttpResponse> DeleteSubscriptions(Int32 subscriptionId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.DeleteSubscriptionsMethod, subscriptionId);
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var resultSubscriptionResponse = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, 
                                                                                                         uriMethod,
                                                                                                         new NewtonsoftJsonSerializer(),
-                                                                                                        RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
+                                                                                                        headers);
             return resultSubscriptionResponse;
         }
 
-        // TODO: не доделан
-        public async Task<HttpResponse<CreateEventResponse>> CreateEvent(NotificationType notificationChannelType, Environment environment)
+        public async Task<HttpResponse<EventResponse>> CreateEvent(CreateEventRequest сreateEventRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
-            var settings = new CreateEventRequest();
-            settings.Event = new CreateEvent();
-            settings.Event.NotificationType = notificationChannelType;
-            settings.Event.Environment = environment;
-
-            var resultPushTokenResponse = await HttpService.PostAsync<CreateEventResponse, CreateEventRequest>(this.quickbloxClient.ApiEndPoint,
-                                                                                                        QuickbloxMethods.EventMethod,
+            var resultPushTokenResponse = await HttpService.PostAsync<EventResponse, CreateEventRequest>(this.quickbloxClient.ApiEndPoint,
+                                                                                                        QuickbloxMethods.EventsMethod,
                                                                                                         new NewtonsoftJsonSerializer(),
-                                                                                                        settings,
+                                                                                                        сreateEventRequest,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
 
             return resultPushTokenResponse;
@@ -104,28 +97,39 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         {
             this.quickbloxClient.CheckIsInitialized();
             var resultPushTokenResponse = await HttpService.GetAsync<GetSubscriptionsResponse>(this.quickbloxClient.ApiEndPoint,
-                                                                                                        QuickbloxMethods.EventMethod,
+                                                                                                        QuickbloxMethods.EventsMethod,
                                                                                                         new NewtonsoftJsonSerializer(),
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
 
             return resultPushTokenResponse;
         }
 
-        public async Task<HttpResponse<CreateEventResponse>> EditEvent(String name, String message, Boolean isActive = true)
+        public async Task<HttpResponse<GetSubscriptionsResponse>> GetEventById(UInt32 eventId)
         {
             this.quickbloxClient.CheckIsInitialized();
-            var settings = new CreateEventRequest();
-            settings.Event = new CreateEvent() {Message = message, EventName = name};
-            var resultPushTokenResponse = await HttpService.PostAsync<CreateEventResponse, CreateEventRequest>(this.quickbloxClient.ApiEndPoint,
-                                                                                                        QuickbloxMethods.EventMethod,
+            var uriMethod = string.Format(QuickbloxMethods.GetEventByIdMethod, eventId);
+            var resultPushTokenResponse = await HttpService.GetAsync<GetSubscriptionsResponse>(this.quickbloxClient.ApiEndPoint,
+                                                                                                        uriMethod,
                                                                                                         new NewtonsoftJsonSerializer(),
-                                                                                                        settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
 
             return resultPushTokenResponse;
         }
 
-        public async Task<HttpResponse> DeleteEvent(String eventId)
+        public async Task<HttpResponse<EventResponse>> EditEvent(UInt32 eventId, EditEventRequest editEventRequest)
+        {
+            this.quickbloxClient.CheckIsInitialized();
+            var uriMethod = String.Format(QuickbloxMethods.EditEventMethod, eventId);
+            var resultPushTokenResponse = await HttpService.PutAsync<EventResponse, EditEventRequest>(this.quickbloxClient.ApiEndPoint,
+                                                                                                        uriMethod,
+                                                                                                        new NewtonsoftJsonSerializer(),
+                                                                                                        editEventRequest,
+                                                                                                        RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token));
+
+            return resultPushTokenResponse;
+        }
+
+        public async Task<HttpResponse> DeleteEvent(UInt32 eventId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.DeleteEventMethod, eventId);
