@@ -82,5 +82,28 @@
 
         #endregion
 
+        #region Content
+
+        public const string CreateFileMethod = "/blobs.json";
+
+        public const string GetFilesMethod = "/blobs.json";
+
+        public const string GetTaggedFilesMethod = "/blobs/tagged.json";
+
+        public const string UploadMethod = "{0}";
+
+        public const string CompleteUploadByFileIdMethod = "/blobs/{0}/complete";
+
+        public const string GetFileByIdMethod = "/blobs/{0}";
+
+        public const string DownloadFileByIdMethod = "/blobs/{0}";
+
+        public const string GetFileByIdReadOnlyMethod = "/blobs/{0}/getblobobjectbyid";
+
+        public const string EditFileMethod = "/blobs/{0}";
+
+        public const string DeleteFileMethod = "/blobs/{0}";
+
+        #endregion
     }
 }
