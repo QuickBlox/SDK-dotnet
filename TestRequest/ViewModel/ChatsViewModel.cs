@@ -6,7 +6,9 @@ using System.Diagnostics;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using GalaSoft.MvvmLight.Command;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule;
+using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
 namespace TestRequest.ViewModel
 {
@@ -16,10 +18,18 @@ namespace TestRequest.ViewModel
 
         private INavigationService navigationService;
         private QuickbloxClient quickbloxClient;
+
         private PrivateChatManager privateChatManager;
-        private int otherUserId;
-        private string messageText;
+        private GroupChatManager groupChatManager;
+
         private int userId;
+        private int otherUserId;
+        private string groupJid;
+        private string messageText;
+        private string messageText2;
+
+        private bool otherUserIdChanged;
+        private bool groupJidChanged;
 
         #endregion
 
@@ -31,6 +41,8 @@ namespace TestRequest.ViewModel
             this.quickbloxClient = quickbloxClient;
             Messages = new ObservableCollection<Message>();
             SendCommand = new RelayCommand(SendCommandExecute);
+            GroupSendCommand = new RelayCommand(GroupSendCommandExecute);
+            CreateDialogCommand = new RelayCommand(CreateDialogCommandExecute);
         }
 
         #endregion
@@ -39,41 +51,49 @@ namespace TestRequest.ViewModel
 
         public ObservableCollection<Message> Messages { get; set; }
 
+        public int UserId
+        {
+            get { return userId; }
+            set { Set(ref userId, value); }
+        }
+
         public int OtherUserId
         {
             get { return otherUserId; }
             set
             {
-                if (otherUserId == value) return;
-                otherUserId = value;
-                RaisePropertyChanged(() => OtherUserId);
+                Set(ref otherUserId, value);
+                otherUserIdChanged = true;
+            }
+        }
+
+        public string GroupJid
+        {
+            get { return groupJid; }
+            set
+            {
+                Set(ref groupJid, value);
+                groupJidChanged = true;
             }
         }
 
         public string MessageText
         {
             get { return messageText; }
-            set
-            {
-                if (messageText == value) return;
-                messageText = value;
-                RaisePropertyChanged(() => MessageText);
-            }
+            set { Set(ref messageText, value); }
         }
 
+        public string MessageText2
+        {
+            get { return messageText2; }
+            set { Set(ref messageText2, value); }
+        }
 
         public RelayCommand SendCommand { get; set; }
 
-        public int UserId
-        {
-            get { return userId; }
-            set
-            {
-                if (userId == value) return;
-                userId = value;
-                RaisePropertyChanged(() => UserId);
-            }
-        }
+        public RelayCommand GroupSendCommand { get; set; }
+
+        public RelayCommand CreateDialogCommand { get; set; }
 
         #endregion
 
@@ -81,8 +101,9 @@ namespace TestRequest.ViewModel
         public void OnNavigated(object parameter)
         {
             UserId = (int) parameter;
-
+            quickbloxClient.MessagesClient.OnMessageReceived += PrivateChatManagerOnOnMessageReceived;
         }
+
 
         private void PrivateChatManagerOnOnMessageReceived(object sender, Message msg)
         {
@@ -95,18 +116,33 @@ namespace TestRequest.ViewModel
 
         private void SendCommandExecute()
         {
-            if (privateChatManager == null)
-        {
+            if (privateChatManager == null || otherUserIdChanged)
+            {
                 privateChatManager = quickbloxClient.MessagesClient.GetPrivateChatManager(OtherUserId);
-                privateChatManager.OnMessageReceived += PrivateChatManagerOnOnMessageReceived;
+                otherUserIdChanged = false;
             }
             
+            if (string.IsNullOrEmpty(MessageText)) return;
+
+            privateChatManager.SendMessage(MessageText);
+        }
+
+        private void GroupSendCommandExecute()
+        {
+            if (groupChatManager == null || groupJidChanged)
+            {
+                groupChatManager = quickbloxClient.MessagesClient.GetGroupChatManager(GroupJid);
+                groupJidChanged = false;
+            }
 
             if (string.IsNullOrEmpty(MessageText)) return;
 
-
-
             privateChatManager.SendMessage(MessageText);
+        }
+
+        private async void CreateDialogCommandExecute()
+        {
+            var response = await quickbloxClient.ChatClient.CreateDialog("Testgroup", DialogType.PublicGroup);
         }
     }
 }

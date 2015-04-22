@@ -1,55 +1,90 @@
 ﻿using System;
 using System.Diagnostics;
 using agsXMPP;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
     public class MessagesClient
     {
+        #region Fields
+
         private QuickbloxClient quickbloxClient;
-        private XmppClientConnection xmpp;
+        private XmppClientConnection xmppConnection;
         private int appId;
 
+        #endregion
 
-        public event EventHandler OnInitialized;
+        #region Properties
 
+        public event EventHandler OnConnected;
+        public event EventHandler<Message> OnMessageReceived;
 
         public bool IsConnected { get; private set; }
+
+        #endregion
+
+        #region Ctor
 
         public MessagesClient(QuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
         }
 
+        #endregion
+
+        #region Public methods
+
         public void Connect(int userId, string password, int appId, string chatEndpoint)
         {
-            xmpp = new XmppClientConnection(chatEndpoint);
-            xmpp.OnLogin += XmppOnOnLogin;
-            xmpp.OnAuthError += (sender, element) => { };
+            xmppConnection = new XmppClientConnection(chatEndpoint);
+            xmppConnection.OnLogin += XmppConnectionOnOnLogin;
+            xmppConnection.OnMessage += XmppConnectionOnOnMessage;
+            xmppConnection.OnAuthError += (sender, element) => { };
             this.appId = appId;
 
-            xmpp.Open(string.Format("{0}-{1}", userId, appId), password); 
+            xmppConnection.Open(string.Format("{0}-{1}", userId, appId), password);
         }
 
         public PrivateChatManager GetPrivateChatManager(int otherUserId)
         {
-            if(xmpp == null || !xmpp.Authenticated)
+            if (xmppConnection == null || !xmppConnection.Authenticated)
                 throw new Exception("Xmpp connection is not ready.");
 
-            return new PrivateChatManager(xmpp, otherUserId, appId);
+            string otherUserJid = string.Format("{0}-{1}@chat.quickblox.com", otherUserId, appId);
+
+            return new PrivateChatManager(xmppConnection, otherUserJid);
         }
 
-        public GroupChatManager GetGroupChatManager(string groupId)
+        public GroupChatManager GetGroupChatManager(string groupJid)
         {
-            throw new NotImplementedException();
+            if (xmppConnection == null || !xmppConnection.Authenticated)
+                throw new Exception("Xmpp connection is not ready.");
+
+            return new GroupChatManager(xmppConnection, groupJid);
         }
 
-        private void XmppOnOnLogin(object sender)
+        #endregion
+
+        #region Private methods
+
+        private void XmppConnectionOnOnLogin(object sender)
         {
             IsConnected = true;
-            var handler = OnInitialized;
+            var handler = OnConnected;
             if (handler != null)
                 handler(this, new EventArgs());
         }
+
+        private void XmppConnectionOnOnMessage(object sender, agsXMPP.protocol.client.Message msg)
+        {
+            var handler = OnMessageReceived;
+            if (handler != null)
+                handler(this, new Message() {From = msg.From.Bare, To = msg.To.Bare, MessageText = msg.Body});
+        }
+
+        #endregion
+
     }
+
 }
