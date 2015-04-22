@@ -10,31 +10,24 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 {
     public class PrivateChatManager
     {
+        #region Fields
+
         private readonly XmppClientConnection xmpp;
         private readonly string otherUserJid;
 
-        public event EventHandler<Message> OnMessageReceived;
-        
-        public event EventHandler OnPresense;
+        #endregion
 
-        
+        #region Ctor
 
-        public PrivateChatManager(XmppClientConnection xmppConnection, int otherUserId, int appId)
+        public PrivateChatManager(XmppClientConnection xmppConnection, string otherUserJid)
         {
-            otherUserJid = string.Format("{0}-{1}@chat.quickblox.com", otherUserId, appId);
-
+            this.otherUserJid = otherUserJid;
             xmpp = xmppConnection;
-            xmpp.OnMessage += XmppOnOnMessage;
         }
 
-        private void XmppOnOnMessage(object sender, agsXMPP.protocol.client.Message msg)
-        {
-            var handler = OnMessageReceived;
-            if (handler != null)
-                handler(this, new Message() {MessageText = msg.Body});
-        }
+        #endregion
 
-        
+        #region Public methods
 
         public bool SendMessage(string message)
         {
@@ -57,8 +50,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void TurnOffAutoPresense()
         {
-            
+
         }
+
+        #endregion
+
 
     }
 }

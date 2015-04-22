@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using agsXMPP;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -14,7 +15,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public event EventHandler OnPresense;
 
-        public GroupChatManager(string userId, string password, string groupId, string appId, string chatEndpoint)
+        public GroupChatManager(XmppClientConnection xmppConnection, string groupJid)
         {
             
         }

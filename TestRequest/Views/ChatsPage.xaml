@@ -47,7 +47,14 @@
             <ListBox ItemsSource="{Binding Messages}" Height="300">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding MessageText}"></TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text ="From:" Margin="12" />
+                            <TextBlock Text ="{Binding From}" Margin="12" />
+                            <TextBlock Text ="To:" Margin="12" />
+                            <TextBlock Text ="{Binding To}" Margin="12" />
+                            <TextBlock Text ="Text:" Margin="12" />
+                            <TextBlock Text="{Binding MessageText}" Margin="12" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -56,8 +63,12 @@
                 <TextBox Header="Message text:" Text="{Binding MessageText, Mode=TwoWay}" Height="60" Width="200" HorizontalAlignment="Left" Margin="12" />
                 <Button Content="Send" Margin="12" Command="{Binding SendCommand}"/>
             </StackPanel>
-            
-            
+            <Button Content="Create group dialog" Command="{Binding CreateDialogCommand}" />
+            <StackPanel Orientation="Horizontal" >
+                <TextBox Header="Group JID:" Text="{Binding GroupJid, Mode=TwoWay}" Height="60" Width="200" HorizontalAlignment="Left" Margin="12" />
+                <TextBox Header="Message text:" Text="{Binding MessageText2, Mode=TwoWay}" Height="60" Width="200" HorizontalAlignment="Left" Margin="12" />
+                <Button Content="Send to group" Margin="12" Command="{Binding GroupSendCommand}"/>
+            </StackPanel>
         </StackPanel>
         
         
