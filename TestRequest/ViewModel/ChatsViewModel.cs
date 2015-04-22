@@ -26,7 +26,6 @@ namespace TestRequest.ViewModel
         private int otherUserId;
         private string groupJid;
         private string messageText;
-        private string messageText2;
 
         private bool otherUserIdChanged;
         private bool groupJidChanged;
@@ -43,6 +42,7 @@ namespace TestRequest.ViewModel
             SendCommand = new RelayCommand(SendCommandExecute);
             GroupSendCommand = new RelayCommand(GroupSendCommandExecute);
             CreateDialogCommand = new RelayCommand(CreateDialogCommandExecute);
+            GroupSendPresenceCommand = new RelayCommand(GroupSendPresenceCommandExecute);
         }
 
         #endregion
@@ -83,15 +83,11 @@ namespace TestRequest.ViewModel
             set { Set(ref messageText, value); }
         }
 
-        public string MessageText2
-        {
-            get { return messageText2; }
-            set { Set(ref messageText2, value); }
-        }
-
         public RelayCommand SendCommand { get; set; }
 
         public RelayCommand GroupSendCommand { get; set; }
+
+        public RelayCommand GroupSendPresenceCommand { get; set; }
 
         public RelayCommand CreateDialogCommand { get; set; }
 
@@ -137,7 +133,21 @@ namespace TestRequest.ViewModel
 
             if (string.IsNullOrEmpty(MessageText)) return;
 
-            privateChatManager.SendMessage(MessageText);
+            groupChatManager.SendMessage(MessageText);
+        }
+
+        private void GroupSendPresenceCommandExecute()
+        {
+            if (groupChatManager == null || groupJidChanged)
+            {
+                groupChatManager = quickbloxClient.MessagesClient.GetGroupChatManager(GroupJid);
+                groupJidChanged = false;
+            }
+
+            Random random = new Random();
+            string nick = "nick" + random.Next(10000);
+
+            groupChatManager.JoinGroup(nick);
         }
 
         private async void CreateDialogCommandExecute()
