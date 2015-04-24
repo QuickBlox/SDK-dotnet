@@ -56,6 +56,8 @@
     <Compile Include="Modules\ContentModule\Response\FileResponseInfo.cs" />
     <Compile Include="Modules\ContentModule\Response\FilesPagedResponse.cs" />
     <Compile Include="Modules\ContentModule\Response\ReadOnlyAccessResponse.cs" />
+    <Compile Include="Modules\MessagesModule\Models\Presence.cs" />
+    <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />
     <Compile Include="Modules\NotificationModule\Models\EditEvent.cs" />
     <Compile Include="Modules\NotificationModule\Models\IMessage.cs" />
     <Compile Include="Modules\NotificationModule\Models\PushMessage.cs" />

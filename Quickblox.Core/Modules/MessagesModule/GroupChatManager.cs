@@ -39,11 +39,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
-        public void Close()
-        {
-
-        }
-
         public void TurnOnAutoPresense()
         {
 

@@ -43,6 +43,8 @@ namespace TestRequest.ViewModel
             GroupSendCommand = new RelayCommand(GroupSendCommandExecute);
             CreateDialogCommand = new RelayCommand(CreateDialogCommandExecute);
             GroupSendPresenceCommand = new RelayCommand(GroupSendPresenceCommandExecute);
+            PresenceSubscribeCommand = new RelayCommand(PresenceSubscribeCommandExecute);
+            ApproveSubsCommand = new RelayCommand(ApproveSubsCommandExecute);
         }
 
         #endregion
@@ -84,6 +86,10 @@ namespace TestRequest.ViewModel
         }
 
         public RelayCommand SendCommand { get; set; }
+
+        public RelayCommand PresenceSubscribeCommand { get; set; }
+
+        public RelayCommand ApproveSubsCommand { get; set; }
 
         public RelayCommand GroupSendCommand { get; set; }
 
@@ -134,6 +140,28 @@ namespace TestRequest.ViewModel
             if (string.IsNullOrEmpty(MessageText)) return;
 
             groupChatManager.SendMessage(MessageText);
+        }
+
+        private void PresenceSubscribeCommandExecute()
+        {
+            if (privateChatManager == null || otherUserIdChanged)
+            {
+                privateChatManager = quickbloxClient.MessagesClient.GetPrivateChatManager(OtherUserId);
+                otherUserIdChanged = false;
+            }
+
+            privateChatManager.SubsribeForPresence();
+        }
+
+        private void ApproveSubsCommandExecute()
+        {
+            if (privateChatManager == null || otherUserIdChanged)
+            {
+                privateChatManager = quickbloxClient.MessagesClient.GetPrivateChatManager(OtherUserId);
+                otherUserIdChanged = false;
+            }
+
+            privateChatManager.ApproveSubscribtionRequest();
         }
 
         private void GroupSendPresenceCommandExecute()

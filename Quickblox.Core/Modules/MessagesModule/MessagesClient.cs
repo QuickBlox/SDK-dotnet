@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using agsXMPP;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
+using Presence = agsXMPP.protocol.client.Presence;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -19,6 +21,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public event EventHandler OnConnected;
         public event EventHandler<Message> OnMessageReceived;
+        public event EventHandler<Models.Presence> OnPresenceReceived;
 
         public bool IsConnected { get; private set; }
 
@@ -40,11 +43,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             xmppConnection = new XmppClientConnection(chatEndpoint);
             xmppConnection.OnLogin += XmppConnectionOnOnLogin;
             xmppConnection.OnMessage += XmppConnectionOnOnMessage;
+            xmppConnection.OnPresence += XmppConnectionOnOnPresence;
             xmppConnection.OnAuthError += (sender, element) => { };
             this.appId = appId;
 
             xmppConnection.Open(string.Format("{0}-{1}", userId, appId), password);
         }
+
+        
 
         public PrivateChatManager GetPrivateChatManager(int otherUserId)
         {
@@ -81,6 +87,13 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             var handler = OnMessageReceived;
             if (handler != null)
                 handler(this, new Message() {From = msg.From.Bare, To = msg.To.Bare, MessageText = msg.Body});
+        }
+
+        private void XmppConnectionOnOnPresence(object sender, Presence pres)
+        {
+            var handler = OnPresenceReceived;
+            if (handler != null)
+                handler(this, new Models.Presence() {From = pres.From.Bare, To = pres.To.Bare, PresenceType = (PresenceType)pres.Type});
         }
 
         #endregion
