@@ -10,6 +10,7 @@ using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.MessagesModule;
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
@@ -45,6 +46,7 @@ namespace Quickblox.Sdk
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
             this.MessagesClient = new MessagesClient(this);
+            this.ContentClient = new ContentClient(this);
         }
 
         #endregion
@@ -59,7 +61,8 @@ namespace Quickblox.Sdk
 
         public ICryptographicProvider CryptographicProvider { get; private set; }
 
-
+        public ContentClient ContentClient { get; private set; }
+        
         public AuthorizationClient CoreClient { get; private set; }
 
         public ChatClient ChatClient { get; private set; }
