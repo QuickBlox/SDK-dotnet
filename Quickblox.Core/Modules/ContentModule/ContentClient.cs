@@ -34,7 +34,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="createFileRequest">The file parameter.</param>
         /// <returns>Success HTTP Status Code 201</returns>
-        public async Task<HttpResponse<FileResponseInfo>> CreateFile(CreateFileRequest createFileRequest)
+        public async Task<HttpResponse<FileResponseInfo>> CreateFileInfo(CreateFileRequest createFileRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
