@@ -45,6 +45,12 @@ namespace TestRequest.ViewModel
             GroupSendPresenceCommand = new RelayCommand(GroupSendPresenceCommandExecute);
             PresenceSubscribeCommand = new RelayCommand(PresenceSubscribeCommandExecute);
             ApproveSubsCommand = new RelayCommand(ApproveSubsCommandExecute);
+            GetRosterCommand = new RelayCommand(GetRosterComandExecute);
+        }
+
+        private void GetRosterComandExecute()
+        {
+            quickbloxClient.MessagesClient.RequestContactList();
         }
 
         #endregion
@@ -96,6 +102,8 @@ namespace TestRequest.ViewModel
         public RelayCommand GroupSendPresenceCommand { get; set; }
 
         public RelayCommand CreateDialogCommand { get; set; }
+
+        public RelayCommand GetRosterCommand { get; set; }
 
         #endregion
 
@@ -182,5 +190,7 @@ namespace TestRequest.ViewModel
         {
             var response = await quickbloxClient.ChatClient.CreateDialog("Testgroup", DialogType.PublicGroup);
         }
+
+
     }
 }
