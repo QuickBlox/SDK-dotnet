@@ -50,7 +50,7 @@ namespace TestRequest.ViewModel
 
         private void GetRosterComandExecute()
         {
-            quickbloxClient.MessagesClient.RequestContactList();
+            quickbloxClient.MessagesClient.DeleteContact(2766516);
         }
 
         #endregion

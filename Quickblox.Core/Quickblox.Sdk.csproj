@@ -56,6 +56,7 @@
     <Compile Include="Modules\ContentModule\Response\FileResponseInfo.cs" />
     <Compile Include="Modules\ContentModule\Response\FilesPagedResponse.cs" />
     <Compile Include="Modules\ContentModule\Response\ReadOnlyAccessResponse.cs" />
+    <Compile Include="Modules\MessagesModule\Models\Contact.cs" />
     <Compile Include="Modules\MessagesModule\Models\Presence.cs" />
     <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />
     <Compile Include="Modules\NotificationModule\Models\EditEvent.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuickbloxClient.cs" />
     <Compile Include="QuickbloxMethods.cs" />
+    <Compile Include="QuickbloxSdkException.cs" />
     <Compile Include="Serializer\ISerializer.cs" />
     <Compile Include="Serializer\JsonSerializer.cs" />
     <Compile Include="Serializer\NewtonsoftJsonSerializer.cs" />
