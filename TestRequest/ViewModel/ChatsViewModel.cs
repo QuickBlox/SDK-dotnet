@@ -43,6 +43,14 @@ namespace TestRequest.ViewModel
             GroupSendCommand = new RelayCommand(GroupSendCommandExecute);
             CreateDialogCommand = new RelayCommand(CreateDialogCommandExecute);
             GroupSendPresenceCommand = new RelayCommand(GroupSendPresenceCommandExecute);
+            PresenceSubscribeCommand = new RelayCommand(PresenceSubscribeCommandExecute);
+            ApproveSubsCommand = new RelayCommand(ApproveSubsCommandExecute);
+            GetRosterCommand = new RelayCommand(GetRosterComandExecute);
+        }
+
+        private void GetRosterComandExecute()
+        {
+            quickbloxClient.MessagesClient.DeleteContact(2766516);
         }
 
         #endregion
@@ -85,11 +93,17 @@ namespace TestRequest.ViewModel
 
         public RelayCommand SendCommand { get; set; }
 
+        public RelayCommand PresenceSubscribeCommand { get; set; }
+
+        public RelayCommand ApproveSubsCommand { get; set; }
+
         public RelayCommand GroupSendCommand { get; set; }
 
         public RelayCommand GroupSendPresenceCommand { get; set; }
 
         public RelayCommand CreateDialogCommand { get; set; }
+
+        public RelayCommand GetRosterCommand { get; set; }
 
         #endregion
 
@@ -136,6 +150,28 @@ namespace TestRequest.ViewModel
             groupChatManager.SendMessage(MessageText);
         }
 
+        private void PresenceSubscribeCommandExecute()
+        {
+            if (privateChatManager == null || otherUserIdChanged)
+            {
+                privateChatManager = quickbloxClient.MessagesClient.GetPrivateChatManager(OtherUserId);
+                otherUserIdChanged = false;
+            }
+
+            privateChatManager.SubsribeForPresence();
+        }
+
+        private void ApproveSubsCommandExecute()
+        {
+            if (privateChatManager == null || otherUserIdChanged)
+            {
+                privateChatManager = quickbloxClient.MessagesClient.GetPrivateChatManager(OtherUserId);
+                otherUserIdChanged = false;
+            }
+
+            privateChatManager.ApproveSubscribtionRequest();
+        }
+
         private void GroupSendPresenceCommandExecute()
         {
             if (groupChatManager == null || groupJidChanged)
@@ -154,5 +190,7 @@ namespace TestRequest.ViewModel
         {
             var response = await quickbloxClient.ChatClient.CreateDialog("Testgroup", DialogType.PublicGroup);
         }
+
+
     }
 }

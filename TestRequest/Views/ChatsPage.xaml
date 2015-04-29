@@ -59,10 +59,13 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <TextBox Header="Message text:" Text="{Binding MessageText, Mode=TwoWay}" Height="60" Width="200" HorizontalAlignment="Left" Margin="12" />
+            <Button Content="Get roster" Margin="12" Command="{Binding GetRosterCommand}"/>
             <StackPanel Orientation="Horizontal" >
                 <TextBox Header="Other user ID:" Text="{Binding OtherUserId, Mode=TwoWay}" Height="60" Width="200" HorizontalAlignment="Left" Margin="12" />
                 
                 <Button Content="Send message" Margin="12" Command="{Binding SendCommand}"/>
+                <Button Content="Send subs request" Margin="12" Command="{Binding PresenceSubscribeCommand}"/>
+                <Button Content="Approve subs request" Margin="12" Command="{Binding ApproveSubsCommand}"/>
             </StackPanel>
             <Button Content="Create group dialog" Command="{Binding CreateDialogCommand}" />
             <StackPanel Orientation="Horizontal" >
