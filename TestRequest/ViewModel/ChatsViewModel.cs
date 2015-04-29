@@ -8,6 +8,7 @@ using Windows.UI.Core;
 using GalaSoft.MvvmLight.Command;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
 namespace TestRequest.ViewModel
@@ -19,8 +20,8 @@ namespace TestRequest.ViewModel
         private INavigationService navigationService;
         private QuickbloxClient quickbloxClient;
 
-        private PrivateChatManager privateChatManager;
-        private GroupChatManager groupChatManager;
+        private IPrivateChatManager privateChatManager;
+        private IGroupChatManager groupChatManager;
 
         private int userId;
         private int otherUserId;

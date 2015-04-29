@@ -58,6 +58,9 @@
     <Compile Include="Modules\ContentModule\Response\FileResponseInfo.cs" />
     <Compile Include="Modules\ContentModule\Response\FilesPagedResponse.cs" />
     <Compile Include="Modules\ContentModule\Response\ReadOnlyAccessResponse.cs" />
+    <Compile Include="Modules\MessagesModule\Interfaces\IMessagesClient.cs" />
+    <Compile Include="Modules\MessagesModule\Interfaces\IGroupChatManager.cs" />
+    <Compile Include="Modules\MessagesModule\Interfaces\IPrivateChatManager.cs" />
     <Compile Include="Modules\MessagesModule\Models\Contact.cs" />
     <Compile Include="Modules\MessagesModule\Models\Presence.cs" />
     <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />

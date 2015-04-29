@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using agsXMPP;
+﻿using agsXMPP;
 using agsXMPP.protocol.client;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+using AgsMessage = agsXMPP.protocol.client.Message;
+using AgsPresence = agsXMPP.protocol.client.Presence;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
-    public class GroupChatManager
+    public class GroupChatManager : IGroupChatManager
     {
+        #region Fields
+
         private readonly XmppClientConnection xmpp;
         private readonly string groupJid;
+
+        #endregion
+
+        #region Ctor
 
         public GroupChatManager(XmppClientConnection xmppConnection, string groupJid)
         {
@@ -19,35 +23,24 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             this.groupJid = groupJid;
         }
 
-        public bool SendMessage(string message)
-        {
-            if (!xmpp.Authenticated)
-                return false;
+        #endregion
 
-            xmpp.Send(new agsXMPP.protocol.client.Message(groupJid, MessageType.groupchat, message));
-            return true;
+        #region IGroupChatManager members
+
+        public void SendMessage(string message)
+        {
+            xmpp.Send(new AgsMessage(groupJid, MessageType.groupchat, message));
         }
 
-        public bool JoinGroup(string nickName)
+        public void JoinGroup(string nickName)
         {
-            if (!xmpp.Authenticated)
-                return false;
-
             string fullJid = string.Format("{0}/{1}", groupJid, nickName);
 
-            xmpp.Send(new agsXMPP.protocol.client.Presence() {To = new Jid(fullJid)});
-            return true;
+            xmpp.Send(new AgsPresence {To = new Jid(fullJid)});
         }
 
-        public void TurnOnAutoPresense()
-        {
+        #endregion
 
-        }
-
-        public void TurnOffAutoPresense()
-        {
-            
-        }
 
     }
 }

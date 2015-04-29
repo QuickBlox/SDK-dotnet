@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using agsXMPP;
+﻿using agsXMPP;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
+using AgsMessage = agsXMPP.protocol.client.Message;
+using AgsPresence = agsXMPP.protocol.client.Presence;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
-    public class PrivateChatManager
+    public class PrivateChatManager : IPrivateChatManager
     {
         #region Fields
 
@@ -27,15 +25,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #endregion
 
-        #region Public methods
+        #region IPrivateChatManager members
 
-        public bool SendMessage(string message)
+        public void SendMessage(string message)
         {
-            if (!xmpp.Authenticated)
-                return false;
-
-            xmpp.Send(new agsXMPP.protocol.client.Message(otherUserJid, agsXMPP.protocol.client.MessageType.chat, message));
-            return true;
+            xmpp.Send(new AgsMessage(otherUserJid, agsXMPP.protocol.client.MessageType.chat, message));
         }
 
         public void SubsribeForPresence()
@@ -60,21 +54,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void SendPresenceInformation(PresenceType presenceType)
         {
-            xmpp.Send(new agsXMPP.protocol.client.Presence() { Type = (agsXMPP.protocol.client.PresenceType)presenceType, To = new Jid(otherUserJid) });
-        }
-
-        public void TurnOnAutoPresense()
-        {
-
-        }
-
-        public void TurnOffAutoPresense()
-        {
-
+            xmpp.Send(new AgsPresence { Type = (agsXMPP.protocol.client.PresenceType)presenceType, To = new Jid(otherUserJid) });
         }
 
         #endregion
-
-
     }
 }
