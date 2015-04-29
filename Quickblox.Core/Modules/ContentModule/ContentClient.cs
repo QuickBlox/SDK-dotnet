@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Modules.ContentModule.Requests;
 using Quickblox.Sdk.Modules.ContentModule.Response;
+using Quickblox.Sdk.Serializer;
 
 namespace Quickblox.Sdk.Modules.ContentModule
 {
@@ -81,18 +83,33 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// Upload a file with the params of BlobObjectAccess info to make a possibility to create items with a content.
         /// </summary>
         /// <param name="uploadFileRequest">The upload file request.</param>
-        /// <returns></returns>
-        public async Task<HttpResponse> FileUpload(UploadFileRequest uploadFileRequest)
+        /// <returns>Success HTTP Status Code 201</returns>
+        public async Task<HttpResponse<PostResponse>> FileUpload(UploadFileRequest uploadFileRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
-            var blob = uploadFileRequest.FileInfo.BlobObjectAccess.Params;
+            var blobObjectAccessParams = uploadFileRequest.BlobObjectAccess.Params;
+
+            String uriMethod = null;
+            IEnumerable<KeyValuePair<String, String>> parameters = null;
+            try
+            {
+                var uriAndParameters = blobObjectAccessParams.Split('?');
+                uriMethod = uriAndParameters[0];
+                //var list = uriAndParameters[1].Split('&')
+                //    .ToDictionary(key => key.Split('=')[0], value => value.Split('=')[1]);
+
+                //parameters = list.Where(pair => pair.Key == "key").Union(list.Where(pair => pair.Key != "key"));
+                parameters = uriAndParameters[1].Split('&')
+                    .ToDictionary(key => key.Split('=')[0], value => value.Split('=')[1]);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Can't parse BlobObjectAccess parameters" + ex);
+            }
+
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var getTaggedFilesResponse = await HttpService.PostAsync<Object>(this.quickbloxClient.ApiEndPoint,
-                                                                                         QuickbloxMethods.GetTaggedFilesMethod,
-                                                                                         new NewtonsoftJsonSerializer(),
-                                                                                         uploadFileRequest.FileContent,
-                                                                                         headers);
-            return getTaggedFilesResponse;
+            var fileUploadResponse = await HttpService.PostAsync<PostResponse>(uriMethod, String.Empty, new XmlSerializer(), uploadFileRequest.FileContent, parameters, headers);
+            return fileUploadResponse;
         }
 
         /// <summary>

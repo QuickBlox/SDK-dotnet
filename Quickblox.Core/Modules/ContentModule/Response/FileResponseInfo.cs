@@ -6,6 +6,6 @@ namespace Quickblox.Sdk.Modules.ContentModule.Response
     public class FileResponseInfo
     {
         [JsonProperty("blob")]
-        public BlobRequest Blob { get; set; }
+        public Blob Blob { get; set; }
     }
 }

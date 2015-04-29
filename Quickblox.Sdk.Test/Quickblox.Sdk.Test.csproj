@@ -143,6 +143,7 @@
     <Content Include="Images\UnitTestStoreLogo.scale-100.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\ContentModule\Assets\1.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Quickblox.Core\Quickblox.Sdk.csproj">
@@ -161,6 +162,7 @@
   <ItemGroup>
     <None Include="Quickblox.Sdk.Test_TemporaryKey.pfx" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

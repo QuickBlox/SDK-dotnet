@@ -38,6 +38,7 @@
     <Compile Include="GeneralDataModel\Request\FilterAggregator.cs" />
     <Compile Include="GeneralDataModel\Request\ListRequest.cs" />
     <Compile Include="GeneralDataModel\Request\SortOperator.cs" />
+    <Compile Include="Http\BytesContent.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSearchOperator.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSortFilter.cs" />
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="Modules\ContentModule\Models\BlobObjectAccess.cs" />
     <Compile Include="Modules\ContentModule\Models\BlobRequest.cs" />
     <Compile Include="Modules\ContentModule\Models\BlobUploadSize.cs" />
+    <Compile Include="Modules\ContentModule\Response\PostResponse.cs" />
     <Compile Include="Modules\ContentModule\Requests\BlobUploadCompleteRequest.cs" />
     <Compile Include="Modules\ContentModule\Requests\CreateFileRequest.cs" />
     <Compile Include="Modules\ContentModule\Requests\GetBlobObjectByIdRequest.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Modules\UsersModule\Models\User.cs" />
     <Compile Include="Modules\UsersModule\Responses\UserResponse.cs" />
     <Compile Include="Modules\UsersModule\UsersClient.cs" />
+    <Compile Include="Serializer\XmlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="agsXMPP">

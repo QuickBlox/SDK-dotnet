@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Core.Http;
 using Quickblox.Sdk.GeneralDataModel.Request;
-using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Http;
 
 namespace Quickblox.Sdk.GeneralDataModel.Response
 {
@@ -90,17 +89,46 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
         }
 
         public static async Task<HttpResponse<TResult>> PostAsync<TResult>(String baseAddress, String requestUri,
-            ISerializer serializer, Byte[] data, IDictionary<String, IEnumerable<String>> headers = null,
+            ISerializer serializer, BytesContent data,
+            IEnumerable<KeyValuePair<String, String>> nameValueCollection,
+            IDictionary<String, IEnumerable<String>> headers = null,
             CancellationToken token = default(CancellationToken))
         {
+            if (data == null) throw new ArgumentNullException("data");
+
             HttpResponseMessage response;
             using (var multiPartContent = new MultipartFormDataContent())
             {
-                var imageContent = new ByteArrayContent(data);
-                imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-                multiPartContent.Add(imageContent, "image", "image.jpg");
-                response =
-                    await PostBaseAsync(baseAddress, requestUri, multiPartContent, headers, token).ConfigureAwait(false);
+                foreach (var parameter in nameValueCollection)
+                {
+                    var stringContent = new StringContent(WebUtility.UrlDecode(parameter.Value));
+                    multiPartContent.Add(stringContent, parameter.Key);
+                }
+
+                var imageContent = new ByteArrayContent(data.Bytes);
+                if (!String.IsNullOrEmpty(data.ContentType))
+                    imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse(data.ContentType);
+                multiPartContent.Add(imageContent, "file");
+
+                response = await PostBaseAsync(baseAddress, requestUri, multiPartContent, headers, token).ConfigureAwait(false);
+            }
+
+            return await ParseResult<TResult>(serializer, response);
+        }
+
+        public static async Task<HttpResponse<TResult>> PostAsync<TResult>(String baseAddress, String requestUri,
+            ISerializer serializer, BytesContent data, IDictionary<String, IEnumerable<String>> headers = null,
+            CancellationToken token = default(CancellationToken))
+        {
+            if (data == null) throw new ArgumentNullException("data");
+            HttpResponseMessage response;
+            using (var multiPartContent = new MultipartFormDataContent())
+            {
+                var imageContent = new ByteArrayContent(data.Bytes);
+                if (!String.IsNullOrEmpty(data.ContentType))
+                    imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse(data.ContentType);
+                multiPartContent.Add(imageContent, data.Name, data.FileName);
+                response = await PostBaseAsync(baseAddress, requestUri, multiPartContent, headers, token).ConfigureAwait(false);
             }
 
             return await ParseResult<TResult>(serializer, response);

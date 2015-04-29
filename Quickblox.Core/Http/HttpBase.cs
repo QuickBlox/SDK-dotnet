@@ -157,6 +157,7 @@ namespace Quickblox.Sdk.Core.Http
                     client.DefaultRequestHeaders.SetRequestHeaders(headers);
 
                     Debug.WriteLine(String.Concat("==> POST REQUEST: ", baseAddress, requestUri));
+                    Debug.WriteLine(String.Concat("==> POST HEADERS: ", client.DefaultRequestHeaders));
                     Debug.WriteLine(String.Concat("==> POST CONTENT: ", await content.ReadAsStringAsync()));
                     try
                     {
