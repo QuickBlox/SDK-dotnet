@@ -2,12 +2,13 @@
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
-using Quickblox.Sdk.Core.Serializer;
 using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ChatModule.Responses;
 using Quickblox.Sdk.Modules.Models;
+using Quickblox.Sdk.Serializer;
 
 namespace Quickblox.Sdk.Modules.ChatModule
 {
@@ -39,14 +40,14 @@ namespace Quickblox.Sdk.Modules.ChatModule
             var createDialogRequest = new CreateDialogRequest {Type = (int) dialogType, Name = dialogName, OccupantsIds = occupantsIds, Photo = photoId};
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.PostAsync<DialogResponse, CreateDialogRequest>(this.quickbloxClient.ApiEndPoint,
-                        QuickbloxMethods.CreateDialogMethod, new NewtonsoftJsonSerializer(), createDialogRequest, headers);
+                        QuickbloxMethods.CreateDialogMethod, createDialogRequest, headers);
         }
 
         public async Task<HttpResponse<RetrieveDialogsResponse>> GetDialogs(RetrieveDialogsRequest retrieveDialogsRequest = null)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.GetAsync<RetrieveDialogsResponse, RetrieveDialogsRequest>(this.quickbloxClient.ApiEndPoint,
-                        QuickbloxMethods.GetDialogsMethod, new NewtonsoftJsonSerializer(), retrieveDialogsRequest, headers);
+                        QuickbloxMethods.GetDialogsMethod, retrieveDialogsRequest, headers);
         }
 
         public async Task<HttpResponse<Dialog>> UpdateDialog(UpdateDialogRequest updateDialogRequest)
@@ -56,7 +57,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
             var uriMethod = String.Format(QuickbloxMethods.UpdateDialogMethod, updateDialogRequest.DialogId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.PutAsync<Dialog, UpdateDialogRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), updateDialogRequest, headers);
+            return await HttpService.PutAsync<Dialog, UpdateDialogRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, updateDialogRequest, headers);
         }
 
         public async Task<HttpResponse<Object>> DeleteDialog(string dialogId)
@@ -67,7 +68,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
             var uriethod = String.Format(QuickbloxMethods.DeleteDialogMethod, dialogId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint,
-                        uriethod, new NewtonsoftJsonSerializer(), headers);
+                        uriethod, headers);
         }
         
         public async Task<HttpResponse<CreateMessageResponse>> CreateMessage(CreateMessageRequest createMessageRequest)
@@ -77,7 +78,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.PostAsync<CreateMessageResponse, CreateMessageRequest>(this.quickbloxClient.ApiEndPoint,
-                        QuickbloxMethods.CreateMessageMethod, new NewtonsoftJsonSerializer(), createMessageRequest, headers);
+                        QuickbloxMethods.CreateMessageMethod, createMessageRequest, headers);
         }
 
         
@@ -90,7 +91,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
             var uriMethod = String.Format(QuickbloxMethods.GetMessagesMethod, dialogId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.GetAsync<RetrieveMessagesResponse>(this.quickbloxClient.ApiEndPoint,
-                         uriMethod, new NewtonsoftJsonSerializer(), headers);
+                         uriMethod, headers);
         }
 
         public async Task<HttpResponse<RetrieveMessagesResponse>> UpdateMessage(UpdateMessageRequest updateMessageRequest)
@@ -100,7 +101,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
             var uriMethod = String.Format(QuickbloxMethods.UpdateMessageMethod, updateMessageRequest.ChatDialogId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.PutAsync<RetrieveMessagesResponse, UpdateMessageRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), updateMessageRequest, headers);
+            return await HttpService.PutAsync<RetrieveMessagesResponse, UpdateMessageRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, updateMessageRequest, headers);
         }
 
         public async Task<HttpResponse<Object>> DeleteMessage(String[] occupantIds)
@@ -110,7 +111,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
             var uriMethod = String.Format(QuickbloxMethods.DeleteMessageMethod, String.Join(",", occupantIds));
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), headers);
+            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
         }
 
         #endregion

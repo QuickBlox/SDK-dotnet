@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
-using Quickblox.Sdk.Core.Serializer;
 using Quickblox.Sdk.Modules.AuthModule.Requests;
 using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.GeneralDataModel.Response;
@@ -12,6 +11,8 @@ using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Http;
+using Quickblox.Sdk.Serializer;
 
 namespace Quickblox.Sdk.Modules.AuthModule
 {
@@ -32,7 +33,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
             settings.Signature = this.BuildSignatureFromJsonAttribute(authSecret, settings);
             var resultSessionResponse = await HttpService.PostAsync<SessionResponse, SessionRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.SessionMethod,
-                                                                                                        new NewtonsoftJsonSerializer(),
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
@@ -57,7 +57,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
 
             var resultSessionResponse = await HttpService.PostAsync<SessionResponse, SessionRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.SessionMethod,
-                                                                                                        new NewtonsoftJsonSerializer(),
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
@@ -82,7 +81,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
 
             var resultSessionResponse = await HttpService.PostAsync<SessionResponse, SessionRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.SessionMethod,
-                                                                                                        new NewtonsoftJsonSerializer(),
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
             if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null)
@@ -96,7 +94,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var result = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, 
                                                                 QuickbloxMethods.SessionMethod,
-                                                                new NewtonsoftJsonSerializer(),
                                                                 headers);
             return result;
         }
@@ -107,7 +104,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var result = await HttpService.GetAsync<SessionResponse>(this.quickbloxClient.ApiEndPoint,
                                                                 QuickbloxMethods.SessionMethod,
-                                                                new NewtonsoftJsonSerializer(),
                                                                 headers);
             return result;
         }
@@ -123,7 +119,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
             
             var loginResponse = await HttpService.PostAsync<LoginResponse, LoginRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                         QuickbloxMethods.LoginMethod,
-                                                                                        new NewtonsoftJsonSerializer(),
                                                                                         request,
                                                                                         RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(quickbloxClient.Token));
             return loginResponse;
@@ -140,7 +135,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
 
             var loginResponse = await HttpService.PostAsync<LoginResponse, LoginRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                         QuickbloxMethods.LoginMethod,
-                                                                                        new NewtonsoftJsonSerializer(),
                                                                                         request,
                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
             return loginResponse;

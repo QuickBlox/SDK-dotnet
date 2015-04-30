@@ -4,16 +4,17 @@ using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Modules.ChatModule;
 using Quickblox.Sdk.Core;
-using Quickblox.Sdk.Core.Http;
 using Quickblox.Sdk.Cryptographic;
 using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.MessagesModule;
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
+using Quickblox.Sdk.Serializer;
 
 namespace Quickblox.Sdk
 {
@@ -126,9 +127,8 @@ namespace Quickblox.Sdk
         private async Task GetAccountSettings()
         {
                 var accountResponse =
-                    await HttpService.GetAsync<AccountResponse, BaseRequestSettings>(this.baseUri, QuickbloxMethods.AccountMethod,
-                        new JsonSerializer() { KnownTypes = { typeof(AccountResponse) } }, null,
-                        RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbAccountKey(this.accountKey));
+                    await HttpService.GetAsync<AccountResponse>(this.baseUri, QuickbloxMethods.AccountMethod,
+                          RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbAccountKey(this.accountKey));
             if (accountResponse.StatusCode == HttpStatusCode.OK)
             {
                 this.ApiEndPoint = accountResponse.Result.ApiEndPoint;
@@ -147,9 +147,5 @@ namespace Quickblox.Sdk
         }
 
         #endregion
-    }
-
-    public class NotInitializedException : Exception
-    {
     }
 }

@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Quickblox.Sdk.GeneralDataModel.Response;
 
-namespace Quickblox.Sdk.Core.Http
+namespace Quickblox.Sdk.Http
 {
     public class HttpBase
     {
@@ -41,7 +41,7 @@ namespace Quickblox.Sdk.Core.Http
             return stringContent;
         }
 
-        public static async Task<String> PostAsync(String baseAddress, String requestUri, ISerializer serializer, IEnumerable<KeyValuePair<String, String>> nameValueCollection, IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken))
+        public static async Task<String> PostAsync(String baseAddress, String requestUri, IEnumerable<KeyValuePair<String, String>> nameValueCollection, IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken))
         {
             HttpResponseMessage response;
             using (var httpContent = new FormUrlEncodedContent(nameValueCollection))
@@ -54,7 +54,7 @@ namespace Quickblox.Sdk.Core.Http
             return stringContent;
         }
 
-        public static async Task<String> PostAsync(String baseAddress, String requestUri, ISerializer serializer, Byte[] data, IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken))
+        public static async Task<String> PostAsync(String baseAddress, String requestUri, Byte[] data, IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken))
         {
             HttpResponseMessage response;
             using (var multiPartContent = new MultipartFormDataContent())
@@ -71,7 +71,7 @@ namespace Quickblox.Sdk.Core.Http
 
         }
 
-        public static async Task<String> DeleteAsync(String baseAddress, String requestUri, ISerializer serializer, IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken))
+        public static async Task<String> DeleteAsync(String baseAddress, String requestUri, IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken))
         {
             var response = await DeleteBaseAsync(baseAddress, requestUri, headers, token).ConfigureAwait(false);
 
@@ -80,7 +80,7 @@ namespace Quickblox.Sdk.Core.Http
             return stringContent;
         }
 
-        private static async Task<String> PutAsync(String baseAddress, String requestUri, ISerializer serializer, IEnumerable<KeyValuePair<String, String>> nameValueCollection, IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers, CancellationToken token)
+        private static async Task<String> PutAsync(String baseAddress, String requestUri, IEnumerable<KeyValuePair<String, String>> nameValueCollection, IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers, CancellationToken token)
         {
             HttpResponseMessage response;
             using (var httpContent = new FormUrlEncodedContent(nameValueCollection))

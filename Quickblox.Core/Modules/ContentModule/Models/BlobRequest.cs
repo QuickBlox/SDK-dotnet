@@ -26,7 +26,6 @@ namespace Quickblox.Sdk.Modules.ContentModule.Models
         /// <summary>
         /// File name
         /// </summary>
-        /// <value>
         [JsonProperty(PropertyName = "name")]
         public String Name { get; set; }
 

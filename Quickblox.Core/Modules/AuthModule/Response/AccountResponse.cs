@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace Quickblox.Sdk.Modules.AuthModule.Response
 {
-    [DataContract]
     public class AccountResponse 
     {
         public AccountResponse()
@@ -15,19 +14,19 @@ namespace Quickblox.Sdk.Modules.AuthModule.Response
             //"s3_bucket_name":"qbprod"
         }
 
-        [DataMember(Name = "account_id")]
+        [JsonProperty(PropertyName = "account_id")]
         public Int32 AccountId { get; set; }
 
-        [DataMember(Name = "api_endpoint")]
+        [JsonProperty(PropertyName = "api_endpoint")]
         public String ApiEndPoint { get; set; }
 
-        [DataMember(Name = "chat_endpoint")]
+        [JsonProperty(PropertyName = "chat_endpoint")]
         public String ChatEndPoint { get; set; }
 
-        [DataMember(Name = "turnserver_endpoint")]
+        [JsonProperty(PropertyName = "turnserver_endpoint")]
         public String TurnServerEndPoint { get; set; }
 
-        [DataMember(Name = "s3_bucket_name")]
+        [JsonProperty(PropertyName = "s3_bucket_name")]
         public String S3BucketName { get; set; }
 
     }

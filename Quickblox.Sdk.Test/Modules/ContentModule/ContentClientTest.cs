@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -92,8 +93,6 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
             {
                 Bytes = bytes,
                 ContentType = "image/jpg",
-                FileName = "@" + settings.Blob.Name,
-                Name = "@" + settings.Blob.Name
             };
 
             var uploadFileResponse = await this.client.ContentClient.FileUpload(uploadFileRequest);
@@ -103,6 +102,41 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
             blobUploadCompleteRequest.BlobUploadSize = new BlobUploadSize() { Size = (uint) bytes.Length };
             var uploadFileCompleteResponse = await this.client.ContentClient.FileUploadComplete(createFileInfoResponse.Result.Blob.Id, blobUploadCompleteRequest);
             Assert.AreEqual(uploadFileCompleteResponse.StatusCode, HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task DeleteFilesSuccessTest()
+        {
+            var getFilesResponse = await this.client.ContentClient.GetFiles();
+            Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
+
+            foreach (var item in getFilesResponse.Result.Items)
+            {
+                var deleteResponse = await client.ContentClient.DeleteFile(item.Blob.Id);
+                Assert.AreEqual(deleteResponse.StatusCode, HttpStatusCode.OK);
+            }
+        }
+
+        [TestMethod]
+        public async Task DownloadFileSuccessTest()
+        {
+            //var getFilesResponse = await this.client.ContentClient.GetFiles();
+            //Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
+            //var firstFile = getFilesResponse.Result.Items.Last();
+
+            var downloadFileResponse = await this.client.ContentClient.DownloadFile("35f6c9cb777340d989ba01770bcc4e2000");
+            Assert.AreEqual(downloadFileResponse.StatusCode, HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task DownloadFileFailTest()
+        {
+            var getFilesResponse = await this.client.ContentClient.GetFiles();
+            Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
+            var firstFile = getFilesResponse.Result.Items.Last();
+
+            var downloadFileResponse = await this.client.ContentClient.DownloadFile(firstFile.Blob.Uid);
+            Assert.IsNotNull(downloadFileResponse.Error);
         }
     }
 }

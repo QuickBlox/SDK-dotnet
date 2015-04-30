@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
-using Quickblox.Sdk.Core.Serializer;
 using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.UsersModule.Requests;
 using Quickblox.Sdk.Modules.UsersModule.Responses;
+using Quickblox.Sdk.Serializer;
 
 namespace Quickblox.Sdk.Modules.UsersModule
 {
@@ -43,7 +44,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         public async Task<HttpResponse<RetrieveUsersResponse>> RetrieveUsers(RetrieveUsersRequest retrieveUsersesRequest = null)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<RetrieveUsersResponse, RetrieveUsersRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UsersMethod, new NewtonsoftJsonSerializer(), retrieveUsersesRequest, headers);
+            return await HttpService.GetAsync<RetrieveUsersResponse, RetrieveUsersRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UsersMethod, retrieveUsersesRequest, headers);
         }
 
         /// <summary>
@@ -87,8 +88,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.PostAsync<UserResponse, UserSignUpRequest>(this.quickbloxClient.ApiEndPoint,
-                        QuickbloxMethods.UsersMethod,
-                        new NewtonsoftJsonSerializer(), userSignUpRequest, headers);
+                        QuickbloxMethods.UsersMethod, userSignUpRequest, headers);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var uriBuilder = String.Format(QuickbloxMethods.GetUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse>(this.quickbloxClient.ApiEndPoint, uriBuilder, new NewtonsoftJsonSerializer(), headers);
+            return await HttpService.GetAsync<UserResponse>(this.quickbloxClient.ApiEndPoint, uriBuilder, headers);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var byLogin = new UserRequest() {Login = login};
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByLoginMethod, new NewtonsoftJsonSerializer(), byLogin, headers);
+            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByLoginMethod, byLogin, headers);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
                 PerPage = perPage
             };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFullMethod, new NewtonsoftJsonSerializer(), byFullname, headers);
+            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFullMethod, byFullname, headers);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var byFacebook = new UserRequest() { FacebookId = facebookId };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFacebookIdMethod, new NewtonsoftJsonSerializer(), byFacebook, headers);
+            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFacebookIdMethod, byFacebook, headers);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var byTwitter = new UserRequest() { TwitterId = twitterId };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, new NewtonsoftJsonSerializer(), byTwitter, headers);
+            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, byTwitter, headers);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var byEmail = new UserRequest() { Email = email };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByEmailMethod, new NewtonsoftJsonSerializer(), byEmail, headers);
+            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByEmailMethod, byEmail, headers);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
             };
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, new NewtonsoftJsonSerializer(), byUserTag, headers);
+            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, byUserTag, headers);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var uriMethod = String.Format(QuickbloxMethods.GetUserByExternalUserMethod, externalUserId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), headers);
+            return await HttpService.GetAsync<UserResponse>(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var uriMethod = string.Format(QuickbloxMethods.UpdateUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.PutAsync<UserResponse, UpdateUserRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), userRequest, headers);
+            return await HttpService.PutAsync<UserResponse, UpdateUserRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, userRequest, headers);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var uriMethod = String.Format(QuickbloxMethods.DeleteUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), headers);
+            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var uriMethod = String.Format(QuickbloxMethods.DeleteUserByExternalUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), headers);
+            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
             };
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<Object, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UserPasswordResetMethod, new NewtonsoftJsonSerializer(), userRequest, headers);
+            return await HttpService.GetAsync<Object, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UserPasswordResetMethod, userRequest, headers);
         }
 
         #endregion
