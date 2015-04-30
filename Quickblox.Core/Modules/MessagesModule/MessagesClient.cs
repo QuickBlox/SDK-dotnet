@@ -7,6 +7,7 @@ using agsXMPP;
 using agsXMPP.protocol.client;
 using agsXMPP.protocol.iq.roster;
 using agsXMPP.Xml.Dom;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using AgsMessage = agsXMPP.protocol.client.Message;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
@@ -16,7 +17,7 @@ using PresenceType = Quickblox.Sdk.Modules.MessagesModule.Models.PresenceType;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
-    public class MessagesClient
+    public class MessagesClient : IMessagesClient
     {
         #region Fields
 
@@ -78,7 +79,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             xmppConnection.Open(string.Format(qbJidUserPattern, userId, applicationId), password);
         }
 
-        public PrivateChatManager GetPrivateChatManager(int otherUserId)
+        public IPrivateChatManager GetPrivateChatManager(int otherUserId)
         {
             if (xmppConnection == null || !xmppConnection.Authenticated)
                 throw new QuickbloxSdkException("Xmpp connection is not ready.");
@@ -88,7 +89,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return new PrivateChatManager(xmppConnection, otherUserJid);
         }
 
-        public GroupChatManager GetGroupChatManager(string groupJid)
+        public IGroupChatManager GetGroupChatManager(string groupJid)
         {
             if (xmppConnection == null || !xmppConnection.Authenticated)
                 throw new QuickbloxSdkException("Xmpp connection is not ready.");
