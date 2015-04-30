@@ -135,7 +135,7 @@ namespace TestRequest.ViewModel
             
             if (string.IsNullOrEmpty(MessageText)) return;
 
-            privateChatManager.SendMessage(MessageText);
+            privateChatManager.SendMessage(MessageText, null);
         }
 
         private void GroupSendCommandExecute()

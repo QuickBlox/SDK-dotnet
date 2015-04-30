@@ -2,6 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using Quickblox.Sdk.Core;
 
 namespace Quickblox.Sdk.Serializer
@@ -20,7 +23,11 @@ namespace Quickblox.Sdk.Serializer
             var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
             using (var memoryStream = new MemoryStream())
             {
-                serializer.Serialize(memoryStream, storedObj);
+                XmlWriterSettings writerSettings = new XmlWriterSettings {OmitXmlDeclaration = true};
+                XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+                namespaces.Add("", "");
+                XmlWriter xmlWriter =  XmlWriter.Create(memoryStream, writerSettings);
+                serializer.Serialize(xmlWriter, storedObj, namespaces);
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 return new StreamReader(memoryStream).ReadToEnd();
             }
