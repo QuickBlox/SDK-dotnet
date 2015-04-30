@@ -11,8 +11,6 @@ namespace Quickblox.Sdk.Serializer
 {
     public class XmlSerializer : ISerializer
     {
-        private const string XmlTagPattern = @"<\?xml.*\?>";
-
         public string ContentType
         {
             get { return "application/xml"; }
@@ -35,10 +33,8 @@ namespace Quickblox.Sdk.Serializer
 
         public T Deserialize<T>(string content)
         {
-            var regex = new Regex(XmlTagPattern);
-            var removeXmlTag = regex.Replace(content, String.Empty);
             var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
-            using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(removeXmlTag)))
+            using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(content)))
             {
                 return (T)serializer.Deserialize(memoryStream);
             }

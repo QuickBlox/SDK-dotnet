@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Quickblox.Sdk.Core
+namespace Quickblox.Sdk.Serializer
 {
     public interface ISerializer
     {

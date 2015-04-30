@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace Quickblox.Sdk.Core
+namespace Quickblox.Sdk.Serializer
 {
     /// <summary>
     /// Serializer class.

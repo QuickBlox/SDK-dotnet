@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
-using Quickblox.Sdk.Core.Serializer;
-using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.ContentModule.Requests;
 using Quickblox.Sdk.Modules.ContentModule.Response;
 using Quickblox.Sdk.Serializer;
@@ -36,13 +33,12 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="createFileRequest">The file parameter.</param>
         /// <returns>Success HTTP Status Code 201</returns>
-        public async Task<HttpResponse<FileResponseInfo>> CreateFileInfo(CreateFileRequest createFileRequest)
+        public async Task<HttpResponse<FileInfoResponse>> CreateFileInfoAsync(CreateFileRequest createFileRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var createFileResponse = await HttpService.PostAsync<FileResponseInfo, CreateFileRequest>(this.quickbloxClient.ApiEndPoint,
+            var createFileResponse = await HttpService.PostAsync<FileInfoResponse, CreateFileRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.CreateFileMethod,
-                                                                                                        new NewtonsoftJsonSerializer(),
                                                                                                         createFileRequest,
                                                                                                         headers);
 
@@ -53,13 +49,12 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// Get list of files for the current user. The ID of the user is taken from the token specified in the request.
         /// </summary>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<FilesPagedResponse>> GetFiles()
+        public async Task<HttpResponse<FilesPagedResponse>> GetFilesAsync()
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var getFilesResponse = await HttpService.GetAsync<FilesPagedResponse>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.GetFilesMethod,
-                                                                                                        new NewtonsoftJsonSerializer(),
                                                                                                         headers);
             return getFilesResponse;
         }
@@ -68,13 +63,12 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// Get list of tagged files for current user. Will be returned files which have the same tags as current user.
         /// </summary>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<FilesPagedResponse>> GetTaggedFiles()
+        public async Task<HttpResponse<FilesPagedResponse>> GetTaggedFilesAsync()
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var getTaggedFilesResponse = await HttpService.GetAsync<FilesPagedResponse>(this.quickbloxClient.ApiEndPoint,
                                                                                          QuickbloxMethods.GetTaggedFilesMethod,
-                                                                                         new NewtonsoftJsonSerializer(),
                                                                                          headers);
             return getTaggedFilesResponse;
         }
@@ -84,7 +78,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="uploadFileRequest">The upload file request.</param>
         /// <returns>Success HTTP Status Code 201</returns>
-        public async Task<HttpResponse<PostResponse>> FileUpload(UploadFileRequest uploadFileRequest)
+        public async Task<HttpResponse<PostResponse>> FileUploadAsync(UploadFileRequest uploadFileRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var blobObjectAccessParams = uploadFileRequest.BlobObjectAccess.Params;
@@ -95,10 +89,6 @@ namespace Quickblox.Sdk.Modules.ContentModule
             {
                 var uriAndParameters = blobObjectAccessParams.Split('?');
                 uriMethod = uriAndParameters[0];
-                //var list = uriAndParameters[1].Split('&')
-                //    .ToDictionary(key => key.Split('=')[0], value => value.Split('=')[1]);
-
-                //parameters = list.Where(pair => pair.Key == "key").Union(list.Where(pair => pair.Key != "key"));
                 parameters = uriAndParameters[1].Split('&')
                     .ToDictionary(key => key.Split('=')[0], value => value.Split('=')[1]);
             }
@@ -108,7 +98,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
             }
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var fileUploadResponse = await HttpService.PostAsync<PostResponse>(uriMethod, String.Empty, new XmlSerializer(), uploadFileRequest.FileContent, parameters, headers);
+            var fileUploadResponse = await HttpService.PostAsync<PostResponse>(uriMethod, String.Empty, uploadFileRequest.FileContent, parameters, headers);
             return fileUploadResponse;
         }
 
@@ -118,14 +108,13 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <param name="fileId">The file identifier.</param>
         /// <param name="blobUploadCompleteRequest">The BLOB upload complete request.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse> FileUploadComplete(Int32  fileId, BlobUploadCompleteRequest blobUploadCompleteRequest)
+        public async Task<HttpResponse> FileUploadCompleteAsync(Int32  fileId, BlobUploadCompleteRequest blobUploadCompleteRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.CompleteUploadByFileIdMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var fileUploadResponse = await HttpService.PutAsync<Object, BlobUploadCompleteRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         uriMethod,
-                                                                                                        new NewtonsoftJsonSerializer(),
                                                                                                         blobUploadCompleteRequest,
                                                                                                         headers);
 
@@ -137,14 +126,13 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileId">The file identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<FileResponseInfo>> GetFileInfoById(Int32 fileId)
+        public async Task<HttpResponse<FileInfoResponse>> GetFileInfoByIdAsync(Int32 fileId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.GetFileByIdMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var getFilesByIdResponse = await HttpService.GetAsync<FileResponseInfo>(this.quickbloxClient.ApiEndPoint,
+            var getFilesByIdResponse = await HttpService.GetAsync<FileInfoResponse>(this.quickbloxClient.ApiEndPoint,
                                                                                                         uriMethod,
-                                                                                                        new NewtonsoftJsonSerializer(),
                                                                                                         headers);
             return getFilesByIdResponse;
         }
@@ -154,15 +142,12 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileGuid">The file unique identifier.</param>
         /// <returns>Success HTTP Status Code 301</returns>
-        public async Task<HttpResponse<Byte[]>> DownloadFile(String fileGuid)
+        public async Task<HttpResponse<Byte[]>> DownloadFileAsync(String fileGuid)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.DownloadFileByIdMethod, fileGuid);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var downloadFileResponse = await HttpService.GetAsync<Byte[]>(this.quickbloxClient.ApiEndPoint,
-                                                                                                        uriMethod,
-                                                                                                        new NewtonsoftJsonSerializer(),
-                                                                                                        headers);
+            var downloadFileResponse = await HttpService.GetBytesAsync(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
             return downloadFileResponse;
         }
 
@@ -171,14 +156,13 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileId">The file identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<ReadOnlyAccessResponse>> GetReadOnlyFileInfoById(Int32 fileId)
+        public async Task<HttpResponse<ReadOnlyAccessResponse>> GetReadOnlyFileInfoByIdAsync(Int32 fileId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.GetFileByIdReadOnlyMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var boaResponse = await HttpService.PostAsync<ReadOnlyAccessResponse, GetBlobObjectByIdRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                             uriMethod,
-                                                                                            new NewtonsoftJsonSerializer(),
                                                                                             new GetBlobObjectByIdRequest(),
                                                                                             headers);
             return boaResponse;
@@ -190,14 +174,13 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <param name="fileId">The file identifier.</param>
         /// <param name="updateFileByIdRequest">The update file request parameter.</param>
         /// <returns></returns>
-        public async Task<HttpResponse<FileResponseInfo>> EditFileById(Int32 fileId, UpdateFileByIdRequest updateFileByIdRequest)
+        public async Task<HttpResponse<FileInfoResponse>> EditFileByIdAsync(Int32 fileId, UpdateFileByIdRequest updateFileByIdRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.EditFileMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var editFileById = await HttpService.PutAsync<FileResponseInfo, UpdateFileByIdRequest>(this.quickbloxClient.ApiEndPoint,
+            var editFileById = await HttpService.PutAsync<FileInfoResponse, UpdateFileByIdRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                             uriMethod,
-                                                                                            new NewtonsoftJsonSerializer(),
                                                                                             updateFileByIdRequest,
                                                                                             headers);
             return editFileById;
@@ -208,14 +191,13 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileId">The file identifier.</param>
         /// <returns></returns>
-        public async Task<HttpResponse> DeleteFile(Int32 fileId)
+        public async Task<HttpResponse> DeleteFileAsync(Int32 fileId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.DeleteFileMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var deleteFileById = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint,
                                                                                             uriMethod,
-                                                                                            new NewtonsoftJsonSerializer(),
                                                                                             headers);
             return deleteFileById;
         }

@@ -189,7 +189,7 @@ namespace TestRequest.ViewModel
 
         private async void CreateDialogCommandExecute()
         {
-            var response = await quickbloxClient.ChatClient.CreateDialog("Testgroup", DialogType.PublicGroup);
+            var response = await quickbloxClient.ChatClient.CreateDialogAsync("Testgroup", DialogType.PublicGroup);
         }
 
 

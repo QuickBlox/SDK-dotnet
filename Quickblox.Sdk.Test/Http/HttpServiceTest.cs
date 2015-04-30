@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Core.Http;
-using Quickblox.Sdk.Core.Serializer;
+using Quickblox.Sdk.Http;
+using Quickblox.Sdk.Serializer;
 
 namespace Quickblox.Sdk.Test.Http
 {
@@ -22,7 +22,7 @@ namespace Quickblox.Sdk.Test.Http
         [TestMethod]
         public async Task PostTest()
         {
-            var response = await HttpBase.PostAsync("http://google.com", null, new NewtonsoftJsonSerializer(), new List<KeyValuePair<string,string>>());
+            var response = await HttpBase.PostAsync("http://google.com", null, new List<KeyValuePair<string,string>>());
         }
 
     }

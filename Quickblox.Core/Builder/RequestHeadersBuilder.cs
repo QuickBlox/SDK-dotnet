@@ -5,7 +5,6 @@ namespace Quickblox.Sdk.Builder
 {
     public static class RequestHeadersBuilder
     {
-
         public static IDictionary<String, IEnumerable<String>> GetDefaultHeaders()
         {
             return new Dictionary<String, IEnumerable<String>>

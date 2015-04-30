@@ -20,32 +20,32 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await this.client.InitializeClient();
-            await this.client.CoreClient.CreateSessionWithLogin(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345");
+            await this.client.InitializeClientAsync();
+            await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345");
         }
 
         [TestMethod]
         public async Task CreateDialogSuccessTest()
         {
-            var response = await this.client.ChatClient.CreateDialog("New test dialog", DialogType.PublicGroup);
+            var response = await this.client.ChatClient.CreateDialogAsync("New test dialog", DialogType.PublicGroup);
             Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
         }
 
         [TestMethod]
         public async Task CreateMessageSuccessTest()
         {
-            var responseCreateDialog = await this.client.ChatClient.CreateDialog("New test dialog", DialogType.PublicGroup);
+            var responseCreateDialog = await this.client.ChatClient.CreateDialogAsync("New test dialog", DialogType.PublicGroup);
             Assert.AreEqual(responseCreateDialog.StatusCode, HttpStatusCode.Created);
 
             var createMessageRequest = new CreateMessageRequest() {ChatDialogId = responseCreateDialog.Result.Id, Message = "Hello"};
-            var responseCreateMessage = await this.client.ChatClient.CreateMessage(createMessageRequest);
+            var responseCreateMessage = await this.client.ChatClient.CreateMessageAsync(createMessageRequest);
             Assert.AreEqual(responseCreateMessage.StatusCode, HttpStatusCode.Created);
         }
 
         [TestMethod]
         public async Task GetDialogsSuccessTest()
         {
-            var response = await this.client.ChatClient.GetDialogs();
+            var response = await this.client.ChatClient.GetDialogsAsync();
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
         }
 
@@ -59,7 +59,7 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
             aggregator.Filters.Add(new RetrieveDialogsFilter<String>(() => new DialogResponse().Id, "551d50bd535c123fc50260db"));
 
             retriveDialogsRequest.Filter = aggregator;
-            var response = await this.client.ChatClient.GetDialogs(retriveDialogsRequest);
+            var response = await this.client.ChatClient.GetDialogsAsync(retriveDialogsRequest);
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
         }
 
@@ -73,24 +73,24 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
             aggregator.Filters.Add(new RetrieveDialogsFilterWithOperator<String>(DialogSearchOperator.Lte, () => new DialogResponse().Id, "551d50bd535c123fc50260db"));
 
             retriveDialogsRequest.Filter = aggregator;
-            var response = await this.client.ChatClient.GetDialogs(retriveDialogsRequest);
+            var response = await this.client.ChatClient.GetDialogsAsync(retriveDialogsRequest);
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task GetMessagesSuccessTest()
         {
-            var responseDialogs = await this.client.ChatClient.GetDialogs();
+            var responseDialogs = await this.client.ChatClient.GetDialogsAsync();
             Assert.AreEqual(responseDialogs.StatusCode, HttpStatusCode.OK);
 
-            var responseMessages = await this.client.ChatClient.GetMessages(responseDialogs.Result.Items.First().Id);
+            var responseMessages = await this.client.ChatClient.GetMessagesAsync(responseDialogs.Result.Items.First().Id);
             Assert.AreEqual(responseMessages.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task UpdateDialogsSuccessTest()
         {
-            var responseDialogs = await this.client.ChatClient.GetDialogs();
+            var responseDialogs = await this.client.ChatClient.GetDialogsAsync();
             Assert.AreEqual(responseDialogs.StatusCode, HttpStatusCode.OK);
 
             var updateDialogRequest = new UpdateDialogRequest()
@@ -98,7 +98,7 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
                 DialogId = responseDialogs.Result.Items.First().Id,
                 Name = "New name 2"
             };
-            var responseDelete = await this.client.ChatClient.UpdateDialog(updateDialogRequest);
+            var responseDelete = await this.client.ChatClient.UpdateDialogAsync(updateDialogRequest);
             Assert.AreEqual(responseDelete.StatusCode, HttpStatusCode.OK);
             Assert.AreEqual(responseDelete.Result.Name, updateDialogRequest.Name);
         }
@@ -106,10 +106,10 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         [TestMethod]
         public async Task DeleteDialogsSuccessTest()
         {
-            var responseDialogs = await this.client.ChatClient.GetDialogs();
+            var responseDialogs = await this.client.ChatClient.GetDialogsAsync();
             Assert.AreEqual(responseDialogs.StatusCode, HttpStatusCode.OK);
 
-            var responseDelete = await this.client.ChatClient.DeleteDialog(responseDialogs.Result.Items.First().Id);
+            var responseDelete = await this.client.ChatClient.DeleteDialogAsync(responseDialogs.Result.Items.First().Id);
             Assert.AreEqual(responseDelete.StatusCode, HttpStatusCode.OK);
         }
     }

@@ -50,9 +50,9 @@ namespace TestRequest
             this.SetupNavigation();
             
             var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.AccountKey, new HmacSha1CryptographicProvider());
-            await quickbloxClient.InitializeClient();
-            //await quickbloxClient.CoreClient.CreateSessionWithLogin(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, "Test654321", "Test12345");
-            await quickbloxClient.CoreClient.CreateSessionBase(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helper.Helpers.GetHardwareId()});
+            await quickbloxClient.InitializeClientAsync();
+            //await quickbloxClient.CoreClient.CreateSessionWithLoginAsync(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, "Test654321", "Test12345");
+            await quickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helper.Helpers.GetHardwareId()});
             SimpleIoc.Default.Register<QuickbloxClient>(() => quickbloxClient);
 
             Frame rootFrame = Window.Current.Content as Frame;

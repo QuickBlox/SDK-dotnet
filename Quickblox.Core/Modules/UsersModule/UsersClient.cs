@@ -2,10 +2,11 @@
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
-using Quickblox.Sdk.Core.Serializer;
 using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.UsersModule.Requests;
 using Quickblox.Sdk.Modules.UsersModule.Responses;
+using Quickblox.Sdk.Serializer;
 
 namespace Quickblox.Sdk.Modules.UsersModule
 {
@@ -40,10 +41,10 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="retrieveUsersesRequest">Filter settings</param>
         /// <returns></returns>
-        public async Task<HttpResponse<RetrieveUsersResponse>> RetrieveUsers(RetrieveUsersRequest retrieveUsersesRequest = null)
+        public async Task<HttpResponse<RetrieveUsersResponse>> RetrieveUsersAsync(RetrieveUsersRequest retrieveUsersesRequest = null)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<RetrieveUsersResponse, RetrieveUsersRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UsersMethod, new NewtonsoftJsonSerializer(), retrieveUsersesRequest, headers);
+            return await HttpService.GetAsync<RetrieveUsersResponse, RetrieveUsersRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UsersMethod, retrieveUsersesRequest, headers);
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// <param name="customData">The custom data.</param>
         /// <param name="password">The password.</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> SignUpUser(String login, String password, Int32? blobId = null, String email = null, Int32? externalUserId = null, Int32? facebookId = null, Int32? twitterId = null, String fullName = null, String phone = null, String website = null, String[] tagList = null, String customData  = null)
+        public async Task<HttpResponse<UserResponse>> SignUpUserAsync(String login, String password, Int32? blobId = null, String email = null, Int32? externalUserId = null, Int32? facebookId = null, Int32? twitterId = null, String fullName = null, String phone = null, String website = null, String[] tagList = null, String customData  = null)
         {
             var userSignUpRequest = new UserSignUpRequest();
             userSignUpRequest.User = new UserRequest()
@@ -87,8 +88,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.PostAsync<UserResponse, UserSignUpRequest>(this.quickbloxClient.ApiEndPoint,
-                        QuickbloxMethods.UsersMethod,
-                        new NewtonsoftJsonSerializer(), userSignUpRequest, headers);
+                        QuickbloxMethods.UsersMethod, userSignUpRequest, headers);
         }
 
         /// <summary>
@@ -96,11 +96,11 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> GetUserById(Int32 userId)
+        public async Task<HttpResponse<UserResponse>> GetUserByIdAsync(Int32 userId)
         {
             var uriBuilder = String.Format(QuickbloxMethods.GetUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse>(this.quickbloxClient.ApiEndPoint, uriBuilder, new NewtonsoftJsonSerializer(), headers);
+            return await HttpService.GetAsync<UserResponse>(this.quickbloxClient.ApiEndPoint, uriBuilder, headers);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         {
             var byLogin = new UserRequest() {Login = login};
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByLoginMethod, new NewtonsoftJsonSerializer(), byLogin, headers);
+            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByLoginMethod, byLogin, headers);
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// <param name="page">Page number of the book of the results that you want to get. By default: 1</param>
         /// <param name="perPage">The maximum number of results per page. Min: 1. Max: 100. By default: 10</param>
         /// <returns></returns>
-        public async Task<HttpResponse<PagedResponse<UserResponse>>> GetUserByFullName(String fullName, UInt32? page, UInt32? perPage)
+        public async Task<HttpResponse<PagedResponse<UserResponse>>> GetUserByFullNameAsync(String fullName, UInt32? page, UInt32? perPage)
         {
             var byFullname = new UserRequest()
             {
@@ -131,7 +131,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
                 PerPage = perPage
             };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFullMethod, new NewtonsoftJsonSerializer(), byFullname, headers);
+            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFullMethod, byFullname, headers);
         }
 
         /// <summary>
@@ -139,11 +139,11 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="facebookId">API User Facebook ID</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> GetUserByFacebookId(Int64 facebookId)
+        public async Task<HttpResponse<UserResponse>> GetUserByFacebookIdAsync(Int64 facebookId)
         {
             var byFacebook = new UserRequest() { FacebookId = facebookId };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFacebookIdMethod, new NewtonsoftJsonSerializer(), byFacebook, headers);
+            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFacebookIdMethod, byFacebook, headers);
         }
 
         /// <summary>
@@ -151,11 +151,11 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="twitterId">API User Twitter ID</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> GetUserByTwitterId(Int32 twitterId)
+        public async Task<HttpResponse<UserResponse>> GetUserByTwitterIdAsync(Int32 twitterId)
         {
             var byTwitter = new UserRequest() { TwitterId = twitterId };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, new NewtonsoftJsonSerializer(), byTwitter, headers);
+            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, byTwitter, headers);
         }
 
         /// <summary>
@@ -163,11 +163,11 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="email">API User email</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> GetUserByEmail(String email)
+        public async Task<HttpResponse<UserResponse>> GetUserByEmailAsync(String email)
         {
             var byEmail = new UserRequest() { Email = email };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByEmailMethod, new NewtonsoftJsonSerializer(), byEmail, headers);
+            return await HttpService.GetAsync<UserResponse, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByEmailMethod, byEmail, headers);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// <param name="page">Page number of the book of the results that you want to get. By default: 1</param>
         /// <param name="perPage">The maximum number of results per page. Min: 1. Max: 100. By default: 10</param>
         /// <returns></returns>
-        public async Task<HttpResponse<PagedResponse<UserResponse>>> GetUserByTags(String[] tags, UInt32? page, UInt32 perPage)
+        public async Task<HttpResponse<PagedResponse<UserResponse>>> GetUserByTagsAsync(String[] tags, UInt32? page, UInt32 perPage)
         {
             var byUserTag = new UserRequest()
             {
@@ -187,7 +187,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
             };
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, new NewtonsoftJsonSerializer(), byUserTag, headers);
+            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, byUserTag, headers);
         }
 
         /// <summary>
@@ -195,11 +195,11 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="externalUserId">The external user Id.</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> GetUserByExeternalUserId(Int32 externalUserId)
+        public async Task<HttpResponse<UserResponse>> GetUserByExeternalUserIdAsync(Int32 externalUserId)
         {
             var uriMethod = String.Format(QuickbloxMethods.GetUserByExternalUserMethod, externalUserId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<UserResponse>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), headers);
+            return await HttpService.GetAsync<UserResponse>(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
         }
 
         /// <summary>
@@ -207,11 +207,11 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="userRequest">Agregate all user parameters</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> UpdateUser(Int32 userId, UpdateUserRequest userRequest)
+        public async Task<HttpResponse<UserResponse>> UpdateUserAsync(Int32 userId, UpdateUserRequest userRequest)
         {
             var uriMethod = string.Format(QuickbloxMethods.UpdateUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.PutAsync<UserResponse, UpdateUserRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), userRequest, headers);
+            return await HttpService.PutAsync<UserResponse, UpdateUserRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, userRequest, headers);
         }
 
         /// <summary>
@@ -219,11 +219,11 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="userId">The user id.</param>
         /// <returns></returns>
-        public async Task<HttpResponse> DeleteUserById(Int32 userId)
+        public async Task<HttpResponse> DeleteUserByIdAsync(Int32 userId)
         {
             var uriMethod = String.Format(QuickbloxMethods.DeleteUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), headers);
+            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
         }
 
         /// <summary>
@@ -231,11 +231,11 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns></returns>
-        public async Task<HttpResponse> DeleteUserByExternalUserId(Int32 userId)
+        public async Task<HttpResponse> DeleteUserByExternalUserIdAsync(Int32 userId)
         {
             var uriMethod = String.Format(QuickbloxMethods.DeleteUserByExternalUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, new NewtonsoftJsonSerializer(), headers);
+            return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// </summary>
         /// <param name="email">API User e-mail.</param>
         /// <returns></returns>
-        public async Task<HttpResponse> ResetUserPasswordByEmail(String email)
+        public async Task<HttpResponse> ResetUserPasswordByEmailAsync(String email)
         {
             var userRequest = new UserRequest()
             {
@@ -251,7 +251,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
             };
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<Object, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UserPasswordResetMethod, new NewtonsoftJsonSerializer(), userRequest, headers);
+            return await HttpService.GetAsync<Object, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UserPasswordResetMethod, userRequest, headers);
         }
 
         #endregion

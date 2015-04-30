@@ -8,29 +8,38 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
-using Quickblox.Sdk.Core;
-using Quickblox.Sdk.Core.Http;
 using Quickblox.Sdk.GeneralDataModel.Request;
-using Quickblox.Sdk.Http;
+using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Serializer;
 
-namespace Quickblox.Sdk.GeneralDataModel.Response
+namespace Quickblox.Sdk.Http
 {
     public class HttpService : HttpBase
     {
+        static HttpService()
+        {
+            FactorySerializer = new FactorySerializer();
+        }
+
+        public static IFactorySerializer FactorySerializer { get; set; }
+
         #region Public Members
 
         #region Get
 
         public static async Task<HttpResponse<TResult>> GetAsync<TResult>(String baseAddress, String requestUri,
-            ISerializer serializer, IDictionary<String, IEnumerable<String>> headers = null,
+            IDictionary<String, IEnumerable<String>> headers = null, ISerializer serializer = null,
             CancellationToken token = default(CancellationToken))
         {
             var response = await GetBaseAsync(baseAddress, requestUri, headers, token).ConfigureAwait(false);
             return await ParseResult<TResult>(serializer, response);
         }
 
-        public static async Task<HttpResponse<TResult>> GetAsync<TResult, TSettings>(String baseAddress, String requestUri, ISerializer serializer, TSettings requestSettings, 
-            IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken)) where TSettings : BaseRequestSettings
+        public static async Task<HttpResponse<TResult>> GetAsync<TResult, TSettings>(String baseAddress,
+            String requestUri, TSettings requestSettings, 
+            IDictionary<String, IEnumerable<String>> headers = null,
+            ISerializer serializer = null,
+            CancellationToken token = default(CancellationToken)) where TSettings : BaseRequestSettings
         {
             if (requestSettings != null)
             {
@@ -41,8 +50,11 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
             return await ParseResult<TResult>(serializer, response);
         }
 
-        public static async Task<HttpResponse<TResult>> GetAsync<TResult>(String baseAddress, String requestUri, ISerializer serializer, IEnumerable<KeyValuePair<String, String>> nameValueCollection,
-            IDictionary<String, IEnumerable<String>> headers = null, CancellationToken token = default(CancellationToken))
+        public static async Task<HttpResponse<TResult>> GetAsync<TResult>(String baseAddress, String requestUri,
+            IEnumerable<KeyValuePair<String, String>> nameValueCollection, 
+            IDictionary<String, IEnumerable<String>> headers = null,
+            ISerializer serializer = null,
+            CancellationToken token = default(CancellationToken))
         {
             if (nameValueCollection != null)
             {
@@ -53,45 +65,85 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
             return await ParseResult<TResult>(serializer, response);
         }
 
+        public static async Task<HttpResponse<Byte[]>> GetBytesAsync(String baseAddress, String requestUri,
+            IDictionary<String, IEnumerable<String>> headers = null,
+            ISerializer serializer = null,
+            CancellationToken token = default(CancellationToken))
+        {
+            var response = await GetBaseAsync(baseAddress, requestUri, headers, token).ConfigureAwait(false);
+
+            HttpResponse<Byte[]> httpResponse = new HttpResponse<Byte[]>();
+
+            if (response.IsSuccessStatusCode)
+            {
+                httpResponse.Result = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                Debug.WriteLine(String.Concat("CONTENT: ", "Byte[] content. Length:", httpResponse.Result.Length));
+            }
+            else
+            {
+                var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                Debug.WriteLine(String.Concat("CONTENT: ", stringContent));
+
+                try
+                {
+                    serializer = serializer ??
+                                 FactorySerializer.CreateSerializer(response.Content.Headers.ContentType.MediaType);
+                    var error = serializer.Deserialize<ErrorResponse>(stringContent);
+                    httpResponse.Error = error.Error;
+                }
+                catch (Exception)
+                {
+                    httpResponse.Error = new Error() {Text = new[] {stringContent}};
+                }
+            }
+
+            httpResponse.StatusCode = response.StatusCode;
+            return httpResponse;
+        }
+
+
         #endregion
 
         #region Post
 
         public static async Task<HttpResponse<TResult>> PostAsync<TResult>(String baseAddress, String requestUri,
-            ISerializer serializer, IEnumerable<KeyValuePair<String, String>> nameValueCollection,
+            IEnumerable<KeyValuePair<String, String>> nameValueCollection,
             IDictionary<String, IEnumerable<String>> headers = null,
+            ISerializer serializer = null,
             CancellationToken token = default(CancellationToken))
         {
             HttpResponseMessage response;
             using (var httpContent = new FormUrlEncodedContent(nameValueCollection))
             {
-                response =
-                    await PostBaseAsync(baseAddress, requestUri, httpContent, headers, token).ConfigureAwait(false);
+                response = await PostBaseAsync(baseAddress, requestUri, httpContent, headers, token).ConfigureAwait(false);
             }
 
             return await ParseResult<TResult>(serializer, response);
         }
 
         public static async Task<HttpResponse<TResult>> PostAsync<TResult, TSettings>(String baseAddress,
-            String requestUri, ISerializer serializer, TSettings settings,
+            String requestUri, TSettings settings, 
             IDictionary<String, IEnumerable<String>> headers = null,
+            ISerializer serializer = null,
             CancellationToken token = default(CancellationToken)) where TSettings : BaseRequestSettings
         {
             HttpResponseMessage response;
-            var body = serializer.Serialize(settings);
-            using (var httpContent = new StringContent(body, Encoding.UTF8, serializer.ContentType))
+            var postSerializer = serializer ?? FactorySerializer.CreateSerializer();
+            var body = postSerializer.Serialize(settings);
+            using (var httpContent = new StringContent(body, Encoding.UTF8, postSerializer.ContentType))
             {
                 response = await PostBaseAsync(baseAddress, requestUri, httpContent, headers, token)
-                            .ConfigureAwait(false);
+                    .ConfigureAwait(false);
             }
 
             return await ParseResult<TResult>(serializer, response);
         }
 
         public static async Task<HttpResponse<TResult>> PostAsync<TResult>(String baseAddress, String requestUri,
-            ISerializer serializer, BytesContent data,
+            BytesContent data,
             IEnumerable<KeyValuePair<String, String>> nameValueCollection,
             IDictionary<String, IEnumerable<String>> headers = null,
+            ISerializer serializer = null,
             CancellationToken token = default(CancellationToken))
         {
             if (data == null) throw new ArgumentNullException("data");
@@ -110,14 +162,16 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse(data.ContentType);
                 multiPartContent.Add(imageContent, "file");
 
-                response = await PostBaseAsync(baseAddress, requestUri, multiPartContent, headers, token).ConfigureAwait(false);
+                response =
+                    await PostBaseAsync(baseAddress, requestUri, multiPartContent, headers, token).ConfigureAwait(false);
             }
 
             return await ParseResult<TResult>(serializer, response);
         }
 
         public static async Task<HttpResponse<TResult>> PostAsync<TResult>(String baseAddress, String requestUri,
-            ISerializer serializer, BytesContent data, IDictionary<String, IEnumerable<String>> headers = null,
+            BytesContent data, IDictionary<String, IEnumerable<String>> headers = null,
+            ISerializer serializer = null,
             CancellationToken token = default(CancellationToken))
         {
             if (data == null) throw new ArgumentNullException("data");
@@ -127,8 +181,9 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
                 var imageContent = new ByteArrayContent(data.Bytes);
                 if (!String.IsNullOrEmpty(data.ContentType))
                     imageContent.Headers.ContentType = MediaTypeHeaderValue.Parse(data.ContentType);
-                multiPartContent.Add(imageContent, data.Name, data.FileName);
-                response = await PostBaseAsync(baseAddress, requestUri, multiPartContent, headers, token).ConfigureAwait(false);
+                multiPartContent.Add(imageContent, "file");
+                response =
+                    await PostBaseAsync(baseAddress, requestUri, multiPartContent, headers, token).ConfigureAwait(false);
             }
 
             return await ParseResult<TResult>(serializer, response);
@@ -139,7 +194,8 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
         #region Delete
 
         public static async Task<HttpResponse<TResult>> DeleteAsync<TResult>(String baseAddress, String requestUri,
-            ISerializer serializer, IDictionary<String, IEnumerable<String>> headers = null,
+            IDictionary<String, IEnumerable<String>> headers = null,
+            ISerializer serializer = null,
             CancellationToken token = default(CancellationToken))
         {
             var response = await DeleteBaseAsync(baseAddress, requestUri, headers, token).ConfigureAwait(false);
@@ -151,28 +207,33 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
         #region Put
 
         public static async Task<HttpResponse<TResult>> PutAsync<TResult>(String baseAddress, String requestUri,
-            ISerializer serializer, IEnumerable<KeyValuePair<String, String>> nameValueCollection,
-            IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers, CancellationToken token = default(CancellationToken))
+            IEnumerable<KeyValuePair<String, String>> nameValueCollection,
+            IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers = null,
+            ISerializer serializer = null,
+            CancellationToken token = default(CancellationToken))
         {
             HttpResponseMessage response;
             using (var httpContent = new FormUrlEncodedContent(nameValueCollection))
             {
-                response =
-                    await PutBaseAsync(baseAddress, requestUri, httpContent, headers, token).ConfigureAwait(false);
+                response = await PutBaseAsync(baseAddress, requestUri, httpContent, headers, token).ConfigureAwait(false);
             }
 
             return await ParseResult<TResult>(serializer, response);
         }
 
-        public static async Task<HttpResponse<TResult>> PutAsync<TResult, TSettings>(String baseAddress, String requestUri,
-            ISerializer serializer, TSettings settings,
-            IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers, CancellationToken token = default(CancellationToken))
+        public static async Task<HttpResponse<TResult>> PutAsync<TResult, TSettings>(String baseAddress,
+            String requestUri,TSettings settings,
+            IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers = null,
+            ISerializer serializer = null,
+            CancellationToken token = default(CancellationToken))
         {
             HttpResponseMessage response;
-            var body = serializer.Serialize(settings);
-            using (var httpContent = new StringContent(body, Encoding.UTF8, serializer.ContentType))
+            var putSerializer = serializer ?? FactorySerializer.CreateSerializer();
+            var body = putSerializer.Serialize(settings);
+            using (var httpContent = new StringContent(body, Encoding.UTF8, putSerializer.ContentType))
             {
-                response = await PutBaseAsync(baseAddress, requestUri, httpContent, headers, token).ConfigureAwait(false);
+                response =
+                    await PutBaseAsync(baseAddress, requestUri, httpContent, headers, token).ConfigureAwait(false);
             }
 
             return await ParseResult<TResult>(serializer, response);
@@ -188,9 +249,15 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
             Debug.WriteLine(String.Concat("CONTENT: ", stringContent));
             HttpResponse<TResult> httpResponse = new HttpResponse<TResult>();
 
+            serializer = serializer ?? FactorySerializer.CreateSerializer(response.Content.Headers.ContentType.MediaType);
+
             if (response.IsSuccessStatusCode)
             {
-                httpResponse.Result = serializer.Deserialize<TResult>(stringContent);
+                if (!string.IsNullOrWhiteSpace(stringContent))
+                {
+                    httpResponse.Result = serializer.Deserialize<TResult>(stringContent);
+                    httpResponse.RawData = stringContent;
+                }
             }
             else
             {
@@ -203,7 +270,7 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
                 {
                     httpResponse.Error = new Error() {Text = new[] {stringContent}};
                 }
-        }
+            }
 
             httpResponse.StatusCode = response.StatusCode;
             return httpResponse;

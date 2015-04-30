@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Quickblox.Sdk.Core.Serializer
+namespace Quickblox.Sdk.Serializer
 {
     public class NewtonsoftJsonSerializer : ISerializer
     {
