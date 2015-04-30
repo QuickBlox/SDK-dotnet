@@ -33,7 +33,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="createFileRequest">The file parameter.</param>
         /// <returns>Success HTTP Status Code 201</returns>
-        public async Task<HttpResponse<FileInfoResponse>> CreateFileInfo(CreateFileRequest createFileRequest)
+        public async Task<HttpResponse<FileInfoResponse>> CreateFileInfoAsync(CreateFileRequest createFileRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -49,7 +49,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// Get list of files for the current user. The ID of the user is taken from the token specified in the request.
         /// </summary>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<FilesPagedResponse>> GetFiles()
+        public async Task<HttpResponse<FilesPagedResponse>> GetFilesAsync()
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -63,7 +63,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// Get list of tagged files for current user. Will be returned files which have the same tags as current user.
         /// </summary>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<FilesPagedResponse>> GetTaggedFiles()
+        public async Task<HttpResponse<FilesPagedResponse>> GetTaggedFilesAsync()
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -78,7 +78,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="uploadFileRequest">The upload file request.</param>
         /// <returns>Success HTTP Status Code 201</returns>
-        public async Task<HttpResponse<PostResponse>> FileUpload(UploadFileRequest uploadFileRequest)
+        public async Task<HttpResponse<PostResponse>> FileUploadAsync(UploadFileRequest uploadFileRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var blobObjectAccessParams = uploadFileRequest.BlobObjectAccess.Params;
@@ -108,7 +108,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <param name="fileId">The file identifier.</param>
         /// <param name="blobUploadCompleteRequest">The BLOB upload complete request.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse> FileUploadComplete(Int32  fileId, BlobUploadCompleteRequest blobUploadCompleteRequest)
+        public async Task<HttpResponse> FileUploadCompleteAsync(Int32  fileId, BlobUploadCompleteRequest blobUploadCompleteRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.CompleteUploadByFileIdMethod, fileId);
@@ -126,7 +126,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileId">The file identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<FileInfoResponse>> GetFileInfoById(Int32 fileId)
+        public async Task<HttpResponse<FileInfoResponse>> GetFileInfoByIdAsync(Int32 fileId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.GetFileByIdMethod, fileId);
@@ -142,7 +142,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileGuid">The file unique identifier.</param>
         /// <returns>Success HTTP Status Code 301</returns>
-        public async Task<HttpResponse<Byte[]>> DownloadFile(String fileGuid)
+        public async Task<HttpResponse<Byte[]>> DownloadFileAsync(String fileGuid)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.DownloadFileByIdMethod, fileGuid);
@@ -156,7 +156,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileId">The file identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<ReadOnlyAccessResponse>> GetReadOnlyFileInfoById(Int32 fileId)
+        public async Task<HttpResponse<ReadOnlyAccessResponse>> GetReadOnlyFileInfoByIdAsync(Int32 fileId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.GetFileByIdReadOnlyMethod, fileId);
@@ -174,7 +174,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <param name="fileId">The file identifier.</param>
         /// <param name="updateFileByIdRequest">The update file request parameter.</param>
         /// <returns></returns>
-        public async Task<HttpResponse<FileInfoResponse>> EditFileById(Int32 fileId, UpdateFileByIdRequest updateFileByIdRequest)
+        public async Task<HttpResponse<FileInfoResponse>> EditFileByIdAsync(Int32 fileId, UpdateFileByIdRequest updateFileByIdRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.EditFileMethod, fileId);
@@ -191,7 +191,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileId">The file identifier.</param>
         /// <returns></returns>
-        public async Task<HttpResponse> DeleteFile(Int32 fileId)
+        public async Task<HttpResponse> DeleteFileAsync(Int32 fileId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.DeleteFileMethod, fileId);

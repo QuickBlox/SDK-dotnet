@@ -61,7 +61,7 @@ namespace TestRequest.ViewModel
             this.IsLoading = true;
             try
             {
-                var response = await this.QuickbloxClient.CoreClient.ByLogin(this.Login, this.Password);
+                var response = await this.QuickbloxClient.CoreClient.ByLoginAsync(this.Login, this.Password);
                 if (response.StatusCode == HttpStatusCode.Accepted)
                 {
                     QuickbloxClient.MessagesClient.Connect(response.Result.User.Id, Password, ApplicationKeys.ApplicationId, QuickbloxClient.ChatEndpoint);

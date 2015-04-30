@@ -26,8 +26,8 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await this.client.InitializeClient();
-            await this.client.CoreClient.CreateSessionWithLogin(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345", deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
+            await this.client.InitializeClientAsync();
+            await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345", deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
         }
         
 
@@ -40,7 +40,7 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
                 DeviceRequest = new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() },
                 PushToken = new PushToken() { Environment = Environment.production, ClientIdentificationSequence = pushChannel.Uri }
             };
-            var createPushTokenResponse = await this.client.NotificationClient.CreatePushToken(settings);
+            var createPushTokenResponse = await this.client.NotificationClient.CreatePushTokenAsync(settings);
             Assert.AreEqual(createPushTokenResponse.StatusCode, HttpStatusCode.Created);
         }
 
@@ -53,34 +53,34 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
                 DeviceRequest = new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() },
                 PushToken = new PushToken() { Environment = Environment.production, ClientIdentificationSequence = pushChannel.Uri }
             };
-            var createPushTokenResponse = await this.client.NotificationClient.CreatePushToken(settings);
+            var createPushTokenResponse = await this.client.NotificationClient.CreatePushTokenAsync(settings);
             Assert.AreEqual(createPushTokenResponse.StatusCode, HttpStatusCode.Created);
 
-            var response = await this.client.NotificationClient.DeletePushToken(createPushTokenResponse.Result.PushToken.PushTokenId);
+            var response = await this.client.NotificationClient.DeletePushTokenAsync(createPushTokenResponse.Result.PushToken.PushTokenId);
             Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task CreateSubscriptionsSuccessTest()
         {
-            var createSubscriptionsResponse = await this.client.NotificationClient.CreateSubscriptions(NotificationChannelType.mpns);
+            var createSubscriptionsResponse = await this.client.NotificationClient.CreateSubscriptionsAsync(NotificationChannelType.mpns);
             Assert.AreEqual(createSubscriptionsResponse.StatusCode, HttpStatusCode.Created);
         }
 
         [TestMethod]
         public async Task GetSubscriptionsSuccessTest()
         {
-            var createSubscriptionsResponse = await this.client.NotificationClient.GetSubscriptions();
+            var createSubscriptionsResponse = await this.client.NotificationClient.GetSubscriptionsAsync();
             Assert.AreEqual(createSubscriptionsResponse.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task DeleteSubscriptionsSuccessTest()
         {
-            var createSubscriptionsResponse = await this.client.NotificationClient.GetSubscriptions();
+            var createSubscriptionsResponse = await this.client.NotificationClient.GetSubscriptionsAsync();
             Assert.AreEqual(createSubscriptionsResponse.StatusCode, HttpStatusCode.OK);
 
-            var deleteResponse = await this.client.NotificationClient.DeleteSubscriptions(createSubscriptionsResponse.Result.First().Subscription.Id);
+            var deleteResponse = await this.client.NotificationClient.DeleteSubscriptionsAsync(createSubscriptionsResponse.Result.First().Subscription.Id);
             Assert.AreEqual(deleteResponse.StatusCode, HttpStatusCode.OK);
         }
 
@@ -96,7 +96,7 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
                 Message = new PushMessage("Title", Convert.ToBase64String(Encoding.UTF8.GetBytes("I love quickblox"))),
                 User = new UserWithTags() {  Ids = "2701456" }
             };
-            var createEventResponse = await this.client.NotificationClient.CreateEvent(createEventRequest);
+            var createEventResponse = await this.client.NotificationClient.CreateEventAsync(createEventRequest);
             Assert.AreEqual(createEventResponse.StatusCode, HttpStatusCode.Created);
         }
 
@@ -112,33 +112,33 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
                 Message = new SimplePushMessage("I love quickblox"),
                 User = new UserWithTags() { Ids = "2701456" }
             };
-            var createEventResponse = await this.client.NotificationClient.CreateEvent(createEventRequest);
+            var createEventResponse = await this.client.NotificationClient.CreateEventAsync(createEventRequest);
             Assert.AreEqual(createEventResponse.StatusCode, HttpStatusCode.Created);
         }
 
         [TestMethod]
         public async Task GetEventsSuccessTest()
         {
-            var getEventsResponse = await this.client.NotificationClient.GetEvents();
+            var getEventsResponse = await this.client.NotificationClient.GetEventsAsync();
             Assert.AreEqual(getEventsResponse.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task GetEventsByIdSuccessTest()
         {
-            var getEventsResponse = await this.client.NotificationClient.GetEvents();
+            var getEventsResponse = await this.client.NotificationClient.GetEventsAsync();
             Assert.AreEqual(getEventsResponse.StatusCode, HttpStatusCode.OK);
 
             UInt32 testEventId = getEventsResponse.Result.Items.First().Event.Id;
 
-            var getEventByIdResponse = await this.client.NotificationClient.GetEventById(testEventId);
+            var getEventByIdResponse = await this.client.NotificationClient.GetEventByIdAsync(testEventId);
             Assert.AreEqual(getEventByIdResponse.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task EditEventSuccessTest()
         {
-            var getEventsResponse = await this.client.NotificationClient.GetEvents();
+            var getEventsResponse = await this.client.NotificationClient.GetEventsAsync();
             Assert.AreEqual(getEventsResponse.StatusCode, HttpStatusCode.OK);
 
             var editEventRequest = new EditEventRequest()
@@ -150,18 +150,18 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
             };
 
             UInt32 eventId = getEventsResponse.Result.Items.First().Event.Id;
-            var editEventsResponse = await this.client.NotificationClient.EditEvent(eventId, editEventRequest);
+            var editEventsResponse = await this.client.NotificationClient.EditEventAsync(eventId, editEventRequest);
             Assert.AreEqual(editEventsResponse.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task DeleteEventSuccessTest()
         {
-            var getEventsResponse = await this.client.NotificationClient.GetEvents();
+            var getEventsResponse = await this.client.NotificationClient.GetEventsAsync();
             Assert.AreEqual(getEventsResponse.StatusCode, HttpStatusCode.OK);
 
             UInt32 testEventId = getEventsResponse.Result.Items.First().Event.Id;
-            var deleteEventResponse = await this.client.NotificationClient.DeleteEvent(testEventId);
+            var deleteEventResponse = await this.client.NotificationClient.DeleteEventAsync(testEventId);
             Assert.AreEqual(deleteEventResponse.StatusCode, HttpStatusCode.OK);
         }
     }

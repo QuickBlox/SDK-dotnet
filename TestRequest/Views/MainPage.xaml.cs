@@ -25,7 +25,7 @@ namespace TestRequest.Views
             //var authSecret = "7v2Jkrc7e-99JJX";
             //var quickbloxclient = new QuickbloxClient(uriBase, appId, qbKey, authKey, authSecret);
             //quickbloxclient.ClientStatusChanged += this.QuickbloxclientOnClientStatusChanged;
-            //await quickbloxclient.InitializeClient();
+            //await quickbloxclient.InitializeClientAsync();
         }
 
         private void QuickbloxclientOnClientStatusChanged(object sender, bool b)

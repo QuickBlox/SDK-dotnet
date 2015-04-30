@@ -102,11 +102,11 @@ namespace Quickblox.Sdk
 
         #region Public Members
         
-        public async Task InitializeClient()
+        public async Task InitializeClientAsync()
         {
             while (!this.IsClientInitialized)
             {
-                await this.GetAccountSettings();
+                await this.GetAccountSettingsAsync();
             }
         }
 
@@ -124,7 +124,7 @@ namespace Quickblox.Sdk
 
         #region Private
 
-        private async Task GetAccountSettings()
+        private async Task GetAccountSettingsAsync()
         {
                 var accountResponse =
                     await HttpService.GetAsync<AccountResponse>(this.baseUri, QuickbloxMethods.AccountMethod,

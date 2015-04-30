@@ -26,13 +26,13 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         public async Task TestInitialize()
         {
             client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await client.InitializeClient();
+            await client.InitializeClientAsync();
         }
 
         [TestMethod]
         public async Task CreateSessionBaseTest()
         {
-            var response = await client.CoreClient.CreateSessionBase(ApplicationId, AuthorizationKey, AuthorizationSecret);
+            var response = await client.CoreClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.Created);
         }
@@ -40,7 +40,7 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         [TestMethod]
         public async Task CreateSessionWithLoginTest()
         {
-            var response = await client.CoreClient.CreateSessionWithLogin(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
+            var response = await client.CoreClient.CreateSessionWithLoginAsync(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.Created);
         }
@@ -48,7 +48,7 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         [TestMethod]
         public async Task CreateSessionWithEmailTest()
         {
-            var response = await client.CoreClient.CreateSessionWithEmail(ApplicationId, AuthorizationKey, AuthorizationSecret, Email, Password);
+            var response = await client.CoreClient.CreateSessionWithEmailAsync(ApplicationId, AuthorizationKey, AuthorizationSecret, Email, Password);
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.Created);
         }
@@ -56,9 +56,9 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         [TestMethod]
         public async Task GetSessionTest()
         {
-            var a = await client.CoreClient.CreateSessionWithLogin(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
+            var a = await client.CoreClient.CreateSessionWithLoginAsync(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
 
-            var response = await client.CoreClient.GetSession();
+            var response = await client.CoreClient.GetSessionAsync();
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
         }
@@ -66,9 +66,9 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         [TestMethod]
         public async Task DeleteSessionTest()
         {
-            var sessionResponse = await client.CoreClient.CreateSessionWithLogin(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
+            var sessionResponse = await client.CoreClient.CreateSessionWithLoginAsync(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
 
-            var response = await client.CoreClient.DeleteSession(sessionResponse.Result.Session.Token);
+            var response = await client.CoreClient.DeleteSessionAsync(sessionResponse.Result.Session.Token);
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
         }
@@ -76,9 +76,9 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         [TestMethod]
         public async Task ByLoginTest()
         {
-            var sessionResponse = await client.CoreClient.CreateSessionBase(ApplicationId, AuthorizationKey, AuthorizationSecret);
+            var sessionResponse = await client.CoreClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
 
-            var response = await client.CoreClient.ByLogin(Login, Password);
+            var response = await client.CoreClient.ByLoginAsync(Login, Password);
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.Accepted);
         }
@@ -86,9 +86,9 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         [TestMethod]
         public async Task ByEmailTest()
         {
-            var sessionResponse = await client.CoreClient.CreateSessionBase(ApplicationId, AuthorizationKey, AuthorizationSecret);
+            var sessionResponse = await client.CoreClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
 
-            var response = await client.CoreClient.ByEmail(Email, Password);
+            var response = await client.CoreClient.ByEmailAsync(Email, Password);
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.Accepted);
         }

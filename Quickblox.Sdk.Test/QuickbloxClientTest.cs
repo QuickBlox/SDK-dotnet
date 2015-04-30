@@ -11,7 +11,7 @@ namespace Quickblox.Sdk.Test
         public async Task TestInitialization()
         {
             Quickblox.Sdk.QuickbloxClient client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await client.InitializeClient();
+            await client.InitializeClientAsync();
 
             Assert.IsTrue(client.IsClientInitialized);
         }
@@ -25,7 +25,7 @@ namespace Quickblox.Sdk.Test
             var ex = AssertEx.ThrowsAsync<NotInitializedException>(
                 async () =>
                 {
-                    await client.CoreClient.CreateSessionBase(0, "", "");
+                    await client.CoreClient.CreateSessionBaseAsync(0, "", "");
                 });
         }
     }

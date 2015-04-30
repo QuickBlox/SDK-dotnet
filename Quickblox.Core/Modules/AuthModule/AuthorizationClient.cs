@@ -25,7 +25,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             this.quickbloxClient = client;
         }
         
-        public async Task<HttpResponse<SessionResponse>> CreateSessionBase(UInt32 applicationId, String authKey, String authSecret, DeviceRequest deviceRequestRequest = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionBaseAsync(UInt32 applicationId, String authKey, String authSecret, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
@@ -40,7 +40,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return resultSessionResponse;
         }
 
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLogin(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLoginAsync(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
@@ -64,7 +64,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return resultSessionResponse;
         }
 
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmail(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmailAsync(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var settings = this.CreateSessionRequest(applicationId, authKey);
@@ -88,7 +88,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return resultSessionResponse;
         }
 
-        public async Task<HttpResponse> DeleteSession(String token)
+        public async Task<HttpResponse> DeleteSessionAsync(String token)
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -98,7 +98,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return result;
         }
 
-        public async Task<HttpResponse<SessionResponse>> GetSession()
+        public async Task<HttpResponse<SessionResponse>> GetSessionAsync()
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -108,7 +108,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return result;
         }
 
-        public async Task<HttpResponse<LoginResponse>> ByLogin(String login, String password, String provider = null, String scope= null)
+        public async Task<HttpResponse<LoginResponse>> ByLoginAsync(String login, String password, String provider = null, String scope= null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var request = new LoginRequest();
@@ -124,7 +124,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             return loginResponse;
         }
 
-        public async Task<HttpResponse<LoginResponse>> ByEmail(String email, String password, String provider = null, String scope = null)
+        public async Task<HttpResponse<LoginResponse>> ByEmailAsync(String email, String password, String provider = null, String scope = null)
         {
             this.quickbloxClient.CheckIsInitialized();
             var request = new LoginRequest();

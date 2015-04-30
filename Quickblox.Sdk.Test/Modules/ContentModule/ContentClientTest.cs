@@ -24,9 +24,9 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey,
                 new HmacSha1CryptographicProvider());
-            await this.client.InitializeClient();
+            await this.client.InitializeClientAsync();
             await
-                this.client.CoreClient.CreateSessionWithLogin(GlobalConstant.ApplicationId,
+                this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId,
                     GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345",
                     deviceRequestRequest:
                         new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
@@ -43,21 +43,21 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
                 }
             };
 
-            var createFileInfoResponse = await this.client.ContentClient.CreateFileInfo(settings);
+            var createFileInfoResponse = await this.client.ContentClient.CreateFileInfoAsync(settings);
             Assert.AreEqual(createFileInfoResponse.StatusCode, HttpStatusCode.Created);
         }
 
         [TestMethod]
         public async Task GetFilesInfoSuccessTest()
         {
-            var getFilesResponse = await this.client.ContentClient.GetFiles();
+            var getFilesResponse = await this.client.ContentClient.GetFilesAsync();
             Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task GetTaggedFilesInfoSuccessTest()
         {
-            var getFilesResponse = await this.client.ContentClient.GetTaggedFiles();
+            var getFilesResponse = await this.client.ContentClient.GetTaggedFilesAsync();
             Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
         }
 
@@ -72,7 +72,7 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
                 }
             };
 
-            var createFileInfoResponse = await this.client.ContentClient.CreateFileInfo(settings);
+            var createFileInfoResponse = await this.client.ContentClient.CreateFileInfoAsync(settings);
             Assert.AreEqual(createFileInfoResponse.StatusCode, HttpStatusCode.Created);
 
             var uploadFileRequest = new UploadFileRequest();
@@ -95,24 +95,24 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
                 ContentType = "image/jpg",
             };
 
-            var uploadFileResponse = await this.client.ContentClient.FileUpload(uploadFileRequest);
+            var uploadFileResponse = await this.client.ContentClient.FileUploadAsync(uploadFileRequest);
             Assert.AreEqual(uploadFileResponse.StatusCode, HttpStatusCode.Created);
 
             var blobUploadCompleteRequest = new BlobUploadCompleteRequest();
             blobUploadCompleteRequest.BlobUploadSize = new BlobUploadSize() { Size = (uint) bytes.Length };
-            var uploadFileCompleteResponse = await this.client.ContentClient.FileUploadComplete(createFileInfoResponse.Result.Blob.Id, blobUploadCompleteRequest);
+            var uploadFileCompleteResponse = await this.client.ContentClient.FileUploadCompleteAsync(createFileInfoResponse.Result.Blob.Id, blobUploadCompleteRequest);
             Assert.AreEqual(uploadFileCompleteResponse.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task DeleteFilesSuccessTest()
         {
-            var getFilesResponse = await this.client.ContentClient.GetFiles();
+            var getFilesResponse = await this.client.ContentClient.GetFilesAsync();
             Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
 
             foreach (var item in getFilesResponse.Result.Items)
             {
-                var deleteResponse = await client.ContentClient.DeleteFile(item.Blob.Id);
+                var deleteResponse = await client.ContentClient.DeleteFileAsync(item.Blob.Id);
                 Assert.AreEqual(deleteResponse.StatusCode, HttpStatusCode.OK);
             }
         }
@@ -120,22 +120,22 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
         [TestMethod]
         public async Task DownloadFileSuccessTest()
         {
-            //var getFilesResponse = await this.client.ContentClient.GetFiles();
+            //var getFilesResponse = await this.client.ContentClient.GetFilesAsync();
             //Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
             //var firstFile = getFilesResponse.Result.Items.Last();
 
-            var downloadFileResponse = await this.client.ContentClient.DownloadFile("35f6c9cb777340d989ba01770bcc4e2000");
+            var downloadFileResponse = await this.client.ContentClient.DownloadFileAsync("35f6c9cb777340d989ba01770bcc4e2000");
             Assert.AreEqual(downloadFileResponse.StatusCode, HttpStatusCode.OK);
         }
 
         [TestMethod]
         public async Task DownloadFileFailTest()
         {
-            var getFilesResponse = await this.client.ContentClient.GetFiles();
+            var getFilesResponse = await this.client.ContentClient.GetFilesAsync();
             Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
             var firstFile = getFilesResponse.Result.Items.Last();
 
-            var downloadFileResponse = await this.client.ContentClient.DownloadFile(firstFile.Blob.Uid);
+            var downloadFileResponse = await this.client.ContentClient.DownloadFileAsync(firstFile.Blob.Uid);
             Assert.IsNotNull(downloadFileResponse.Error);
         }
     }

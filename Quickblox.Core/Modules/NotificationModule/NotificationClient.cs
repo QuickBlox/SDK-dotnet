@@ -35,7 +35,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="сreatePushTokenRequest">The сreate push token request.</param>
         /// <returns>Success HTTP Status Code 201</returns>
-        public async Task<HttpResponse<CreatePushTokenResponse>> CreatePushToken(CreatePushTokenRequest сreatePushTokenRequest)
+        public async Task<HttpResponse<CreatePushTokenResponse>> CreatePushTokenAsync(CreatePushTokenRequest сreatePushTokenRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -52,7 +52,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="pushTokenId">The push token identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse> DeletePushToken(String pushTokenId)
+        public async Task<HttpResponse> DeletePushTokenAsync(String pushTokenId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var methodUrl = String.Format(QuickbloxMethods.DeletePushTokenMethod, pushTokenId);
@@ -68,7 +68,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="type">Notification channel type.</param>
         /// <returns>Success HTTP Status Code 201</returns>
-        public async Task<HttpResponse> CreateSubscriptions(NotificationChannelType type)
+        public async Task<HttpResponse> CreateSubscriptionsAsync(NotificationChannelType type)
         {
             this.quickbloxClient.CheckIsInitialized();
             var createSubscriptions = new CreateSubscriptionsRequest {Name = type};
@@ -84,7 +84,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// Retrieve subscriptions for the device which is specified in the authorization token.
         /// </summary>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<GetSubscriptionResponse[]>> GetSubscriptions()
+        public async Task<HttpResponse<GetSubscriptionResponse[]>> GetSubscriptionsAsync()
         {
             this.quickbloxClient.CheckIsInitialized();
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -99,7 +99,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="subscriptionId">The subscription identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse> DeleteSubscriptions(Int32 subscriptionId)
+        public async Task<HttpResponse> DeleteSubscriptionsAsync(Int32 subscriptionId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.DeleteSubscriptionsMethod, subscriptionId);
@@ -115,7 +115,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="сreateEventRequest">The сreate event parameter.</param>
         /// <returns>Success HTTP Status Code 201</returns>
-        public async Task<HttpResponse<EventResponse>> CreateEvent(CreateEventRequest сreateEventRequest)
+        public async Task<HttpResponse<EventResponse>> CreateEventAsync(CreateEventRequest сreateEventRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var resultPushTokenResponse = await HttpService.PostAsync<EventResponse, CreateEventRequest>(this.quickbloxClient.ApiEndPoint,
@@ -130,7 +130,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// Get all events which were created by a user specified in the authorization token.
         /// </summary>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<GetSubscriptionsResponse>> GetEvents()
+        public async Task<HttpResponse<GetSubscriptionsResponse>> GetEventsAsync()
         {
             this.quickbloxClient.CheckIsInitialized();
             var resultPushTokenResponse = await HttpService.GetAsync<GetSubscriptionsResponse>(this.quickbloxClient.ApiEndPoint,
@@ -145,7 +145,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="eventId">The event identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<GetSubscriptionsResponse>> GetEventById(UInt32 eventId)
+        public async Task<HttpResponse<GetSubscriptionsResponse>> GetEventByIdAsync(UInt32 eventId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = string.Format(QuickbloxMethods.GetEventByIdMethod, eventId);
@@ -162,7 +162,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// <param name="eventId">The event identifier.</param>
         /// <param name="editEventRequest">The edit event parameter.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<EventResponse>> EditEvent(UInt32 eventId, EditEventRequest editEventRequest)
+        public async Task<HttpResponse<EventResponse>> EditEventAsync(UInt32 eventId, EditEventRequest editEventRequest)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.EditEventMethod, eventId);
@@ -179,7 +179,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="eventId">The event identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse> DeleteEvent(UInt32 eventId)
+        public async Task<HttpResponse> DeleteEventAsync(UInt32 eventId)
         {
             this.quickbloxClient.CheckIsInitialized();
             var uriMethod = String.Format(QuickbloxMethods.DeleteEventMethod, eventId);
