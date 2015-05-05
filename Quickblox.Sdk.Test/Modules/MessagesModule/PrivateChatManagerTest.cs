@@ -22,8 +22,8 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await this.client.InitializeClient();
-            await this.client.CoreClient.CreateSessionWithLogin(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345");
+            await this.client.InitializeClientAsync();
+            await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345");
             await client.MessagesClient.Connect(2701456, "Test12345", (int)GlobalConstant.ApplicationId, "chat.quickblox.com", new TimeSpan(0, 0, 10));
             chatManager = client.MessagesClient.GetPrivateChatManager(2766517);
         }
