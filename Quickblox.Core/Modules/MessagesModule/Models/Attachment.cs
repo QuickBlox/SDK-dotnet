@@ -4,22 +4,23 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Quickblox.Sdk.Modules.MessagesModule.Models
 {
     [DataContract(Name = "attachment")]
     public class Attachment
     {
-        [DataMember(Name = "type")]
+        [XmlAttribute("type")]
         public string Type { get; set; }
 
-        [DataMember(Name = "name")]
+        [XmlAttribute("name")]
         public string Name { get; set; }
 
-        [DataMember(Name = "id")]
+        [XmlAttribute("id")]
         public string Id { get; set; }
 
-        [DataMember(Name = "url")]
+        [XmlAttribute("url")]
         public string Url { get; set; }
     }
 }
