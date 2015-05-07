@@ -73,8 +73,8 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
 
             await Task.Delay(5000);
 
-            if (lastMessageClient2 == null)
-                Assert.Fail("The message wasn't received by client2");
+            if (lastMessageClient2 == null || lastMessageClient2.Attachments == null || lastMessageClient2.Attachments.Count() != 1 || lastMessageClient2.Attachments[0].Id != attachemntId)
+                Assert.Fail("The message wasn't received correctly by client 2.");
         }
     }
 }

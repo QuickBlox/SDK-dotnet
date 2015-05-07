@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using agsXMPP;
 using agsXMPP.protocol.client;
 using agsXMPP.protocol.iq.roster;
 using agsXMPP.Xml.Dom;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Serializer;
 using AgsMessage = agsXMPP.protocol.client.Message;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 using AgsPresence = agsXMPP.protocol.client.Presence;
@@ -163,9 +166,34 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private void XmppConnectionOnOnMessage(object sender, AgsMessage msg)
         {
+            string extraParams = msg.GetTag("extraParams");
+            var attachments = new List<Attachment>();
+            if (!string.IsNullOrEmpty(extraParams))
+            {
+                XmlReaderSettings settings = new XmlReaderSettings {ConformanceLevel = ConformanceLevel.Fragment};
+                using (XmlReader reader = XmlReader.Create(new StringReader(extraParams), settings))
+                {
+                    while (reader.Read())
+                    {
+                        if (reader.NodeType == XmlNodeType.Element)
+                        {
+                            if (reader.Name == "Attachment")
+                            {
+                                var attachmentXml = reader.ReadOuterXml();
+                                var xmlSerializer = new XmlSerializer();
+                                var attachment = xmlSerializer.Deserialize<Attachment>(attachmentXml);
+                                if(attachment != null) attachments.Add(attachment);
+                            }
+                        }
+                    }
+                }
+            }
+
+            
+
             var handler = OnMessageReceived;
             if (handler != null)
-                handler(this, new Message {From = msg.From.ToString(), To = msg.To.ToString(), MessageText = msg.Body});
+                handler(this, new Message {From = msg.From.ToString(), To = msg.To.ToString(), MessageText = msg.Body, Attachments = attachments.ToArray()});
         }
 
         private void XmppConnectionOnOnPresence(object sender, AgsPresence pres)
