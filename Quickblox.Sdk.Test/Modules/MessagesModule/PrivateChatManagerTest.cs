@@ -34,14 +34,14 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
-            client1 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await client1.InitializeClientAsync();
+            client1 = new QuickbloxClient();
+            await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             await client1.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, login1, password1);
             await client1.MessagesClient.Connect(id1, password1, (int)GlobalConstant.ApplicationId, "chat.quickblox.com", new TimeSpan(0, 0, 10));
             chatManager1 = client1.MessagesClient.GetPrivateChatManager(id2);
 
-            client2 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await client2.InitializeClientAsync();
+            client2 = new QuickbloxClient();
+            await client2.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             await client2.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, login2, password2);
             await client2.MessagesClient.Connect(id2, password2, (int)GlobalConstant.ApplicationId, "chat.quickblox.com", new TimeSpan(0, 0, 10));
             chatManager2 = client2.MessagesClient.GetPrivateChatManager(id1);

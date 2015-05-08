@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.Navigation;
@@ -7,7 +8,7 @@ using Quickblox.Sdk;
 
 namespace QMunicate.ViewModels
 {
-    public class ViewModel : ObservableObject
+    public class ViewModel : ObservableObject, INavigationAware
     {
         private Boolean isLoading;
 
@@ -40,6 +41,14 @@ namespace QMunicate.ViewModels
         private bool CanGobackCommandExecute()
         {
             return this.NavigationService.CanGoBack;
+        }
+
+        public virtual void OnNavigatedTo(NavigationEventArgs e)
+        {
+        }
+
+        public virtual void OnNavigatedFrom(NavigatingCancelEventArgs e)
+        {
         }
     }
 }
