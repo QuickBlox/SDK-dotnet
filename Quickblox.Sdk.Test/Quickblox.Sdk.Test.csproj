@@ -120,6 +120,7 @@
     <Compile Include="Modules\ChatModule\ChatClientTest.cs" />
     <Compile Include="GlobalConstant.cs" />
     <Compile Include="Modules\ContentModule\ContentClientTest.cs" />
+    <Compile Include="Modules\MessagesModule\PrivateChatManagerTest.cs" />
     <Compile Include="Modules\NotificationModule\NotificationClientTest.cs" />
     <Compile Include="Modules\UsersModule\UsersClientTest.cs" />
     <Compile Include="QuickbloxClientTest.cs" />

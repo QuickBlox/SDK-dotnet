@@ -1,6 +1,8 @@
 ﻿using agsXMPP;
+using agsXMPP.Xml.Dom;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Serializer;
 using AgsMessage = agsXMPP.protocol.client.Message;
 using AgsPresence = agsXMPP.protocol.client.Presence;
 
@@ -27,9 +29,17 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region IPrivateChatManager members
 
-        public void SendMessage(string message)
+        public void SendMessage(string message, Attachment attachment = null)
         {
-            xmpp.Send(new AgsMessage(otherUserJid, agsXMPP.protocol.client.MessageType.chat, message));
+            var msg = new AgsMessage(otherUserJid, agsXMPP.protocol.client.MessageType.chat, message);
+            if (attachment != null)
+            {
+                XmlSerializer xmlSerializer = new XmlSerializer();
+                string attachemntXml = xmlSerializer.Serialize(attachment);
+                msg.AddTag("extraParams", attachemntXml);
+            }
+
+            xmpp.Send(msg);
         }
 
         public void SubsribeForPresence()

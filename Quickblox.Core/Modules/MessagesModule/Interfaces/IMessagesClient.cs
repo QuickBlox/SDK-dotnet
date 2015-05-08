@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 
 namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
@@ -13,6 +14,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         List<Contact> Contacts { get; }
         bool IsConnected { get; }
         void Connect(int userId, string password, int applicationId, string chatEndpoint);
+        Task Connect(int userId, string password, int applicationId, string chatEndpoint, TimeSpan timeout);
         IPrivateChatManager GetPrivateChatManager(int otherUserId);
         IGroupChatManager GetGroupChatManager(string groupJid);
         void ReloadContacts();
