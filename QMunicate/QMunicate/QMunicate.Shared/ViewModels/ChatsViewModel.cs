@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
@@ -99,13 +100,11 @@ namespace QMunicate.ViewModels
 
         #endregion
 
-
-        public void OnNavigated(object parameter)
+        public override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.UserId = (int) parameter;
+            this.UserId = (int)e.Parameter;
             this.QuickbloxClient.MessagesClient.OnMessageReceived += this.PrivateChatManagerOnOnMessageReceived;
         }
-
 
         private void PrivateChatManagerOnOnMessageReceived(object sender, Message msg)
         {
