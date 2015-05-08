@@ -191,6 +191,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             
 
+            
+
             var handler = OnMessageReceived;
             if (handler != null)
                 handler(this, new Message {From = msg.From.ToString(), To = msg.To.ToString(), MessageText = msg.Body, Attachments = attachments.ToArray()});

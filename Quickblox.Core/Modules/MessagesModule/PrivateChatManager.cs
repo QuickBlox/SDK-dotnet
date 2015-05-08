@@ -1,10 +1,17 @@
-﻿using agsXMPP;
+﻿using System;
+using System.Threading.Tasks;
+using agsXMPP;
+using agsXMPP.protocol.client;
+using agsXMPP.protocol.iq.privacy;
 using agsXMPP.Xml.Dom;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Serializer;
+using Action = agsXMPP.protocol.iq.privacy.Action;
 using AgsMessage = agsXMPP.protocol.client.Message;
 using AgsPresence = agsXMPP.protocol.client.Presence;
+using PresenceType = Quickblox.Sdk.Modules.MessagesModule.Models.PresenceType;
+using Type = agsXMPP.protocol.iq.privacy.Type;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -66,6 +73,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         {
             xmpp.Send(new AgsPresence { Type = (agsXMPP.protocol.client.PresenceType)presenceType, To = new Jid(otherUserJid) });
         }
+
+        public void Block()
+        {
+            PrivacyManager p = new PrivacyManager(xmpp);
+
+            p.AddList("testList", new Item[] { new Item(Action.deny, 0, Type.jid, "6666-546@chat.quickblox.com") });
+            p.ChangeActiveList("testList");
+            
+        }
+
 
         #endregion
     }

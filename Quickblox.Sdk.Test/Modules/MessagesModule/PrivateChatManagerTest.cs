@@ -76,5 +76,22 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             if (lastMessageClient2 == null || lastMessageClient2.Attachments == null || lastMessageClient2.Attachments.Count() != 1 || lastMessageClient2.Attachments[0].Id != attachemntId)
                 Assert.Fail("The message wasn't received correctly by client 2.");
         }
+
+        [TestMethod]
+        public async Task PrivacyListTest()
+        {
+            lastMessageClient2 = null;
+            string messageText = "Test message";
+
+            chatManager1.SendMessage(messageText);
+            await Task.Delay(5000);
+
+            if (lastMessageClient2 == null || lastMessageClient2.MessageText != messageText)
+                Assert.Fail("The message wasn't received by client2");
+
+
+            chatManager1.Block();
+            await Task.Delay(5000);
+        }
     }
 }
