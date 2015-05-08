@@ -4,17 +4,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}</ProjectGuid>
+    <ProjectGuid>{6F35BE22-0851-42C6-B3DB-5403B829D7AC}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestRequest</RootNamespace>
-    <AssemblyName>TestRequest</AssemblyName>
+    <RootNamespace>QMunicate</RootNamespace>
+    <AssemblyName>QMunicate.Windows</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
+    <SynthesizeLinkMetadata>true</SynthesizeLinkMetadata>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>TestRequest_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>QMunicate.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -103,47 +104,39 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\QMunicate\QMunicate.Core\QMunicate.Core.csproj">
-      <Project>{B2B5054E-5424-4424-87B7-E6177069F242}</Project>
-      <Name>QMunicate.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Quickblox.Core\Quickblox.Sdk.csproj">
-      <Project>{08fdea8c-a156-4f7e-8b8a-31228d88b3bc}</Project>
+    <ProjectReference Include="..\..\..\Quickblox.Core\Quickblox.Sdk.csproj">
+      <Project>{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}</Project>
       <Name>Quickblox.Sdk</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj">
+    <ProjectReference Include="..\..\..\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj">
       <Project>{b9ff8451-9750-4b80-bcf6-8d151b10486b}</Project>
       <Name>Quickblox.Sdk.Cryptographic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Quickblox.Sdk.Hmacsha\Quickblox.Sdk.Hmacsha.csproj">
+    <ProjectReference Include="..\..\..\Quickblox.Sdk.Hmacsha\Quickblox.Sdk.Hmacsha.csproj">
       <Project>{17aa4da9-1669-4248-a18a-a1438b8a791c}</Project>
       <Name>Quickblox.Sdk.Hmacsha</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\QMunicate.Core\QMunicate.Core.csproj">
+      <Project>{b2b5054e-5424-4424-87b7-e6177069f242}</Project>
+      <Name>QMunicate.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ApplicationKeys.cs" />
-    <Compile Include="Helper\Helpers.cs" />
-    <Compile Include="INavigatable.cs" />
-    <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ViewModel\ChatsViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ViewModel.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="Views\ChatsPage.xaml.cs">
       <DependentUpon>ChatsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="packages.config" />
+    <None Include="QMunicate.Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.scale-100.png" />
@@ -152,46 +145,25 @@
     <Content Include="Assets\StoreLogo.scale-100.png" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Views\ChatsPage.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainPage.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="TestRequest_TemporaryKey.pfx" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight">
-      <HintPath>..\packages\MvvmLightLibs.5.1.1.0\lib\windows81\GalaSoft.MvvmLight.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras">
-      <HintPath>..\packages\MvvmLightLibs.5.1.1.0\lib\windows81\GalaSoft.MvvmLight.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform">
-      <HintPath>..\packages\MvvmLightLibs.5.1.1.0\lib\windows81\GalaSoft.MvvmLight.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
+  <Import Project="..\QMunicate.Shared\QMunicate.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

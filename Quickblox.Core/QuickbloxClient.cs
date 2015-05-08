@@ -23,25 +23,15 @@ namespace Quickblox.Sdk
     /// </summary>
     public class QuickbloxClient
     {
-        private readonly String baseUri;
-        private readonly String accountKey;
-        private readonly ICryptographicProvider cryptographicProvider;
+        private String baseUri;
+        private String accountKey;
+        private ICryptographicProvider cryptographicProvider;
         private Boolean isClientInitialized;
 
         #region Ctor
 
-        /// <summary>
-        /// Инициализирует новый экземпляр класса QuickbloxClient.
-        /// </summary>
-        /// <param name="baseUri">Начальный урл.</param>
-        /// <param name="accountKey">Ключ аккаунта</param>
-        /// <param name="cryptographicProvider"></param>
-        public QuickbloxClient(String baseUri, String accountKey, ICryptographicProvider cryptographicProvider)
+        public QuickbloxClient()
         {
-            this.baseUri = baseUri;
-            this.accountKey = accountKey;
-            this.CryptographicProvider = cryptographicProvider;
-
             this.CoreClient = new AuthorizationClient(this);
             this.ChatClient = new ChatClient(this);
             this.UsersClient = new UsersClient(this);
@@ -49,6 +39,26 @@ namespace Quickblox.Sdk
             this.MessagesClient = new MessagesClient(this);
             this.ContentClient = new ContentClient(this);
         }
+
+        /// <summary>
+        /// Инициализирует новый экземпляр класса QuickbloxClient.
+        /// </summary>
+        /// <param name="baseUri">Начальный урл.</param>
+        /// <param name="accountKey">Ключ аккаунта</param>
+        /// <param name="cryptographicProvider"></param>
+        //public QuickbloxClient(String baseUri, String accountKey, ICryptographicProvider cryptographicProvider)
+        //{
+        //    this.baseUri = baseUri;
+        //    this.accountKey = accountKey;
+        //    this.CryptographicProvider = cryptographicProvider;
+
+        //    this.CoreClient = new AuthorizationClient(this);
+        //    this.ChatClient = new ChatClient(this);
+        //    this.UsersClient = new UsersClient(this);
+        //    this.NotificationClient = new NotificationClient(this);
+        //    this.MessagesClient = new MessagesClient(this);
+        //    this.ContentClient = new ContentClient(this);
+        //}
 
         #endregion
 
@@ -102,8 +112,15 @@ namespace Quickblox.Sdk
 
         #region Public Members
         
-        public async Task InitializeClientAsync()
+        public async Task InitializeClientAsync(String baseUri, String accountKey, ICryptographicProvider cryptographicProvider)
         {
+            if (baseUri == null) throw new ArgumentNullException("baseUri");
+            if (accountKey == null) throw new ArgumentNullException("accountKey");
+            if (cryptographicProvider == null) throw new ArgumentNullException("cryptographicProvider");
+            this.baseUri = baseUri;
+            this.accountKey = accountKey;
+            this.CryptographicProvider = cryptographicProvider;
+
             while (!this.IsClientInitialized)
             {
                 await this.GetAccountSettingsAsync();

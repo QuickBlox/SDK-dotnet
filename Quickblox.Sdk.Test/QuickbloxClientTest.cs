@@ -10,8 +10,8 @@ namespace Quickblox.Sdk.Test
         [TestMethod]
         public async Task TestInitialization()
         {
-            Quickblox.Sdk.QuickbloxClient client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await client.InitializeClientAsync();
+            Quickblox.Sdk.QuickbloxClient client = new QuickbloxClient();
+            await client.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
 
             Assert.IsTrue(client.IsClientInitialized);
         }
@@ -19,7 +19,7 @@ namespace Quickblox.Sdk.Test
         [TestMethod]
         public async Task TestFailInitialization()
         {
-            Quickblox.Sdk.QuickbloxClient client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
+            Quickblox.Sdk.QuickbloxClient client = new QuickbloxClient();
 
             Assert.IsFalse(client.IsClientInitialized);
             var ex = AssertEx.ThrowsAsync<NotInitializedException>(
