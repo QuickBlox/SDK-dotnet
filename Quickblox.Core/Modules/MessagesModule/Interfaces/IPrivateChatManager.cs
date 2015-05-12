@@ -15,6 +15,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         void DeclineSubscribtionRequest();
         void Unsubscribe();
         void SendPresenceInformation(PresenceType presenceType);
-        void Block();
+        Task Block();
+        Task Unblock();
     }
 }

@@ -80,18 +80,26 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [TestMethod]
         public async Task PrivacyListTest()
         {
-            lastMessageClient2 = null;
             string messageText = "Test message";
 
+            await chatManager2.Unblock();
+
+            lastMessageClient2 = null;
             chatManager1.SendMessage(messageText);
             await Task.Delay(5000);
 
             if (lastMessageClient2 == null || lastMessageClient2.MessageText != messageText)
                 Assert.Fail("The message wasn't received by client2");
 
+            await chatManager2.Block();
 
-            chatManager1.Block();
+            lastMessageClient2 = null;
+            chatManager1.SendMessage(messageText);
             await Task.Delay(5000);
+
+            if (lastMessageClient2 != null)
+                Assert.Fail("Blocking doesn't work");
+
         }
     }
 }
