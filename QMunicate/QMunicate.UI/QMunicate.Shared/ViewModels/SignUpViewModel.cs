@@ -10,6 +10,8 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Helper;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace QMunicate.ViewModels
 {
@@ -70,11 +72,19 @@ namespace QMunicate.ViewModels
 
         private async void SignUpCommandExecute()
         {
+            await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
+                        ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
+                        new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
+
             var response = await QuickbloxClient.UsersClient.SignUpUserAsync(FullName, Password, email: Email);
         }
 
         public async void ContinueFileOpenPicker(FileOpenPickerContinuationEventArgs args)
         {
+            await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
+                        ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
+                        new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
+
             if (args.Files.Any())
             {
                 FileRandomAccessStream stream = (FileRandomAccessStream)await args.Files[0].OpenAsync(FileAccessMode.Read);

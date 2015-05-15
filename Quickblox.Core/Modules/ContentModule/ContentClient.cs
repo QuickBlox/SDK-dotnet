@@ -203,6 +203,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
             return deleteFileById;
         }
 
+        //DO it only after user creation!!!
         public async Task UploadFile(byte[] fileBytes, string contentType)
         {
             var settings = new CreateFileRequest()
