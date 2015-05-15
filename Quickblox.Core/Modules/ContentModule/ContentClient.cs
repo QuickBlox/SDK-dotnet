@@ -6,6 +6,7 @@ using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Http;
+using Quickblox.Sdk.Modules.ContentModule.Models;
 using Quickblox.Sdk.Modules.ContentModule.Requests;
 using Quickblox.Sdk.Modules.ContentModule.Response;
 using Quickblox.Sdk.Serializer;
@@ -200,6 +201,36 @@ namespace Quickblox.Sdk.Modules.ContentModule
                                                                                             uriMethod,
                                                                                             headers);
             return deleteFileById;
+        }
+
+        public async Task UploadFile(byte[] fileBytes, string contentType)
+        {
+            var settings = new CreateFileRequest()
+            {
+                Blob = new BlobRequest()
+                {
+                    Name = Guid.NewGuid().ToString(),
+                }
+            };
+
+            var createFileInfoResponse = await CreateFileInfoAsync(settings);
+            var uploadFileRequest = new UploadFileRequest
+            {
+                BlobObjectAccess = createFileInfoResponse.Result.Blob.BlobObjectAccess,
+                FileContent = new BytesContent()
+                {
+                    Bytes = fileBytes,
+                    ContentType = contentType,
+                }
+            };
+
+            var uploadFileResponse = await FileUploadAsync(uploadFileRequest);
+
+            var blobUploadCompleteRequest = new BlobUploadCompleteRequest
+            {
+                BlobUploadSize = new BlobUploadSize() {Size = (uint) fileBytes.Length}
+            };
+            var uploadFileCompleteResponse = await FileUploadCompleteAsync(createFileInfoResponse.Result.Blob.Id, blobUploadCompleteRequest);
         }
     }
 }

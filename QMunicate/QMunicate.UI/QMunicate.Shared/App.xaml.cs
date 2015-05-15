@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Calls;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -17,6 +18,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.Navigation;
+using QMunicate.ViewModels;
 using QMunicate.Views;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Hmacsha;
@@ -120,6 +122,24 @@ namespace QMunicate
             Window.Current.Activate();
         }
 
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            var quickbloxClient = Factory.CommonFactory.GetInstance<QuickbloxClient>();
+            var token = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.QbToken);
+            quickbloxClient.Resume(token);
+
+            var continuationActivatedEventArgs = args as IContinuationActivatedEventArgs;
+            if (args != null)
+            {
+                ContinuationManager.Continue(continuationActivatedEventArgs);
+            }
+
+        }
+
+        
+
+        
+
         private PageResolver GetPageResolver()
         {
             var dictionary = new Dictionary<string, Type>();
@@ -155,6 +175,10 @@ namespace QMunicate
 
             // TODO: Save application state and stop any background activity
             deferral.Complete();
+
+            var quickbloxClient = Factory.CommonFactory.GetInstance<QuickbloxClient>();
+
+            SettingsManager.Instance.WriteToSettings(SettingsKeys.QbToken, quickbloxClient.Token);
         }
     }
 }

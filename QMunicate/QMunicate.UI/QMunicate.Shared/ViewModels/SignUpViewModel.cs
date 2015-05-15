@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using QMunicate.Core.Command;
+using Quickblox.Sdk;
+using System;
+using System.Linq;
 using System.Windows.Input;
+using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using QMunicate.Core.Command;
 
 namespace QMunicate.ViewModels
 {
-    public class SignUpViewModel : ViewModel
+    public class SignUpViewModel : ViewModel, IFileOpenPickerContinuable
     {
         private string fullName;
         private string email;
@@ -54,7 +57,7 @@ namespace QMunicate.ViewModels
 
         public override void OnNavigatedTo(NavigationEventArgs e)
         {
-           
+            
         }
 
         private async void ChoosePhotoCommandExecute()
@@ -63,11 +66,35 @@ namespace QMunicate.ViewModels
             picker.FileTypeFilter.Add(".jpg");
             picker.FileTypeFilter.Add(".png");
             picker.PickSingleFileAndContinue();
-            
         }
 
-        private void SignUpCommandExecute()
+        private async void SignUpCommandExecute()
         {
+            var response = await QuickbloxClient.UsersClient.SignUpUserAsync(FullName, Password, email: Email);
+        }
+
+        public async void ContinueFileOpenPicker(FileOpenPickerContinuationEventArgs args)
+        {
+            if (args.Files.Any())
+            {
+                FileRandomAccessStream stream = (FileRandomAccessStream)await args.Files[0].OpenAsync(FileAccessMode.Read);
+
+                var bytes = new byte[stream.Size];
+
+                using (var dataReader = new DataReader(stream))
+                {
+                    await dataReader.LoadAsync((uint)stream.Size);
+                    dataReader.ReadBytes(bytes);
+                }
+
+                await QuickbloxClient.ContentClient.UploadFile(bytes, "image/jpg");
+
+
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.SetSource(stream);
+                UserImage = bitmapImage;
+            }
+
 
         }
     }
