@@ -16,5 +16,12 @@
         public const string AuthorizationSecret = "7v2Jkrc7e-99JJX";
 
         #endregion
+
+        #region Password Vault
+
+        public const string QMunicateCredentials = "QMunicateCredentials";
+
+        #endregion
+
     }
 }
