@@ -112,7 +112,7 @@ namespace QMunicate
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!navigationService.Navigate("SignUp", e.Arguments))
+                if (!navigationService.Navigate("Login", e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -145,6 +145,7 @@ namespace QMunicate
             var dictionary = new Dictionary<string, Type>();
             dictionary.Add("MainPage", typeof(MainPage));
             dictionary.Add("SignUp", typeof(SignUpPage));
+            dictionary.Add("Login", typeof(LoginPage));
             return new PageResolver(dictionary);
         }
 

@@ -25,7 +25,7 @@
             <TextBlock Text="By clicking Done, you agree" FontSize="{StaticResource SmallFontSize}" Margin="{StaticResource DefaultHorizontalMargin}"/>
             <StackPanel Orientation="Horizontal" Margin="{StaticResource DefaultHorizontalMargin}">
                 <TextBlock Text="to Q-municate" FontSize="{StaticResource SmallFontSize}" VerticalAlignment="Center"/>
-                <HyperlinkButton Content="User Agreement" FontSize="{StaticResource SmallFontSize}" Foreground="Blue" Margin="6 0 0 0"/>
+                <HyperlinkButton Content="User Agreement" NavigateUri="http://q-municate.com/agreement/" FontSize="{StaticResource SmallFontSize}" Foreground="Blue" Margin="6 0 0 0"/>
             </StackPanel>
         </StackPanel>
     </Grid>
