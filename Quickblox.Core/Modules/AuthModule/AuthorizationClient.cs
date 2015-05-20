@@ -136,7 +136,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             var loginResponse = await HttpService.PostAsync<LoginResponse, LoginRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                         QuickbloxMethods.LoginMethod,
                                                                                         request,
-                                                                                        RequestHeadersBuilder.GetDefaultHeaders());
+                                                                                        RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(quickbloxClient.Token));
             return loginResponse;
         }
 

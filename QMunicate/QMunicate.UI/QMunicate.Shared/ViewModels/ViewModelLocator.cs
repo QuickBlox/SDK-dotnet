@@ -6,6 +6,16 @@ namespace QMunicate.ViewModels
         {
             
         }
+
+        public SignUpViewModel SignUpViewModel
+        {
+            get { return new SignUpViewModel(); }
+        }
+
+        public LoginViewModel LoginViewModel
+        {
+            get { return new LoginViewModel(); }
+        }
         
         public static void Cleanup()
         {

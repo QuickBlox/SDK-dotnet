@@ -16,10 +16,13 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ApplicationKeys.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ContinuationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\RadTextBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ValidationState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\Helpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SettingsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ChatsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SignUpViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModel.cs" />

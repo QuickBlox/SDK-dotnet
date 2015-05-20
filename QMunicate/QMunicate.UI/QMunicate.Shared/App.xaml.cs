@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Calls;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -17,6 +18,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.Navigation;
+using QMunicate.ViewModels;
 using QMunicate.Views;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Hmacsha;
@@ -110,7 +112,7 @@ namespace QMunicate
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                if (!navigationService.Navigate("SignUp", e.Arguments))
+                if (!navigationService.Navigate("Login", e.Arguments))
                 {
                     throw new Exception("Failed to create initial page");
                 }
@@ -120,11 +122,33 @@ namespace QMunicate
             Window.Current.Activate();
         }
 
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            var quickbloxClient = Factory.CommonFactory.GetInstance<QuickbloxClient>();
+            var token = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.QbToken);
+            quickbloxClient.Resume(token);
+
+#if WINDOWS_PHONE_APP
+
+            var continuationActivatedEventArgs = args as IContinuationActivatedEventArgs;
+            if (args != null)
+            {
+                ContinuationManager.Continue(continuationActivatedEventArgs);
+            }
+#endif
+        }
+
+        
+
+        
+
         private PageResolver GetPageResolver()
         {
             var dictionary = new Dictionary<string, Type>();
-            dictionary.Add("MainPage", typeof(MainPage));
+            dictionary.Add("Main", typeof(MainPage));
             dictionary.Add("SignUp", typeof(SignUpPage));
+            dictionary.Add("Login", typeof(LoginPage));
+            //dictionary.Add("ChatsPage", typeof(ChatsPage));
             return new PageResolver(dictionary);
         }
 
@@ -155,6 +179,10 @@ namespace QMunicate
 
             // TODO: Save application state and stop any background activity
             deferral.Complete();
+
+            var quickbloxClient = Factory.CommonFactory.GetInstance<QuickbloxClient>();
+
+            SettingsManager.Instance.WriteToSettings(SettingsKeys.QbToken, quickbloxClient.Token);
         }
     }
 }

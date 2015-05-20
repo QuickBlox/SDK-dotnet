@@ -37,7 +37,7 @@ namespace Quickblox.Sdk
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
             this.MessagesClient = new MessagesClient(this);
-            this.ContentClient = new ContentClient(this);
+            this.ContentClient = new ContentClient(this);            
         }
 
         /// <summary>
@@ -125,6 +125,16 @@ namespace Quickblox.Sdk
             {
                 await this.GetAccountSettingsAsync();
             }
+        }
+
+        public void Resume(string token)
+        {
+            Token = token;
+        }
+
+        public string Suspend()
+        {
+            return Token;
         }
 
         #region Internal
