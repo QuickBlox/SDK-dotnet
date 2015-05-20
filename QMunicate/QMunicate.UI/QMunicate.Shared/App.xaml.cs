@@ -128,12 +128,14 @@ namespace QMunicate
             var token = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.QbToken);
             quickbloxClient.Resume(token);
 
+#if WINDOWS_PHONE_APP
+
             var continuationActivatedEventArgs = args as IContinuationActivatedEventArgs;
             if (args != null)
             {
                 ContinuationManager.Continue(continuationActivatedEventArgs);
             }
-
+#endif
         }
 
         
@@ -143,9 +145,10 @@ namespace QMunicate
         private PageResolver GetPageResolver()
         {
             var dictionary = new Dictionary<string, Type>();
-            dictionary.Add("MainPage", typeof(MainPage));
+            dictionary.Add("Main", typeof(MainPage));
             dictionary.Add("SignUp", typeof(SignUpPage));
             dictionary.Add("Login", typeof(LoginPage));
+            //dictionary.Add("ChatsPage", typeof(ChatsPage));
             return new PageResolver(dictionary);
         }
 

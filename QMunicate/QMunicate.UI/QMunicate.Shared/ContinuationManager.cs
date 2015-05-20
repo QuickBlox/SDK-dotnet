@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using QMunicate.ViewModels;
 
 namespace QMunicate
 {
+
+#if WINDOWS_PHONE_APP
+
     internal static class ContinuationManager
     {
         internal static void Continue(IContinuationActivatedEventArgs continuationActivatedEventArgs)
@@ -22,11 +26,13 @@ namespace QMunicate
                 var openPickerContinuable = page.DataContext as IFileOpenPickerContinuable;
                 var fileOpenArgs = continuationActivatedEventArgs as FileOpenPickerContinuationEventArgs;
                 if(openPickerContinuable != null && fileOpenArgs != null)
-                    openPickerContinuable.ContinueFileOpenPicker(fileOpenArgs);
+                    openPickerContinuable.ContinueFileOpenPicker(fileOpenArgs.Files);
             }
         }
 
     }
+
+#endif
 
     interface IFileOpenPickerContinuable
     {
@@ -34,10 +40,8 @@ namespace QMunicate
         /// This method is invoked when the file open picker returns picked
         /// files
         /// </summary>
-        /// <param name="args">Activated event args object that contains returned files from file open picker</param>
-        void ContinueFileOpenPicker(FileOpenPickerContinuationEventArgs args);
+        /// <param name="files">Picked files</param>
+        void ContinueFileOpenPicker(IReadOnlyList<StorageFile> files);
     }
-
-
 
 }

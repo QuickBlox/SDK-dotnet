@@ -26,6 +26,9 @@ namespace QMunicate.ViewModels
         {
             ForgotPasswordCommand = new RelayCommand(ForgotPasswordCommandExecute);
             LoginCommand = new RelayCommand(LoginCommandExecute);
+
+            Email = "an@to.ly";
+            Password = "12345678";
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿using QMunicate.Core.Command;
 using Quickblox.Sdk;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Windows.ApplicationModel.Activation;
@@ -67,7 +68,9 @@ namespace QMunicate.ViewModels
             FileOpenPicker picker = new FileOpenPicker();
             picker.FileTypeFilter.Add(".jpg");
             picker.FileTypeFilter.Add(".png");
+#if WINDOWS_PHONE_APP
             picker.PickSingleFileAndContinue();
+#endif
         }
 
         private async void SignUpCommandExecute()
@@ -79,15 +82,15 @@ namespace QMunicate.ViewModels
             var response = await QuickbloxClient.UsersClient.SignUpUserAsync(FullName, Password, email: Email);
         }
 
-        public async void ContinueFileOpenPicker(FileOpenPickerContinuationEventArgs args)
+        public async void ContinueFileOpenPicker(IReadOnlyList<StorageFile> files)
         {
             await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
                         ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
                         new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
 
-            if (args.Files.Any())
+            if (files != null && files.Any())
             {
-                FileRandomAccessStream stream = (FileRandomAccessStream)await args.Files[0].OpenAsync(FileAccessMode.Read);
+                FileRandomAccessStream stream = (FileRandomAccessStream)await files[0].OpenAsync(FileAccessMode.Read);
 
                 var bytes = new byte[stream.Size];
 
@@ -104,8 +107,7 @@ namespace QMunicate.ViewModels
                 bitmapImage.SetSource(stream);
                 UserImage = bitmapImage;
             }
-
-
         }
+
     }
 }
