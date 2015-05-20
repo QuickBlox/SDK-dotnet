@@ -9,7 +9,13 @@
     <Import_RootNamespace>QMunicate</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Database.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Repository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RepositoryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sqlite\SQLite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Sqlite\SQLiteAsync.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StorageType.cs" />
   </ItemGroup>
 </Project>
