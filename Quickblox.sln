@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk", "Quickblox.Core\Quickblox.Sdk.csproj", "{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}"
 EndProject
@@ -31,6 +31,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Windows.Database", "QMunicate\QMunicate.Database\QMunicate.Windows.Database\QMunicate.Windows.Database.csproj", "{11DE446E-95E7-45D6-805F-28BD7AC00DD7}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QMunicate.Shared.Database", "QMunicate\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.shproj", "{FCDEB827-1A78-4A0F-B410-F22FA197E9E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Resources", "QMunicate\QMunicate.Resources\QMunicate.Resources.csproj", "{284DB2A0-59AE-40D7-8E2C-CEC053957A34}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -244,6 +246,22 @@ Global
 		{11DE446E-95E7-45D6-805F-28BD7AC00DD7}.Release|x64.Build.0 = Release|x64
 		{11DE446E-95E7-45D6-805F-28BD7AC00DD7}.Release|x86.ActiveCfg = Release|x86
 		{11DE446E-95E7-45D6-805F-28BD7AC00DD7}.Release|x86.Build.0 = Release|x86
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Debug|ARM.Build.0 = Debug|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Debug|x64.Build.0 = Debug|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Debug|x86.Build.0 = Debug|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|ARM.ActiveCfg = Release|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|ARM.Build.0 = Release|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|x64.ActiveCfg = Release|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|x64.Build.0 = Release|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|x86.ActiveCfg = Release|Any CPU
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -258,5 +276,6 @@ Global
 		{8D310E26-619E-4B32-A59D-0A1A56EEDADC} = {4E175C30-F72D-4569-BFED-397F3BE68EEF}
 		{11DE446E-95E7-45D6-805F-28BD7AC00DD7} = {4E175C30-F72D-4569-BFED-397F3BE68EEF}
 		{FCDEB827-1A78-4A0F-B410-F22FA197E9E1} = {4E175C30-F72D-4569-BFED-397F3BE68EEF}
+		{284DB2A0-59AE-40D7-8E2C-CEC053957A34} = {93024201-E145-42C3-9F07-E05DBC9500A1}
 	EndGlobalSection
 EndGlobal

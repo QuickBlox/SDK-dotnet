@@ -97,6 +97,10 @@
       <Project>{b2b5054e-5424-4424-87b7-e6177069f242}</Project>
       <Name>QMunicate.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\QMunicate.Resources\QMunicate.Resources.csproj">
+      <Project>{284db2a0-59ae-40d7-8e2c-cec053957a34}</Project>
+      <Name>QMunicate.Resources</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Views\MainPage.xaml.cs">
