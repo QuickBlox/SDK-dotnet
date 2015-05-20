@@ -147,7 +147,7 @@
     <Content Include="Modules\ContentModule\Assets\1.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Quickblox.Core\Quickblox.Sdk.csproj">
+    <ProjectReference Include="..\Quickblox.Sdk\Quickblox.Sdk.csproj">
       <Project>{08fdea8c-a156-4f7e-8b8a-31228d88b3bc}</Project>
       <Name>Quickblox.Sdk</Name>
     </ProjectReference>

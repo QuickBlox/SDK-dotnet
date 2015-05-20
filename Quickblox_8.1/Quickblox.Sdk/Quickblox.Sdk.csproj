@@ -163,13 +163,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="agsXMPP">
-      <HintPath>..\External\agsXMPP.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.UnitTestFramework">
-      <HintPath>C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0\ExtensionSDKs\MSTestFramework\11.0\References\CommonConfiguration\Neutral\Microsoft.VisualStudio.TestPlatform.UnitTestFramework.dll</HintPath>
+      <HintPath>..\..\External\agsXMPP.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

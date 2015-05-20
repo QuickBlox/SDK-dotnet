@@ -2,46 +2,46 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk", "Quickblox.Core\Quickblox.Sdk.csproj", "{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk", "Quickblox_8.1\Quickblox.Sdk\Quickblox.Sdk.csproj", "{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRequest", "TestRequest\TestRequest.csproj", "{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk.Test", "Quickblox_8.1\Quickblox.Sdk.Test\Quickblox.Sdk.Test.csproj", "{0FC5EB24-64AA-464A-9940-41187CC98FCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk.Test", "Quickblox.Sdk.Test\Quickblox.Sdk.Test.csproj", "{0FC5EB24-64AA-464A-9940-41187CC98FCE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk.Hmacsha", "Quickblox_8.1\Quickblox.Sdk.Hmacsha\Quickblox.Sdk.Hmacsha.csproj", "{17AA4DA9-1669-4248-A18A-A1438B8A791C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk.Hmacsha", "Quickblox.Sdk.Hmacsha\Quickblox.Sdk.Hmacsha.csproj", "{17AA4DA9-1669-4248-A18A-A1438B8A791C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk.Cryptographic", "Quickblox_8.1\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj", "{B9FF8451-9750-4B80-BCF6-8D151B10486B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk.Cryptographic", "Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj", "{B9FF8451-9750-4B80-BCF6-8D151B10486B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QMunicate", "QMunicate", "{93024201-E145-42C3-9F07-E05DBC9500A1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QMunicate_8.1", "QMunicate_8.1", "{93024201-E145-42C3-9F07-E05DBC9500A1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QMunicate.UI", "QMunicate.UI", "{94371C00-FF6C-4807-A314-2B0333D258A9}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QMunicate.Shared", "QMunicate\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.shproj", "{BA7ACFF7-A9DB-46A4-A6B8-9089128DC102}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QMunicate.Shared", "QMunicate_8.1\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.shproj", "{BA7ACFF7-A9DB-46A4-A6B8-9089128DC102}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Windows", "QMunicate\QMunicate.UI\QMunicate.Windows\QMunicate.Windows.csproj", "{6F35BE22-0851-42C6-B3DB-5403B829D7AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Windows", "QMunicate_8.1\QMunicate.UI\QMunicate.Windows\QMunicate.Windows.csproj", "{6F35BE22-0851-42C6-B3DB-5403B829D7AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.WindowsPhone", "QMunicate\QMunicate.UI\QMunicate.WindowsPhone\QMunicate.WindowsPhone.csproj", "{D42A6FAA-2C74-4C22-8C44-F9E29E9E3DF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.WindowsPhone", "QMunicate_8.1\QMunicate.UI\QMunicate.WindowsPhone\QMunicate.WindowsPhone.csproj", "{D42A6FAA-2C74-4C22-8C44-F9E29E9E3DF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Core", "QMunicate\QMunicate.Core\QMunicate.Core.csproj", "{B2B5054E-5424-4424-87B7-E6177069F242}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Core", "QMunicate_8.1\QMunicate.Core\QMunicate.Core.csproj", "{B2B5054E-5424-4424-87B7-E6177069F242}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QMunicate.Database", "QMunicate.Database", "{4E175C30-F72D-4569-BFED-397F3BE68EEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.WP.Database", "QMunicate\QMunicate.Database\QMunicate.WP.Database\QMunicate.WP.Database.csproj", "{8D310E26-619E-4B32-A59D-0A1A56EEDADC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.WP.Database", "QMunicate_8.1\QMunicate.Database\QMunicate.WP.Database\QMunicate.WP.Database.csproj", "{8D310E26-619E-4B32-A59D-0A1A56EEDADC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Windows.Database", "QMunicate\QMunicate.Database\QMunicate.Windows.Database\QMunicate.Windows.Database.csproj", "{11DE446E-95E7-45D6-805F-28BD7AC00DD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Windows.Database", "QMunicate_8.1\QMunicate.Database\QMunicate.Windows.Database\QMunicate.Windows.Database.csproj", "{11DE446E-95E7-45D6-805F-28BD7AC00DD7}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QMunicate.Shared.Database", "QMunicate\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.shproj", "{FCDEB827-1A78-4A0F-B410-F22FA197E9E1}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QMunicate.Shared.Database", "QMunicate_8.1\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.shproj", "{FCDEB827-1A78-4A0F-B410-F22FA197E9E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Resources", "QMunicate\QMunicate.Resources\QMunicate.Resources.csproj", "{284DB2A0-59AE-40D7-8E2C-CEC053957A34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Resources", "QMunicate_8.1\QMunicate.Resources\QMunicate.Resources.csproj", "{284DB2A0-59AE-40D7-8E2C-CEC053957A34}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Quickblox_8.1", "Quickblox_8.1", "{F245F1B4-27BF-42C9-8323-82817732E496}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		QMunicate\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.projitems*{ba7acff7-a9db-46a4-a6b8-9089128dc102}*SharedItemsImports = 13
-		QMunicate\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.projitems*{11de446e-95e7-45d6-805f-28bd7ac00dd7}*SharedItemsImports = 4
-		QMunicate\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.projitems*{8d310e26-619e-4b32-a59d-0a1a56eedadc}*SharedItemsImports = 4
-		QMunicate\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.projitems*{d42a6faa-2c74-4c22-8c44-f9e29e9e3df4}*SharedItemsImports = 4
-		QMunicate\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.projitems*{fcdeb827-1a78-4a0f-b410-f22fa197e9e1}*SharedItemsImports = 13
-		QMunicate\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.projitems*{6f35be22-0851-42c6-b3db-5403b829d7ac}*SharedItemsImports = 4
+		QMunicate_8.1\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.projitems*{ba7acff7-a9db-46a4-a6b8-9089128dc102}*SharedItemsImports = 13
+		QMunicate_8.1\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.projitems*{11de446e-95e7-45d6-805f-28bd7ac00dd7}*SharedItemsImports = 4
+		QMunicate_8.1\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.projitems*{8d310e26-619e-4b32-a59d-0a1a56eedadc}*SharedItemsImports = 4
+		QMunicate_8.1\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.projitems*{d42a6faa-2c74-4c22-8c44-f9e29e9e3df4}*SharedItemsImports = 4
+		QMunicate_8.1\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.projitems*{fcdeb827-1a78-4a0f-b410-f22fa197e9e1}*SharedItemsImports = 13
+		QMunicate_8.1\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.projitems*{6f35be22-0851-42c6-b3db-5403b829d7ac}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,30 +70,6 @@ Global
 		{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}.Release|x64.Build.0 = Release|Any CPU
 		{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}.Release|x86.ActiveCfg = Release|Any CPU
 		{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}.Release|x86.Build.0 = Release|Any CPU
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|ARM.ActiveCfg = Debug|ARM
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|ARM.Build.0 = Debug|ARM
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|ARM.Deploy.0 = Debug|ARM
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|x64.ActiveCfg = Debug|x64
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|x64.Build.0 = Debug|x64
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|x64.Deploy.0 = Debug|x64
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|x86.ActiveCfg = Debug|x86
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|x86.Build.0 = Debug|x86
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Debug|x86.Deploy.0 = Debug|x86
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|ARM.ActiveCfg = Release|ARM
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|ARM.Build.0 = Release|ARM
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|ARM.Deploy.0 = Release|ARM
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|x64.ActiveCfg = Release|x64
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|x64.Build.0 = Release|x64
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|x64.Deploy.0 = Release|x64
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|x86.ActiveCfg = Release|x86
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|x86.Build.0 = Release|x86
-		{D2645634-08E7-4170-B9B9-6D1F8DDAFC13}.Release|x86.Deploy.0 = Release|x86
 		{0FC5EB24-64AA-464A-9940-41187CC98FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0FC5EB24-64AA-464A-9940-41187CC98FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FC5EB24-64AA-464A-9940-41187CC98FCE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -267,6 +243,10 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC} = {F245F1B4-27BF-42C9-8323-82817732E496}
+		{0FC5EB24-64AA-464A-9940-41187CC98FCE} = {F245F1B4-27BF-42C9-8323-82817732E496}
+		{17AA4DA9-1669-4248-A18A-A1438B8A791C} = {F245F1B4-27BF-42C9-8323-82817732E496}
+		{B9FF8451-9750-4B80-BCF6-8D151B10486B} = {F245F1B4-27BF-42C9-8323-82817732E496}
 		{94371C00-FF6C-4807-A314-2B0333D258A9} = {93024201-E145-42C3-9F07-E05DBC9500A1}
 		{BA7ACFF7-A9DB-46A4-A6B8-9089128DC102} = {94371C00-FF6C-4807-A314-2B0333D258A9}
 		{6F35BE22-0851-42C6-B3DB-5403B829D7AC} = {94371C00-FF6C-4807-A314-2B0333D258A9}
