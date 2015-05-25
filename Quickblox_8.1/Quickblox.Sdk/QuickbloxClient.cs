@@ -11,6 +11,7 @@ using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.ContentModule;
+using Quickblox.Sdk.Modules.CustomObjectModule;
 using Quickblox.Sdk.Modules.MessagesModule;
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
@@ -37,7 +38,8 @@ namespace Quickblox.Sdk
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
             this.MessagesClient = new MessagesClient(this);
-            this.ContentClient = new ContentClient(this);            
+            this.ContentClient = new ContentClient(this);      
+            this.CustomObjectsClient = new CustomObjectsClient(this);
         }
 
         /// <summary>
@@ -83,6 +85,8 @@ namespace Quickblox.Sdk
         public NotificationClient NotificationClient { get; private set; }
 
         public MessagesClient MessagesClient { get; private set; }
+
+        public CustomObjectsClient CustomObjectsClient { get; private set; }
 
         /// <summary>
         /// Возварщает время последнего запроса в UTC.
