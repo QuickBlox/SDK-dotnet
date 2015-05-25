@@ -58,16 +58,6 @@
     <Compile Include="Modules\ContentModule\Response\FileInfoResponse.cs" />
     <Compile Include="Modules\ContentModule\Response\FilesPagedResponse.cs" />
     <Compile Include="Modules\ContentModule\Response\ReadOnlyAccessResponse.cs" />
-    <Compile Include="Modules\CustomObjectModule\CustomObjectsClient.cs" />
-    <Compile Include="Modules\CustomObjectModule\Models\BaseCustomObject.cs" />
-    <Compile Include="Modules\CustomObjectModule\Models\CustomObjectItems.cs" />
-    <Compile Include="Modules\CustomObjectModule\Models\NotFoundsItems.cs" />
-    <Compile Include="Modules\CustomObjectModule\Models\SuccessfullyDeleted.cs" />
-    <Compile Include="Modules\CustomObjectModule\Models\WrongPermissions.cs" />
-    <Compile Include="Modules\CustomObjectModule\Requests\CreateCustomObjectRequest.cs" />
-    <Compile Include="Modules\CustomObjectModule\Requests\UpdateCustomObjectRequest.cs" />
-    <Compile Include="Modules\CustomObjectModule\Responses\MultipleDeletesResponse.cs" />
-    <Compile Include="Modules\CustomObjectModule\Responses\RetriveCustomObjectsResponce.cs" />
     <Compile Include="Modules\MessagesModule\Interfaces\IMessagesClient.cs" />
     <Compile Include="Modules\MessagesModule\Interfaces\IGroupChatManager.cs" />
     <Compile Include="Modules\MessagesModule\Interfaces\IPrivateChatManager.cs" />
@@ -196,7 +186,6 @@
       <Name>Quickblox.Sdk.Cryptographic</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
