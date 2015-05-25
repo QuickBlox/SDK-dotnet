@@ -17,6 +17,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 {
     public class PrivateChatManager : IPrivateChatManager
     {
+        //this is some change
         private string banListName = "banList";
 
         #region Fields
