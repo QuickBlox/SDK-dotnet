@@ -14,6 +14,7 @@ using agsXMPP.Xml.Dom;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Serializer;
+using XMPP.common;
 using AgsMessage = agsXMPP.protocol.client.Message;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 using AgsPresence = agsXMPP.protocol.client.Presence;
@@ -63,10 +64,35 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Public methods
 
-        public void Connect(int userId, string password, int applicationId, string chatEndpoint)
+        public async void Connect(int userId, string password, int applicationId, string chatEndpoint)
         {
-            var xmpp = new XmppClientConnection(chatEndpoint);
-            OpenConnection(xmpp, userId, password, applicationId);
+            //var xmpp = new XmppClientConnection(chatEndpoint);
+            //OpenConnection(xmpp, userId, password, applicationId);
+
+            XMPP.Client client = new XMPP.Client();
+
+            client.Settings.Hostname = chatEndpoint;
+            client.Settings.Id = string.Format("{0}-{1}", userId, applicationId);
+            client.Settings.Password = password;
+
+            client.OnNewTag += ClientOnOnNewTag;
+            client.OnReceive += ClientOnOnReceive;
+
+            client.Connect();
+
+
+            client.OnConnected += (sender, args) => { };
+
+        }
+
+        private void ClientOnOnReceive(object sender, TagEventArgs tagEventArgs)
+        {
+            Debug.WriteLine("NEW RECEIVE: " + tagEventArgs.tag);
+        }
+
+        private void ClientOnOnNewTag(object sender, TagEventArgs tagEventArgs)
+        {
+           Debug.WriteLine("NEW TAG: " + tagEventArgs.tag);
         }
 
         public async Task Connect(int userId, string password, int applicationId, string chatEndpoint, TimeSpan timeout)

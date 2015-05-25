@@ -187,6 +187,10 @@
       <Project>{b9ff8451-9750-4b80-bcf6-8d151b10486b}</Project>
       <Name>Quickblox.Sdk.Cryptographic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UbietyXmpp\UbietyXmpp.csproj">
+      <Project>{3ce40842-e229-4ade-bb9a-a539453addad}</Project>
+      <Name>UbietyXmpp</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <TargetPlatform Include="Windows, Version=8.1" />
