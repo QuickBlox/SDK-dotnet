@@ -1,4 +1,6 @@
-﻿namespace Quickblox.Sdk.Core
+﻿using System;
+
+namespace Quickblox.Sdk.Core
 {
     public static class QuickbloxMethods
     {
@@ -103,6 +105,18 @@
         public const string EditFileMethod = "/blobs/{0}";
 
         public const string DeleteFileMethod = "/blobs/{0}";
+
+        #endregion
+
+        #region CustomObject
+        
+        public const string RetriveObjectsByIdsMethod = "/data/{0}/{1}";
+        public const string RetriveObjectsMethod = "/data/{0}";
+        public const string CreateCustomObjectMethod = "/data/{0}";
+        public const string CreateMultiCustomObjectMethod = "/data/{0}/multi";
+        public const string UpdateCustomObjectMethod = "/data/{0}/{1}";
+        public const string UpdateMultiCustomObjectMethod = "/data/{0}/multi";
+        public const string DeleteCustomObjectMethod = "/data/{0}/{1}";
 
         #endregion
     }
