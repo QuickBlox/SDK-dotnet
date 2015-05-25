@@ -34,7 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Resources", "QMun
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Quickblox_8.1", "Quickblox_8.1", "{F245F1B4-27BF-42C9-8323-82817732E496}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UbietyXmpp", "UbietyXmpp\UbietyXmpp.csproj", "{3CE40842-E229-4ADE-BB9A-A539453ADDAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UbietyXmpp", "Quickblox_8.1\UbietyXmpp\UbietyXmpp.csproj", "{3CE40842-E229-4ADE-BB9A-A539453ADDAD}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
