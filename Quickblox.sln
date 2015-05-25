@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk", "Quickblox_8.1\Quickblox.Sdk\Quickblox.Sdk.csproj", "{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}"
 EndProject
@@ -33,6 +33,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate.Resources", "QMunicate_8.1\QMunicate.Resources\QMunicate.Resources.csproj", "{284DB2A0-59AE-40D7-8E2C-CEC053957A34}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Quickblox_8.1", "Quickblox_8.1", "{F245F1B4-27BF-42C9-8323-82817732E496}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UbietyXmpp", "UbietyXmpp\UbietyXmpp.csproj", "{3CE40842-E229-4ADE-BB9A-A539453ADDAD}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -238,6 +240,16 @@ Global
 		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|x64.Build.0 = Release|Any CPU
 		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|x86.ActiveCfg = Release|Any CPU
 		{284DB2A0-59AE-40D7-8E2C-CEC053957A34}.Release|x86.Build.0 = Release|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Release|ARM.ActiveCfg = Release|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Release|x64.ActiveCfg = Release|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -257,5 +269,6 @@ Global
 		{11DE446E-95E7-45D6-805F-28BD7AC00DD7} = {4E175C30-F72D-4569-BFED-397F3BE68EEF}
 		{FCDEB827-1A78-4A0F-B410-F22FA197E9E1} = {4E175C30-F72D-4569-BFED-397F3BE68EEF}
 		{284DB2A0-59AE-40D7-8E2C-CEC053957A34} = {93024201-E145-42C3-9F07-E05DBC9500A1}
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD} = {F245F1B4-27BF-42C9-8323-82817732E496}
 	EndGlobalSection
 EndGlobal
