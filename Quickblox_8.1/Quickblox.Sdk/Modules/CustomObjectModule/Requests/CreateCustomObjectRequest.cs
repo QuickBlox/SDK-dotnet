@@ -5,6 +5,6 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule.Requests
 {
     public class CreateCustomObjectRequest<T> : BaseRequestSettings where T: BaseCustomObject
     {
-        public T Type { get; set; }
+        public T CreateCustomObject { get; set; }
     }
 }
