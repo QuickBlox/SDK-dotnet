@@ -21,6 +21,5 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule.Responses
 
         [JsonProperty(PropertyName = "not_found")]
         public NotFoundsItems NotFoundsItems { get; set; }
-        //public CustomObjectItems<T> CustomObjectItems { get; set; }
     }
 }
