@@ -62,6 +62,7 @@
     <Compile Include="Modules\CustomObjectModule\Models\BaseCustomObject.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\CustomObjectItems.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\NotFoundsItems.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\Permissions.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\SuccessfullyDeleted.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\WrongPermissions.cs" />
     <Compile Include="Modules\CustomObjectModule\Requests\CreateCustomObjectRequest.cs" />

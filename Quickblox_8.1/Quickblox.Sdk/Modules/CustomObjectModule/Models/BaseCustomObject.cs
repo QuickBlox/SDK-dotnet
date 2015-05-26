@@ -19,5 +19,8 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule.Models
 
         [JsonProperty(PropertyName = "_parent_id")]
         public String ParentId { get; set; }
+
+        [JsonProperty(PropertyName = "permissions", NullValueHandling = NullValueHandling.Ignore)]
+        public Permissions Permissions { get; set; }
     }
 }

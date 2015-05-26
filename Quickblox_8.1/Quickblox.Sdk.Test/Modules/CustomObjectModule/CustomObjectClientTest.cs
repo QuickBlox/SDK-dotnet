@@ -27,8 +27,10 @@ namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient();
-            await this.client.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await this.client.CoreClient.CreateSessionWithLoginAsync(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
+            await this.client.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey,
+                    new HmacSha1CryptographicProvider());
+            await this.client.CoreClient.CreateSessionWithLoginAsync(ApplicationId, AuthorizationKey, AuthorizationSecret,
+                    Login, Password);
         }
 
         [TestMethod]
@@ -36,6 +38,7 @@ namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
         {
             var response = await this.client.CustomObjectsClient.RetriveCustomObjectsAsync<TestCustomObjectModel>(ClassName);
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(response.Result != null);
         }
 
         [TestMethod]
@@ -44,6 +47,7 @@ namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
             var ids = "55630f456390d803e1018672";
             var response = await this.client.CustomObjectsClient.RetriveCustomObjectsByIdsAsync<TestCustomObjectModel>(ClassName, ids);
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(response.Result != null);
         }
 
         [TestMethod]
@@ -57,7 +61,75 @@ namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
             testCustomObjectModel.CreateCustomObject.StringField = "Test1";
             testCustomObjectModel.CreateCustomObject.ArrayField = new List<int>() {123, 123, 123};
             var response = await this.client.CustomObjectsClient.CreateCustomObjectsAsync(ClassName, testCustomObjectModel);
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.Created);
+            Assert.IsTrue(response.Result != null);
+        }
+
+        [TestMethod]
+        public async Task CreateMultiCustomObject()
+        {
+            var items = new List<TestCustomObjectModel>();
+            var testCustomObjectModel = new TestCustomObjectModel();
+            testCustomObjectModel.IntegerField = 111;
+            testCustomObjectModel.FloatField = 111.111;
+            testCustomObjectModel.BooleanField = true;
+            testCustomObjectModel.StringField = "Multi1";
+            testCustomObjectModel.ArrayField = new List<int>() { 123, 123, 123 };
+            items.Add(testCustomObjectModel);
+
+            testCustomObjectModel = new TestCustomObjectModel();
+            testCustomObjectModel.IntegerField = 222;
+            testCustomObjectModel.FloatField = 222.222;
+            testCustomObjectModel.BooleanField = true;
+            testCustomObjectModel.StringField = "Multi2";
+            testCustomObjectModel.ArrayField = new List<int>() { 321, 321, 321 };
+            items.Add(testCustomObjectModel);
+
+            testCustomObjectModel = new TestCustomObjectModel();
+            testCustomObjectModel.IntegerField = 333;
+            testCustomObjectModel.FloatField = 333.333;
+            testCustomObjectModel.BooleanField = true;
+            testCustomObjectModel.StringField = "Multi3";
+            testCustomObjectModel.ArrayField = new List<int>() { 333, 222, 111 };
+            items.Add(testCustomObjectModel);
+
+            var response = await this.client.CustomObjectsClient.CreateMultiCustomObjectsAsync(ClassName, items);
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.Created);
+            Assert.IsTrue(response.Result != null);
+        }
+
+        [TestMethod]
+        public async Task UpdateCustomObject()
+        {
+            var response = await this.client.CustomObjectsClient.RetriveCustomObjectsAsync<TestCustomObjectModel>(ClassName);
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+
+            var updateCustomObjectRequest = new UpdateCustomObjectRequest<TestCustomObjectModel>();
+            updateCustomObjectRequest.CustomObject = response.Result.Items.First();
+            updateCustomObjectRequest.CustomObject.StringField = "Updated";
+
+            var updateResponse = await this.client.CustomObjectsClient.UpdateCustomObjectsByIdAsync(ClassName, updateCustomObjectRequest);
+            Assert.IsTrue(updateResponse.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(response.Result != null);
+        }
+
+        [TestMethod]
+        public async Task UpdateMultiCustomObject()
+        {
+            var response = await this.client.CustomObjectsClient.RetriveCustomObjectsAsync<TestCustomObjectModel>(ClassName);
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+            
+            var list = new List<TestCustomObjectModel>();
+            var first = response.Result.Items.First();
+            var last = response.Result.Items.Last();
+            first.StringField = "Updated - first";
+            last.StringField = "Updated - last";
+
+            list.Add(first);
+            list.Add(last);
+            var updateResponse = await this.client.CustomObjectsClient.UpdateMultiCustomObjectsAsync(ClassName, list);
+            Assert.IsTrue(updateResponse.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(response.Result != null);
         }
     }
 }

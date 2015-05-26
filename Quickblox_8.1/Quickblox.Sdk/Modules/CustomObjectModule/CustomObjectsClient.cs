@@ -11,6 +11,8 @@ using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.CustomObjectModule.Models;
 using Quickblox.Sdk.Modules.CustomObjectModule.Requests;
 using Quickblox.Sdk.Modules.CustomObjectModule.Responses;
+using System.Collections;
+using System.Text;
 
 namespace Quickblox.Sdk.Modules.CustomObjectModule
 {
@@ -74,10 +76,42 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
             var requestUri = String.Format(QuickbloxMethods.CreateCustomObjectMethod, className);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
 
+            var nameValueCollection = new List<KeyValuePair<String, String>>();
+            var properties = customObject.CreateCustomObject.GetType().GetRuntimeProperties();
+            foreach (var property in properties.Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null))
+            {
+                var jsonProperty = property.GetCustomAttribute<JsonPropertyAttribute>();
+
+                var propertyValue = property.GetValue(customObject.CreateCustomObject);
+                if (propertyValue != null)
+                {
+                    if (property.PropertyType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IList)))
+                    {
+                        var items = propertyValue as IEnumerable;
+                        var enumerator = items.GetEnumerator();
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while (enumerator.MoveNext())
+                        {
+                            stringBuilder.Append(enumerator.Current + ",");
+                        }
+                        
+                        var pair = new KeyValuePair<string, string>(jsonProperty.PropertyName, stringBuilder.ToString());
+                        nameValueCollection.Add(pair);
+                    }
+                    else
+                    {
+                        var pair = new KeyValuePair<string, string>(jsonProperty.PropertyName, propertyValue.ToString());
+                        nameValueCollection.Add(pair);
+                    }
+                }
+
+            }
+
             var createFileResponse =
-                await HttpService.PostAsync<T, CreateCustomObjectRequest<T>>(this.quickbloxClient.ApiEndPoint,
+                await HttpService.PostAsync<T>(this.quickbloxClient.ApiEndPoint,
                     requestUri,
-                    customObject,
+                    nameValueCollection,
                     headers);
             return createFileResponse;
         }
@@ -101,11 +135,29 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
                 {
                     var jsonProperty = property.GetCustomAttribute<JsonPropertyAttribute>();
 
-                    var pair =
-                        new KeyValuePair<string, string>(
-                            String.Format("record[{0}][{1}", itemIndex, jsonProperty.PropertyName),
-                            property.GetValue(items[itemIndex]).ToString());
-                    nameValueCollection.Add(pair);
+                    var propertyValue = property.GetValue(items[itemIndex]);
+                    if (propertyValue != null)
+                    {
+                        if (property.PropertyType.GetTypeInfo().ImplementedInterfaces.Contains(typeof (IList)))
+                        {
+                            var propertyFields = propertyValue as IEnumerable;
+                            var enumerator = propertyFields.GetEnumerator();
+
+                            StringBuilder stringBuilder = new StringBuilder();
+                            while (enumerator.MoveNext())
+                            {
+                                stringBuilder.Append(enumerator.Current + ",");
+                            }
+
+                            var pair = new KeyValuePair<string, string>(String.Format("record[{0}][{1}", itemIndex, jsonProperty.PropertyName), stringBuilder.ToString());
+                            nameValueCollection.Add(pair);
+                        }
+                        else
+                        {
+                            var pair = new KeyValuePair<string, string>(String.Format("record[{0}][{1}", itemIndex, jsonProperty.PropertyName), property.GetValue(items[itemIndex]).ToString());
+                            nameValueCollection.Add(pair);
+                        }
+                    }
                 }
             }
 
@@ -152,12 +204,37 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
                 foreach (var property in properties.Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null))
                 {
                     var jsonProperty = property.GetCustomAttribute<JsonPropertyAttribute>();
+                    if (String.Equals(jsonProperty.PropertyName, "_id"))
+                    {
+                        // in update method we need to use "id" without "_"
+                        var pair = new KeyValuePair<string, string>(String.Format("record[{0}][{1}", itemIndex, "id"), property.GetValue(items[itemIndex]).ToString());
+                        nameValueCollection.Add(pair);
+                        continue;
+                    }
 
-                    var pair =
-                        new KeyValuePair<string, string>(
-                            String.Format("record[{0}][{1}", itemIndex, jsonProperty.PropertyName),
-                            property.GetValue(items[itemIndex]).ToString());
-                    nameValueCollection.Add(pair);
+                    var propertyValue = property.GetValue(items[itemIndex]);
+                    if (propertyValue != null)
+                    {
+                        if (property.PropertyType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IList)))
+                        {
+                            var propertyFields = propertyValue as IEnumerable;
+                            var enumerator = propertyFields.GetEnumerator();
+
+                            StringBuilder stringBuilder = new StringBuilder();
+                            while (enumerator.MoveNext())
+                            {
+                                stringBuilder.Append(enumerator.Current + ",");
+                            }
+
+                            var pair = new KeyValuePair<string, string>(String.Format("record[{0}][{1}", itemIndex, jsonProperty.PropertyName), stringBuilder.ToString());
+                            nameValueCollection.Add(pair);
+                        }
+                        else
+                        {
+                            var pair = new KeyValuePair<string, string>(String.Format("record[{0}][{1}", itemIndex, jsonProperty.PropertyName), property.GetValue(items[itemIndex]).ToString());
+                            nameValueCollection.Add(pair);
+                        }
+                    }
                 }
             }
 
