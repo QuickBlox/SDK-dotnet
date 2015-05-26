@@ -118,6 +118,12 @@ namespace Quickblox.Sdk.Core
         public const string UpdateMultiCustomObjectMethod = "/data/{0}/multi.json";
         public const string DeleteCustomObjectMethod = "/data/{0}/{1}.json";
 
+        /// <summary>
+        /// https://api.quickblox.com/data/<parent_class_name>/<parent_record_id>/<child_class_name>
+        /// </summary>
+        public const string CreateRelationMethod = "/data/{0}/{1}/{2}.json";
+        public const string GetRelatedObjectsMethod = "/data/{0}/{1}/{2}.json";
+
         #endregion
     }
 }

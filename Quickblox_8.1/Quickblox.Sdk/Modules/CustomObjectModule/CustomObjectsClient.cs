@@ -279,5 +279,74 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
                     headers);
             return deleteCustomObjectRequest;
         }
+
+        public async Task<HttpResponse<T>> CreateRelationObjectAsync<T>(String parentClassName, String parentId,  String childClassName, CreateCustomObjectRequest<T> createCustomObjectRequest) where T : BaseCustomObject
+        {
+            this.quickbloxClient.CheckIsInitialized();
+
+            if (parentClassName == null) throw new ArgumentNullException("parentClassName");
+            if (childClassName == null) throw new ArgumentNullException("childClassName");
+            if (parentId == null) throw new ArgumentNullException("parentId");
+            if (createCustomObjectRequest == null) throw new ArgumentNullException("createCustomObjectRequest");
+            if (createCustomObjectRequest.CreateCustomObject == null) throw new ArgumentNullException("createCustomObjectRequest.CreateCustomObject");
+
+            var requestUri = String.Format(QuickbloxMethods.CreateRelationMethod, parentClassName, parentId, childClassName);
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+
+            var nameValueCollection = new List<KeyValuePair<String, String>>();
+            var properties = createCustomObjectRequest.CreateCustomObject.GetType().GetRuntimeProperties();
+            foreach (var property in properties.Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null))
+            {
+                var jsonProperty = property.GetCustomAttribute<JsonPropertyAttribute>();
+
+                var propertyValue = property.GetValue(createCustomObjectRequest.CreateCustomObject);
+                if (propertyValue != null)
+                {
+                    if (property.PropertyType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IList)))
+                    {
+                        var items = propertyValue as IEnumerable;
+                        var enumerator = items.GetEnumerator();
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        while (enumerator.MoveNext())
+                        {
+                            stringBuilder.Append(enumerator.Current + ",");
+                        }
+
+                        var pair = new KeyValuePair<string, string>(jsonProperty.PropertyName, stringBuilder.ToString());
+                        nameValueCollection.Add(pair);
+                    }
+                    else
+                    {
+                        var pair = new KeyValuePair<string, string>(jsonProperty.PropertyName, propertyValue.ToString());
+                        nameValueCollection.Add(pair);
+                    }
+                }
+
+            }
+
+            var createRelationResponse = await HttpService.PostAsync<T>(this.quickbloxClient.ApiEndPoint,
+                                                                        requestUri,
+                                                                        nameValueCollection,
+                                                                        headers);
+            return createRelationResponse;
+        }
+
+        public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveRelationObjectsAsync<T>(String parentClassName, String parentId, String childClassName) where T : BaseCustomObject
+        {
+            this.quickbloxClient.CheckIsInitialized();
+
+            if (parentClassName == null) throw new ArgumentNullException("parentClassName");
+            if (childClassName == null) throw new ArgumentNullException("childClassName");
+            if (parentId == null) throw new ArgumentNullException("parentId");
+
+            var requestUri = String.Format(QuickbloxMethods.GetRelatedObjectsMethod, parentClassName, parentId, childClassName);
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+
+            var createRelationResponse = await HttpService.GetAsync<RetriveCustomObjectsResponce<T>>(this.quickbloxClient.ApiEndPoint,
+                                                                        requestUri,
+                                                                        headers);
+            return createRelationResponse;
+        }
     }
 }

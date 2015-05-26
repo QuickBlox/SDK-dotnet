@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.Hmacsha;
 using Quickblox.Sdk.Modules.CustomObjectModule.Requests;
+using Quickblox.Sdk.Modules.CustomObjectModule.Responses;
 
 namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
 {
@@ -20,6 +21,7 @@ namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
         private const string Password = "Test12345";
 
         private const string ClassName = "TestCustomObject";
+        private const string RelativeClassName = "TestRelativeObject";
 
         private QuickbloxClient client;
 
@@ -129,6 +131,37 @@ namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
             list.Add(last);
             var updateResponse = await this.client.CustomObjectsClient.UpdateMultiCustomObjectsAsync(ClassName, list);
             Assert.IsTrue(updateResponse.StatusCode == HttpStatusCode.OK);
+            Assert.IsTrue(response.Result != null);
+        }
+
+        [TestMethod]
+        public async Task CreateRelationObject()
+        {
+            var response = await this.client.CustomObjectsClient.RetriveCustomObjectsAsync<TestCustomObjectModel>(ClassName);
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+
+            var parentItem = response.Result.Items.First();
+            var createCustomObjectRequest = new CreateCustomObjectRequest<TestRelativeObject>();
+            createCustomObjectRequest.CreateCustomObject = new TestRelativeObject()
+            {
+                RelativeString = "This item relative to " + parentItem.Id
+            };
+
+            var updateResponse = await this.client.CustomObjectsClient.CreateRelationObjectAsync(ClassName, parentItem.Id, RelativeClassName,  createCustomObjectRequest);
+            Assert.IsTrue(updateResponse.StatusCode == HttpStatusCode.Created);
+            Assert.IsTrue(response.Result != null);
+        }
+
+        [TestMethod]
+        public async Task GetRelationObjects()
+        {
+            var response = await this.client.CustomObjectsClient.RetriveCustomObjectsAsync<TestCustomObjectModel>(ClassName);
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+
+            var parentItem = response.Result.Items.First();
+            
+            var retriveResponse = await this.client.CustomObjectsClient.RetriveRelationObjectsAsync<TestRelativeObject>(ClassName, parentItem.Id, RelativeClassName);
+            Assert.IsTrue(retriveResponse.StatusCode == HttpStatusCode.OK);
             Assert.IsTrue(response.Result != null);
         }
     }

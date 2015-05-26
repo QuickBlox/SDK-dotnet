@@ -117,6 +117,7 @@
     <Compile Include="Modules\ContentModule\ContentClientTest.cs" />
     <Compile Include="Modules\CustomObjectModule\CustomObjectClientTest.cs" />
     <Compile Include="Modules\CustomObjectModule\TestCustomObjectModel.cs" />
+    <Compile Include="Modules\CustomObjectModule\TestRelativeObject.cs" />
     <Compile Include="Modules\MessagesModule\PrivateChatManagerTest.cs" />
     <Compile Include="Modules\NotificationModule\NotificationClientTest.cs" />
     <Compile Include="Modules\UsersModule\UsersClientTest.cs" />
