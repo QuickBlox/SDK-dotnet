@@ -33,6 +33,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+"); // Quickblox JID pattern
         private const string qbJidPattern = @"{0}-{1}@chat.quickblox.com";
         private const string qbJidUserPattern = "{0}-{1}";
+        private XMPP.Client client;
 
         #endregion
 
@@ -69,20 +70,28 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             //var xmpp = new XmppClientConnection(chatEndpoint);
             //OpenConnection(xmpp, userId, password, applicationId);
 
-            XMPP.Client client = new XMPP.Client();
+            client = new XMPP.Client();
 
             client.Settings.Hostname = chatEndpoint;
-            client.Settings.Id = string.Format("{0}-{1}", userId, applicationId);
+            //client.Settings.SSL = true;
+            //client.Settings.OldSSL = true;
+            //client.Settings.Port = 5222;
+            client.Settings.Id = string.Format("{0}-{1}@chat.quickblox.com", userId, applicationId);
             client.Settings.Password = password;
+            client.OnError += ClientOnOnError;
 
             client.OnNewTag += ClientOnOnNewTag;
             client.OnReceive += ClientOnOnReceive;
 
             client.Connect();
-
-
             client.OnConnected += (sender, args) => { };
+        }
 
+        #region Ubiety lib event handlers
+
+        private void ClientOnOnError(object sender, ErrorEventArgs errorEventArgs)
+        {
+            Debug.WriteLine("ERROR hapened " + errorEventArgs.message);
         }
 
         private void ClientOnOnReceive(object sender, TagEventArgs tagEventArgs)
@@ -92,8 +101,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private void ClientOnOnNewTag(object sender, TagEventArgs tagEventArgs)
         {
-           Debug.WriteLine("NEW TAG: " + tagEventArgs.tag);
+            Debug.WriteLine("NEW TAG: " + tagEventArgs.tag);
         }
+
+        #endregion
+
+
 
         public async Task Connect(int userId, string password, int applicationId, string chatEndpoint, TimeSpan timeout)
         {
@@ -121,12 +134,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public IPrivateChatManager GetPrivateChatManager(int otherUserId)
         {
-            if (xmppConnection == null || !xmppConnection.Authenticated)
-                throw new QuickbloxSdkException("Xmpp connection is not ready.");
+            //if (xmppConnection == null || !xmppConnection.Authenticated)
+            //    throw new QuickbloxSdkException("Xmpp connection is not ready.");
 
             string otherUserJid = string.Format(qbJidPattern, otherUserId, appId);
 
-            return new PrivateChatManager(xmppConnection, otherUserJid);
+            return new PrivateChatManager(client, otherUserJid);
         }
 
         public IGroupChatManager GetGroupChatManager(string groupJid)
