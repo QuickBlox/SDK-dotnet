@@ -63,7 +63,7 @@ namespace QMunicate.ViewModels
 
         private void ForgotPasswordCommandExecute()
         {
-            NavigationService.Navigate("ForgotPassword");
+            NavigationService.Navigate(ViewLocator.ForgotPassword);
         }
 
         private async void LoginCommandExecute()
