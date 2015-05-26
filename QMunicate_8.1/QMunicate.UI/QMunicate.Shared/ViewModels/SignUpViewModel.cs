@@ -83,6 +83,7 @@ namespace QMunicate.ViewModels
                         new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
 
             var response = await QuickbloxClient.UsersClient.SignUpUserAsync(FullName, Password, email: Email);
+            //TODO: uploa image now
         }
 
         private void LoginCommandExecute()
@@ -99,20 +100,20 @@ namespace QMunicate.ViewModels
             if (files != null && files.Any())
             {
                 FileRandomAccessStream stream = (FileRandomAccessStream)await files[0].OpenAsync(FileAccessMode.Read);
-
-                var bytes = new byte[stream.Size];
-
-                using (var dataReader = new DataReader(stream))
-                {
-                    await dataReader.LoadAsync((uint)stream.Size);
-                    dataReader.ReadBytes(bytes);
-                }
-
-                await QuickbloxClient.ContentClient.UploadFile(bytes, "image/jpg");
-
                 BitmapImage bitmapImage = new BitmapImage();
                 bitmapImage.SetSource(stream);
                 UserImage = bitmapImage;
+
+                //CONTENT: {"errors":{"base":["Forbidden. Need user."]}}
+
+                //var bytes = new byte[stream.Size];
+                //using (var dataReader = new DataReader(stream))
+                //{
+                //    await dataReader.LoadAsync((uint)stream.Size);
+                //    dataReader.ReadBytes(bytes);
+                //}
+
+                //await QuickbloxClient.ContentClient.UploadFile(bytes, "image/jpg");
             }
         }
 
