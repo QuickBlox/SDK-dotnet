@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.ApplicationModel.Calls;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
-using QMunicate.Core.DependencyInjection;
+﻿using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageBoxProvider;
 using QMunicate.Core.Navigation;
-using QMunicate.ViewModels;
+using QMunicate.Helper;
 using QMunicate.Views;
 using Quickblox.Sdk;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Hmacsha;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.ApplicationModel.Activation;
+using Windows.Security.Credentials;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -111,13 +106,7 @@ namespace QMunicate
                 rootFrame.Navigated += this.RootFrame_FirstNavigated;
 #endif
 
-                // When the navigation stack isn't restored navigate to the first page,
-                // configuring the new page by passing required information as a navigation
-                // parameter
-                if (!navigationService.Navigate(ViewLocator.Login, e.Arguments))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
+                await DoFirstNavigation(quickbloxClient, navigationService, e);
             }
 
             // Ensure the current window is active
@@ -140,9 +129,43 @@ namespace QMunicate
 #endif
         }
 
-        
 
-        
+        private async Task DoFirstNavigation(QuickbloxClient quickbloxClient, INavigationService navigationService, LaunchActivatedEventArgs e)
+        {
+            string login = null;
+            string password = null;
+
+            try
+            {
+                var passwordVault = new PasswordVault();
+                var credentials = passwordVault.FindAllByResource(ApplicationKeys.QMunicateCredentials);
+                if (credentials != null && credentials.Any())
+                {
+                    credentials[0].RetrievePassword();
+                    login = credentials[0].UserName;
+                    password = credentials[0].Password;
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
+            {
+                var response = await quickbloxClient.CoreClient.CreateSessionWithEmailAsync(ApplicationKeys.ApplicationId,
+                        ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, login, password,
+                        deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    navigationService.Navigate(ViewLocator.SignUp, e.Arguments); //TODO: navigate to proper page
+                }
+            }
+            else
+            {
+                navigationService.Navigate(ViewLocator.SignUp, e.Arguments);
+            }
+        }
+
 
         private PageResolver GetPageResolver()
         {

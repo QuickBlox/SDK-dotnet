@@ -75,16 +75,16 @@ namespace QMunicate.ViewModels
                 passwordVault.Add(credentials);
             }
 
-            await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
-                ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
-                new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
+            var response = await QuickbloxClient.CoreClient.CreateSessionWithEmailAsync(ApplicationKeys.ApplicationId,
+                ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, Email, Password,
+                deviceRequestRequest:new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
 
-            var response = await this.QuickbloxClient.CoreClient.ByEmailAsync(this.Email, this.Password);
-            if (response.StatusCode == HttpStatusCode.Accepted)
+            //var response = await this.QuickbloxClient.CoreClient.ByEmailAsync(this.Email, this.Password);
+            if (response.StatusCode == HttpStatusCode.Created)
             {
-                QuickbloxClient.MessagesClient.Connect(response.Result.User.Id, Password, ApplicationKeys.ApplicationId,
-                    QuickbloxClient.ChatEndpoint);
-                this.NavigationService.Navigate("SignUp", response.Result.User.Id); //TODO: navigate to proper pageS
+                //QuickbloxClient.MessagesClient.Connect(response.Result.User.Id, Password, ApplicationKeys.ApplicationId,
+                //    QuickbloxClient.ChatEndpoint);
+                this.NavigationService.Navigate("SignUp", response.Result.Session.UserId); //TODO: navigate to proper pageS
             }
         }
 

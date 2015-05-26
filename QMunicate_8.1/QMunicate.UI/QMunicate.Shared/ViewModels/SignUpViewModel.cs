@@ -27,6 +27,7 @@ namespace QMunicate.ViewModels
         {
             ChoosePhotoCommand = new RelayCommand(ChoosePhotoCommandExecute);
             SignUpCommand = new RelayCommand(SignUpCommandExecute);
+            LoginCommand = new RelayCommand(LoginCommandExecute);
         }
 
         public string FullName
@@ -57,6 +58,8 @@ namespace QMunicate.ViewModels
 
         public ICommand SignUpCommand { get; set; }
 
+        public ICommand LoginCommand { get; set; }
+
 
         public override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -82,6 +85,11 @@ namespace QMunicate.ViewModels
             var response = await QuickbloxClient.UsersClient.SignUpUserAsync(FullName, Password, email: Email);
         }
 
+        private void LoginCommandExecute()
+        {
+            NavigationService.Navigate(ViewLocator.Login);
+        }
+
         public async void ContinueFileOpenPicker(IReadOnlyList<StorageFile> files)
         {
             await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
@@ -101,7 +109,6 @@ namespace QMunicate.ViewModels
                 }
 
                 await QuickbloxClient.ContentClient.UploadFile(bytes, "image/jpg");
-
 
                 BitmapImage bitmapImage = new BitmapImage();
                 bitmapImage.SetSource(stream);
