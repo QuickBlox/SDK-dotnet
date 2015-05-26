@@ -16,7 +16,12 @@ namespace QMunicate.ViewModels
         {
             get { return new LoginViewModel(); }
         }
-        
+
+        public ForgotPasswordViewModel ForgotPasswordViewModel
+        {
+            get { return new ForgotPasswordViewModel(); }
+        }
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
