@@ -63,7 +63,7 @@ namespace QMunicate.ViewModels
 
         private void ForgotPasswordCommandExecute()
         {
-            NavigationService.Navigate("SignUp"); // TODO: navigate to proper page
+            NavigationService.Navigate("ForgotPassword");
         }
 
         private async void LoginCommandExecute()
