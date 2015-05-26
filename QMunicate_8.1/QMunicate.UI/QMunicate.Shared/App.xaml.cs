@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageBoxProvider;
 using QMunicate.Core.Navigation;
 using QMunicate.ViewModels;
 using QMunicate.Views;
@@ -44,6 +45,7 @@ namespace QMunicate
         {
             Factory.CommonFactory.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
             Factory.CommonFactory.Bind<QuickbloxClient, QuickbloxClient>(LifetimeMode.Singleton);
+            Factory.CommonFactory.Bind<IMessageBoxProvider, MessageBoxProvider>(LifetimeMode.Singleton);
 
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
