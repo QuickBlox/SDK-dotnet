@@ -159,13 +159,12 @@ namespace QMunicate
                         deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    navigationService.Navigate(ViewLocator.SignUp, e.Arguments); //TODO: navigate to proper page
+                    navigationService.Navigate(ViewLocator.Chats, e.Arguments);
+                    return;
                 }
             }
-            else
-            {
-                navigationService.Navigate(ViewLocator.SignUp, e.Arguments);
-            }
+
+            navigationService.Navigate(ViewLocator.SignUp, e.Arguments);
         }
 
 
@@ -176,7 +175,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.SignUp, typeof(SignUpPage));
             dictionary.Add(ViewLocator.Login, typeof(LoginPage));
             dictionary.Add(ViewLocator.ForgotPassword, typeof(ForgotPasswordPage));
-            //dictionary.Add("ChatsPage", typeof(ChatsPage));
+            dictionary.Add(ViewLocator.Chats, typeof(ChatsPage));
             return new PageResolver(dictionary);
         }
 

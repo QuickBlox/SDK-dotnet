@@ -2,11 +2,6 @@ namespace QMunicate.ViewModels
 {
     public class ViewModelLocator
     {
-        public ViewModelLocator()
-        {
-            
-        }
-
         public SignUpViewModel SignUpViewModel
         {
             get { return new SignUpViewModel(); }
@@ -20,6 +15,11 @@ namespace QMunicate.ViewModels
         public ForgotPasswordViewModel ForgotPasswordViewModel
         {
             get { return new ForgotPasswordViewModel(); }
+        }
+
+        public ChatsViewModel ChatsViewModel
+        {
+            get { return new ChatsViewModel(); }
         }
 
         public static void Cleanup()
