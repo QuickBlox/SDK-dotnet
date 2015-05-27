@@ -13,6 +13,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Phone.UI.Input;
 using Windows.Security.Credentials;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -104,6 +105,7 @@ namespace QMunicate
 
                 rootFrame.ContentTransitions = null;
                 rootFrame.Navigated += this.RootFrame_FirstNavigated;
+                HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
 #endif
 
                 await DoFirstNavigation(quickbloxClient, navigationService, e);
@@ -189,6 +191,16 @@ namespace QMunicate
             var rootFrame = sender as Frame;
             rootFrame.ContentTransitions = this.transitions ?? new TransitionCollection() { new NavigationThemeTransition() };
             rootFrame.Navigated -= this.RootFrame_FirstNavigated;
+        }
+
+        private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
+        {
+            var navigationService = Factory.CommonFactory.GetInstance<INavigationService>();
+            if (navigationService != null && navigationService.CanGoBack)
+            {
+                navigationService.GoBack();
+                backPressedEventArgs.Handled = true;
+            }
         }
 #endif
 
