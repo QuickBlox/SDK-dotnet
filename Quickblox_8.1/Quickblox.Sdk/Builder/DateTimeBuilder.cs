@@ -9,7 +9,7 @@ namespace Quickblox.Sdk.Builder
     {
         #region Fields
 
-        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddHours(4);
+        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
 
         #endregion
 
@@ -17,8 +17,13 @@ namespace Quickblox.Sdk.Builder
 
         public static Int64 ToUnixEpoch(this DateTime dateTime)
         {
-            var timeSpan = dateTime.Subtract(UnixEpoch);
+            var timeSpan = dateTime.Subtract(UnixEpoch.AddHours(4));
             return (Int64)timeSpan.TotalMilliseconds;
+        }
+
+        public static DateTime ToDateTime(this long unixTime)
+        {
+            return UnixEpoch.AddSeconds(unixTime).ToLocalTime();
         }
 
         #endregion

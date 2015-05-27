@@ -10,10 +10,37 @@
     RequestedTheme="Light"
     DataContext="{Binding ChatsViewModel, Source={StaticResource Locator}}">
 
-    <Grid>
+    <Grid Margin="{StaticResource DefaultMargin}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <StackPanel>
             <TextBlock Text="Q-MUNICATE" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
             <TextBlock Text="chats" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource LargeFontSize}"/>
         </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Dialogs}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="{StaticResource DefaultMargin}" Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding Name}" Grid.Column="1" Grid.Row="0" FontSize="{StaticResource NormalFontSize}"/>
+                            <TextBlock Text="{Binding LastActivity}" Grid.Column="1" Grid.Row="1" FontSize="{StaticResource SmallFontSize}" Foreground="Gray"/>
+                            <TextBlock Text="{Binding LastMessageSent, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:dd MMM yyyy}'}"
+                                       FontSize="{StaticResource SmallFontSize}" Foreground="Gray" Grid.Column="2" Grid.Row="0"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </Page>

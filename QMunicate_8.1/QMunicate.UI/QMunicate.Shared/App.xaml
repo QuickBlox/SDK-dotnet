@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:viewModels="using:QMunicate.ViewModels"
     xmlns:system="using:System"
-    xmlns:resources="using:QMunicate.Resources">
+    xmlns:resources="using:QMunicate.Resources"
+    xmlns:converters="using:QMunicate.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -20,7 +21,9 @@
 
             <Color x:Key="AppBarColor">#00bd26</Color>
             <SolidColorBrush x:Key="AppBarBrush" Color="{StaticResource AppBarColor}"  />
-            
+
+            <converters:StringFormatConverter x:Key="StringFormatConverter" />
+
             <viewModels:ViewModelLocator x:Key="Locator"  />
             <resources:LocalizedStrings x:Key="LocalizedStrings"  />
         </ResourceDictionary>

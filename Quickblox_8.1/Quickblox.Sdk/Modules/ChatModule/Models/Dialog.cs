@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using Quickblox.Sdk.Builder;
 
 namespace Quickblox.Sdk.Modules.Models
 {
@@ -7,11 +10,14 @@ namespace Quickblox.Sdk.Modules.Models
         [JsonProperty("_id")]
         public string Id { get; set; }
 
+        [JsonProperty("created_at")]
+        public DateTime CreatedAt { get; set; }
+
         [JsonProperty("last_message")]
         public string LastMessage { get; set; }
 
         [JsonProperty("last_message_date_sent")]
-        public string LastMessageDateSent { get; set; }
+        public long? LastMessageDateSent { get; set; }
 
         [JsonProperty("last_message_user_id")]
         public int? LastMessageUserId { get; set; }
@@ -19,19 +25,22 @@ namespace Quickblox.Sdk.Modules.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("photo")]
-        public string Photo { get; set; }
-
         [JsonProperty("occupants_ids")]
-        public int[] OccupantsIds { get; set; }
+        public IList<int> OccupantsIds { get; set; }
+
+        [JsonProperty("photo")]
+        public object Photo { get; set; }
 
         [JsonProperty("type")]
         public int Type { get; set; }
 
-        [JsonProperty("unread_messages_count")]
-        public int? UnreadMessagesCount { get; set; }
+        [JsonProperty("user_id")]
+        public int UserId { get; set; }
 
         [JsonProperty("xmpp_room_jid")]
         public string XmppRoomJid { get; set; }
+
+        [JsonProperty("unread_messages_count")]
+        public int? UnreadMessagesCount { get; set; }
     }
 }

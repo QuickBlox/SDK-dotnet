@@ -19,7 +19,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)ContinuationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\RadTextBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ValidationState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\StringFormatConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\Helpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\DialogVm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SettingsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ChatsViewModel.cs" />
