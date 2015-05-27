@@ -22,6 +22,11 @@ namespace QMunicate.ViewModels
             get { return new ChatsViewModel(); }
         }
 
+        public ChatViewModel ChatViewModel
+        {
+            get { return new ChatViewModel(); }
+        }
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
