@@ -98,7 +98,7 @@ namespace QMunicate.ViewModels
             {
                 var loginResponse = await QuickbloxClient.CoreClient.ByEmailAsync(Email, Password);
                 if (loginResponse.StatusCode == HttpStatusCode.Accepted)
-                    NavigationService.Navigate(ViewLocator.Dialogs);
+                    NavigationService.Navigate(ViewLocator.Dialogs, loginResponse.Result.User.Id);
                 else
                     await messageBoxProvider.ShowAsync("Error"); //TODO: deserialize properly and show errors from server
             }

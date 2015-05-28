@@ -108,7 +108,7 @@ namespace QMunicate
                 HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
 #endif
 
-                await DoFirstNavigation(quickbloxClient, navigationService, e);
+                await DoFirstNavigation(quickbloxClient, navigationService);
             }
 
             // Ensure the current window is active
@@ -132,7 +132,7 @@ namespace QMunicate
         }
 
 
-        private async Task DoFirstNavigation(QuickbloxClient quickbloxClient, INavigationService navigationService, LaunchActivatedEventArgs e)
+        private async Task DoFirstNavigation(QuickbloxClient quickbloxClient, INavigationService navigationService)
         {
             string login = null;
             string password = null;
@@ -159,12 +159,12 @@ namespace QMunicate
                         deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    navigationService.Navigate(ViewLocator.Dialogs, e.Arguments);
+                    navigationService.Navigate(ViewLocator.Dialogs, response.Result.Session.UserId);
                     return;
                 }
             }
 
-            navigationService.Navigate(ViewLocator.SignUp, e.Arguments);
+            navigationService.Navigate(ViewLocator.SignUp);
         }
 
 

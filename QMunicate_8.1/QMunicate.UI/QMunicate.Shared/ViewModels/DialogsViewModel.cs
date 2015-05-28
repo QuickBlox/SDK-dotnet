@@ -15,6 +15,8 @@ namespace QMunicate.ViewModels
 {
     public class DialogsViewModel : ViewModel
     {
+        private int currentUserId;
+
         #region Ctor
 
         public DialogsViewModel()
@@ -40,6 +42,9 @@ namespace QMunicate.ViewModels
 
         public override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.Parameter is int)
+                currentUserId = (int) e.Parameter;
+
             NavigationService.BackStack.Clear();
             LoadDialogs();
         }
@@ -83,7 +88,7 @@ namespace QMunicate.ViewModels
 
         private void OpenChatCommandExecute(object dialog)
         {
-            NavigationService.Navigate(ViewLocator.Chat, dialog);
+            NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter {CurrentUserId = currentUserId, Dialog = dialog as DialogVm});
         }
 
         #endregion

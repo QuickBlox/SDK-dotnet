@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net;
 using System.Text;
 using System.Windows.Input;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
 using QMunicate.Models;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 
 namespace QMunicate.ViewModels
 {
@@ -13,6 +15,7 @@ namespace QMunicate.ViewModels
     {
         #region Fields
 
+        private int curentUserId;
         private string newMessageText;
         private string chatName;
         private string chatImage;
@@ -59,11 +62,15 @@ namespace QMunicate.ViewModels
 
         public override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var dialog = e.Parameter as DialogVm;
-            if (dialog != null)
+            var chatParameter = e.Parameter as ChatNavigationParameter;
+            if (chatParameter == null) return;
+            curentUserId = chatParameter.CurrentUserId;
+
+            if (chatParameter.Dialog != null)
             {
-                ChatName = dialog.Name;
-                ChatImage = dialog.Image;
+                ChatName = chatParameter.Dialog.Name;
+                ChatImage = chatParameter.Dialog.Image;
+                LoadMessages(chatParameter.Dialog.Id);
             }
         }
 
@@ -83,6 +90,20 @@ namespace QMunicate.ViewModels
             });
 
             NewMessageText = "";
+        }
+
+        private async void LoadMessages(string dialogId)
+        {
+            var response = await QuickbloxClient.ChatClient.GetMessagesAsync(dialogId);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                foreach (Message message in response.Result.Items)
+                {
+                    var msg = (MessageVm)message;
+                    msg.MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
+                    Messages.Add(msg);
+                }
+            }
         }
 
         #endregion

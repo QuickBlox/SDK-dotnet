@@ -7,6 +7,7 @@ namespace QMunicate.Models
 {
     public class DialogVm
     {
+        public string Id { get; set; }
         public string Image { get; set; }
         public string Name { get; set; }
         public DateTime? LastMessageSent { get; set; }
@@ -17,6 +18,7 @@ namespace QMunicate.Models
         {
             return new DialogVm()
             {
+                Id = dialog.Id,
                 Name = dialog.Name,
                 LastMessageSent = dialog.LastMessageDateSent.HasValue ? dialog.LastMessageDateSent.Value.ToDateTime() : (DateTime?)null,
                 LastActivity = dialog.LastMessage,

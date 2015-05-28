@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ValidationState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringFormatConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\Helpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\ChatNavigationParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DialogVm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MessageVm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\MessageTemplateSelector.cs" />
