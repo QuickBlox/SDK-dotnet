@@ -80,7 +80,7 @@ namespace QMunicate.ViewModels
 
         private async void SendCommandExecute()
         {
-            if (string.IsNullOrEmpty(NewMessageText)) return;
+            if (string.IsNullOrWhiteSpace(NewMessageText)) return;
 
             Messages.Add(new MessageVm()
             {
