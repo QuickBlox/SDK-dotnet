@@ -15,6 +15,7 @@ namespace QMunicate.ViewModels
 
         private string newMessageText;
         private string chatName;
+        private string chatImage;
 
         #endregion
 
@@ -46,6 +47,12 @@ namespace QMunicate.ViewModels
 
         public ICommand SendCommand { get; set; }
 
+        public string ChatImage
+        {
+            get { return chatImage; }
+            set { Set(ref chatImage, value); }
+        }
+
         #endregion
 
         #region Navigation
@@ -54,7 +61,10 @@ namespace QMunicate.ViewModels
         {
             var dialog = e.Parameter as DialogVm;
             if (dialog != null)
+            {
                 ChatName = dialog.Name;
+                ChatImage = dialog.Image;
+            }
         }
 
         #endregion

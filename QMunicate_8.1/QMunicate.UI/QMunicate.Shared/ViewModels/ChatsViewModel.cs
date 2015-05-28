@@ -36,7 +36,6 @@ namespace QMunicate.ViewModels
 
         #endregion
 
-
         #region Navigation
 
         public override void OnNavigatedTo(NavigationEventArgs e)
@@ -50,6 +49,7 @@ namespace QMunicate.ViewModels
 
         private async void LoadDialogs()
         {
+            Dialogs = new ObservableCollection<DialogVm>();
             RetrieveDialogsRequest retrieveDialogsRequest = new RetrieveDialogsRequest();
             var response = await QuickbloxClient.ChatClient.GetDialogsAsync(retrieveDialogsRequest);
             if (response.StatusCode == HttpStatusCode.OK)
