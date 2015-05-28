@@ -79,7 +79,6 @@ namespace QMunicate.ViewModels
                 ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, Email, Password,
                 deviceRequestRequest:new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
 
-            //var response = await this.QuickbloxClient.CoreClient.ByEmailAsync(this.Email, this.Password);
             if (response.StatusCode == HttpStatusCode.Created)
             {
                 //QuickbloxClient.MessagesClient.Connect(response.Result.User.Id, Password, ApplicationKeys.ApplicationId,

@@ -40,6 +40,7 @@ namespace QMunicate.ViewModels
 
         public override void OnNavigatedTo(NavigationEventArgs e)
         {
+            NavigationService.BackStack.Clear();
             LoadDialogs();
         }
 
@@ -77,6 +78,7 @@ namespace QMunicate.ViewModels
             }
 
             NavigationService.Navigate(ViewLocator.SignUp);
+            NavigationService.BackStack.Clear();
         }
 
         private void OpenChatCommandExecute(object dialog)
