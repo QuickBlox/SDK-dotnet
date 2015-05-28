@@ -13,11 +13,11 @@ using QMunicate.Models;
 
 namespace QMunicate.ViewModels
 {
-    public class ChatsViewModel : ViewModel
+    public class DialogsViewModel : ViewModel
     {
         #region Ctor
 
-        public ChatsViewModel()
+        public DialogsViewModel()
         {
             Dialogs = new ObservableCollection<DialogVm>();
             OpenChatCommand = new RelayCommand<object>(OpenChatCommandExecute);

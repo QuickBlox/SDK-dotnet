@@ -17,9 +17,9 @@ namespace QMunicate.ViewModels
             get { return new ForgotPasswordViewModel(); }
         }
 
-        public ChatsViewModel ChatsViewModel
+        public DialogsViewModel ChatsViewModel
         {
-            get { return new ChatsViewModel(); }
+            get { return new DialogsViewModel(); }
         }
 
         public ChatViewModel ChatViewModel
