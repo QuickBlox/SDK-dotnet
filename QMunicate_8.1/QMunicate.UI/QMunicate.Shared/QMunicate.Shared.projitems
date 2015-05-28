@@ -22,6 +22,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringFormatConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\Helpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DialogVm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\MessageVm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Selectors\MessageTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SettingsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ChatsViewModel.cs" />
@@ -37,6 +39,10 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\AvatarPlaceholder.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Themes\ContentButtonStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Themes\RadTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

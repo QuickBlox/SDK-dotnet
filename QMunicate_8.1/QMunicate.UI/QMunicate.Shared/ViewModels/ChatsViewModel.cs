@@ -1,28 +1,46 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Net;
+using System.Windows.Input;
 using Windows.UI.Xaml.Navigation;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.Models;
 using QMunicate;
+using QMunicate.Core.Command;
 using QMunicate.Models;
 
 namespace QMunicate.ViewModels
 {
     public class ChatsViewModel : ViewModel
     {
+        #region Ctor
 
         public ChatsViewModel()
         {
             Dialogs = new ObservableCollection<DialogVm>();
+            OpenChatCommand = new RelayCommand<object>(OpenChatCommandExecute);
         }
 
+        #endregion
+
+        #region Properties
+
         public ObservableCollection<DialogVm> Dialogs { get; set; }
+
+        public RelayCommand<object> OpenChatCommand { get; set; }
+
+        #endregion
+
+        #region Navigation
 
         public override void OnNavigatedTo(NavigationEventArgs e)
         {
             LoadDialogs();
         }
+
+        #endregion
+
+        #region Private methods
 
         private async void LoadDialogs()
         {
@@ -32,10 +50,17 @@ namespace QMunicate.ViewModels
             {
                 foreach (Dialog dialog in response.Result.Items)
                 {
-                    Dialogs.Add((DialogVm)dialog);
+                    Dialogs.Add((DialogVm) dialog);
                 }
             }
         }
+
+        private void OpenChatCommandExecute(object dialog)
+        {
+            NavigationService.Navigate(ViewLocator.Chat, dialog);
+        }
+
+        #endregion
 
     }
 }
