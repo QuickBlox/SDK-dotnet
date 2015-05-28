@@ -20,6 +20,7 @@ namespace QMunicate.ViewModels
         public ChatsViewModel()
         {
             Dialogs = new ObservableCollection<DialogVm>();
+            OpenChatCommand = new RelayCommand<object>(OpenChatCommandExecute);
             SignOutCommand = new RelayCommand(SignOutCommandExecute);
         }
 
@@ -29,9 +30,12 @@ namespace QMunicate.ViewModels
 
         public ObservableCollection<DialogVm> Dialogs { get; set; }
 
+        public RelayCommand<object> OpenChatCommand { get; set; }
+
         public ICommand SignOutCommand { get; set; }
 
         #endregion
+
 
         #region Navigation
 
@@ -67,12 +71,17 @@ namespace QMunicate.ViewModels
                 {
                     passwordVault.Remove(credentials[0]);
                 }
-            }
+                }
             catch (Exception)
             {
             }
 
             NavigationService.Navigate(ViewLocator.SignUp);
+        }
+
+        private void OpenChatCommandExecute(object dialog)
+        {
+            NavigationService.Navigate(ViewLocator.Chat, dialog);
         }
 
         #endregion

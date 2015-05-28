@@ -10,6 +10,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/RadTextBox.xaml" />
+                <ResourceDictionary Source="Themes/ContentButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <x:Double x:Key="SmallFontSize">15</x:Double>
@@ -18,6 +19,7 @@
             
             <Thickness x:Key="DefaultMargin">12</Thickness>
             <Thickness x:Key="DefaultHorizontalMargin">12 0</Thickness>
+            <Thickness x:Key="DefaultVerticalMargin">0 12</Thickness>
 
             <Color x:Key="AppBarColor">#00bd26</Color>
             <SolidColorBrush x:Key="AppBarBrush" Color="{StaticResource AppBarColor}"  />

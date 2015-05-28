@@ -5,10 +5,19 @@
     xmlns:local="using:QMunicate.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tapListener="using:QMunicate.Core.TapListener"
+    xmlns:viewModels="using:QMunicate.ViewModels"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    RequestedTheme="Light"
-    DataContext="{Binding ChatsViewModel, Source={StaticResource Locator}}">
+    RequestedTheme="Light">
+
+    <Page.Resources>
+        <viewModels:ChatsViewModel x:Key="ChatsViewModel" />
+    </Page.Resources>
+
+    <Page.DataContext>
+        <Binding Source="{StaticResource ChatsViewModel}" />
+    </Page.DataContext>
 
     <Grid Margin="{StaticResource DefaultMargin}">
         <Grid.RowDefinitions>
@@ -23,7 +32,8 @@
             <ItemsControl ItemsSource="{Binding Dialogs}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="{StaticResource DefaultMargin}" Background="Transparent">
+                        <Grid Margin="{StaticResource DefaultMargin}" tapListener:TapListener.TapCommand="{Binding OpenChatCommand, Source={StaticResource ChatsViewModel}}"
+                              tapListener:TapListener.TapCommandParameter="{Binding }" Background="Transparent">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>

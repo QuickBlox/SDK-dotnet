@@ -1,0 +1,74 @@
+﻿<Page
+    x:Class="QMunicate.Views.ChatPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:QMunicate.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:selectors="using:QMunicate.Selectors"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    RequestedTheme="Light"
+    DataContext="{Binding ChatViewModel, Source={StaticResource Locator}}">
+
+    <Page.Resources>
+        <selectors:MessageTemplateSelector x:Key="MessageTemplateSelector">
+            <selectors:MessageTemplateSelector.IncomingMessageTemplate>
+                <DataTemplate>
+                    <TextBlock Text="Incoming message"/>
+                </DataTemplate>
+            </selectors:MessageTemplateSelector.IncomingMessageTemplate>
+            <selectors:MessageTemplateSelector.OutgoingMessageTemplate>
+                <DataTemplate>
+                    <Grid Margin="{StaticResource DefaultVerticalMargin}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="8*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="1" Background="{StaticResource AppBarBrush}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding MessageText}" Foreground="White" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
+                            <TextBlock Grid.Row="1" Text="{Binding DateTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:HH:mm}'}"
+                                       FontSize="{StaticResource NormalFontSize}" Foreground="Gainsboro" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Polygon Points="0,0 0,12 12,12 0,0" Fill="{StaticResource AppBarBrush}"
+                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="2"/>
+                    </Grid>
+                </DataTemplate>
+            </selectors:MessageTemplateSelector.OutgoingMessageTemplate>
+        </selectors:MessageTemplateSelector>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="{Binding ChatName}" FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}"/>
+        </StackPanel>
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Messages}" ItemTemplateSelector="{StaticResource MessageTemplateSelector}">
+
+        </ItemsControl>
+        <Border Grid.Row="2" Height="1" Background="Gray"/>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding NewMessageText, Mode=TwoWay}" Height="120" TextWrapping="Wrap" PlaceholderText="Message"
+                      Background="White" BorderBrush="White" Margin="{StaticResource DefaultMargin}"/>
+            <Button Grid.Column="1" VerticalAlignment="Top" Command="{Binding SendCommand}" BorderThickness="0"  Style="{StaticResource ContentButtonStyle}">
+                <Button.Content>
+                    <Image Source="../Assets/send_ic.png" Width="50" Height="50"/>
+                </Button.Content>
+            </Button>
+        </Grid>
+    </Grid>
+</Page>
