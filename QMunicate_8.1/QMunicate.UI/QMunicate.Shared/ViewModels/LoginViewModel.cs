@@ -95,6 +95,10 @@ namespace QMunicate.ViewModels
                 //    QuickbloxClient.ChatEndpoint);
                 this.NavigationService.Navigate(ViewLocator.Dialogs, response.Result.Session.UserId);
             }
+            else
+            {
+                await messageBoxProvider.ShowAsync("Error");
+            }
         }
 
         #endregion
