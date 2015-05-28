@@ -43,4 +43,21 @@
             </ItemsControl>
         </ScrollViewer>
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar Background="{StaticResource AppBarBrush}">
+            <AppBarButton Label="new message" Command="{Binding LoginCommand}">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Add" Foreground="White"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton Label="search" Command="{Binding LoginCommand}">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Find" Foreground="White"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="sign out" Command="{Binding SignOutCommand}"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

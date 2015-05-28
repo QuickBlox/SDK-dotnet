@@ -84,7 +84,7 @@ namespace QMunicate.ViewModels
             {
                 //QuickbloxClient.MessagesClient.Connect(response.Result.User.Id, Password, ApplicationKeys.ApplicationId,
                 //    QuickbloxClient.ChatEndpoint);
-                this.NavigationService.Navigate("SignUp", response.Result.Session.UserId); //TODO: navigate to proper pageS
+                this.NavigationService.Navigate(ViewLocator.Chats, response.Result.Session.UserId);
             }
         }
 
