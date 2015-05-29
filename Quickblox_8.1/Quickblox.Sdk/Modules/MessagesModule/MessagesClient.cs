@@ -22,6 +22,10 @@ using PresenceType = Quickblox.Sdk.Modules.MessagesModule.Models.PresenceType;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
+    //TODO: use conditions if something was different
+    #if Xamarin
+    #endif
+
     public class MessagesClient : IMessagesClient
     {
         #region Fields

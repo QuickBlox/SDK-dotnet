@@ -6,6 +6,10 @@ using AgsPresence = agsXMPP.protocol.client.Presence;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
+    //TODO: use conditions if something was different
+    #if Xamarin
+    #endif
+
     public class GroupChatManager : IGroupChatManager
     {
         #region Fields

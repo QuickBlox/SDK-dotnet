@@ -15,6 +15,10 @@ using Type = agsXMPP.protocol.iq.privacy.Type;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
+    //TODO: use conditions if something was different
+    #if Xamarin
+    #endif
+
     public class PrivateChatManager : IPrivateChatManager
     {
         //this is some change
