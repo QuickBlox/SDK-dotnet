@@ -43,10 +43,13 @@ namespace QMunicate.ViewModels
 
         public override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is int)
-                currentUserId = (int) e.Parameter;
+            if (e.Parameter is int && e.NavigationMode != NavigationMode.Back)
+            {
+                isLoaded = false;
+                NavigationService.BackStack.Clear();
+                currentUserId = (int)e.Parameter;
+            }
 
-            NavigationService.BackStack.Clear();
             LoadDialogs();
         }
 

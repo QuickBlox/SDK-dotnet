@@ -26,8 +26,8 @@ namespace QMunicate.ViewModels
 
         public LoginViewModel()
         {
-            ForgotPasswordCommand = new RelayCommand(ForgotPasswordCommandExecute);
-            LoginCommand = new RelayCommand(LoginCommandExecute);
+            ForgotPasswordCommand = new RelayCommand(ForgotPasswordCommandExecute, () => !IsLoading);
+            LoginCommand = new RelayCommand(LoginCommandExecute, () => !IsLoading);
 
             Email = "an@to.ly";
             Password = "12345678";
@@ -78,6 +78,8 @@ namespace QMunicate.ViewModels
                 return;
             }
 
+            IsLoading = true;
+
             if (RememberMe)
             {
                 var passwordVault = new PasswordVault();
@@ -99,6 +101,8 @@ namespace QMunicate.ViewModels
             {
                 await messageBoxProvider.ShowAsync("Error");
             }
+
+            IsLoading = false;
         }
 
         #endregion
