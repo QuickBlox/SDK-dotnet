@@ -1,18 +1,20 @@
 ﻿using QMunicate.Core.Command;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageBoxProvider;
+using QMunicate.Helper;
 using Quickblox.Sdk;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Windows.Input;
-using Windows.ApplicationModel.Activation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using QMunicate.Helper;
-using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace QMunicate.ViewModels
 {
@@ -78,12 +80,31 @@ namespace QMunicate.ViewModels
 
         private async void SignUpCommandExecute()
         {
+            var messageBoxProvider = Factory.CommonFactory.GetInstance<IMessageBoxProvider>();
+
+            if (string.IsNullOrEmpty(FullName) || string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
+            {
+                await messageBoxProvider.ShowAsync("Message", "Please fill all empty input fields");
+                return;
+            }
+
             await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
                         ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
                         new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
 
             var response = await QuickbloxClient.UsersClient.SignUpUserAsync(FullName, Password, email: Email);
-            //TODO: uploa image now
+
+            if (response.StatusCode == HttpStatusCode.Created)
+            {
+                var loginResponse = await QuickbloxClient.CoreClient.ByEmailAsync(Email, Password);
+                if (loginResponse.StatusCode == HttpStatusCode.Accepted)
+                    NavigationService.Navigate(ViewLocator.Dialogs, loginResponse.Result.User.Id);
+                else
+                    await messageBoxProvider.ShowAsync("Error"); //TODO: deserialize properly and show errors from server
+            }
+            else
+                await messageBoxProvider.ShowAsync("Error"); //TODO: deserialize properly and show errors from server
+
         }
 
         private void LoginCommandExecute()

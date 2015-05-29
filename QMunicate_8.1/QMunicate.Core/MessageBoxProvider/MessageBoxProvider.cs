@@ -8,7 +8,7 @@ namespace QMunicate.Core.MessageBoxProvider
     {
         public async Task<MessageBoxResult> ShowAsync(string title, string content = null, MessageBoxButton messageBoxButton = MessageBoxButton.Ok)
         {
-            var md = new MessageDialog(content, title);
+            var md = new MessageDialog(content ?? "", title);
             bool result = false;
             md.Commands.Add(new UICommand("Ok", (cmd) => result = true));
 

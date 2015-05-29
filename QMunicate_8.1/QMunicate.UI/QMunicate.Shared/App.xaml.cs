@@ -108,7 +108,7 @@ namespace QMunicate
                 HardwareButtons.BackPressed += HardwareButtonsOnBackPressed;
 #endif
 
-                await DoFirstNavigation(quickbloxClient, navigationService, e);
+                await DoFirstNavigation(quickbloxClient, navigationService);
             }
 
             // Ensure the current window is active
@@ -132,7 +132,7 @@ namespace QMunicate
         }
 
 
-        private async Task DoFirstNavigation(QuickbloxClient quickbloxClient, INavigationService navigationService, LaunchActivatedEventArgs e)
+        private async Task DoFirstNavigation(QuickbloxClient quickbloxClient, INavigationService navigationService)
         {
             string login = null;
             string password = null;
@@ -159,23 +159,22 @@ namespace QMunicate
                         deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    navigationService.Navigate(ViewLocator.Chats, e.Arguments);
+                    navigationService.Navigate(ViewLocator.Dialogs, response.Result.Session.UserId);
                     return;
                 }
             }
 
-            navigationService.Navigate(ViewLocator.SignUp, e.Arguments);
+            navigationService.Navigate(ViewLocator.SignUp);
         }
 
 
         private PageResolver GetPageResolver()
         {
             var dictionary = new Dictionary<string, Type>();
-            dictionary.Add("Main", typeof(MainPage));
             dictionary.Add(ViewLocator.SignUp, typeof(SignUpPage));
             dictionary.Add(ViewLocator.Login, typeof(LoginPage));
             dictionary.Add(ViewLocator.ForgotPassword, typeof(ForgotPasswordPage));
-            dictionary.Add(ViewLocator.Chats, typeof(ChatsPage));
+            dictionary.Add(ViewLocator.Dialogs, typeof(DialogsPage));
             dictionary.Add(ViewLocator.Chat, typeof(ChatPage));
             return new PageResolver(dictionary);
         }

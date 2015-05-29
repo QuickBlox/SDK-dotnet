@@ -5,6 +5,8 @@ using System.Text;
 using System.Windows.Input;
 using Windows.Security.Credentials;
 using QMunicate.Core.Command;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageBoxProvider;
 using QMunicate.Helper;
 using Quickblox.Sdk.GeneralDataModel.Models;
 
@@ -68,6 +70,14 @@ namespace QMunicate.ViewModels
 
         private async void LoginCommandExecute()
         {
+            var messageBoxProvider = Factory.CommonFactory.GetInstance<IMessageBoxProvider>();
+
+            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
+            {
+                await messageBoxProvider.ShowAsync("Message", "Please fill all empty input fields");
+                return;
+            }
+
             if (RememberMe)
             {
                 var passwordVault = new PasswordVault();
@@ -79,12 +89,15 @@ namespace QMunicate.ViewModels
                 ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, Email, Password,
                 deviceRequestRequest:new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
 
-            //var response = await this.QuickbloxClient.CoreClient.ByEmailAsync(this.Email, this.Password);
             if (response.StatusCode == HttpStatusCode.Created)
             {
                 //QuickbloxClient.MessagesClient.Connect(response.Result.User.Id, Password, ApplicationKeys.ApplicationId,
                 //    QuickbloxClient.ChatEndpoint);
-                this.NavigationService.Navigate(ViewLocator.Chats, response.Result.Session.UserId);
+                this.NavigationService.Navigate(ViewLocator.Dialogs, response.Result.Session.UserId);
+            }
+            else
+            {
+                await messageBoxProvider.ShowAsync("Error");
             }
         }
 

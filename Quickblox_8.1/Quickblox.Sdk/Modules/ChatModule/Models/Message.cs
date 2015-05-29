@@ -14,7 +14,7 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
         public string ChatDialogId { get; set; }
 
         [JsonProperty("date_sent")]
-        public int DateSent { get; set; }
+        public long DateSent { get; set; }
 
         [JsonProperty("message")]
         public string MessageText { get; set; }

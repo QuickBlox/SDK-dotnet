@@ -13,11 +13,13 @@ using QMunicate.Models;
 
 namespace QMunicate.ViewModels
 {
-    public class ChatsViewModel : ViewModel
+    public class DialogsViewModel : ViewModel
     {
+        private int currentUserId;
+
         #region Ctor
 
-        public ChatsViewModel()
+        public DialogsViewModel()
         {
             Dialogs = new ObservableCollection<DialogVm>();
             OpenChatCommand = new RelayCommand<object>(OpenChatCommandExecute);
@@ -36,11 +38,14 @@ namespace QMunicate.ViewModels
 
         #endregion
 
-
         #region Navigation
 
         public override void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.Parameter is int)
+                currentUserId = (int) e.Parameter;
+
+            NavigationService.BackStack.Clear();
             LoadDialogs();
         }
 
@@ -50,6 +55,7 @@ namespace QMunicate.ViewModels
 
         private async void LoadDialogs()
         {
+            Dialogs = new ObservableCollection<DialogVm>();
             RetrieveDialogsRequest retrieveDialogsRequest = new RetrieveDialogsRequest();
             var response = await QuickbloxClient.ChatClient.GetDialogsAsync(retrieveDialogsRequest);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -77,11 +83,12 @@ namespace QMunicate.ViewModels
             }
 
             NavigationService.Navigate(ViewLocator.SignUp);
+            NavigationService.BackStack.Clear();
         }
 
         private void OpenChatCommandExecute(object dialog)
         {
-            NavigationService.Navigate(ViewLocator.Chat, dialog);
+            NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter {CurrentUserId = currentUserId, Dialog = dialog as DialogVm});
         }
 
         #endregion

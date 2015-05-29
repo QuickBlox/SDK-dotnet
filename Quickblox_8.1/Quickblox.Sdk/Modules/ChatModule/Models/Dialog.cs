@@ -29,7 +29,7 @@ namespace Quickblox.Sdk.Modules.Models
         public IList<int> OccupantsIds { get; set; }
 
         [JsonProperty("photo")]
-        public object Photo { get; set; }
+        public string Photo { get; set; }
 
         [JsonProperty("type")]
         public int Type { get; set; }

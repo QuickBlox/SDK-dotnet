@@ -29,6 +29,6 @@ namespace Quickblox.Sdk.Modules.AuthModule.Models
         public string UpdatedAt { get; set; }
 
         [JsonProperty("user_id")]
-        public object UserId { get; set; }
+        public int UserId { get; set; }
     }
 }
