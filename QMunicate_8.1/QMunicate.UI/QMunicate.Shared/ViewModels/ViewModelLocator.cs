@@ -2,6 +2,14 @@ namespace QMunicate.ViewModels
 {
     public class ViewModelLocator
     {
+        #region Fields
+
+        private DialogsViewModel dialogsViewModel;
+
+        #endregion
+
+        #region Properties
+
         public SignUpViewModel SignUpViewModel
         {
             get { return new SignUpViewModel(); }
@@ -17,9 +25,9 @@ namespace QMunicate.ViewModels
             get { return new ForgotPasswordViewModel(); }
         }
 
-        public DialogsViewModel ChatsViewModel
+        public DialogsViewModel DialogsViewModel
         {
-            get { return new DialogsViewModel(); }
+            get { return dialogsViewModel ?? (dialogsViewModel = new DialogsViewModel()); }
         }
 
         public ChatViewModel ChatViewModel
@@ -27,9 +35,16 @@ namespace QMunicate.ViewModels
             get { return new ChatViewModel(); }
         }
 
-        public static void Cleanup()
+        #endregion
+
+        #region Public methods
+
+        public void Cleanup()
         {
-            // TODO Clear the ViewModels
+            dialogsViewModel = null;
         }
+
+        #endregion
+
     }
 }
