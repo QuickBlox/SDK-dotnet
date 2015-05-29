@@ -72,7 +72,7 @@ namespace QMunicate.ViewModels
         {
             var messageBoxProvider = Factory.CommonFactory.GetInstance<IMessageBoxProvider>();
 
-            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
+            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
                 await messageBoxProvider.ShowAsync("Message", "Please fill all empty input fields");
                 return;
