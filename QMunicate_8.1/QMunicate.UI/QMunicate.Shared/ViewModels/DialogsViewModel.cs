@@ -16,6 +16,7 @@ namespace QMunicate.ViewModels
     public class DialogsViewModel : ViewModel
     {
         private int currentUserId;
+        private bool isLoaded;
 
         #region Ctor
 
@@ -42,10 +43,13 @@ namespace QMunicate.ViewModels
 
         public override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is int)
-                currentUserId = (int) e.Parameter;
+            if (e.Parameter is int && e.NavigationMode != NavigationMode.Back)
+            {
+                isLoaded = false;
+                NavigationService.BackStack.Clear();
+                currentUserId = (int)e.Parameter;
+            }
 
-            NavigationService.BackStack.Clear();
             LoadDialogs();
         }
 
@@ -55,6 +59,8 @@ namespace QMunicate.ViewModels
 
         private async void LoadDialogs()
         {
+            if (isLoaded) return;
+
             Dialogs = new ObservableCollection<DialogVm>();
             RetrieveDialogsRequest retrieveDialogsRequest = new RetrieveDialogsRequest();
             var response = await QuickbloxClient.ChatClient.GetDialogsAsync(retrieveDialogsRequest);
@@ -64,6 +70,7 @@ namespace QMunicate.ViewModels
                 {
                     Dialogs.Add((DialogVm) dialog);
                 }
+                isLoaded = true;
             }
         }
 

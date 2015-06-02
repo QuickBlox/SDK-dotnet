@@ -27,9 +27,9 @@ namespace QMunicate.ViewModels
 
         public SignUpViewModel()
         {
-            ChoosePhotoCommand = new RelayCommand(ChoosePhotoCommandExecute);
-            SignUpCommand = new RelayCommand(SignUpCommandExecute);
-            LoginCommand = new RelayCommand(LoginCommandExecute);
+            ChoosePhotoCommand = new RelayCommand(ChoosePhotoCommandExecute, () => !IsLoading);
+            SignUpCommand = new RelayCommand(SignUpCommandExecute, () => !IsLoading);
+            LoginCommand = new RelayCommand(LoginCommandExecute, () => !IsLoading);
         }
 
         public string FullName
@@ -82,11 +82,21 @@ namespace QMunicate.ViewModels
         {
             var messageBoxProvider = Factory.CommonFactory.GetInstance<IMessageBoxProvider>();
 
-            if (string.IsNullOrEmpty(FullName) || string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
+            if (string.IsNullOrWhiteSpace(FullName) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
                 await messageBoxProvider.ShowAsync("Message", "Please fill all empty input fields");
                 return;
             }
+
+            //TODO: delete this and show error messages from server instead
+            if (Password.Length < 8)
+            {
+                await messageBoxProvider.ShowAsync("Message", "Password is too short (minimum is 8 characters)");
+                return;
+            }
+            
+
+            IsLoading = true;
 
             await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
                         ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
@@ -105,6 +115,7 @@ namespace QMunicate.ViewModels
             else
                 await messageBoxProvider.ShowAsync("Error"); //TODO: deserialize properly and show errors from server
 
+            IsLoading = false;
         }
 
         private void LoginCommandExecute()
