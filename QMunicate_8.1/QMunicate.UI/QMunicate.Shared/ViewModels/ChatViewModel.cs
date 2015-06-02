@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows.Input;
@@ -19,6 +20,7 @@ namespace QMunicate.ViewModels
         private string newMessageText;
         private string chatName;
         private string chatImage;
+        private DialogVm dialog;
 
         #endregion
 
@@ -68,9 +70,18 @@ namespace QMunicate.ViewModels
 
             if (chatParameter.Dialog != null)
             {
+                dialog = chatParameter.Dialog;
                 ChatName = chatParameter.Dialog.Name;
                 ChatImage = chatParameter.Dialog.Image;
-                LoadMessages(chatParameter.Dialog.Id);
+
+                if (dialog.Messages != null && dialog.Messages.Any())
+                {
+                    Messages = new ObservableCollection<MessageVm>(dialog.Messages);
+                }
+                else
+                {
+                    LoadMessages(chatParameter.Dialog.Id);
+                }
             }
         }
 
@@ -82,12 +93,16 @@ namespace QMunicate.ViewModels
         {
             if (string.IsNullOrWhiteSpace(NewMessageText)) return;
 
-            Messages.Add(new MessageVm()
+            var msg = new MessageVm()
             {
                 MessageText = NewMessageText,
                 MessageType = MessageType.Outgoing,
                 DateTime = DateTime.Now
-            });
+            };
+
+            Messages.Add(msg);
+            dialog.Messages.Add(msg);
+            dialog.LastActivity = NewMessageText;
 
             NewMessageText = "";
         }
@@ -102,6 +117,7 @@ namespace QMunicate.ViewModels
                     var msg = (MessageVm)message;
                     msg.MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
                     Messages.Add(msg);
+                    dialog.Messages.Add(msg);
                 }
             }
         }
