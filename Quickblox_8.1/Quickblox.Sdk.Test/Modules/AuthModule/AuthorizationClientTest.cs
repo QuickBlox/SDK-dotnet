@@ -17,8 +17,8 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         private const string AuthorizationKey = "LxnQksQJsXA2NLU";
         private const string AuthorizationSecret = "7v2Jkrc7e-99JJX";
         private const string Login = "Test654321";
-        private const string Password = "Test12345";
-        private const string Email = "test@test.com";
+        private const string Password = "12345678";
+        private const string Email = "an@to.ly";
 
         private Quickblox.Sdk.QuickbloxClient client;
 

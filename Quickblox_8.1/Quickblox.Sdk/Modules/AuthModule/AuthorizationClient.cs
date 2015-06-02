@@ -145,7 +145,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             var settings = new SessionRequest();
             settings.ApplicationId = applicationId;
             settings.AuthKey = authKey;
-            settings.Timestamp = (long)DateTimeBuilder.ToUnixEpoch(DateTime.Now) / 1000;
+            settings.Timestamp = (long)DateTimeBuilder.ToUnixEpoch(DateTime.UtcNow) / 1000;
             settings.Nonce = new Random().Next(10000);
             return settings;
         }

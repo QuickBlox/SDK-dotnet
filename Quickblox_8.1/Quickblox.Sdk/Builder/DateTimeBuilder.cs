@@ -17,7 +17,7 @@ namespace Quickblox.Sdk.Builder
 
         public static Int64 ToUnixEpoch(this DateTime dateTime)
         {
-            var timeSpan = dateTime.Subtract(UnixEpoch.AddHours(4));
+            var timeSpan = dateTime.Subtract(UnixEpoch);
             return (Int64)timeSpan.TotalMilliseconds;
         }
 
