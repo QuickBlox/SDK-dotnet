@@ -119,9 +119,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void ReloadContacts()
         {
-            throw new NotImplementedException();
-
-            xmppConnection.Send(new IQ(IqType.get) { Query = new Roster() });
+            iq iq = new iq {type = iq.typeEnum.get};
+            iq.Add(new XMPP.tags.jabber.iq.roster.query());
+            xmppClient.Send(iq);
         }
 
         public void AddContact(Contact contact)
@@ -195,6 +195,13 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                 OnPresence(presence);
                 return;
             }
+
+            var iq = tagEventArgs.tag as iq;
+            if (iq != null)
+            {
+                OnIq(iq);
+                return;
+            }
         }
 
         private void OnMessage(message message)
@@ -221,6 +228,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             var handler = OnPresenceReceived;
             if (handler != null)
                 handler(this, receivedPresence);
+        }
+
+        private void OnIq(iq iq)
+        {
+
         }
 
         #endregion
@@ -255,13 +267,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             var handler = OnMessageReceived;
             if (handler != null)
                 handler(this, new Message {From = msg.From.ToString(), To = msg.To.ToString(), MessageText = msg.Body, Attachments = attachments.ToArray()});
-        }
-
-        private void XmppConnectionOnOnPresence(object sender, AgsPresence pres)
-        {
-            var handler = OnPresenceReceived;
-            if (handler != null)
-                handler(this, new Presence {From = pres.From.ToString(), To = pres.To.ToString(), PresenceType = (PresenceType)pres.Type});
         }
 
         private void XmppConnectionOnOnRosterStart(object sender)
