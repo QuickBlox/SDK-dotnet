@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Windows.UI.Xaml.Media;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Modules.Models;
@@ -7,12 +8,19 @@ namespace QMunicate.Models
 {
     public class DialogVm
     {
+        public DialogVm()
+        {
+            Messages = new List<MessageVm>();
+        }
+
         public string Id { get; set; }
         public string Image { get; set; }
         public string Name { get; set; }
         public DateTime? LastMessageSent { get; set; }
         public string LastActivity { get; set; }
         public int? UnreadMessageCount { get; set; }
+        public List<MessageVm> Messages { get; set; }
+
 
         public static explicit operator DialogVm(Dialog dialog)
         {
