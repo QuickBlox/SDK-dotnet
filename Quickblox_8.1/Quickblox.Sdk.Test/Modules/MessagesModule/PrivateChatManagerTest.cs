@@ -15,14 +15,13 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
     [TestClass]
     public class PrivateChatManagerTest
     {
-        private static string login1 = "Test654321";
-        private static string password1 = "Test12345";
-        private static int id1 = 2701456;
+        private static string email1 = "to1@test.com";
+        private static string password1 = "12345678";
+        private static int id1 = 3323859;
 
-        private static string login2 = "Test987654";
-        private static string password2 = "Test12345";
-        private static int id2 = 2766517;
-
+        private static string email2 = "to2@test.com";
+        private static string password2 = "12345678";
+        private static int id2 = 3323883;
 
         private static QuickbloxClient client1;
         private static IPrivateChatManager chatManager1;
@@ -35,20 +34,19 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         public static async Task ClassInitialize(TestContext testContext)
         {
             client1 = new QuickbloxClient();
-            await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await client1.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, login1, password1);
-            client1.MessagesClient.Connect(id1, password1, (int)GlobalConstant.ApplicationId, "chat.quickblox.com");
+            //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
+            //await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
+            client1.MessagesClient.DebugClientName = "1";
+            await client1.MessagesClient.Connect("chat.quickblox.com", id1, (int)GlobalConstant.ApplicationId, password1);
             chatManager1 = client1.MessagesClient.GetPrivateChatManager(id2);
 
             client2 = new QuickbloxClient();
-            await client2.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            await client2.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, login2, password2);
-            client2.MessagesClient.Connect(id2, password2, (int)GlobalConstant.ApplicationId, "chat.quickblox.com");
+            //await client2.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
+            //await client2.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
+            client2.MessagesClient.DebugClientName = "2";
+            await client2.MessagesClient.Connect("chat.quickblox.com", id2, (int)GlobalConstant.ApplicationId, password2);
             chatManager2 = client2.MessagesClient.GetPrivateChatManager(id1);
-            client2.MessagesClient.OnMessageReceived += delegate(object sender, Message message)
-            {
-                lastMessageClient2 = message;
-            };
+            client2.MessagesClient.OnMessageReceived += (sender, message) => lastMessageClient2 = message;
         }
 
         [TestMethod]

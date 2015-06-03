@@ -17,12 +17,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 {
     public class PrivateChatManager : IPrivateChatManager
     {
-        private string banListName = "banList";
-
         #region Fields
 
         private XMPP.Client xmppClient;
-
+        private string banListName = "banList";
         private readonly XmppClientConnection xmpp;
         private readonly string otherUserJid;
 
@@ -42,22 +40,28 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void SendMessage(string message, Attachment attachment = null)
         {
-            //var msg = new AgsMessage(otherUserJid, agsXMPP.protocol.client.MessageType.chat, message);
-            //if (attachment != null)
-            //{
-            //    XmlSerializer xmlSerializer = new XmlSerializer();
-            //    string attachemntXml = xmlSerializer.Serialize(attachment);
-            //    msg.AddTag("extraParams", attachemntXml);
-            //}
+            if (attachment != null)
+            {
+                throw new NotImplementedException("Attachments are not supported yet");
 
-            //xmpp.Send(msg);
+                //var msg = new AgsMessage(otherUserJid, agsXMPP.protocol.client.MessageType.chat, message);
+                //if (attachment != null)
+                //{
+                //    XmlSerializer xmlSerializer = new XmlSerializer();
+                //    string attachemntXml = xmlSerializer.Serialize(attachment);
+                //    msg.AddTag("extraParams", attachemntXml);
+                //}
 
-            var msg = new XMPP.tags.jabber.client.message();
-            msg.to = otherUserJid;
-            msg.type = XMPP.tags.jabber.client.message.typeEnum.chat;
+                //xmpp.Send(msg);
+            }
 
-            var body = new XMPP.tags.jabber.client.body();
-            body.Value = "Hi!";
+            var msg = new XMPP.tags.jabber.client.message
+            {
+                to = otherUserJid,
+                type = XMPP.tags.jabber.client.message.typeEnum.chat
+            };
+
+            var body = new XMPP.tags.jabber.client.body {Value = message};
             msg.Add(body);
 
             xmppClient.Send(msg);

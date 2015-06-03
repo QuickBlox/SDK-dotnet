@@ -1,23 +1,23 @@
-﻿using System;
+﻿using agsXMPP;
+using agsXMPP.protocol.client;
+using agsXMPP.protocol.iq.roster;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Serializer;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using agsXMPP;
-using agsXMPP.protocol.client;
-using agsXMPP.protocol.iq.roster;
-using agsXMPP.Xml.Dom;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Quickblox.Sdk.Serializer;
+using XMPP;
 using XMPP.common;
+using XMPP.tags.jabber.client;
 using AgsMessage = agsXMPP.protocol.client.Message;
-using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 using AgsPresence = agsXMPP.protocol.client.Presence;
+using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 using Presence = Quickblox.Sdk.Modules.MessagesModule.Models.Presence;
 using PresenceType = Quickblox.Sdk.Modules.MessagesModule.Models.PresenceType;
 
@@ -29,17 +29,15 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private QuickbloxClient quickbloxClient;
         private XmppClientConnection xmppConnection;
+        private XMPP.Client xmppClient;
         private int appId;
-        readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+"); // Quickblox JID pattern
+        readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
         private const string qbJidPattern = @"{0}-{1}@chat.quickblox.com";
-        private const string qbJidUserPattern = "{0}-{1}";
-        private XMPP.Client client;
 
         #endregion
 
         #region Events
 
-        public event EventHandler OnConnected;
         public event EventHandler<Message> OnMessageReceived;
         public event EventHandler<Presence> OnPresenceReceived;
         public event EventHandler OnContactsLoaded;
@@ -61,89 +59,48 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public bool IsConnected { get; private set; }
 
+#if DEBUG
+        public string DebugClientName { get; set; }
+#endif
+
         #endregion
 
         #region Public methods
 
-        public async void Connect(int userId, string password, int applicationId, string chatEndpoint)
+        public async Task Connect(string chatEndpoint, int userId, int applicationId, string password)
         {
-            //var xmpp = new XmppClientConnection(chatEndpoint);
-            //OpenConnection(xmpp, userId, password, applicationId);
-
-            client = new XMPP.Client();
-
-            client.Settings.Hostname = chatEndpoint;
-            //client.Settings.SSL = true;
-            //client.Settings.OldSSL = true;
-            //client.Settings.Port = 5222;
-            client.Settings.Id = string.Format("{0}-{1}@chat.quickblox.com", userId, applicationId);
-            client.Settings.Password = password;
-            client.OnError += ClientOnOnError;
-
-            client.OnNewTag += ClientOnOnNewTag;
-            client.OnReceive += ClientOnOnReceive;
-
-            client.Connect();
-            client.OnConnected += (sender, args) => { };
-        }
-
-        #region Ubiety lib event handlers
-
-        private void ClientOnOnError(object sender, ErrorEventArgs errorEventArgs)
-        {
-            Debug.WriteLine("ERROR hapened " + errorEventArgs.message);
-        }
-
-        private void ClientOnOnReceive(object sender, TagEventArgs tagEventArgs)
-        {
-            Debug.WriteLine("NEW RECEIVE: " + tagEventArgs.tag);
-        }
-
-        private void ClientOnOnNewTag(object sender, TagEventArgs tagEventArgs)
-        {
-            Debug.WriteLine("NEW TAG: " + tagEventArgs.tag);
-        }
-
-        #endregion
-
-
-
-        public async Task Connect(int userId, string password, int applicationId, string chatEndpoint, TimeSpan timeout)
-        {
-            TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
-            var xmpp = new XmppClientConnection(chatEndpoint);
-            xmpp.OnLogin += sender =>
+            var timeout = new TimeSpan(0, 0, 60);
+            var tcs = new TaskCompletionSource<object>();
+            XMPP.Client xmppClient = new XMPP.Client();
+            xmppClient.OnReady += (sender, args) => 
             {
-                tcs.SetResult(null);
+                if (tcs.Task.Status == TaskStatus.WaitingForActivation)
+                    tcs.TrySetResult(null);
             };
-            xmpp.OnAuthError += (sender, element) => tcs.SetException(new QuickbloxSdkException(element.Value));
-            xmpp.OnError += (sender, exception) => tcs.SetException(new QuickbloxSdkException("Error connecting to xmpp server.", exception));
 
             var timer = new Timer(state =>
             {
-                if (tcs.Task.Status == TaskStatus.WaitingForActivation)
-                    tcs.SetCanceled();
+                var myTcs = (TaskCompletionSource<object>)state;
+                if (myTcs.Task.Status == TaskStatus.WaitingForActivation)
+                    myTcs.TrySetException(new QuickbloxSdkException("Failed to fully initialize xmpp connection because of timeout."));
             },
-            null, timeout, new TimeSpan(0, 0, 0, 0, -1));
+            tcs, timeout, new TimeSpan(0, 0, 0, 0, -1));
 
-            OpenConnection(xmpp, userId, password, applicationId);
+            OpenConnection(xmppClient, chatEndpoint, userId, applicationId, password);
 
             await tcs.Task;
-
         }
 
         public IPrivateChatManager GetPrivateChatManager(int otherUserId)
         {
-            //if (xmppConnection == null || !xmppConnection.Authenticated)
-            //    throw new QuickbloxSdkException("Xmpp connection is not ready.");
-
             string otherUserJid = string.Format(qbJidPattern, otherUserId, appId);
-
-            return new PrivateChatManager(client, otherUserJid);
+            return new PrivateChatManager(xmppClient, otherUserJid);
         }
 
         public IGroupChatManager GetGroupChatManager(string groupJid)
         {
+            throw new NotImplementedException();
+
             if (xmppConnection == null || !xmppConnection.Authenticated)
                 throw new QuickbloxSdkException("Xmpp connection is not ready.");
 
@@ -152,11 +109,15 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void ReloadContacts()
         {
+            throw new NotImplementedException();
+
             xmppConnection.Send(new IQ(IqType.get) { Query = new Roster() });
         }
 
         public void AddContact(Contact contact)
         {
+            throw new NotImplementedException();
+
             string jid = string.Format(qbJidPattern, contact.UserId, appId);
             var roster = new Roster();
             roster.AddRosterItem(new RosterItem(new Jid(jid), contact.Name));
@@ -165,6 +126,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void DeleteContact(int userId)
         {
+            throw new NotImplementedException();
+
             string jid = string.Format(qbJidPattern, userId, appId);
             var roster = new Roster();
             roster.AddRosterItem(new RosterItem(new Jid(jid)) {Subscription = SubscriptionType.remove});
@@ -175,33 +138,52 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Private methods
 
-        private void OpenConnection(XmppClientConnection xmpp, int userId, string password, int applicationId)
+        private void OpenConnection(Client client, string chatEndpoint, int userId, int applicationId,
+            string password)
         {
-            xmppConnection = xmpp;
-            xmppConnection.OnLogin += XmppConnectionOnOnLogin;
-            xmppConnection.OnMessage += XmppConnectionOnOnMessage;
-            xmppConnection.OnPresence += XmppConnectionOnOnPresence;
-            xmppConnection.OnRosterStart += XmppConnectionOnOnRosterStart;
-            xmppConnection.OnRosterItem += XmppConnectionOnOnRosterItem;
-            xmppConnection.OnRosterEnd += XmppConnectionOnOnRosterEnd;
-            xmppConnection.OnAuthError += (sender, element) => { throw new QuickbloxSdkException("Failed to authenticate: " + element.ToString()); };
-            this.appId = applicationId;
+            appId = applicationId;
+
+            client.Settings.Hostname = chatEndpoint;
+            client.Settings.SSL = false;
+            client.Settings.OldSSL = false;
+            client.Settings.Port = 5222;
+            client.Settings.AuthenticationTypes = MechanismType.Plain;
+            client.Settings.Id = string.Format(qbJidPattern, userId, applicationId);
+            client.Settings.Password = password;
+
+            client.OnReceive += ClientOnOnReceive;
+            client.OnReady += (sender, args) => IsConnected = true;
+            client.OnError +=
+                (sender, args) =>
+                {
+                    throw new QuickbloxSdkException(string.Format("XMPP connection exception. Message: {0}. Type: {1}",
+                        args.message, args.type));
+                };
 
 #if DEBUG
-            xmppConnection.OnReadXml += XmppConnectionOnOnReadXml;
-            xmppConnection.OnWriteXml += XmppConnectionOnOnWriteXml;
+            client.OnLogMessage +=
+                (sender, args) => Debug.WriteLine("XMPP {0} LOG: {1} {2}", DebugClientName, args.type, args.message);
 #endif
 
-            xmppConnection.Open(string.Format(qbJidUserPattern, userId, applicationId), password);
+            xmppClient = client;
+            IsConnected = false;
+            client.Connect();
         }
 
-        private void XmppConnectionOnOnLogin(object sender)
+        private void ClientOnOnReceive(object sender, TagEventArgs tagEventArgs)
         {
-            IsConnected = true;
-            var handler = OnConnected;
-            if (handler != null)
-                handler(this, new EventArgs());
+            var message = tagEventArgs.tag as message;
+            if (message != null)
+            {
+                var handler = OnMessageReceived;
+                if (handler != null)
+                    handler(this, new Message { From = message.from, To = message.to, MessageText = message.body });
+            }
         }
+
+        #endregion
+
+        #region Ags methods
 
         private void XmppConnectionOnOnMessage(object sender, AgsMessage msg)
         {
@@ -227,10 +209,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                     }
                 }
             }
-
-            
-
-            
 
             var handler = OnMessageReceived;
             if (handler != null)
@@ -267,20 +245,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         }
 
         #endregion
-
-#if DEBUG
-
-        private void XmppConnectionOnOnWriteXml(object sender, string xml)
-        {
-            Debug.WriteLine("XMPP sent: " + xml);
-        }
-
-        private void XmppConnectionOnOnReadXml(object sender, string xml)
-        {
-            Debug.WriteLine("XMPP received: " + xml);
-        }
-
-#endif
 
     }
 
