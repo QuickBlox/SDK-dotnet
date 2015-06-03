@@ -97,9 +97,11 @@ namespace Quickblox.Sdk.Http
 
         #region Protected Members
 
-        protected static async Task<HttpResponseMessage> GetBaseAsync(String baseAddress, String requestUri, IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers, CancellationToken token)
+        protected static async Task<HttpResponseMessage> GetBaseAsync(String baseAddress, String requestUri,
+            IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers, CancellationToken token)
         {
             HttpResponseMessage response;
+            
             using (var handler = new HttpClientHandler())
             {
                 using (var client = new HttpClient(handler))
@@ -115,7 +117,11 @@ namespace Quickblox.Sdk.Http
                     {
                         client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("identity"));
                     }
-                    client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true, NoStore = true };
+                    client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
+                    {
+                        NoCache = true,
+                        NoStore = true
+                    };
                     client.DefaultRequestHeaders.SetRequestHeaders(headers);
 
                     Debug.WriteLine(String.Concat("==> GET REQUEST: ", baseAddress, requestUri));
@@ -124,6 +130,11 @@ namespace Quickblox.Sdk.Http
                         response = await client.GetAsync(requestUri, token).ConfigureAwait(false);
                     }
                     catch (HttpRequestException)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                        response.Content = new StringContent("Error internet connection");
+                    }
+                    catch (Exception ex)
                     {
                         response = new HttpResponseMessage(HttpStatusCode.NotFound);
                         response.Content = new StringContent("Error internet connection");
@@ -168,6 +179,11 @@ namespace Quickblox.Sdk.Http
                         response = new HttpResponseMessage(HttpStatusCode.NotFound);
                         response.Content = new StringContent("Error internet connection");
                     }
+                    catch (Exception ex)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                        response.Content = new StringContent("Error internet connection");
+                    }
                     Debug.WriteLine(String.Concat("<== POST RESPONSE: ", response));
                     Interlocked.Exchange(ref ticks, DateTime.UtcNow.Ticks);
                 }
@@ -202,6 +218,11 @@ namespace Quickblox.Sdk.Http
                         response = await client.DeleteAsync(requestUri, token).ConfigureAwait(false);
                     }
                     catch (HttpRequestException)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                        response.Content = new StringContent("Error internet connection");
+                    }
+                    catch (Exception ex)
                     {
                         response = new HttpResponseMessage(HttpStatusCode.NotFound);
                         response.Content = new StringContent("Error internet connection");
@@ -241,6 +262,11 @@ namespace Quickblox.Sdk.Http
                         response = await client.PutAsync(requestUri, content, token).ConfigureAwait(false);
                     }
                     catch (HttpRequestException)
+                    {
+                        response = new HttpResponseMessage(HttpStatusCode.NotFound);
+                        response.Content = new StringContent("Error internet connection");
+                    }
+                    catch (Exception ex)
                     {
                         response = new HttpResponseMessage(HttpStatusCode.NotFound);
                         response.Content = new StringContent("Error internet connection");

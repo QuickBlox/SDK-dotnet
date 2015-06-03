@@ -35,7 +35,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveCustomObjectsByIdsAsync<T>(
             String className, String ids) where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (ids == null) throw new ArgumentNullException("ids");
             if (className == null) throw new ArgumentNullException("className");
@@ -52,7 +52,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveCustomObjectsAsync<T>(String className)
             where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (className == null) throw new ArgumentNullException("className");
 
@@ -68,7 +68,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<T>> CreateCustomObjectsAsync<T>(String className,
             CreateCustomObjectRequest<T> customObject) where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (className == null) throw new ArgumentNullException("className");
             if (customObject == null) throw new ArgumentNullException("customObject");
@@ -119,7 +119,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> CreateMultiCustomObjectsAsync<T>(
             String className, List<T> items) where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (className == null) throw new ArgumentNullException("className");
             if (items == null) throw new ArgumentNullException("items");
@@ -172,7 +172,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<T>> UpdateCustomObjectsByIdAsync<T>(String className,
             UpdateCustomObjectRequest<T> updateCustomObjectRequest) where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (className == null) throw new ArgumentNullException("className");
             if (updateCustomObjectRequest == null) throw new ArgumentNullException("updateCustomObjectRequest");
@@ -190,7 +190,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> UpdateMultiCustomObjectsAsync<T>(
             String className, List<T> items) where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (className == null) throw new ArgumentNullException("className");
 
@@ -248,7 +248,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
 
         public async Task<HttpResponse> DeleteCustomObjectsByIdAsync<T>(String className, String id) where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (className == null) throw new ArgumentNullException("className");
             if (id == null) throw new ArgumentNullException("id");
@@ -265,7 +265,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
 
         public async Task<HttpResponse> DeleteCustomObjectsByIdsAsync<T>(String className, String ids) where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (className == null) throw new ArgumentNullException("className");
             if (ids == null) throw new ArgumentNullException("ids");
@@ -282,7 +282,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
 
         public async Task<HttpResponse<T>> CreateRelationObjectAsync<T>(String parentClassName, String parentId,  String childClassName, CreateCustomObjectRequest<T> createCustomObjectRequest) where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (parentClassName == null) throw new ArgumentNullException("parentClassName");
             if (childClassName == null) throw new ArgumentNullException("childClassName");
@@ -334,7 +334,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
 
         public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveRelationObjectsAsync<T>(String parentClassName, String parentId, String childClassName) where T : BaseCustomObject
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
 
             if (parentClassName == null) throw new ArgumentNullException("parentClassName");
             if (childClassName == null) throw new ArgumentNullException("childClassName");

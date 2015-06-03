@@ -36,7 +36,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns>Success HTTP Status Code 201</returns>
         public async Task<HttpResponse<FileInfoResponse>> CreateFileInfoAsync(CreateFileRequest createFileRequest)
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var createFileResponse = await HttpService.PostAsync<FileInfoResponse, CreateFileRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.CreateFileMethod,
@@ -52,7 +52,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns>Success HTTP Status Code 200</returns>
         public async Task<HttpResponse<FilesPagedResponse>> GetFilesAsync()
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var getFilesResponse = await HttpService.GetAsync<FilesPagedResponse>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.GetFilesMethod,
@@ -66,7 +66,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns>Success HTTP Status Code 200</returns>
         public async Task<HttpResponse<FilesPagedResponse>> GetTaggedFilesAsync()
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var getTaggedFilesResponse = await HttpService.GetAsync<FilesPagedResponse>(this.quickbloxClient.ApiEndPoint,
                                                                                          QuickbloxMethods.GetTaggedFilesMethod,
@@ -81,7 +81,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns>Success HTTP Status Code 201</returns>
         public async Task<HttpResponse<PostResponse>> FileUploadAsync(UploadFileRequest uploadFileRequest)
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var blobObjectAccessParams = uploadFileRequest.BlobObjectAccess.Params;
 
             String uriMethod = null;
@@ -111,7 +111,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns>Success HTTP Status Code 200</returns>
         public async Task<HttpResponse> FileUploadCompleteAsync(Int32  fileId, BlobUploadCompleteRequest blobUploadCompleteRequest)
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var uriMethod = String.Format(QuickbloxMethods.CompleteUploadByFileIdMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var fileUploadResponse = await HttpService.PutAsync<Object, BlobUploadCompleteRequest>(this.quickbloxClient.ApiEndPoint,
@@ -129,7 +129,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns>Success HTTP Status Code 200</returns>
         public async Task<HttpResponse<FileInfoResponse>> GetFileInfoByIdAsync(Int32 fileId)
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var uriMethod = String.Format(QuickbloxMethods.GetFileByIdMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var getFilesByIdResponse = await HttpService.GetAsync<FileInfoResponse>(this.quickbloxClient.ApiEndPoint,
@@ -145,7 +145,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns>Success HTTP Status Code 301</returns>
         public async Task<HttpResponse<Byte[]>> DownloadFileAsync(String fileGuid)
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var uriMethod = String.Format(QuickbloxMethods.DownloadFileByIdMethod, fileGuid);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var downloadFileResponse = await HttpService.GetBytesAsync(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
@@ -159,7 +159,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns>Success HTTP Status Code 200</returns>
         public async Task<HttpResponse<ReadOnlyAccessResponse>> GetReadOnlyFileInfoByIdAsync(Int32 fileId)
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var uriMethod = String.Format(QuickbloxMethods.GetFileByIdReadOnlyMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var boaResponse = await HttpService.PostAsync<ReadOnlyAccessResponse, GetBlobObjectByIdRequest>(this.quickbloxClient.ApiEndPoint,
@@ -177,7 +177,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns></returns>
         public async Task<HttpResponse<FileInfoResponse>> EditFileByIdAsync(Int32 fileId, UpdateFileByIdRequest updateFileByIdRequest)
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var uriMethod = String.Format(QuickbloxMethods.EditFileMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var editFileById = await HttpService.PutAsync<FileInfoResponse, UpdateFileByIdRequest>(this.quickbloxClient.ApiEndPoint,
@@ -194,7 +194,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <returns></returns>
         public async Task<HttpResponse> DeleteFileAsync(Int32 fileId)
         {
-            this.quickbloxClient.CheckIsInitialized();
+            
             var uriMethod = String.Format(QuickbloxMethods.DeleteFileMethod, fileId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var deleteFileById = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint,

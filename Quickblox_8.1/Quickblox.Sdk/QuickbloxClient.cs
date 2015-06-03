@@ -27,7 +27,7 @@ namespace Quickblox.Sdk
         private String baseUri;
         private String accountKey;
         private ICryptographicProvider cryptographicProvider;
-        private Boolean isClientInitialized;
+        private string chatUri;
 
         #region Ctor
 
@@ -96,16 +96,6 @@ namespace Quickblox.Sdk
             get { return HttpBase.LastRequest; }
         }
 
-        public Boolean IsClientInitialized
-        {
-            get { return this.isClientInitialized; }
-            private set
-            {
-                this.isClientInitialized = value;
-                this.OnStatusChanged();
-            }
-        }
-
         public string ApiEndPoint { get; private set; }
 
         public string ChatEndpoint { get; private set; }
@@ -124,11 +114,7 @@ namespace Quickblox.Sdk
             this.baseUri = baseUri;
             this.accountKey = accountKey;
             this.CryptographicProvider = cryptographicProvider;
-
-            while (!this.IsClientInitialized)
-            {
-                await this.GetAccountSettingsAsync();
-            }
+            await this.GetAccountSettingsAsync();
         }
 
         public void Resume(string token)
@@ -141,16 +127,6 @@ namespace Quickblox.Sdk
             return Token;
         }
 
-        #region Internal
-
-        internal void CheckIsInitialized()
-        {
-            if (!this.IsClientInitialized)
-                throw new NotInitializedException();
-        }
-
-        #endregion
-
         #endregion
 
         #region Private
@@ -160,21 +136,9 @@ namespace Quickblox.Sdk
                 var accountResponse =
                     await HttpService.GetAsync<AccountResponse>(this.baseUri, QuickbloxMethods.AccountMethod,
                           RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbAccountKey(this.accountKey));
-            if (accountResponse.StatusCode == HttpStatusCode.OK)
-            {
-                this.ApiEndPoint = accountResponse.Result.ApiEndPoint;
-                this.ChatEndpoint = accountResponse.Result.ChatEndPoint;
-                this.IsClientInitialized = true;
-            }
-        }
 
-        private void OnStatusChanged()
-        {
-            var handler = this.ClientStatusChanged;
-            if (handler != null)
-            {
-                handler.Invoke(this, this.isClientInitialized);
-            }
+                this.ApiEndPoint = accountResponse.Result != null ? accountResponse.Result.ApiEndPoint : this.baseUri;
+                this.ChatEndpoint = accountResponse.Result != null ? accountResponse.Result.ChatEndPoint : this.chatUri;
         }
 
         #endregion

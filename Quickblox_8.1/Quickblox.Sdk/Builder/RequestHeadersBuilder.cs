@@ -15,7 +15,11 @@ namespace Quickblox.Sdk.Builder
 
         public static IDictionary<String, IEnumerable<String>> GetHeaderWithQbAccountKey(this IDictionary<String, IEnumerable<String>> headers, String key)
         {
-            headers.Add("QB-Account-Key", new[] {key});
+            if (!String.IsNullOrEmpty(key))
+            {
+                headers.Add("QB-Account-Key", new[] {key});
+            }
+        
             return headers;
         }
 
