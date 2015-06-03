@@ -57,6 +57,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public List<Contact> Contacts { get; private set; }
 
+        public List<Presence> Presences { get; private set; }
+
         public bool IsConnected { get; private set; }
 
 #if DEBUG
@@ -89,6 +91,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             OpenConnection(xmppClient, chatEndpoint, userId, applicationId, password);
 
             await tcs.Task;
+        }
+
+        public void Disconnect()
+        {
+            if (!IsConnected) return;
+
+            xmppClient.Send(new presence { type = presence.typeEnum.unavailable });
+            xmppClient.Disconnect();
         }
 
         public IPrivateChatManager GetPrivateChatManager(int otherUserId)
@@ -175,10 +185,42 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             var message = tagEventArgs.tag as message;
             if (message != null)
             {
-                var handler = OnMessageReceived;
-                if (handler != null)
-                    handler(this, new Message { From = message.from, To = message.to, MessageText = message.body });
+                OnMessage(message);
+                return;
             }
+
+            var presence = tagEventArgs.tag as presence;
+            if (presence != null)
+            {
+                OnPresence(presence);
+                return;
+            }
+        }
+
+        private void OnMessage(message message)
+        {
+            var handler = OnMessageReceived;
+            if (handler != null)
+                handler(this, new Message { From = message.from, To = message.to, MessageText = message.body });
+        }
+
+        private void OnPresence(presence presence)
+        {
+            var receivedPresence = new Presence
+            {
+                From = presence.from,
+                To = presence.to,
+                PresenceType = (PresenceType) presence.type
+            };
+
+            if (Presences == null) Presences = new List<Presence>();
+
+            Presences.RemoveAll(p => p.From == receivedPresence.From);
+            Presences.Add(receivedPresence);
+
+            var handler = OnPresenceReceived;
+            if (handler != null)
+                handler(this, receivedPresence);
         }
 
         #endregion

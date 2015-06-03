@@ -12,9 +12,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         event EventHandler OnContactsLoaded;
 
         List<Contact> Contacts { get; }
+        List<Presence> Presences { get; }
         bool IsConnected { get; }
 
         Task Connect(string chatEndpoint, int userId, int applicationId, string password);
+        void Disconnect();
         IPrivateChatManager GetPrivateChatManager(int otherUserId);
         IGroupChatManager GetGroupChatManager(string groupJid);
         void ReloadContacts();

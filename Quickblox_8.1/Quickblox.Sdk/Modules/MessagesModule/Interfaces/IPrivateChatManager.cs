@@ -10,11 +10,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
     public interface IPrivateChatManager
     {
         void SendMessage(string message, Attachment attachment = null);
+
         void SubsribeForPresence();
         void ApproveSubscribtionRequest();
         void DeclineSubscribtionRequest();
         void Unsubscribe();
-        void SendPresenceInformation(PresenceType presenceType);
+
         Task Block();
         Task Unblock();
     }

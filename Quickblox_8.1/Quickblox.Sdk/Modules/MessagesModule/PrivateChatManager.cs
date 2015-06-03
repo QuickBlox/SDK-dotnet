@@ -2,15 +2,12 @@
 using agsXMPP.protocol.iq.privacy;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Quickblox.Sdk.Serializer;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using XMPP.tags.jabber.client;
 using Action = agsXMPP.protocol.iq.privacy.Action;
-using AgsMessage = agsXMPP.protocol.client.Message;
-using AgsPresence = agsXMPP.protocol.client.Presence;
-using PresenceType = Quickblox.Sdk.Modules.MessagesModule.Models.PresenceType;
 using Type = agsXMPP.protocol.iq.privacy.Type;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
@@ -55,42 +52,41 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                 //xmpp.Send(msg);
             }
 
-            var msg = new XMPP.tags.jabber.client.message
+            var msg = new message
             {
                 to = otherUserJid,
                 type = XMPP.tags.jabber.client.message.typeEnum.chat
             };
 
-            var body = new XMPP.tags.jabber.client.body {Value = message};
+            var body = new body {Value = message};
             msg.Add(body);
 
             xmppClient.Send(msg);
         }
 
+        #region Presence
+
         public void SubsribeForPresence()
         {
-            SendPresenceInformation(PresenceType.subscribe);
+            SendPresenceInformation(presence.typeEnum.subscribe);
         }
 
         public void ApproveSubscribtionRequest()
         {
-            SendPresenceInformation(PresenceType.subscribe);
+            SendPresenceInformation(presence.typeEnum.subscribed);
         }
 
         public void DeclineSubscribtionRequest()
         {
-            SendPresenceInformation(PresenceType.unsubscribed);
+            SendPresenceInformation(presence.typeEnum.unsubscribed);
         }
 
         public void Unsubscribe()
         {
-            SendPresenceInformation(PresenceType.unsubscribe);
+            SendPresenceInformation(presence.typeEnum.unsubscribe);
         }
 
-        public void SendPresenceInformation(PresenceType presenceType)
-        {
-            xmpp.Send(new AgsPresence { Type = (agsXMPP.protocol.client.PresenceType)presenceType, To = new Jid(otherUserJid) });
-        }
+        #endregion
 
         public async Task Block()
         {
@@ -120,6 +116,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         #endregion
 
         #region Private methods
+
+        private void SendPresenceInformation(presence.typeEnum type)
+        {
+            xmppClient.Send(new presence { type = type, to = otherUserJid });
+        }
 
         private async Task<List> GetBanListAsync()
         {
