@@ -20,6 +20,8 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [TestMethod]
         public async Task RosterTest()
         {
+            bool contactsChanged = false;
+
             client1 = new QuickbloxClient();
             //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
@@ -29,8 +31,12 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             await client1.MessagesClient.Connect("chat.quickblox.com", id1, (int)GlobalConstant.ApplicationId, password1);
 
             client1.MessagesClient.ReloadContacts();
+            client1.MessagesClient.OnContactsChanged += (sender, args) => contactsChanged = true;
 
             await Task.Delay(10000);
+
+            if(!contactsChanged)
+                Assert.Fail("Contacts wasn't received");
         }
     }
 }

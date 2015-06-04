@@ -9,7 +9,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
     {
         event EventHandler<Message> OnMessageReceived;
         event EventHandler<Presence> OnPresenceReceived;
-        event EventHandler OnContactsLoaded;
+        event EventHandler OnContactsChanged;
 
         List<Contact> Contacts { get; }
         List<Presence> Presences { get; }

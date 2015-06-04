@@ -40,7 +40,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public event EventHandler<Message> OnMessageReceived;
         public event EventHandler<Presence> OnPresenceReceived;
-        public event EventHandler OnContactsLoaded;
+        public event EventHandler OnContactsChanged;
 
         #endregion
 
@@ -49,6 +49,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         public MessagesClient(QuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
+            Contacts = new List<Contact>();
         }
 
         #endregion
@@ -232,7 +233,34 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private void OnIq(iq iq)
         {
+            if (iq.type == iq.typeEnum.result || iq.type == iq.typeEnum.set)
+            {
+                var query = iq.Element<XMPP.tags.jabber.iq.roster.query>(XMPP.tags.jabber.iq.roster.Namespace.query);
+                if (query != null)
+                {
+                    if (iq.type == iq.typeEnum.result) // This is a roster
+                    {
+                        Contacts = new List<Contact>();
+                    }
 
+                    foreach (var item in query.itemElements)
+                    {
+                        var match = qbJidRegex.Match(item.jid);
+                        string userId = (match.Success && match.Groups.Count > 0) ? match.Groups[1].Value : item.jid;
+                        Contacts.RemoveAll(c => c.UserId == userId);
+
+                        if (item.subscription != XMPP.tags.jabber.iq.roster.item.subscriptionEnum.remove)
+                        {
+                            Contact contact = new Contact { Name = item.name, UserId = userId };
+                            Contacts.Add(contact);
+                        }
+                    }
+
+                    var handler = OnContactsChanged;
+                    if (handler != null)
+                        handler(this, new EventArgs());
+                }
+            }
         }
 
         #endregion
@@ -267,28 +295,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             var handler = OnMessageReceived;
             if (handler != null)
                 handler(this, new Message {From = msg.From.ToString(), To = msg.To.ToString(), MessageText = msg.Body, Attachments = attachments.ToArray()});
-        }
-
-        private void XmppConnectionOnOnRosterStart(object sender)
-        {
-            Contacts = new List<Contact>();
-        }
-
-        private void XmppConnectionOnOnRosterItem(object sender, RosterItem item)
-        {
-            if (item == null) return;
-
-            var match = qbJidRegex.Match(item.Jid.Bare);
-            string userId = (match.Success && match.Groups.Count > 0) ? match.Groups[1].Value : item.Jid.ToString();
-
-            Contacts.Add(new Contact { UserId = userId, Name = item.Name });
-        }
-
-        private void XmppConnectionOnOnRosterEnd(object sender)
-        {
-            var handler = OnContactsLoaded;
-            if (handler != null)
-                handler(this, new EventArgs());
         }
 
         #endregion
