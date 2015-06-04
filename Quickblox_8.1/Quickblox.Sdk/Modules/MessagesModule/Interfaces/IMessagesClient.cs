@@ -7,14 +7,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
 {
     public interface IMessagesClient
     {
-        event EventHandler OnConnected;
         event EventHandler<Message> OnMessageReceived;
         event EventHandler<Presence> OnPresenceReceived;
-        event EventHandler OnContactsLoaded;
+        event EventHandler OnContactsChanged;
+
         List<Contact> Contacts { get; }
+        List<Presence> Presences { get; }
         bool IsConnected { get; }
-        void Connect(int userId, string password, int applicationId, string chatEndpoint);
-        Task Connect(int userId, string password, int applicationId, string chatEndpoint, TimeSpan timeout);
+
+        Task Connect(string chatEndpoint, int userId, int applicationId, string password);
+        void Disconnect();
         IPrivateChatManager GetPrivateChatManager(int otherUserId);
         IGroupChatManager GetGroupChatManager(string groupJid);
         void ReloadContacts();
