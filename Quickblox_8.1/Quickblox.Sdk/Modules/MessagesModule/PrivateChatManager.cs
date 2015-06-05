@@ -59,7 +59,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             };
 
             var body = new body {Value = message};
-            msg.Add(body);
+            
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory {Value = "1"});
+            
+            msg.Add(body, extraParams);
 
             xmppClient.Send(msg);
         }
