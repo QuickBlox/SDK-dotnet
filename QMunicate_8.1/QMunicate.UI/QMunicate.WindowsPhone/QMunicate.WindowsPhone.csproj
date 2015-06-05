@@ -96,6 +96,10 @@
       <Project>{17aa4da9-1669-4248-a18a-a1438b8a791c}</Project>
       <Name>Quickblox.Sdk.Hmacsha</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Quickblox_8.1\UbietyXmpp\UbietyXmpp.csproj">
+      <Project>{3ce40842-e229-4ade-bb9a-a539453addad}</Project>
+      <Name>UbietyXmpp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\QMunicate.Core\QMunicate.Core.csproj">
       <Project>{b2b5054e-5424-4424-87b7-e6177069f242}</Project>
       <Name>QMunicate.Core</Name>

@@ -8,6 +8,7 @@ using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageBoxProvider;
 using QMunicate.Helper;
+using QMunicate.Models;
 using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace QMunicate.ViewModels
@@ -93,9 +94,9 @@ namespace QMunicate.ViewModels
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                //QuickbloxClient.MessagesClient.Connect(response.Result.User.Id, Password, ApplicationKeys.ApplicationId,
-                //    QuickbloxClient.ChatEndpoint);
-                this.NavigationService.Navigate(ViewLocator.Dialogs, response.Result.Session.UserId);
+               
+                
+                this.NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
             }
             else
             {

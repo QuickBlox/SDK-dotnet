@@ -5,10 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows.Input;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
 using QMunicate.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 
 namespace QMunicate.ViewModels
 {
@@ -21,6 +24,7 @@ namespace QMunicate.ViewModels
         private string chatName;
         private string chatImage;
         private DialogVm dialog;
+        private IPrivateChatManager chatManager;
 
         #endregion
 
@@ -74,6 +78,13 @@ namespace QMunicate.ViewModels
                 ChatName = chatParameter.Dialog.Name;
                 ChatImage = chatParameter.Dialog.Image;
 
+                int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != curentUserId);
+                if (otherUserId != 0)
+                {
+                    chatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
+                    chatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
+                }
+
                 if (dialog.Messages != null && dialog.Messages.Any())
                 {
                     Messages = new ObservableCollection<MessageVm>(dialog.Messages);
@@ -104,7 +115,18 @@ namespace QMunicate.ViewModels
             dialog.Messages.Add(msg);
             dialog.LastActivity = NewMessageText;
 
+            chatManager.SendMessage(NewMessageText);
+
             NewMessageText = "";
+        }
+
+        private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)
+        {
+            MessageVm incomingMessage = new MessageVm();
+            incomingMessage.MessageText = message.MessageText;
+            incomingMessage.MessageType = MessageType.Incoming;
+
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(incomingMessage));
         }
 
         private async void LoadMessages(string dialogId)

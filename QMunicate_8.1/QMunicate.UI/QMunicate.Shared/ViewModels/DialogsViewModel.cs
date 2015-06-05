@@ -1,22 +1,21 @@
-﻿using System;
+﻿using QMunicate.Core.Command;
+using QMunicate.Models;
+using Quickblox.Sdk.Modules.ChatModule.Requests;
+using Quickblox.Sdk.Modules.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Security.Credentials;
 using Windows.UI.Xaml.Navigation;
-using Quickblox.Sdk.Modules.ChatModule.Requests;
-using Quickblox.Sdk.Modules.Models;
-using QMunicate;
-using QMunicate.Core.Command;
-using QMunicate.Models;
 
 namespace QMunicate.ViewModels
 {
     public class DialogsViewModel : ViewModel
     {
         private int currentUserId;
-        private bool isLoaded;
 
         #region Ctor
 
@@ -41,27 +40,39 @@ namespace QMunicate.ViewModels
 
         #region Navigation
 
-        public override void OnNavigatedTo(NavigationEventArgs e)
+        public async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (e.Parameter is int && e.NavigationMode != NavigationMode.Back)
+            var parameter = e.Parameter as DialogsNavigationParameter;
+            if (parameter != null && e.NavigationMode != NavigationMode.Back)
             {
-                isLoaded = false;
                 NavigationService.BackStack.Clear();
-                currentUserId = (int)e.Parameter;
+                currentUserId = parameter.CurrentUserId;
+                
+                await Initialize(parameter.CurrentUserId, parameter.Password);
             }
-
-            LoadDialogs();
         }
 
         #endregion
 
         #region Private methods
 
-        private async void LoadDialogs()
+        private async Task Initialize(int userId, string password)
         {
-            if (isLoaded) return;
+            IsLoading = true;
+            await ConnectToChat(userId, password);
+            await LoadDialogs();
+            IsLoading = false;
+        }
 
-            Dialogs = new ObservableCollection<DialogVm>();
+        private async Task ConnectToChat(int userId, string password)
+        {
+            if (!QuickbloxClient.MessagesClient.IsConnected)
+                await QuickbloxClient.MessagesClient.Connect(QuickbloxClient.ChatEndpoint, userId, ApplicationKeys.ApplicationId, password);
+        }
+
+        private async Task LoadDialogs()
+        {
+            Dialogs.Clear();
             RetrieveDialogsRequest retrieveDialogsRequest = new RetrieveDialogsRequest();
             var response = await QuickbloxClient.ChatClient.GetDialogsAsync(retrieveDialogsRequest);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -70,7 +81,6 @@ namespace QMunicate.ViewModels
                 {
                     Dialogs.Add((DialogVm) dialog);
                 }
-                isLoaded = true;
             }
         }
 

@@ -15,6 +15,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Models;
 
 namespace QMunicate.ViewModels
 {
@@ -108,7 +109,7 @@ namespace QMunicate.ViewModels
             {
                 var loginResponse = await QuickbloxClient.CoreClient.ByEmailAsync(Email, Password);
                 if (loginResponse.StatusCode == HttpStatusCode.Accepted)
-                    NavigationService.Navigate(ViewLocator.Dialogs, loginResponse.Result.User.Id);
+                    NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter { CurrentUserId = loginResponse.Result.User.Id, Password = Password });
                 else
                     await messageBoxProvider.ShowAsync("Error"); //TODO: deserialize properly and show errors from server
             }

@@ -37,6 +37,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private int appId;
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
         private const string qbJidPattern = @"{0}-{1}@chat.quickblox.com";
+        private bool isReady;
 
         #endregion
 
@@ -64,7 +65,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public List<Presence> Presences { get; private set; }
 
-        public bool IsConnected { get; private set; }
+        public bool IsConnected { get { return xmppClient != null && xmppClient.Connected && isReady; } }
 
 #if DEBUG
         public string DebugClientName { get; set; }
@@ -104,6 +105,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             xmppClient.Send(new presence { type = presence.typeEnum.unavailable });
             xmppClient.Disconnect();
+            isReady = false;
         }
 
         public IPrivateChatManager GetPrivateChatManager(int otherUserId)
@@ -165,9 +167,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             client.Settings.AuthenticationTypes = MechanismType.Plain;
             client.Settings.Id = string.Format(qbJidPattern, userId, applicationId);
             client.Settings.Password = password;
-
+            
             client.OnReceive += ClientOnOnReceive;
-            client.OnReady += (sender, args) => IsConnected = true;
+            client.OnReady += (sender, args) => isReady = true;
             client.OnError +=
                 (sender, args) =>
                 {
@@ -181,7 +183,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 #endif
 
             xmppClient = client;
-            IsConnected = false;
+            isReady = false;
             client.Connect();
         }
 

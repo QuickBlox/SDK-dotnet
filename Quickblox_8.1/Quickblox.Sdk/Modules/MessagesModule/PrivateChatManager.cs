@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using XMPP.common;
 using XMPP.tags.jabber.client;
 using Action = agsXMPP.protocol.iq.privacy.Action;
 using Type = agsXMPP.protocol.iq.privacy.Type;
@@ -23,12 +24,15 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #endregion
 
+        public event EventHandler<Message> OnMessageReceived;
+
         #region Ctor
 
         public PrivateChatManager(XMPP.Client xmppClient, string otherUserJid)
         {
             this.otherUserJid = otherUserJid;
             this.xmppClient = xmppClient;
+            this.xmppClient.OnReceive += XmppClientOnOnReceive;
         }
 
         #endregion
@@ -120,6 +124,18 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         #endregion
 
         #region Private methods
+
+        private void XmppClientOnOnReceive(object sender, TagEventArgs tagEventArgs)
+        {
+            var message = tagEventArgs.tag as message;
+            if (message != null && message.from.Contains(otherUserJid))
+            {
+                var handler = OnMessageReceived;
+                if (handler != null)
+                    handler(this, new Message { From = message.from, To = message.to, MessageText = message.body });
+                return;
+            }
+        }
 
         private void SendPresenceInformation(presence.typeEnum type)
         {

@@ -79,9 +79,10 @@
             <TextBlock Text="{Binding ChatName}" FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}"/>
             <Image Grid.Column="1" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55"  HorizontalAlignment="Right" Margin="0 0 12 0"/>
         </Grid>
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Messages}" ItemTemplateSelector="{StaticResource MessageTemplateSelector}">
-
-        </ItemsControl>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Messages}" ItemTemplateSelector="{StaticResource MessageTemplateSelector}" />
+        </ScrollViewer>
+        
         <Border Grid.Row="2" Height="1" Background="Gray"/>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>

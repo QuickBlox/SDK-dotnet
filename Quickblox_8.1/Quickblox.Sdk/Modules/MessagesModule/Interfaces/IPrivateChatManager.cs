@@ -9,6 +9,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
 {
     public interface IPrivateChatManager
     {
+        event EventHandler<Message> OnMessageReceived;
+
         void SendMessage(string message, Attachment attachment = null);
 
         void SubsribeForPresence();

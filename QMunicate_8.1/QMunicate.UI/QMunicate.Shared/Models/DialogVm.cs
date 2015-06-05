@@ -20,6 +20,7 @@ namespace QMunicate.Models
         public string LastActivity { get; set; }
         public int? UnreadMessageCount { get; set; }
         public List<MessageVm> Messages { get; set; }
+        public IList<int> OccupantIds { get; set; }
 
 
         public static explicit operator DialogVm(Dialog dialog)
@@ -31,7 +32,8 @@ namespace QMunicate.Models
                 LastMessageSent = dialog.LastMessageDateSent.HasValue ? dialog.LastMessageDateSent.Value.ToDateTime() : (DateTime?)null,
                 LastActivity = dialog.LastMessage,
                 UnreadMessageCount = dialog.UnreadMessagesCount,
-                Image = dialog.Photo
+                Image = dialog.Photo,
+                OccupantIds = dialog.OccupantsIds
             };
         }
     }
