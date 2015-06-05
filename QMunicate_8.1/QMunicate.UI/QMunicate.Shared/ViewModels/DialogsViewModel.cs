@@ -24,6 +24,8 @@ namespace QMunicate.ViewModels
             Dialogs = new ObservableCollection<DialogVm>();
             OpenChatCommand = new RelayCommand<object>(OpenChatCommandExecute);
             SignOutCommand = new RelayCommand(SignOutCommandExecute);
+            NewMessageCommand = new RelayCommand(NewMessageCommandExecute);
+            SearchCommand = new RelayCommand(SearchCommandExecute);
         }
 
         #endregion
@@ -33,6 +35,10 @@ namespace QMunicate.ViewModels
         public ObservableCollection<DialogVm> Dialogs { get; set; }
 
         public RelayCommand<object> OpenChatCommand { get; set; }
+
+        public ICommand NewMessageCommand { get; set; }
+
+        public ICommand SearchCommand { get; set; }
 
         public ICommand SignOutCommand { get; set; }
 
@@ -106,6 +112,16 @@ namespace QMunicate.ViewModels
         private void OpenChatCommandExecute(object dialog)
         {
             NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter {CurrentUserId = currentUserId, Dialog = dialog as DialogVm});
+        }
+
+        private void NewMessageCommandExecute()
+        {
+
+        }
+
+        private void SearchCommandExecute()
+        {
+
         }
 
         #endregion

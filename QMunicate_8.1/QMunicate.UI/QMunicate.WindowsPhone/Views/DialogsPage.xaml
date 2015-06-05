@@ -50,12 +50,12 @@
     </Grid>
     <Page.BottomAppBar>
         <CommandBar Background="{StaticResource AppBarBrush}">
-            <AppBarButton Label="new message" Command="{Binding LoginCommand}">
+            <AppBarButton Label="new message" Command="{Binding NewMessageCommand}">
                 <AppBarButton.Icon>
                     <SymbolIcon Symbol="Add" Foreground="White"/>
                 </AppBarButton.Icon>
             </AppBarButton>
-            <AppBarButton Label="search" Command="{Binding LoginCommand}">
+            <AppBarButton Label="search" Command="{Binding SearchCommand}">
                 <AppBarButton.Icon>
                     <SymbolIcon Symbol="Find" Foreground="White"/>
                 </AppBarButton.Icon>
