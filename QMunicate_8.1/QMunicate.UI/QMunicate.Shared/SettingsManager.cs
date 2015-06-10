@@ -45,7 +45,7 @@ namespace QMunicate
                 settings.Values.TryGetValue(settingsKey, out value);
             }
 
-            return (T)value;
+            return value == null ? default(T) : (T) value;
         }
 
         public void DeleteFromSettings(string settingsKey)

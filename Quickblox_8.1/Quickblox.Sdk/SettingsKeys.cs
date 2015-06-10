@@ -9,5 +9,8 @@ namespace Quickblox.Sdk
     public class SettingsKeys
     {
         public static string QbToken = "QbToken";
+        public static string PushTokenHash = "PushTokenHash";
+        public static string PushTokenId = "PushTokenId";
+        public static string IsPushSubscriptionCreated = "IsPushSubscriptionCreated";
     }
 }
