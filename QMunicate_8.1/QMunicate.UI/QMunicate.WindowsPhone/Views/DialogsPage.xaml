@@ -61,7 +61,8 @@
                 </AppBarButton.Icon>
             </AppBarButton>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="sign out" Command="{Binding SignOutCommand}"/>
+                <AppBarButton Label="settings" Command="{Binding SettingsCommand}"/>
+                <AppBarButton Label="invite friends" Command="{Binding InviteFriendsCommand}"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

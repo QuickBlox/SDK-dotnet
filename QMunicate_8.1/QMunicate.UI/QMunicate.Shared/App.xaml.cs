@@ -177,6 +177,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.ForgotPassword, typeof(ForgotPasswordPage));
             dictionary.Add(ViewLocator.Dialogs, typeof(DialogsPage));
             dictionary.Add(ViewLocator.Chat, typeof(ChatPage));
+            dictionary.Add(ViewLocator.Settings, typeof(SettingsView));
             return new PageResolver(dictionary);
         }
 

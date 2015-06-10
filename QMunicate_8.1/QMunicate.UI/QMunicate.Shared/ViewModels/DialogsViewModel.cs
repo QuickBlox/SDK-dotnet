@@ -30,9 +30,10 @@ namespace QMunicate.ViewModels
         {
             Dialogs = new ObservableCollection<DialogVm>();
             OpenChatCommand = new RelayCommand<object>(OpenChatCommandExecute);
-            SignOutCommand = new RelayCommand(SignOutCommandExecute);
             NewMessageCommand = new RelayCommand(NewMessageCommandExecute);
             SearchCommand = new RelayCommand(SearchCommandExecute);
+            SettingsCommand = new RelayCommand(SettingsCommandExecute);
+            InviteFriendsCommand = new RelayCommand(InviteFriendsCommandExecute);
         }
 
         #endregion
@@ -47,7 +48,9 @@ namespace QMunicate.ViewModels
 
         public ICommand SearchCommand { get; set; }
 
-        public ICommand SignOutCommand { get; set; }
+        public ICommand SettingsCommand { get; set; }
+
+        public ICommand InviteFriendsCommand { get; set; }
 
         #endregion
 
@@ -150,39 +153,21 @@ namespace QMunicate.ViewModels
 
         private async Task CreatePushSubscriptionIfNeeded()
         {
-            bool subscriptionCreated =
-                SettingsManager.Instance.ReadFromSettings<bool>(SettingsKeys.IsPushSubscriptionCreated);
-            if (!subscriptionCreated)
+            int pushSubscriptionId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.PushSubscriptionId);
+            bool userDisabledPush = SettingsManager.Instance.ReadFromSettings<bool>(SettingsKeys.UserDisabledPush);
+            if (pushSubscriptionId == default(int) && !userDisabledPush)
             {
-                var createSubscriptionsResponse =
-                    await QuickbloxClient.NotificationClient.CreateSubscriptionsAsync(NotificationChannelType.mpns);
+                var createSubscriptionsResponse = await QuickbloxClient.NotificationClient.CreateSubscriptionsAsync(NotificationChannelType.mpns);
                 if (createSubscriptionsResponse.StatusCode == HttpStatusCode.Created)
                 {
-                    SettingsManager.Instance.WriteToSettings(SettingsKeys.IsPushSubscriptionCreated, true);
+                    var subscription = createSubscriptionsResponse.Result.FirstOrDefault();
+                    if(subscription != null)
+                        SettingsManager.Instance.WriteToSettings(SettingsKeys.PushSubscriptionId, subscription.Subscription.Id);
                 }
             }
         }
 
         #endregion
-
-        private async void SignOutCommandExecute()
-        {
-            try
-            {
-                var passwordVault = new PasswordVault();
-                var credentials = passwordVault.FindAllByResource(ApplicationKeys.QMunicateCredentials);
-                if (credentials != null && credentials.Any())
-                {
-                    passwordVault.Remove(credentials[0]);
-                }
-                }
-            catch (Exception)
-            {
-            }
-
-            NavigationService.Navigate(ViewLocator.SignUp);
-            NavigationService.BackStack.Clear();
-        }
 
         private void OpenChatCommandExecute(object dialog)
         {
@@ -200,6 +185,16 @@ namespace QMunicate.ViewModels
         }
 
         private void SearchCommandExecute()
+        {
+
+        }
+
+        private void SettingsCommandExecute()
+        {
+            NavigationService.Navigate(ViewLocator.Settings);
+        }
+
+        private void InviteFriendsCommandExecute()
         {
 
         }

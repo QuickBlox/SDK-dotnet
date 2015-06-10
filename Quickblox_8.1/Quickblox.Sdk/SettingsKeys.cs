@@ -11,6 +11,7 @@ namespace Quickblox.Sdk
         public static string QbToken = "QbToken";
         public static string PushTokenHash = "PushTokenHash";
         public static string PushTokenId = "PushTokenId";
-        public static string IsPushSubscriptionCreated = "IsPushSubscriptionCreated";
+        public static string PushSubscriptionId = "PushSubscriptionId";
+        public static string UserDisabledPush = "UserDisabledPush";
     }
 }

@@ -68,12 +68,12 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="type">Notification channel type.</param>
         /// <returns>Success HTTP Status Code 201</returns>
-        public async Task<HttpResponse> CreateSubscriptionsAsync(NotificationChannelType type)
+        public async Task<HttpResponse<CreateSubscriptionResponseItem[]>> CreateSubscriptionsAsync(NotificationChannelType type)
         {
             
             var createSubscriptions = new CreateSubscriptionsRequest {Name = type};
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var resultSubscriptionResponse = await HttpService.PostAsync<Object, CreateSubscriptionsRequest>(this.quickbloxClient.ApiEndPoint,
+            var resultSubscriptionResponse = await HttpService.PostAsync<CreateSubscriptionResponseItem[], CreateSubscriptionsRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.SubscriptionsMethod,
                                                                                                         createSubscriptions,
                                                                                                         headers);
