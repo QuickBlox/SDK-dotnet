@@ -47,10 +47,6 @@
     <Compile Include="DependencyInjection\LifetimeMode.cs" />
     <Compile Include="DependencyInjection\TypeBinding.cs" />
     <Compile Include="DependencyInjection\TypeBindingBase.cs" />
-    <Compile Include="MessageBoxProvider\IMessageBoxProvider.cs" />
-    <Compile Include="MessageBoxProvider\MessageBoxButton.cs" />
-    <Compile Include="MessageBoxProvider\MessageBoxProvider.cs" />
-    <Compile Include="MessageBoxProvider\MessageBoxResult.cs" />
     <Compile Include="MessageService\DialogCommand.cs" />
     <Compile Include="MessageService\IMessageService.cs" />
     <Compile Include="MessageService\MessageService.cs" />

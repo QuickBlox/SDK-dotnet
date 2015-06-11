@@ -1,5 +1,4 @@
 ﻿using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.MessageBoxProvider;
 using QMunicate.Core.Navigation;
 using QMunicate.Helper;
 using QMunicate.Views;
@@ -43,7 +42,6 @@ namespace QMunicate
         {
             Factory.CommonFactory.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
             Factory.CommonFactory.Bind<QuickbloxClient, QuickbloxClient>(LifetimeMode.Singleton);
-            Factory.CommonFactory.Bind<IMessageBoxProvider, MessageBoxProvider>(LifetimeMode.Singleton);
             Factory.CommonFactory.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
 
             this.InitializeComponent();
