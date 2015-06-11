@@ -7,6 +7,8 @@ using System.Windows.Input;
 using Windows.Security.Credentials;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageService;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.NotificationModule.Models;
 
@@ -26,6 +28,7 @@ namespace QMunicate.ViewModels
         public SettingsViewModel()
         {
             SignOutCommand = new RelayCommand(SignOutCommandExecute);
+            DeleteAccountCommand = new RelayCommand(DeleteAccountCommandExecute);
         }
 
         #endregion
@@ -51,6 +54,8 @@ namespace QMunicate.ViewModels
         }
 
         public ICommand SignOutCommand { get; set; }
+
+        public ICommand DeleteAccountCommand { get; set; }
 
         #endregion
 
@@ -107,6 +112,14 @@ namespace QMunicate.ViewModels
 
         private async void SignOutCommandExecute()
         {
+            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            DialogCommand logoutCommand = new DialogCommand("logout", new RelayCommand(SignOut));
+            DialogCommand cancelCommand = new DialogCommand("cancel", new RelayCommand(() => { }), false, true);
+            await messageService.ShowAsync("Logout", "Do you really want to logout?", new [] {logoutCommand, cancelCommand});
+        }
+
+        private void SignOut()
+        {
             try
             {
                 var passwordVault = new PasswordVault();
@@ -122,6 +135,11 @@ namespace QMunicate.ViewModels
 
             NavigationService.Navigate(ViewLocator.SignUp);
             NavigationService.BackStack.Clear();
+        }
+
+        private async void DeleteAccountCommandExecute()
+        {
+
         }
 
         #endregion

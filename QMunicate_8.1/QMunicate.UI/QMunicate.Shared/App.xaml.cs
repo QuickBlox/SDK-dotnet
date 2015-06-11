@@ -19,6 +19,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.MessageService;
 using QMunicate.Models;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
@@ -43,6 +44,7 @@ namespace QMunicate
             Factory.CommonFactory.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
             Factory.CommonFactory.Bind<QuickbloxClient, QuickbloxClient>(LifetimeMode.Singleton);
             Factory.CommonFactory.Bind<IMessageBoxProvider, MessageBoxProvider>(LifetimeMode.Singleton);
+            Factory.CommonFactory.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
 
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
