@@ -57,11 +57,22 @@ namespace QMunicate.ViewModels
             set { Set(ref userImage, value); }
         }
 
-        public ICommand ChoosePhotoCommand { get; set; }
+        public RelayCommand ChoosePhotoCommand { get; set; }
 
-        public ICommand SignUpCommand { get; set; }
+        public RelayCommand SignUpCommand { get; set; }
 
-        public ICommand LoginCommand { get; set; }
+        public RelayCommand LoginCommand { get; set; }
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            ChoosePhotoCommand.RaiseCanExecuteChanged();
+            SignUpCommand.RaiseCanExecuteChanged();
+            LoginCommand.RaiseCanExecuteChanged();
+        }
+
+        #endregion
 
 
         public override void OnNavigatedTo(NavigationEventArgs e)

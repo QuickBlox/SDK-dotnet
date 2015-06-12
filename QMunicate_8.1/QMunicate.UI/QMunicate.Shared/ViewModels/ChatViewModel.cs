@@ -33,7 +33,7 @@ namespace QMunicate.ViewModels
         public ChatViewModel()
         {
             Messages = new ObservableCollection<MessageVm>();
-            SendCommand = new RelayCommand(SendCommandExecute);
+            SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -54,7 +54,7 @@ namespace QMunicate.ViewModels
             set { Set(ref chatName, value); }
         }
 
-        public ICommand SendCommand { get; set; }
+        public RelayCommand SendCommand { get; set; }
 
         public string ChatImage
         {
@@ -94,6 +94,15 @@ namespace QMunicate.ViewModels
                     LoadMessages(chatParameter.Dialog.Id);
                 }
             }
+        }
+
+        #endregion
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            SendCommand.RaiseCanExecuteChanged();
         }
 
         #endregion

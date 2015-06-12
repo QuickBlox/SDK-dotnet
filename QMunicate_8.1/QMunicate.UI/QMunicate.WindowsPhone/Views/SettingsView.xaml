@@ -15,7 +15,8 @@
     <Grid>
         <StackPanel>
             <TextBlock Text="SETTINGS" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
-            <ToggleSwitch Header="Push notifications" Margin="{StaticResource DefaultMargin}" IsOn="{Binding IsPushEnabled, Mode=TwoWay}" />
+            <ToggleSwitch Header="Push notifications" Margin="{StaticResource DefaultMargin}" IsOn="{Binding IsPushEnabled, Mode=TwoWay}"
+                          IsEnabled="{Binding IsLoading, Converter={StaticResource BooleanToNegationConverter}}"/>
             <HyperlinkButton Content="logout" Command="{Binding SignOutCommand}"  Margin="{StaticResource DefaultMargin}"/>
             <HyperlinkButton Content="delete my account" Command="{Binding DeleteAccountCommand}"  Foreground="Red" Margin="12 0 12 12"/>
         </StackPanel>

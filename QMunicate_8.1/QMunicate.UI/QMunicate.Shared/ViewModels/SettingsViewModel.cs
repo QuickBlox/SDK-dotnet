@@ -27,8 +27,8 @@ namespace QMunicate.ViewModels
 
         public SettingsViewModel()
         {
-            SignOutCommand = new RelayCommand(SignOutCommandExecute);
-            DeleteAccountCommand = new RelayCommand(DeleteAccountCommandExecute);
+            SignOutCommand = new RelayCommand(SignOutCommandExecute, () => !IsLoading);
+            DeleteAccountCommand = new RelayCommand(DeleteAccountCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -53,9 +53,9 @@ namespace QMunicate.ViewModels
             }
         }
 
-        public ICommand SignOutCommand { get; set; }
+        public RelayCommand SignOutCommand { get; set; }
 
-        public ICommand DeleteAccountCommand { get; set; }
+        public RelayCommand DeleteAccountCommand { get; set; }
 
         #endregion
 
@@ -69,6 +69,16 @@ namespace QMunicate.ViewModels
                 isSettingPushEnabledFromCode = true;
                 IsPushEnabled = true;
             }
+        }
+
+        #endregion
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            SignOutCommand.RaiseCanExecuteChanged();
+            DeleteAccountCommand.RaiseCanExecuteChanged();
         }
 
         #endregion

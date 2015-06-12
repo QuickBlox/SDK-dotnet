@@ -56,9 +56,19 @@ namespace QMunicate.ViewModels
             set { Set(ref rememberMe, value); }
         }
 
-        public ICommand ForgotPasswordCommand { get; set; }
+        public RelayCommand ForgotPasswordCommand { get; set; }
 
-        public ICommand LoginCommand { get; set; }
+        public RelayCommand LoginCommand { get; set; }
+
+        #endregion
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            ForgotPasswordCommand.RaiseCanExecuteChanged();
+            LoginCommand.RaiseCanExecuteChanged();
+        }
 
         #endregion
 

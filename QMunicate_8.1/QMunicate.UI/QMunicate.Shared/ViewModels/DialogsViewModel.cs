@@ -29,11 +29,11 @@ namespace QMunicate.ViewModels
         public DialogsViewModel()
         {
             Dialogs = new ObservableCollection<DialogVm>();
-            OpenChatCommand = new RelayCommand<object>(OpenChatCommandExecute);
-            NewMessageCommand = new RelayCommand(NewMessageCommandExecute);
-            SearchCommand = new RelayCommand(SearchCommandExecute);
-            SettingsCommand = new RelayCommand(SettingsCommandExecute);
-            InviteFriendsCommand = new RelayCommand(InviteFriendsCommandExecute);
+            OpenChatCommand = new RelayCommand<object>(OpenChatCommandExecute, obj => !IsLoading);
+            NewMessageCommand = new RelayCommand(NewMessageCommandExecute, () => !IsLoading);
+            SearchCommand = new RelayCommand(SearchCommandExecute, () => !IsLoading);
+            SettingsCommand = new RelayCommand(SettingsCommandExecute, () => !IsLoading);
+            InviteFriendsCommand = new RelayCommand(InviteFriendsCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -44,13 +44,13 @@ namespace QMunicate.ViewModels
 
         public RelayCommand<object> OpenChatCommand { get; set; }
 
-        public ICommand NewMessageCommand { get; set; }
+        public RelayCommand NewMessageCommand { get; set; }
 
-        public ICommand SearchCommand { get; set; }
+        public RelayCommand SearchCommand { get; set; }
 
-        public ICommand SettingsCommand { get; set; }
+        public RelayCommand SettingsCommand { get; set; }
 
-        public ICommand InviteFriendsCommand { get; set; }
+        public RelayCommand InviteFriendsCommand { get; set; }
 
         #endregion
 
@@ -67,6 +67,19 @@ namespace QMunicate.ViewModels
                 await InitializeChat(parameter.CurrentUserId, parameter.Password);
             }
             await InitializePush();
+        }
+
+        #endregion
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            OpenChatCommand.RaiseCanExecuteChanged();
+            NewMessageCommand.RaiseCanExecuteChanged();
+            SearchCommand.RaiseCanExecuteChanged();
+            SettingsCommand.RaiseCanExecuteChanged();
+            InviteFriendsCommand.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -105,10 +118,12 @@ namespace QMunicate.ViewModels
 
         private async Task InitializePush()
         {
+            IsLoading = true;
             var pushChannel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
             pushChannel.PushNotificationReceived += PushChannelOnPushNotificationReceived;
             await CheckAndUpdatePushToken(pushChannel);
             await CreatePushSubscriptionIfNeeded();
+            IsLoading = false;
         }
 
         private void PushChannelOnPushNotificationReceived(PushNotificationChannel sender,

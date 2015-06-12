@@ -25,6 +25,7 @@
             <SolidColorBrush x:Key="AppBarBrush" Color="{StaticResource AppBarColor}"  />
 
             <converters:StringFormatConverter x:Key="StringFormatConverter" />
+            <converters:BooleanToNegationConverter x:Key="BooleanToNegationConverter"/>
 
             <viewModels:ViewModelLocator x:Key="Locator"  />
             <resources:LocalizedStrings x:Key="LocalizedStrings"  />
