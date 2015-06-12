@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace Quickblox.Sdk.GeneralDataModel.Response
@@ -7,7 +8,7 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
     {
         public String RawData { get; set; }
 
-        public Error Error { get; set; }
+        public Dictionary<string, string[]> Errors { get; set; }
 
         public HttpStatusCode StatusCode { get; set; }
     }

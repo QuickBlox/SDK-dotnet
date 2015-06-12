@@ -56,11 +56,11 @@ namespace QMunicate.ViewModels
             {
                 await messageService.ShowAsync("Reset", "A link to reset your password was sent to your email.");
             }
-
             else if (response.StatusCode == HttpStatusCode.NotFound)
             {
                 await messageService.ShowAsync("Not found", "The user with this email wasn't found.");
             }
+            else await Helpers.ShowErrors(response.Errors, messageService);
         }
 
         #endregion

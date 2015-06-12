@@ -89,14 +89,6 @@ namespace QMunicate.ViewModels
                 return;
             }
 
-            //TODO: delete this and show error messages from server instead
-            if (Password.Length < 8)
-            {
-                await messageService.ShowAsync("Message", "Password is too short (minimum is 8 characters)");
-                return;
-            }
-            
-
             IsLoading = true;
 
             await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
@@ -109,12 +101,15 @@ namespace QMunicate.ViewModels
             {
                 var loginResponse = await QuickbloxClient.CoreClient.ByEmailAsync(Email, Password);
                 if (loginResponse.StatusCode == HttpStatusCode.Accepted)
-                    NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter { CurrentUserId = loginResponse.Result.User.Id, Password = Password });
-                else
-                    await messageService.ShowAsync("Error", "Error happened"); //TODO: deserialize properly and show errors from server
+                    NavigationService.Navigate(ViewLocator.Dialogs,
+                        new DialogsNavigationParameter
+                        {
+                            CurrentUserId = loginResponse.Result.User.Id,
+                            Password = Password
+                        });
+                else await Helpers.ShowErrors(response.Errors, messageService);
             }
-            else
-                await messageService.ShowAsync("Error", "Error happened"); //TODO: deserialize properly and show errors from server
+            else await Helpers.ShowErrors(response.Errors, messageService);
 
             IsLoading = false;
         }

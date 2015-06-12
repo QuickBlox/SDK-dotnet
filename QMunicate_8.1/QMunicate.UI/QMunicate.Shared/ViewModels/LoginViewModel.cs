@@ -96,10 +96,7 @@ namespace QMunicate.ViewModels
             {
                 this.NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
             }
-            else
-            {
-                await messageService.ShowAsync("Error", "Error happened");
-            }
+            else await Helpers.ShowErrors(response.Errors, messageService);
 
             IsLoading = false;
         }
