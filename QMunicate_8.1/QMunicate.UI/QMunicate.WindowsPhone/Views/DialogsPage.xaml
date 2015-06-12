@@ -7,6 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tapListener="using:QMunicate.Core.TapListener"
     xmlns:viewModels="using:QMunicate.ViewModels"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:QMunicate.Behaviors"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
@@ -48,6 +50,10 @@
             </ItemsControl>
         </ScrollViewer>
     </Grid>
+
+    <i:Interaction.Behaviors>
+        <behaviors:StatusBarBehavior IsLoading="{Binding IsLoading}"/>
+    </i:Interaction.Behaviors>
     <Page.BottomAppBar>
         <CommandBar Background="{StaticResource AppBarBrush}">
             <AppBarButton Label="new message" Command="{Binding NewMessageCommand}">

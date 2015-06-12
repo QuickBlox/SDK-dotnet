@@ -110,4 +110,8 @@
             </Button>
         </Grid>
     </Grid>
+
+    <i:Interaction.Behaviors>
+        <behaviors:StatusBarBehavior IsLoading="{Binding IsLoading}"/>
+    </i:Interaction.Behaviors>
 </Page>

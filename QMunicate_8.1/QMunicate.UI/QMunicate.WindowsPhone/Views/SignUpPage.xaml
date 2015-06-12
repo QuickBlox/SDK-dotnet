@@ -7,6 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:QMunicate.Controls"
     xmlns:system="using:System"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:QMunicate.Behaviors"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
@@ -31,7 +33,11 @@
                              FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}" />
         </StackPanel>
     </Grid>
-    
+
+    <interactivity:Interaction.Behaviors>
+        <behaviors:StatusBarBehavior IsLoading="{Binding IsLoading}"/>
+    </interactivity:Interaction.Behaviors>
+
     <Page.BottomAppBar>
         <CommandBar Background="{StaticResource AppBarBrush}">
             <AppBarButton Label="Done" Command="{Binding SignUpCommand}">

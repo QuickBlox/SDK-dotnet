@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\ListBoxAutoscrollBehavior.cs" />
+    <Compile Include="Behaviors\StatusBarBehavior.cs" />
     <Compile Include="Views\ChatPage.xaml.cs">
       <DependentUpon>ChatPage.xaml</DependentUpon>
     </Compile>

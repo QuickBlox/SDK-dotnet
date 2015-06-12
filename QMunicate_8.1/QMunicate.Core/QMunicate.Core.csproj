@@ -47,6 +47,7 @@
     <Compile Include="DependencyInjection\LifetimeMode.cs" />
     <Compile Include="DependencyInjection\TypeBinding.cs" />
     <Compile Include="DependencyInjection\TypeBindingBase.cs" />
+    <Compile Include="Extensions\AsyncExtensions.cs" />
     <Compile Include="MessageService\DialogCommand.cs" />
     <Compile Include="MessageService\IMessageService.cs" />
     <Compile Include="MessageService\MessageService.cs" />
