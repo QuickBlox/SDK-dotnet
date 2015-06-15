@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Quickblox.Sdk.GeneralDataModel.Response
 {
     public class ErrorResponse
     {
         [JsonProperty("errors")]
-        public Error Error { get; set; }
+        public Dictionary<string, string[]> Errors { get; set; }
     }
 }

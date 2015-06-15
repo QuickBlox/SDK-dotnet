@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.MessageBoxProvider;
+using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using Quickblox.Sdk;
 using Quickblox.Sdk.GeneralDataModel.Models;
@@ -24,7 +24,7 @@ namespace QMunicate.ViewModels
 
         public ForgotPasswordViewModel()
         {
-            ResetCommand = new RelayCommand(ResetCommandExecute);
+            ResetCommand = new RelayCommand(ResetCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -37,7 +37,16 @@ namespace QMunicate.ViewModels
             set { Set(ref email, value); }
         }
 
-        public ICommand ResetCommand { get; private set; }
+        public RelayCommand ResetCommand { get; private set; }
+
+        #endregion
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            ResetCommand.RaiseCanExecuteChanged();
+        }
 
         #endregion
 
@@ -50,17 +59,17 @@ namespace QMunicate.ViewModels
                         new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
             var response = await QuickbloxClient.UsersClient.ResetUserPasswordByEmailAsync(Email);
 
-            var messageBoxProvider = Factory.CommonFactory.GetInstance<IMessageBoxProvider>();
+            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                await messageBoxProvider.ShowAsync("Reset", "A link to reset your password was sent to your email.");
+                await messageService.ShowAsync("Reset", "A link to reset your password was sent to your email.");
             }
-
             else if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                await messageBoxProvider.ShowAsync("Not found", "The user with this email wasn't found.");
+                await messageService.ShowAsync("Not found", "The user with this email wasn't found.");
             }
+            else await Helpers.ShowErrors(response.Errors, messageService);
         }
 
         #endregion

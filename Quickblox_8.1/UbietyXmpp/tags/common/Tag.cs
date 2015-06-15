@@ -80,7 +80,7 @@ namespace XMPP.tags
             set
             {
                 if (string.IsNullOrEmpty(Account))
-                    Add(new XComment("[AC]" + value.ToString()));
+                    Add(new XComment("[AC]" + value));
             }
         }
 

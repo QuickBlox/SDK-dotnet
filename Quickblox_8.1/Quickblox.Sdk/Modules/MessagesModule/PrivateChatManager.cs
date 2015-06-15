@@ -2,41 +2,37 @@
 using agsXMPP.protocol.iq.privacy;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Quickblox.Sdk.Serializer;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using XMPP.common;
+using XMPP.tags.jabber.client;
 using Action = agsXMPP.protocol.iq.privacy.Action;
-using AgsMessage = agsXMPP.protocol.client.Message;
-using AgsPresence = agsXMPP.protocol.client.Presence;
-using PresenceType = Quickblox.Sdk.Modules.MessagesModule.Models.PresenceType;
 using Type = agsXMPP.protocol.iq.privacy.Type;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
-    //TODO: use conditions if something was different
-    #if Xamarin
-    #endif
-
     public class PrivateChatManager : IPrivateChatManager
     {
-        //this is some change
-        private string banListName = "banList";
-
         #region Fields
 
+        private XMPP.Client xmppClient;
+        private string banListName = "banList";
         private readonly XmppClientConnection xmpp;
         private readonly string otherUserJid;
 
         #endregion
 
+        public event EventHandler<Message> OnMessageReceived;
+
         #region Ctor
 
-        public PrivateChatManager(XmppClientConnection xmppConnection, string otherUserJid)
+        public PrivateChatManager(XMPP.Client xmppClient, string otherUserJid)
         {
             this.otherUserJid = otherUserJid;
-            xmpp = xmppConnection;
+            this.xmppClient = xmppClient;
+            this.xmppClient.OnReceive += XmppClientOnOnReceive;
         }
 
         #endregion
@@ -45,41 +41,60 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void SendMessage(string message, Attachment attachment = null)
         {
-            var msg = new AgsMessage(otherUserJid, agsXMPP.protocol.client.MessageType.chat, message);
             if (attachment != null)
             {
-                XmlSerializer xmlSerializer = new XmlSerializer();
-                string attachemntXml = xmlSerializer.Serialize(attachment);
-                msg.AddTag("extraParams", attachemntXml);
+                throw new NotImplementedException("Attachments are not supported yet");
+
+                //var msg = new AgsMessage(otherUserJid, agsXMPP.protocol.client.MessageType.chat, message);
+                //if (attachment != null)
+                //{
+                //    XmlSerializer xmlSerializer = new XmlSerializer();
+                //    string attachemntXml = xmlSerializer.Serialize(attachment);
+                //    msg.AddTag("extraParams", attachemntXml);
+                //}
+
+                //xmpp.Send(msg);
             }
 
-            xmpp.Send(msg);
+            var msg = new message
+            {
+                to = otherUserJid,
+                type = XMPP.tags.jabber.client.message.typeEnum.chat
+            };
+
+            var body = new body {Value = message};
+            
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory {Value = "1"});
+            
+            msg.Add(body, extraParams);
+
+            xmppClient.Send(msg);
         }
+
+        #region Presence
 
         public void SubsribeForPresence()
         {
-            SendPresenceInformation(PresenceType.subscribe);
+            SendPresenceInformation(presence.typeEnum.subscribe);
         }
 
         public void ApproveSubscribtionRequest()
         {
-            SendPresenceInformation(PresenceType.subscribe);
+            SendPresenceInformation(presence.typeEnum.subscribed);
         }
 
         public void DeclineSubscribtionRequest()
         {
-            SendPresenceInformation(PresenceType.unsubscribed);
+            SendPresenceInformation(presence.typeEnum.unsubscribed);
         }
 
         public void Unsubscribe()
         {
-            SendPresenceInformation(PresenceType.unsubscribe);
+            SendPresenceInformation(presence.typeEnum.unsubscribe);
         }
 
-        public void SendPresenceInformation(PresenceType presenceType)
-        {
-            xmpp.Send(new AgsPresence { Type = (agsXMPP.protocol.client.PresenceType)presenceType, To = new Jid(otherUserJid) });
-        }
+        #endregion
 
         public async Task Block()
         {
@@ -109,6 +124,23 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         #endregion
 
         #region Private methods
+
+        private void XmppClientOnOnReceive(object sender, TagEventArgs tagEventArgs)
+        {
+            var message = tagEventArgs.tag as message;
+            if (message != null && message.from.Contains(otherUserJid))
+            {
+                var handler = OnMessageReceived;
+                if (handler != null)
+                    handler(this, new Message { From = message.from, To = message.to, MessageText = message.body });
+                return;
+            }
+        }
+
+        private void SendPresenceInformation(presence.typeEnum type)
+        {
+            xmppClient.Send(new presence { type = type, to = otherUserJid });
+        }
 
         private async Task<List> GetBanListAsync()
         {

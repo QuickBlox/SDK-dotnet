@@ -7,6 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tapListener="using:QMunicate.Core.TapListener"
     xmlns:viewModels="using:QMunicate.ViewModels"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:QMunicate.Behaviors"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
@@ -48,20 +50,25 @@
             </ItemsControl>
         </ScrollViewer>
     </Grid>
+
+    <i:Interaction.Behaviors>
+        <behaviors:StatusBarBehavior IsLoading="{Binding IsLoading}"/>
+    </i:Interaction.Behaviors>
     <Page.BottomAppBar>
         <CommandBar Background="{StaticResource AppBarBrush}">
-            <AppBarButton Label="new message" Command="{Binding LoginCommand}">
+            <AppBarButton Label="new message" Command="{Binding NewMessageCommand}">
                 <AppBarButton.Icon>
                     <SymbolIcon Symbol="Add" Foreground="White"/>
                 </AppBarButton.Icon>
             </AppBarButton>
-            <AppBarButton Label="search" Command="{Binding LoginCommand}">
+            <AppBarButton Label="search" Command="{Binding SearchCommand}">
                 <AppBarButton.Icon>
                     <SymbolIcon Symbol="Find" Foreground="White"/>
                 </AppBarButton.Icon>
             </AppBarButton>
             <CommandBar.SecondaryCommands>
-                <AppBarButton Label="sign out" Command="{Binding SignOutCommand}"/>
+                <AppBarButton Label="settings" Command="{Binding SettingsCommand}"/>
+                <AppBarButton Label="invite friends" Command="{Binding InviteFriendsCommand}"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>

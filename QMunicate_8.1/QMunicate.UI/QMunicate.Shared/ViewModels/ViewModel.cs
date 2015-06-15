@@ -23,7 +23,11 @@ namespace QMunicate.ViewModels
         public Boolean IsLoading
         {
             get { return this.isLoading; }
-            set { this.Set(ref this.isLoading, value); }
+            set
+            {
+                if(Set(ref this.isLoading, value))
+                    OnIsLoadingChanged(); 
+            }
         }
 
         public RelayCommand GoBackCommand { get; set; }
@@ -42,6 +46,8 @@ namespace QMunicate.ViewModels
         {
             return this.NavigationService.CanGoBack;
         }
+
+        protected virtual void OnIsLoadingChanged() { }
 
         public virtual void OnNavigatedTo(NavigationEventArgs e)
         {

@@ -135,7 +135,7 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
             var firstFile = getFilesResponse.Result.Items.Last();
 
             var downloadFileResponse = await this.client.ContentClient.DownloadFileAsync(firstFile.Blob.Uid);
-            Assert.IsNotNull(downloadFileResponse.Error);
+            Assert.IsNotNull(downloadFileResponse.Errors);
         }
     }
 }

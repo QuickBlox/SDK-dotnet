@@ -1,5 +1,4 @@
 ﻿using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.MessageBoxProvider;
 using QMunicate.Core.Navigation;
 using QMunicate.Helper;
 using QMunicate.Views;
@@ -19,6 +18,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.MessageService;
+using QMunicate.Models;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -41,7 +42,7 @@ namespace QMunicate
         {
             Factory.CommonFactory.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
             Factory.CommonFactory.Bind<QuickbloxClient, QuickbloxClient>(LifetimeMode.Singleton);
-            Factory.CommonFactory.Bind<IMessageBoxProvider, MessageBoxProvider>(LifetimeMode.Singleton);
+            Factory.CommonFactory.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
 
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
@@ -159,7 +160,7 @@ namespace QMunicate
                         deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    navigationService.Navigate(ViewLocator.Dialogs, response.Result.Session.UserId);
+                    navigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter { CurrentUserId = response.Result.Session.UserId, Password = password });
                     return;
                 }
             }
@@ -176,6 +177,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.ForgotPassword, typeof(ForgotPasswordPage));
             dictionary.Add(ViewLocator.Dialogs, typeof(DialogsPage));
             dictionary.Add(ViewLocator.Chat, typeof(ChatPage));
+            dictionary.Add(ViewLocator.Settings, typeof(SettingsView));
             return new PageResolver(dictionary);
         }
 

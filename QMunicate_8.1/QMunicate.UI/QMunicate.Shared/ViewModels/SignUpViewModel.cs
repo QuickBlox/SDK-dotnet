@@ -1,6 +1,5 @@
 ﻿using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.MessageBoxProvider;
 using QMunicate.Helper;
 using Quickblox.Sdk;
 using Quickblox.Sdk.GeneralDataModel.Models;
@@ -15,6 +14,8 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.MessageService;
+using QMunicate.Models;
 
 namespace QMunicate.ViewModels
 {
@@ -56,11 +57,22 @@ namespace QMunicate.ViewModels
             set { Set(ref userImage, value); }
         }
 
-        public ICommand ChoosePhotoCommand { get; set; }
+        public RelayCommand ChoosePhotoCommand { get; set; }
 
-        public ICommand SignUpCommand { get; set; }
+        public RelayCommand SignUpCommand { get; set; }
 
-        public ICommand LoginCommand { get; set; }
+        public RelayCommand LoginCommand { get; set; }
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            ChoosePhotoCommand.RaiseCanExecuteChanged();
+            SignUpCommand.RaiseCanExecuteChanged();
+            LoginCommand.RaiseCanExecuteChanged();
+        }
+
+        #endregion
 
 
         public override void OnNavigatedTo(NavigationEventArgs e)
@@ -80,21 +92,13 @@ namespace QMunicate.ViewModels
 
         private async void SignUpCommandExecute()
         {
-            var messageBoxProvider = Factory.CommonFactory.GetInstance<IMessageBoxProvider>();
-
+            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            
             if (string.IsNullOrWhiteSpace(FullName) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
-                await messageBoxProvider.ShowAsync("Message", "Please fill all empty input fields");
+                await messageService.ShowAsync("Message", "Please fill all empty input fields");
                 return;
             }
-
-            //TODO: delete this and show error messages from server instead
-            if (Password.Length < 8)
-            {
-                await messageBoxProvider.ShowAsync("Message", "Password is too short (minimum is 8 characters)");
-                return;
-            }
-            
 
             IsLoading = true;
 
@@ -108,12 +112,15 @@ namespace QMunicate.ViewModels
             {
                 var loginResponse = await QuickbloxClient.CoreClient.ByEmailAsync(Email, Password);
                 if (loginResponse.StatusCode == HttpStatusCode.Accepted)
-                    NavigationService.Navigate(ViewLocator.Dialogs, loginResponse.Result.User.Id);
-                else
-                    await messageBoxProvider.ShowAsync("Error"); //TODO: deserialize properly and show errors from server
+                    NavigationService.Navigate(ViewLocator.Dialogs,
+                        new DialogsNavigationParameter
+                        {
+                            CurrentUserId = loginResponse.Result.User.Id,
+                            Password = Password
+                        });
+                else await Helpers.ShowErrors(response.Errors, messageService);
             }
-            else
-                await messageBoxProvider.ShowAsync("Error"); //TODO: deserialize properly and show errors from server
+            else await Helpers.ShowErrors(response.Errors, messageService);
 
             IsLoading = false;
         }

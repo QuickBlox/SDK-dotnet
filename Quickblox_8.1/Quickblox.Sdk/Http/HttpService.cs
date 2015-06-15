@@ -89,11 +89,12 @@ namespace Quickblox.Sdk.Http
                     serializer = serializer ??
                                  FactorySerializer.CreateSerializer(response.Content.Headers.ContentType.MediaType);
                     var error = serializer.Deserialize<ErrorResponse>(stringContent);
-                    httpResponse.Error = error.Error;
+                    httpResponse.Errors = error.Errors;
                 }
                 catch (Exception)
                 {
-                    httpResponse.Error = new Error() {Text = new[] {stringContent}};
+                    httpResponse.Errors = new Dictionary<string, string[]>();
+                    httpResponse.Errors.Add(" ", new []{stringContent});
                 }
             }
 
@@ -264,11 +265,12 @@ namespace Quickblox.Sdk.Http
                 try
                 {
                     var error = serializer.Deserialize<ErrorResponse>(stringContent);
-                    httpResponse.Error = error.Error;
+                    httpResponse.Errors = error.Errors;
                 }
                 catch (Exception)
                 {
-                    httpResponse.Error = new Error() {Text = new[] {stringContent}};
+                    httpResponse.Errors = new Dictionary<string, string[]>();
+                    httpResponse.Errors.Add(" ", new[] { stringContent });
                 }
             }
 

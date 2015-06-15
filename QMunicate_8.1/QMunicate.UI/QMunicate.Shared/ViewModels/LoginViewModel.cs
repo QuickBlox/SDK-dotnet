@@ -6,8 +6,9 @@ using System.Windows.Input;
 using Windows.Security.Credentials;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.MessageBoxProvider;
+using QMunicate.Core.MessageService;
 using QMunicate.Helper;
+using QMunicate.Models;
 using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace QMunicate.ViewModels
@@ -55,9 +56,19 @@ namespace QMunicate.ViewModels
             set { Set(ref rememberMe, value); }
         }
 
-        public ICommand ForgotPasswordCommand { get; set; }
+        public RelayCommand ForgotPasswordCommand { get; set; }
 
-        public ICommand LoginCommand { get; set; }
+        public RelayCommand LoginCommand { get; set; }
+
+        #endregion
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            ForgotPasswordCommand.RaiseCanExecuteChanged();
+            LoginCommand.RaiseCanExecuteChanged();
+        }
 
         #endregion
 
@@ -70,11 +81,11 @@ namespace QMunicate.ViewModels
 
         private async void LoginCommandExecute()
         {
-            var messageBoxProvider = Factory.CommonFactory.GetInstance<IMessageBoxProvider>();
+            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
 
             if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
-                await messageBoxProvider.ShowAsync("Message", "Please fill all empty input fields");
+                await messageService.ShowAsync("Message", "Please fill all empty input fields");
                 return;
             }
 
@@ -93,14 +104,9 @@ namespace QMunicate.ViewModels
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                //QuickbloxClient.MessagesClient.Connect(response.Result.User.Id, Password, ApplicationKeys.ApplicationId,
-                //    QuickbloxClient.ChatEndpoint);
-                this.NavigationService.Navigate(ViewLocator.Dialogs, response.Result.Session.UserId);
+                this.NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
             }
-            else
-            {
-                await messageBoxProvider.ShowAsync("Error");
-            }
+            else await Helpers.ShowErrors(response.Errors, messageService);
 
             IsLoading = false;
         }

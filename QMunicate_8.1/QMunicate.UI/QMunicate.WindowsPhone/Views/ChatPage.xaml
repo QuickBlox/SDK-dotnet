@@ -6,6 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:selectors="using:QMunicate.Selectors"
+    xmlns:behaviors="using:QMunicate.Behaviors"
+    xmlns:i="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
@@ -79,9 +81,20 @@
             <TextBlock Text="{Binding ChatName}" FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}"/>
             <Image Grid.Column="1" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55"  HorizontalAlignment="Right" Margin="0 0 12 0"/>
         </Grid>
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Messages}" ItemTemplateSelector="{StaticResource MessageTemplateSelector}">
-
-        </ItemsControl>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Messages}"
+                 ItemTemplateSelector="{StaticResource MessageTemplateSelector}"
+                 Background="Transparent">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="IsEnabled" Value="False"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <i:Interaction.Behaviors>
+                <behaviors:ListBoxAutoscrollBehavior />
+            </i:Interaction.Behaviors>
+        </ListBox>
+        
         <Border Grid.Row="2" Height="1" Background="Gray"/>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -97,4 +110,8 @@
             </Button>
         </Grid>
     </Grid>
+
+    <i:Interaction.Behaviors>
+        <behaviors:StatusBarBehavior IsLoading="{Binding IsLoading}"/>
+    </i:Interaction.Behaviors>
 </Page>

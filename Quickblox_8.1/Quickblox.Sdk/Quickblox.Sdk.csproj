@@ -73,6 +73,7 @@
     <Compile Include="Modules\MessagesModule\Interfaces\IPrivateChatManager.cs" />
     <Compile Include="Modules\MessagesModule\Models\Attachment.cs" />
     <Compile Include="Modules\MessagesModule\Models\Contact.cs" />
+    <Compile Include="Modules\MessagesModule\Models\ExtraParams.cs" />
     <Compile Include="Modules\MessagesModule\Models\Presence.cs" />
     <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />
     <Compile Include="Modules\NotificationModule\Models\EditEvent.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Modules\NotificationModule\Models\UserWithTags.cs" />
     <Compile Include="Modules\NotificationModule\Requests\EditEventRequest.cs" />
     <Compile Include="Modules\MessagesModule\Models\Message.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\CreateSubscriptionResponseItem.cs" />
     <Compile Include="Modules\UsersModule\Models\UserSortFilter.cs" />
     <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
     <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
@@ -196,6 +198,10 @@
     <ProjectReference Include="..\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj">
       <Project>{b9ff8451-9750-4b80-bcf6-8d151b10486b}</Project>
       <Name>Quickblox.Sdk.Cryptographic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UbietyXmpp\UbietyXmpp.csproj">
+      <Project>{3ce40842-e229-4ade-bb9a-a539453addad}</Project>
+      <Name>UbietyXmpp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

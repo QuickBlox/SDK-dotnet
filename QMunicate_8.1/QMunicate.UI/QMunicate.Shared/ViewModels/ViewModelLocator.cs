@@ -35,6 +35,11 @@ namespace QMunicate.ViewModels
             get { return new ChatViewModel(); }
         }
 
+        public SettingsViewModel SettingsViewModel
+        {
+            get { return new SettingsViewModel(); }
+        }
+
         #endregion
 
         #region Public methods

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Quickblox.Sdk.Modules.MessagesModule.Models
 {
+    // this is identical to presence type enum in Ubiety library
     public enum PresenceType
     {
-        available = -1,
-        subscribe = 0,
-        subscribed = 1,
-        unsubscribe = 2,
-        unsubscribed = 3,
-        unavailable = 4,
-        invisible = 5,
-        error = 6,
-        probe = 7,
+        None,
+        Error,
+        Probe,
+        Subscribe,
+        Subscribed,
+        Unavailable,
+        Unsubscribe,
+        Unsubscribed
     }
 }
