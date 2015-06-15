@@ -17,10 +17,8 @@ namespace Quickblox.Sdk.Serializer
             {
                 return new XmlSerializer();
             }
-            else
-            {
-                throw new NotImplementedException(String.Concat("Not found serializer for this content type:", contentType));
-            }
+
+            return null;
         }
 
         public ISerializer CreateSerializer()
