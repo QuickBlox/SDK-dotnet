@@ -16,6 +16,8 @@ using System.Windows.Input;
 using Windows.Networking.PushNotifications;
 using Windows.Security.Credentials;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageService;
 using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 
 namespace QMunicate.ViewModels
@@ -126,10 +128,11 @@ namespace QMunicate.ViewModels
             IsLoading = false;
         }
 
-        private void PushChannelOnPushNotificationReceived(PushNotificationChannel sender,
+        private async void PushChannelOnPushNotificationReceived(PushNotificationChannel sender,
             PushNotificationReceivedEventArgs args)
         {
-            throw new NotImplementedException();
+            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            await messageService.ShowAsync("Message", "Push received");
         }
 
         private async Task CheckAndUpdatePushToken(PushNotificationChannel pushChannel)
@@ -191,11 +194,6 @@ namespace QMunicate.ViewModels
 
         private async void NewMessageCommandExecute()
         {
-            var pushChannel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-            pushChannel.PushNotificationReceived += PushChannelOnPushNotificationReceived;
-
-
-
 
         }
 
