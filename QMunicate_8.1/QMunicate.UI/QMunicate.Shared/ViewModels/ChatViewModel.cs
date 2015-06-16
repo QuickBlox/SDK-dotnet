@@ -131,9 +131,12 @@ namespace QMunicate.ViewModels
 
         private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)
         {
-            MessageVm incomingMessage = new MessageVm();
-            incomingMessage.MessageText = message.MessageText;
-            incomingMessage.MessageType = MessageType.Incoming;
+            MessageVm incomingMessage = new MessageVm
+            {
+                MessageText = message.MessageText,
+                MessageType = MessageType.Incoming,
+                DateTime = DateTime.Now
+            };
 
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(incomingMessage));
         }
