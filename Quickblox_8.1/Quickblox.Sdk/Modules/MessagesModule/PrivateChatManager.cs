@@ -1,15 +1,9 @@
-﻿using agsXMPP;
-using agsXMPP.protocol.iq.privacy;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+﻿using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using XMPP.common;
 using XMPP.tags.jabber.client;
-using Action = agsXMPP.protocol.iq.privacy.Action;
-using Type = agsXMPP.protocol.iq.privacy.Type;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -19,7 +13,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private XMPP.Client xmppClient;
         private string banListName = "banList";
-        private readonly XmppClientConnection xmpp;
         private readonly string otherUserJid;
 
         #endregion
@@ -96,28 +89,40 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #endregion
 
+        /// <summary>
+        /// Prohibits other user from sending any messages to current user.
+        /// </summary>
+        /// <returns></returns>
         public async Task Block()
         {
-            var list = await GetBanListAsync() ?? new List();
+            throw new NotImplementedException("User ban is not implemented with Ubiety.");
 
-            list.AddItem(new Item(Action.deny, 0, Type.jid, otherUserJid));
-            var privacyManager = new PrivacyManager(xmpp);
-            privacyManager.AddList(banListName, list.GetItems());
-            privacyManager.ChangeActiveList(banListName);
-            privacyManager.ChangeDefaultList(banListName);
+            //var list = await GetBanListAsync() ?? new List();
+
+            //list.AddItem(new Item(Action.deny, 0, Type.jid, otherUserJid));
+            //var privacyManager = new PrivacyManager(xmpp);
+            //privacyManager.AddList(banListName, list.GetItems());
+            //privacyManager.ChangeActiveList(banListName);
+            //privacyManager.ChangeDefaultList(banListName);
         }
 
+        /// <summary>
+        /// Allow other user to send send messages to current user.
+        /// </summary>
+        /// <returns></returns>
         public async Task Unblock()
         {
-            var list = await GetBanListAsync() ?? new List();
+            throw new NotImplementedException("User ban is not implemented with Ubiety.");
 
-            if (list.GetItems().Any(i => i.Val == otherUserJid))
-            {
-                var privacyManager = new PrivacyManager(xmpp);
-                privacyManager.AddList(banListName, list.GetItems().Where(i => i.Val != otherUserJid).ToArray());
-                privacyManager.ChangeActiveList(banListName);
-                privacyManager.ChangeDefaultList(banListName);
-            }
+            //var list = await GetBanListAsync() ?? new List();
+
+            //if (list.GetItems().Any(i => i.Val == otherUserJid))
+            //{
+            //    var privacyManager = new PrivacyManager(xmpp);
+            //    privacyManager.AddList(banListName, list.GetItems().Where(i => i.Val != otherUserJid).ToArray());
+            //    privacyManager.ChangeActiveList(banListName);
+            //    privacyManager.ChangeDefaultList(banListName);
+            //}
             
         }
 
@@ -142,37 +147,37 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             xmppClient.Send(new presence { type = type, to = otherUserJid });
         }
 
-        private async Task<List> GetBanListAsync()
-        {
-            TimeSpan timeout = new TimeSpan(0, 0, 5);
+        //private async Task<List> GetBanListAsync()
+        //{
+        //    TimeSpan timeout = new TimeSpan(0, 0, 5);
 
-            TaskCompletionSource<List> tcs = new TaskCompletionSource<List>();
+        //    TaskCompletionSource<List> tcs = new TaskCompletionSource<List>();
 
-            xmpp.OnIq += (sender, iq) =>
-            {
-                if (iq.Query != null &&  iq.Query.Namespace.Contains("jabber:iq:privacy"))
-                {
-                    Privacy privacy = iq.Query as Privacy;
-                    if (privacy != null && tcs.Task.Status == TaskStatus.WaitingForActivation)
-                    {
-                        tcs.SetResult(privacy.GetList().FirstOrDefault(l => l.Name == banListName));
-                    }
+        //    xmpp.OnIq += (sender, iq) =>
+        //    {
+        //        if (iq.Query != null &&  iq.Query.Namespace.Contains("jabber:iq:privacy"))
+        //        {
+        //            Privacy privacy = iq.Query as Privacy;
+        //            if (privacy != null && tcs.Task.Status == TaskStatus.WaitingForActivation)
+        //            {
+        //                tcs.SetResult(privacy.GetList().FirstOrDefault(l => l.Name == banListName));
+        //            }
 
-                }
-            };
+        //        }
+        //    };
 
-            PrivacyManager p = new PrivacyManager(xmpp);
-            p.GetList(banListName);
+        //    PrivacyManager p = new PrivacyManager(xmpp);
+        //    p.GetList(banListName);
 
-            var timer = new Timer(state =>
-            {
-                if (tcs.Task.Status == TaskStatus.WaitingForActivation)
-                    tcs.SetResult(null);
-            },
-                null, timeout, new TimeSpan(0, 0, 0, 0, -1));
+        //    var timer = new Timer(state =>
+        //    {
+        //        if (tcs.Task.Status == TaskStatus.WaitingForActivation)
+        //            tcs.SetResult(null);
+        //    },
+        //        null, timeout, new TimeSpan(0, 0, 0, 0, -1));
 
-            return await tcs.Task;
-        }
+        //    return await tcs.Task;
+        //}
 
         #endregion
 
