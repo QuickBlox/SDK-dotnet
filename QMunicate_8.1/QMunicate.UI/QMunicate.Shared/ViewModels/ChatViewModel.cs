@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Windows.Input;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Navigation;
-using QMunicate.Core.Command;
+﻿using QMunicate.Core.Command;
 using QMunicate.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Navigation;
 
 namespace QMunicate.ViewModels
 {
@@ -24,7 +22,7 @@ namespace QMunicate.ViewModels
         private string chatName;
         private string chatImage;
         private DialogVm dialog;
-        private IPrivateChatManager chatManager;
+        private IPrivateChatManager privateChatManager;
 
         #endregion
 
@@ -54,46 +52,31 @@ namespace QMunicate.ViewModels
             set { Set(ref chatName, value); }
         }
 
-        public RelayCommand SendCommand { get; set; }
-
         public string ChatImage
         {
             get { return chatImage; }
             set { Set(ref chatImage, value); }
         }
 
+        public RelayCommand SendCommand { get; set; }
+
         #endregion
 
         #region Navigation
 
-        public override void OnNavigatedTo(NavigationEventArgs e)
+        public async override void OnNavigatedTo(NavigationEventArgs e)
         {
             var chatParameter = e.Parameter as ChatNavigationParameter;
             if (chatParameter == null) return;
-            curentUserId = chatParameter.CurrentUserId;
 
-            if (chatParameter.Dialog != null)
-            {
-                dialog = chatParameter.Dialog;
-                ChatName = chatParameter.Dialog.Name;
-                ChatImage = chatParameter.Dialog.Image;
+            await Initialize(chatParameter);
+        }
 
-                int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != curentUserId);
-                if (otherUserId != 0)
-                {
-                    chatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
-                    chatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
-                }
+        public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
 
-                if (dialog.Messages != null && dialog.Messages.Any())
-                {
-                    Messages = new ObservableCollection<MessageVm>(dialog.Messages);
-                }
-                else
-                {
-                    LoadMessages(chatParameter.Dialog.Id);
-                }
-            }
+            if (privateChatManager != null) privateChatManager.OnMessageReceived -= ChatManagerOnOnMessageReceived;
         }
 
         #endregion
@@ -109,6 +92,45 @@ namespace QMunicate.ViewModels
 
         #region Private methods
 
+        private async Task Initialize(ChatNavigationParameter chatParameter)
+        {
+            IsLoading = true;
+
+            curentUserId = chatParameter.CurrentUserId;
+
+            if (chatParameter.Dialog != null)
+            {
+                dialog = chatParameter.Dialog;
+                ChatName = chatParameter.Dialog.Name;
+                ChatImage = chatParameter.Dialog.Image;
+
+                int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != curentUserId);
+                if (otherUserId != 0)
+                {
+                    privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
+                    privateChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
+                }
+
+                await LoadMessages(chatParameter.Dialog.Id);
+            }
+
+            IsLoading = false;
+        }
+
+        private async Task LoadMessages(string dialogId)
+        {
+            var response = await QuickbloxClient.ChatClient.GetMessagesAsync(dialogId);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                foreach (Message message in response.Result.Items)
+                {
+                    var msg = (MessageVm)message;
+                    msg.MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
+                    Messages.Add(msg);
+                }
+            }
+        }
+
         private async void SendCommandExecute()
         {
             if (string.IsNullOrWhiteSpace(NewMessageText)) return;
@@ -121,17 +143,16 @@ namespace QMunicate.ViewModels
             };
 
             Messages.Add(msg);
-            dialog.Messages.Add(msg);
             dialog.LastActivity = NewMessageText;
 
-            chatManager.SendMessage(NewMessageText);
+            privateChatManager.SendMessage(NewMessageText);
 
             NewMessageText = "";
         }
 
         private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)
         {
-            MessageVm incomingMessage = new MessageVm
+            var incomingMessage = new MessageVm
             {
                 MessageText = message.MessageText,
                 MessageType = MessageType.Incoming,
@@ -139,21 +160,6 @@ namespace QMunicate.ViewModels
             };
 
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(incomingMessage));
-        }
-
-        private async void LoadMessages(string dialogId)
-        {
-            var response = await QuickbloxClient.ChatClient.GetMessagesAsync(dialogId);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                foreach (Message message in response.Result.Items)
-                {
-                    var msg = (MessageVm)message;
-                    msg.MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
-                    Messages.Add(msg);
-                    dialog.Messages.Add(msg);
-                }
-            }
         }
 
         #endregion
