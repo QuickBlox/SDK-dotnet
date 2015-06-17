@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Windows.UI.Xaml.Media;
 using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.Models;
 
 namespace QMunicate.Models
@@ -15,6 +16,7 @@ namespace QMunicate.Models
         public string LastActivity { get; set; }
         public int? UnreadMessageCount { get; set; }
         public IList<int> OccupantIds { get; set; }
+        public DialogType DialogType { get; set; }
 
         public static explicit operator DialogVm(Dialog dialog)
         {
@@ -26,7 +28,8 @@ namespace QMunicate.Models
                 LastActivity = dialog.LastMessage,
                 UnreadMessageCount = dialog.UnreadMessagesCount,
                 Image = dialog.Photo,
-                OccupantIds = dialog.OccupantsIds
+                OccupantIds = dialog.OccupantsIds,
+                DialogType = dialog.Type
             };
         }
     }

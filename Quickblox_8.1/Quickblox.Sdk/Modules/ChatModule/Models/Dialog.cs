@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 
 namespace Quickblox.Sdk.Modules.Models
 {
@@ -32,7 +33,7 @@ namespace Quickblox.Sdk.Modules.Models
         public string Photo { get; set; }
 
         [JsonProperty("type")]
-        public int Type { get; set; }
+        public DialogType Type { get; set; }
 
         [JsonProperty("user_id")]
         public int UserId { get; set; }

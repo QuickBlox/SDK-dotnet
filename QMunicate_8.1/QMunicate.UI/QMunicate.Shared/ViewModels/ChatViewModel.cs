@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageService;
 
 namespace QMunicate.ViewModels
 {
@@ -134,6 +136,14 @@ namespace QMunicate.ViewModels
         private async void SendCommandExecute()
         {
             if (string.IsNullOrWhiteSpace(NewMessageText)) return;
+
+            //TODO: check is not needed. Navigate to proper page when opening dialog or do not show public dialogs
+            if (dialog.DialogType != DialogType.Private)
+            {
+                var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+                await messageService.ShowAsync("Message", "This is a public group dialog. You cannot send messages to public groups yet.");
+                return;
+            }
 
             var msg = new MessageVm()
             {
