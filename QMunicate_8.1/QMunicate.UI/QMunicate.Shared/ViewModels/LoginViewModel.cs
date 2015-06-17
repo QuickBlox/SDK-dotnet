@@ -102,13 +102,14 @@ namespace QMunicate.ViewModels
                 ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, Email, Password,
                 deviceRequestRequest:new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
 
+            IsLoading = false;
+
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                this.NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
+                NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
             }
             else await Helpers.ShowErrors(response.Errors, messageService);
 
-            IsLoading = false;
         }
 
         #endregion

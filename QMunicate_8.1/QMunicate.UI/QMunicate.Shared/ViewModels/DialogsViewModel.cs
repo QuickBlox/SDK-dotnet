@@ -1,4 +1,6 @@
 ﻿using QMunicate.Core.Command;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
 using Quickblox.Sdk;
@@ -12,12 +14,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Windows.Networking.PushNotifications;
-using Windows.Security.Credentials;
 using Windows.UI.Xaml.Navigation;
-using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.MessageService;
 using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 
 namespace QMunicate.ViewModels
@@ -60,6 +58,7 @@ namespace QMunicate.ViewModels
 
         public async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            IsLoading = true;
             var parameter = e.Parameter as DialogsNavigationParameter;
             if (parameter != null && e.NavigationMode != NavigationMode.Back)
             {
@@ -69,6 +68,7 @@ namespace QMunicate.ViewModels
                 await InitializeChat(parameter.CurrentUserId, parameter.Password);
             }
             await InitializePush();
+            IsLoading = false;
         }
 
         #endregion
@@ -90,10 +90,8 @@ namespace QMunicate.ViewModels
 
         private async Task InitializeChat(int userId, string password)
         {
-            IsLoading = true;
             await ConnectToChat(userId, password);
             await LoadDialogs();
-            IsLoading = false;
         }
 
         private async Task ConnectToChat(int userId, string password)
@@ -120,12 +118,10 @@ namespace QMunicate.ViewModels
 
         private async Task InitializePush()
         {
-            IsLoading = true;
             var pushChannel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
             pushChannel.PushNotificationReceived += PushChannelOnPushNotificationReceived;
             await CheckAndUpdatePushToken(pushChannel);
             await CreatePushSubscriptionIfNeeded();
-            IsLoading = false;
         }
 
         private async void PushChannelOnPushNotificationReceived(PushNotificationChannel sender,
