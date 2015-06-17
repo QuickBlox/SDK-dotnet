@@ -12,12 +12,15 @@ using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+#if WINDOWS_PHONE_APP
 using Windows.Phone.UI.Input;
+#endif
 using Windows.Security.Credentials;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.Command;
 using QMunicate.Core.MessageService;
 using QMunicate.Models;
 
@@ -43,9 +46,25 @@ namespace QMunicate
             Factory.CommonFactory.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
             Factory.CommonFactory.Bind<QuickbloxClient, QuickbloxClient>(LifetimeMode.Singleton);
             Factory.CommonFactory.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
+            UnhandledException += OnUnhandledException;
 
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+        }
+
+        private async void OnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+            unhandledExceptionEventArgs.Handled = true;
+            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            var yesCommand = new DialogCommand("yes", new RelayCommand(async () => await EmailException(unhandledExceptionEventArgs.Exception.ToString())));
+            var noCommand = new DialogCommand("no", new RelayCommand(() => {  }), false, true);
+            await messageService.ShowAsync("Report error?", "Error happened. Do you want to email developers about it?", new[] { yesCommand, noCommand });
+        }
+
+        private async Task EmailException(string exception)
+        {
+            var mailto = new Uri(string.Format("mailto:?to={0}&subject={1}&body={2}", "anatoliy.krivchenko@injoit.com", "Q-municate exception", exception));
+            await Windows.System.Launcher.LaunchUriAsync(mailto);
         }
 
         /// <summary>
