@@ -1,25 +1,15 @@
-﻿using agsXMPP;
-using agsXMPP.protocol.client;
-using agsXMPP.protocol.iq.roster;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+﻿using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Quickblox.Sdk.Serializer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 using XMPP;
 using XMPP.common;
 using XMPP.tags.jabber.client;
-using AgsMessage = agsXMPP.protocol.client.Message;
-using AgsPresence = agsXMPP.protocol.client.Presence;
-using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
-using Presence = Quickblox.Sdk.Modules.MessagesModule.Models.Presence;
-using PresenceType = Quickblox.Sdk.Modules.MessagesModule.Models.PresenceType;
+using XMPP.tags.jabber.iq.roster;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -32,7 +22,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         #region Fields
 
         private QuickbloxClient quickbloxClient;
-        private XmppClientConnection xmppConnection;
         private XMPP.Client xmppClient;
         private int appId;
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
@@ -118,37 +107,43 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         {
             throw new NotImplementedException();
 
-            if (xmppConnection == null || !xmppConnection.Authenticated)
-                throw new QuickbloxSdkException("Xmpp connection is not ready.");
+            //if (xmppConnection == null || !xmppConnection.Authenticated)
+            //    throw new QuickbloxSdkException("Xmpp connection is not ready.");
 
-            return new GroupChatManager(xmppConnection, groupJid);
+            //return new GroupChatManager(xmppConnection, groupJid);
         }
 
         public void ReloadContacts()
         {
             iq iq = new iq {type = iq.typeEnum.get};
-            iq.Add(new XMPP.tags.jabber.iq.roster.query());
+            iq.Add(new query());
             xmppClient.Send(iq);
         }
 
         public void AddContact(Contact contact)
         {
-            throw new NotImplementedException();
-
             string jid = string.Format(qbJidPattern, contact.UserId, appId);
-            var roster = new Roster();
-            roster.AddRosterItem(new RosterItem(new Jid(jid), contact.Name));
-            xmppConnection.Send(new IQ(IqType.set) { Query = roster });
+
+            var rosterItem = new item {jid = jid, name = contact.Name};
+            var rosterQuery = new query();
+            rosterQuery.Add(rosterItem);
+            iq iq = new iq { type = iq.typeEnum.set };
+            iq.Add(rosterQuery);
+
+            xmppClient.Send(iq);
         }
 
         public void DeleteContact(int userId)
         {
-            throw new NotImplementedException();
-
             string jid = string.Format(qbJidPattern, userId, appId);
-            var roster = new Roster();
-            roster.AddRosterItem(new RosterItem(new Jid(jid)) {Subscription = SubscriptionType.remove});
-            xmppConnection.Send(new IQ(IqType.set) { Query = roster });
+
+            var rosterItem = new item { jid = jid, subscription = item.subscriptionEnum.remove};
+            var rosterQuery = new query();
+            rosterQuery.Add(rosterItem);
+            iq iq = new iq { type = iq.typeEnum.set };
+            iq.Add(rosterQuery);
+
+            xmppClient.Send(iq);
         }
 
         #endregion
@@ -269,39 +264,36 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             }
         }
 
-        #endregion
+        //TODO: parse attachemnts from extraparams with Ubiety
+        //private void XmppConnectionOnOnMessage(object sender, AgsMessage msg)
+        //{
+        //    string extraParams = msg.GetTag("extraParams");
+        //    var attachments = new List<Attachment>();
+        //    if (!string.IsNullOrEmpty(extraParams))
+        //    {
+        //        XmlReaderSettings settings = new XmlReaderSettings {ConformanceLevel = ConformanceLevel.Fragment};
+        //        using (XmlReader reader = XmlReader.Create(new StringReader(extraParams), settings))
+        //        {
+        //            while (reader.Read())
+        //            {
+        //                if (reader.NodeType == XmlNodeType.Element)
+        //                {
+        //                    if (reader.Name == "Attachment")
+        //                    {
+        //                        var attachmentXml = reader.ReadOuterXml();
+        //                        var xmlSerializer = new XmlSerializer();
+        //                        var attachment = xmlSerializer.Deserialize<Attachment>(attachmentXml);
+        //                        if(attachment != null) attachments.Add(attachment);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
 
-        #region Ags methods
-
-        private void XmppConnectionOnOnMessage(object sender, AgsMessage msg)
-        {
-            string extraParams = msg.GetTag("extraParams");
-            var attachments = new List<Attachment>();
-            if (!string.IsNullOrEmpty(extraParams))
-            {
-                XmlReaderSettings settings = new XmlReaderSettings {ConformanceLevel = ConformanceLevel.Fragment};
-                using (XmlReader reader = XmlReader.Create(new StringReader(extraParams), settings))
-                {
-                    while (reader.Read())
-                    {
-                        if (reader.NodeType == XmlNodeType.Element)
-                        {
-                            if (reader.Name == "Attachment")
-                            {
-                                var attachmentXml = reader.ReadOuterXml();
-                                var xmlSerializer = new XmlSerializer();
-                                var attachment = xmlSerializer.Deserialize<Attachment>(attachmentXml);
-                                if(attachment != null) attachments.Add(attachment);
-                            }
-                        }
-                    }
-                }
-            }
-
-            var handler = OnMessageReceived;
-            if (handler != null)
-                handler(this, new Message {From = msg.From.ToString(), To = msg.To.ToString(), MessageText = msg.Body, Attachments = attachments.ToArray()});
-        }
+        //    var handler = OnMessageReceived;
+        //    if (handler != null)
+        //        handler(this, new Message {From = msg.From.ToString(), To = msg.To.ToString(), MessageText = msg.Body, Attachments = attachments.ToArray()});
+        //}
 
         #endregion
 
