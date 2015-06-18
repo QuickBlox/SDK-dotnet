@@ -1,8 +1,7 @@
-﻿using agsXMPP;
-using agsXMPP.protocol.client;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
-using AgsMessage = agsXMPP.protocol.client.Message;
-using AgsPresence = agsXMPP.protocol.client.Presence;
+﻿using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
+using XMPP.tags.jabber.client;
+using XMPP.tags.jabber.x.dataforms;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -14,16 +13,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
     {
         #region Fields
 
-        private readonly XmppClientConnection xmpp;
+        private XMPP.Client xmppClient;
         private readonly string groupJid;
 
         #endregion
 
         #region Ctor
 
-        public GroupChatManager(XmppClientConnection xmppConnection, string groupJid)
+        public GroupChatManager(XMPP.Client client, string groupJid)
         {
-            xmpp = xmppConnection;
+            xmppClient = client;
             this.groupJid = groupJid;
         }
 
@@ -33,18 +32,58 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void SendMessage(string message)
         {
-            xmpp.Send(new AgsMessage(groupJid, MessageType.groupchat, message));
+            var msg = new message
+            {
+                to = groupJid,
+                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
+            };
+
+            var body = new body { Value = message };
+
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory { Value = "1" });
+
+            msg.Add(body, extraParams);
+
+            xmppClient.Send(msg);
         }
 
         public void JoinGroup(string nickName)
         {
             string fullJid = string.Format("{0}/{1}", groupJid, nickName);
+            xmppClient.Send(new presence { to = fullJid });
+        }
 
-            xmpp.Send(new AgsPresence {To = new Jid(fullJid)});
+        public void RequestVoice()
+        {
+            var msg = new message
+            {
+                to = groupJid
+            };
+
+            x x = new x {type = x.typeEnum.submit};
+
+            var formTypeField = new field
+            {
+                var = "FORM_TYPE"
+            };
+            formTypeField.Add(new value { Value = "http://jabber.org/protocol/muc#request" });
+
+            var mucRoleField = new field
+            {
+                type = field.typeEnum.text_single,
+                label = "Requested role",
+                var = "muc#role"
+            };
+            mucRoleField.Add(new value {Value = "participant"});
+
+            x.Add(formTypeField, mucRoleField);
+            msg.Add(x);
+
+            xmppClient.Send(msg);
         }
 
         #endregion
-
 
     }
 }

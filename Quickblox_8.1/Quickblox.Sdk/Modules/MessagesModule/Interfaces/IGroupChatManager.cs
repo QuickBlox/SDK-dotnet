@@ -9,6 +9,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
     public interface IGroupChatManager
     {
         void JoinGroup(string nickName);
+        void RequestVoice();
         void SendMessage(string message);
     }
 }

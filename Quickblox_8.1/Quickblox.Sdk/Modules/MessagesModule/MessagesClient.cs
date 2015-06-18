@@ -105,12 +105,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public IGroupChatManager GetGroupChatManager(string groupJid)
         {
-            throw new NotImplementedException();
-
-            //if (xmppConnection == null || !xmppConnection.Authenticated)
-            //    throw new QuickbloxSdkException("Xmpp connection is not ready.");
-
-            //return new GroupChatManager(xmppConnection, groupJid);
+            return new GroupChatManager(xmppClient, groupJid);
         }
 
         public void ReloadContacts()

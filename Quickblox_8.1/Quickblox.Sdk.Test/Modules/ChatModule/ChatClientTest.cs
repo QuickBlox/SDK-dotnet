@@ -32,6 +32,14 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         }
 
         [TestMethod]
+        public async Task CreateGroupDialogTest()
+        {
+            string occupantsIds = "3323859,3323883";
+            var response = await this.client.ChatClient.CreateDialogAsync("Weekend plans", DialogType.Group, occupantsIds, "http://monevator.monevator.netdna-cdn.com/wp-content/uploads/2008/12/small-cap-fireworks.jpg");
+            Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
+        }
+
+        [TestMethod]
         public async Task CreateMessageSuccessTest()
         {
             var responseCreateDialog = await this.client.ChatClient.CreateDialogAsync("New test dialog", DialogType.PublicGroup);
