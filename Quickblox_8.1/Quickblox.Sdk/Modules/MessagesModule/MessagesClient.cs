@@ -236,10 +236,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         {
             if (iq.type == iq.typeEnum.result || iq.type == iq.typeEnum.set)
             {
-                var query = iq.Element<XMPP.tags.jabber.iq.roster.query>(XMPP.tags.jabber.iq.roster.Namespace.query);
+                var query = iq.Element<query>(XMPP.tags.jabber.iq.roster.Namespace.query);
                 if (query != null)
                 {
-                    if (iq.type == iq.typeEnum.result) // This is a roster
+                    if (iq.type == iq.typeEnum.result || Contacts == null)
                     {
                         Contacts = new List<Contact>();
                     }

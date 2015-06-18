@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,28 +37,51 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         public async Task GetContactsTest()
         {
             bool contactsChanged = false;
-
             client1.MessagesClient.OnContactsChanged += (sender, args) => contactsChanged = true;
+
             client1.MessagesClient.ReloadContacts();
 
             await Task.Delay(10000);
 
             if(!contactsChanged)
-                Assert.Fail("Contacts wasn't received");
+                Assert.Fail("Contacts were not received");
+
+#if DEBUG
+            Debug.WriteLine("Roster items received from server:");
+            foreach (var contact in client1.MessagesClient.Contacts)
+            {
+                Debug.WriteLine("ID: {0} Name: {1}", contact.UserId, contact.Name);
+            }
+#endif
         }
 
         [TestMethod]
         public async Task AddContactTest()
         {
-            client1.MessagesClient.AddContact(new Contact() { Name = "Test Contact", UserId = 2701450 });
+            var testContact = new Contact {Name = "Test Contact", UserId = 2701450};
+
+            client1.MessagesClient.AddContact(testContact);
             await Task.Delay(10000);
+
+            var contact = client1.MessagesClient.Contacts.FirstOrDefault(c => c.Name == testContact.Name && c.UserId == testContact.UserId);
+            if(contact == null)
+                Assert.Fail("Contact wasn't added to contact list.");
         }
 
         [TestMethod]
         public async Task DeleteContactTest()
         {
-            client1.MessagesClient.DeleteContact(2701450);
+            var testContact = new Contact { Name = "Test Contact", UserId = 2701450 };
+
+            client1.MessagesClient.AddContact(testContact);
             await Task.Delay(10000);
+
+            client1.MessagesClient.DeleteContact(testContact.UserId);
+            await Task.Delay(10000);
+
+            var contact = client1.MessagesClient.Contacts.FirstOrDefault(c => c.Name == testContact.Name && c.UserId == testContact.UserId);
+            if (contact != null)
+                Assert.Fail("Contact wasn't removed from contact list.");
         }
     }
 }
