@@ -49,7 +49,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [TestMethod]
         public async Task AddContactTest()
         {
-            client1.MessagesClient.AddContact(new Contact() { Name = "Test Contact", UserId = "2701450" });
+            client1.MessagesClient.AddContact(new Contact() { Name = "Test Contact", UserId = 2701450 });
             await Task.Delay(10000);
         }
 

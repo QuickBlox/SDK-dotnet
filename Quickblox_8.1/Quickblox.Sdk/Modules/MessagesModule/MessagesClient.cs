@@ -247,7 +247,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                     foreach (var item in query.itemElements)
                     {
                         var match = qbJidRegex.Match(item.jid);
-                        string userId = (match.Success && match.Groups.Count > 0) ? match.Groups[1].Value : item.jid;
+
+                        if (!match.Success || match.Groups.Count == 0) continue;
+                        int userId;
+                        if (!int.TryParse(match.Groups[1].Value, out userId)) continue;
+
                         Contacts.RemoveAll(c => c.UserId == userId);
 
                         if (item.subscription != XMPP.tags.jabber.iq.roster.item.subscriptionEnum.remove)

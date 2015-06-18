@@ -8,7 +8,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
 {
     public class Contact
     {
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public string Name { get; set; }
     }
 }
