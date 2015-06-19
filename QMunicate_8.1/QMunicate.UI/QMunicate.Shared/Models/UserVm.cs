@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Windows.UI.Xaml.Media;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Models;
 
 namespace QMunicate.Models
@@ -19,6 +20,11 @@ namespace QMunicate.Models
             FullName = user.FullName;
         }
 
+        protected UserVm(Contact contact)
+        {
+            FullName = contact.Name;
+        }
+
         #endregion
 
         #region Properties
@@ -34,6 +40,11 @@ namespace QMunicate.Models
         public static UserVm FromUser(User user)
         {
             return new UserVm(user);
+        }
+
+        public static UserVm FromContact(Contact contact)
+        {
+            return new UserVm(contact);
         }
 
         #endregion

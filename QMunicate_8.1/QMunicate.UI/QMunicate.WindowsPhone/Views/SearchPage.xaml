@@ -11,6 +11,15 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
     DataContext="{Binding SearchViewModel, Source={StaticResource Locator}}">
+    
+    <Page.Resources>
+        <DataTemplate x:Key="UserTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
+                <TextBlock Text="{Binding FullName}" FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -25,19 +34,12 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem Header="local">
-                
+                <ListBox ItemsSource="{Binding LocalResults}" Background="Transparent"
+                         ItemTemplate="{StaticResource UserTemplate}" />
             </PivotItem>
             <PivotItem Header="global">
-                <ListBox ItemsSource="{Binding GlobalResults}" Background="Transparent">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
-                                <TextBlock Text="{Binding FullName}" FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <ListBox ItemsSource="{Binding GlobalResults}" Background="Transparent"
+                         ItemTemplate="{StaticResource UserTemplate}" />
             </PivotItem>
         </Pivot>
     </Grid>

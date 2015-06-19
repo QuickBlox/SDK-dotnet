@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
 using System.Text;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Navigation;
 using QMunicate.Models;
+using Quickblox.Sdk;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Responses;
 
 namespace QMunicate.ViewModels
@@ -21,6 +26,7 @@ namespace QMunicate.ViewModels
         public SearchViewModel()
         {
             GlobalResults = new ObservableCollection<UserVm>();
+            LocalResults = new ObservableCollection<UserVm>();
         }
 
         #endregion
@@ -39,7 +45,14 @@ namespace QMunicate.ViewModels
 
         public ObservableCollection<UserVm> GlobalResults { get; set; }
 
+        public ObservableCollection<UserVm> LocalResults { get; set; }
+
         #endregion
+
+        public async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            LoadLocalUsers();
+        }
 
         #region Private methods
 
@@ -63,6 +76,26 @@ namespace QMunicate.ViewModels
             }
 
             IsLoading = false;
+        }
+
+        private async void LoadLocalUsers()
+        {
+            QuickbloxClient.MessagesClient.OnContactsChanged += MessagesClientOnOnContactsChanged;
+            QuickbloxClient.MessagesClient.ReloadContacts();
+        }
+
+        private void MessagesClientOnOnContactsChanged(object sender, EventArgs eventArgs)
+        {
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => LocalResults.Clear());
+            
+            if (QuickbloxClient.MessagesClient.Contacts != null)
+            {
+                foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
+                {
+                    var contact1 = contact;
+                    CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => LocalResults.Add(UserVm.FromContact(contact1)));
+                }
+            }
         }
 
         #endregion
