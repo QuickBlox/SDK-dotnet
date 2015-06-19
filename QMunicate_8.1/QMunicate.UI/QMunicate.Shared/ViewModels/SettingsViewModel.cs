@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Security.Credentials;
 using Windows.UI.Xaml.Navigation;
@@ -128,7 +129,7 @@ namespace QMunicate.ViewModels
             await messageService.ShowAsync("Logout", "Do you really want to logout?", new [] {logoutCommand, cancelCommand});
         }
 
-        private void SignOut()
+        private async Task SignOut()
         {
             try
             {
@@ -139,9 +140,17 @@ namespace QMunicate.ViewModels
                     passwordVault.Remove(credentials[0]);
                 }
             }
-            catch (Exception)
+            catch (Exception) { }
+
+            int pushSubscriptionId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.PushSubscriptionId);
+            if (pushSubscriptionId != default(int))
             {
+                var deleteResponse = await QuickbloxClient.NotificationClient.DeleteSubscriptionsAsync(pushSubscriptionId);
+                if (deleteResponse.StatusCode == HttpStatusCode.OK)
+                    SettingsManager.Instance.DeleteFromSettings(SettingsKeys.PushSubscriptionId);
             }
+
+            SettingsManager.Instance.DeleteFromSettings(SettingsKeys.QbToken);
 
             NavigationService.Navigate(ViewLocator.SignUp);
             NavigationService.BackStack.Clear();
