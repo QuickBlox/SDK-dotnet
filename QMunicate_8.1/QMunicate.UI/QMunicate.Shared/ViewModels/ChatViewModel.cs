@@ -126,8 +126,7 @@ namespace QMunicate.ViewModels
             {
                 foreach (Message message in response.Result.Items)
                 {
-                    var msg = (MessageVm)message;
-                    msg.MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
+                    var msg = MessageVm.FromMessage(message, curentUserId);
                     Messages.Add(msg);
                 }
             }
