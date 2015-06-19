@@ -5,12 +5,44 @@
     xmlns:local="using:QMunicate.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:QMunicate.Behaviors"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
     DataContext="{Binding SearchViewModel, Source={StaticResource Locator}}">
 
     <Grid>
-        <TextBox Text="{Binding SearchText, Mode=TwoWay}" Margin="{StaticResource DefaultMargin}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="{StaticResource DefaultMargin}"/>
+        <Pivot Grid.Row="1">
+            <Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" FontSize="{StaticResource LargeFontSize}"/>
+                </DataTemplate>
+            </Pivot.HeaderTemplate>
+            <PivotItem Header="local">
+                
+            </PivotItem>
+            <PivotItem Header="global">
+                <ListBox ItemsSource="{Binding GlobalResults}" Background="Transparent">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
+                                <TextBlock Text="{Binding FullName}" FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </PivotItem>
+        </Pivot>
     </Grid>
+
+    <interactivity:Interaction.Behaviors>
+        <behaviors:StatusBarBehavior IsLoading="{Binding IsLoading}"/>
+    </interactivity:Interaction.Behaviors>
 </Page>

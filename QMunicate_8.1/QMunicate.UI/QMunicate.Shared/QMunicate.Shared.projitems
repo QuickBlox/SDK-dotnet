@@ -26,6 +26,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\DialogsNavigationParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DialogVm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MessageVm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\UserVm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\MessageTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SettingsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewLocator.cs" />
