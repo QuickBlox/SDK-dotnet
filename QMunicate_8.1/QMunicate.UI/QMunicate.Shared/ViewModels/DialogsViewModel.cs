@@ -109,7 +109,7 @@ namespace QMunicate.ViewModels
             {
                 foreach (Dialog dialog in response.Result.Items)
                 {
-                    Dialogs.Add((DialogVm) dialog);
+                    Dialogs.Add(DialogVm.FromDialog(dialog));
                 }
             }
         }
