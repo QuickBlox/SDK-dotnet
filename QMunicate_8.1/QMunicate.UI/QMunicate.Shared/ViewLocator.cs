@@ -12,5 +12,6 @@ namespace QMunicate
         public const string Dialogs = "Dialogs";
         public const string Chat = "Chat";
         public const string Settings = "Settings";
+        public const string Search = "Search";
     }
 }

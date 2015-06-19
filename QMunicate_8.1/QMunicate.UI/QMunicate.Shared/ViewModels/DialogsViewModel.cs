@@ -195,7 +195,7 @@ namespace QMunicate.ViewModels
 
         private void SearchCommandExecute()
         {
-
+            NavigationService.Navigate(ViewLocator.Search);
         }
 
         private void SettingsCommandExecute()
