@@ -129,7 +129,7 @@ namespace QMunicate.ViewModels
             await messageService.ShowAsync("Logout", "Do you really want to logout?", new [] {logoutCommand, cancelCommand});
         }
 
-        private async Task SignOut()
+        private async void SignOut()
         {
             try
             {
