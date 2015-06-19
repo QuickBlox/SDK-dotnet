@@ -5,16 +5,16 @@ using System.Globalization;
 
 namespace QMunicate.Core.DependencyInjection
 {
-    public class Factory
+    public class ServiceLocator
     {
         private Dictionary<Type, TypeBindingBase> typeBindings = new Dictionary<Type, TypeBindingBase>();
 
-        static Factory()
+        static ServiceLocator()
         {
-            CommonFactory = new Factory();
+            Locator = new ServiceLocator();
         }
 
-        public static Factory CommonFactory { get; private set; }
+        public static ServiceLocator Locator { get; private set; }
 
         public void Initialize(FactoryInitializer initializer)
         {
@@ -30,7 +30,7 @@ namespace QMunicate.Core.DependencyInjection
             this.typeBindings[sourceType] = binding;
         }
 
-        public TSource GetInstance<TSource>()
+        public TSource Get<TSource>()
         {
             TypeBindingBase binding = null;
             var sourceType = typeof(TSource);

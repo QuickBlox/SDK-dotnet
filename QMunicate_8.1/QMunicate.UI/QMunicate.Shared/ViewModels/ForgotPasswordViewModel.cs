@@ -59,7 +59,7 @@ namespace QMunicate.ViewModels
                         new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
             var response = await QuickbloxClient.UsersClient.ResetUserPasswordByEmailAsync(Email);
 
-            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
 
             if (response.StatusCode == HttpStatusCode.OK)
             {

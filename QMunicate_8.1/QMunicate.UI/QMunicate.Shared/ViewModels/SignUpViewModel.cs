@@ -92,7 +92,7 @@ namespace QMunicate.ViewModels
 
         private async void SignUpCommandExecute()
         {
-            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
             
             if (string.IsNullOrWhiteSpace(FullName) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {

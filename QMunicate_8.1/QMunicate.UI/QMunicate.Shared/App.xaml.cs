@@ -43,9 +43,9 @@ namespace QMunicate
         /// </summary>
         public App()
         {
-            Factory.CommonFactory.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
-            Factory.CommonFactory.Bind<QuickbloxClient, QuickbloxClient>(LifetimeMode.Singleton);
-            Factory.CommonFactory.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
+            ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
+            ServiceLocator.Locator.Bind<QuickbloxClient, QuickbloxClient>(LifetimeMode.Singleton);
+            ServiceLocator.Locator.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
             UnhandledException += OnUnhandledException;
 
             this.InitializeComponent();
@@ -55,7 +55,7 @@ namespace QMunicate
         private async void OnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
         {
             unhandledExceptionEventArgs.Handled = true;
-            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
             var yesCommand = new DialogCommand("yes", new RelayCommand(async () => await EmailException(unhandledExceptionEventArgs.Exception.ToString())));
             var noCommand = new DialogCommand("no", new RelayCommand(() => {  }), false, true);
             await messageService.ShowAsync("Report error?", "Error happened. Do you want to email developers about it?", new[] { yesCommand, noCommand });
@@ -104,10 +104,10 @@ namespace QMunicate
                 Window.Current.Content = rootFrame;
             }
 
-            var navigationService = Factory.CommonFactory.GetInstance<INavigationService>();
+            var navigationService = ServiceLocator.Locator.Get<INavigationService>();
             navigationService.Initialize(rootFrame, this.GetPageResolver());
 
-            var quickbloxClient = Factory.CommonFactory.GetInstance<QuickbloxClient>();
+            var quickbloxClient = ServiceLocator.Locator.Get<QuickbloxClient>();
             await quickbloxClient.InitializeClientAsync(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.AccountKey, new HmacSha1CryptographicProvider());
 
             if (rootFrame.Content == null)
@@ -137,7 +137,7 @@ namespace QMunicate
 
         protected override void OnActivated(IActivatedEventArgs args)
         {
-            var quickbloxClient = Factory.CommonFactory.GetInstance<QuickbloxClient>();
+            var quickbloxClient = ServiceLocator.Locator.Get<QuickbloxClient>();
             var token = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.QbToken);
             quickbloxClient.Resume(token);
 
@@ -215,7 +215,7 @@ namespace QMunicate
 
         private void HardwareButtonsOnBackPressed(object sender, BackPressedEventArgs backPressedEventArgs)
         {
-            var navigationService = Factory.CommonFactory.GetInstance<INavigationService>();
+            var navigationService = ServiceLocator.Locator.Get<INavigationService>();
             if (navigationService != null && navigationService.CanGoBack)
             {
                 navigationService.GoBack();
@@ -238,7 +238,7 @@ namespace QMunicate
             // TODO: Save application state and stop any background activity
             deferral.Complete();
 
-            var quickbloxClient = Factory.CommonFactory.GetInstance<QuickbloxClient>();
+            var quickbloxClient = ServiceLocator.Locator.Get<QuickbloxClient>();
 
             SettingsManager.Instance.WriteToSettings(SettingsKeys.QbToken, quickbloxClient.Token);
         }

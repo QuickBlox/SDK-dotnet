@@ -81,7 +81,7 @@ namespace QMunicate.ViewModels
 
         private async void LoginCommandExecute()
         {
-            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
 
             if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {

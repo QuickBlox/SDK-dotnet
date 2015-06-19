@@ -127,7 +127,7 @@ namespace QMunicate.ViewModels
         private async void PushChannelOnPushNotificationReceived(PushNotificationChannel sender,
             PushNotificationReceivedEventArgs args)
         {
-            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
             await messageService.ShowAsync("Message", "Push received");
         }
 

@@ -2,6 +2,6 @@
 {
     public abstract class FactoryInitializer
     {
-        public abstract void SetBindings(Factory initializedFactory);
+        public abstract void SetBindings(ServiceLocator initializedFactory);
     }
 }

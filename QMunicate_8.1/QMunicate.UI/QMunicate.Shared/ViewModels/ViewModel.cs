@@ -14,8 +14,8 @@ namespace QMunicate.ViewModels
 
         public ViewModel()
         {
-            this.NavigationService = Factory.CommonFactory.GetInstance<INavigationService>();
-            this.QuickbloxClient = Factory.CommonFactory.GetInstance<QuickbloxClient>();
+            this.NavigationService = ServiceLocator.Locator.Get<INavigationService>();
+            this.QuickbloxClient = ServiceLocator.Locator.Get<QuickbloxClient>();
 
             this.GoBackCommand = new RelayCommand(this.GoBackCommandExecute, this.CanGobackCommandExecute);
         }

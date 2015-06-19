@@ -122,7 +122,7 @@ namespace QMunicate.ViewModels
 
         private async void SignOutCommandExecute()
         {
-            var messageService = Factory.CommonFactory.GetInstance<IMessageService>();
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
             DialogCommand logoutCommand = new DialogCommand("logout", new RelayCommand(SignOut));
             DialogCommand cancelCommand = new DialogCommand("cancel", new RelayCommand(() => { }), false, true);
             await messageService.ShowAsync("Logout", "Do you really want to logout?", new [] {logoutCommand, cancelCommand});
