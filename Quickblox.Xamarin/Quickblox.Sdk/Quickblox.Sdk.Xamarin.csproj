@@ -278,6 +278,9 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Models\Contact.cs">
       <Link>Modules\MessagesModule\Models\Contact.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Models\ExtraParams.cs">
+      <Link>Modules\MessagesModule\Models\ExtraParams.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Models\Message.cs">
       <Link>Modules\MessagesModule\Models\Message.cs</Link>
     </Compile>
@@ -368,6 +371,9 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\NotificationModule\Responses\CreatePushTokenResponse.cs">
       <Link>Modules\NotificationModule\Responses\CreatePushTokenResponse.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\NotificationModule\Responses\CreateSubscriptionResponseItem.cs">
+      <Link>Modules\NotificationModule\Responses\CreateSubscriptionResponseItem.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\NotificationModule\Responses\EventResponse.cs">
       <Link>Modules\NotificationModule\Responses\EventResponse.cs</Link>
     </Compile>
@@ -448,12 +454,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="agsXMPP">
-      <HintPath>..\..\External\agsXMPP.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="UbietyXmpp">
+      <HintPath>..\UbietyXmpp\bin\Debug\UbietyXmpp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

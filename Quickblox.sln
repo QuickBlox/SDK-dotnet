@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk", "Quickblox_8.1\Quickblox.Sdk\Quickblox.Sdk.csproj", "{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}"
 EndProject
@@ -41,6 +41,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk.Xamarin", "Quickblox.Xamarin\Quickblox.Sdk\Quickblox.Sdk.Xamarin.csproj", "{F5C92500-D225-4473-B169-4C0749FE2A90}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinPortableTest", "Quickblox.Xamarin\XamarinPortableTest\XamarinPortableTest.csproj", "{E44ED153-F352-4576-85EA-D484651A2CCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UbietyXmpp", "Quickblox.Xamarin\UbietyXmpp\UbietyXmpp.csproj", "{4121980C-B6F9-43EE-895F-FF6552574784}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -278,6 +280,22 @@ Global
 		{E44ED153-F352-4576-85EA-D484651A2CCC}.Release|x64.Build.0 = Release|Any CPU
 		{E44ED153-F352-4576-85EA-D484651A2CCC}.Release|x86.ActiveCfg = Release|Any CPU
 		{E44ED153-F352-4576-85EA-D484651A2CCC}.Release|x86.Build.0 = Release|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|ARM.Build.0 = Debug|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|x64.Build.0 = Debug|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|x86.Build.0 = Debug|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|ARM.Build.0 = Release|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|x64.ActiveCfg = Release|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|x64.Build.0 = Release|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|x86.ActiveCfg = Release|Any CPU
+		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -300,5 +318,6 @@ Global
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD} = {F245F1B4-27BF-42C9-8323-82817732E496}
 		{F5C92500-D225-4473-B169-4C0749FE2A90} = {136B0548-2308-4DB4-B557-931032A61C4C}
 		{E44ED153-F352-4576-85EA-D484651A2CCC} = {136B0548-2308-4DB4-B557-931032A61C4C}
+		{4121980C-B6F9-43EE-895F-FF6552574784} = {136B0548-2308-4DB4-B557-931032A61C4C}
 	EndGlobalSection
 EndGlobal
