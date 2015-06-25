@@ -60,6 +60,8 @@
     <Compile Include="Modules\ContentModule\Response\ReadOnlyAccessResponse.cs" />
     <Compile Include="Modules\CustomObjectModule\CustomObjectsClient.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\BaseCustomObject.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\CustomObjectFilter.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\CustomObjectOperator.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\NotFoundsItems.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\Permissions.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\SuccessfullyDeleted.cs" />

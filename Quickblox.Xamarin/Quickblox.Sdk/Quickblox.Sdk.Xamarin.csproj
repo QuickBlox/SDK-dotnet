@@ -233,6 +233,12 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\CustomObjectModule\Models\BaseCustomObject.cs">
       <Link>Modules\CustomObjectModule\Models\BaseCustomObject.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\CustomObjectModule\Models\CustomObjectFilter.cs">
+      <Link>Modules\CustomObjectModule\Models\CustomObjectFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\CustomObjectModule\Models\CustomObjectOperator.cs">
+      <Link>Modules\CustomObjectModule\Models\CustomObjectOperator.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\CustomObjectModule\Models\NotFoundsItems.cs">
       <Link>Modules\CustomObjectModule\Models\NotFoundsItems.cs</Link>
     </Compile>
