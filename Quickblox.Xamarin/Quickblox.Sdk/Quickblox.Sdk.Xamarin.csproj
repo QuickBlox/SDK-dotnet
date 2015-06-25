@@ -257,42 +257,6 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\CustomObjectModule\Responses\RetriveCustomObjectsResponce.cs">
       <Link>Modules\CustomObjectModule\Responses\RetriveCustomObjectsResponce.cs</Link>
     </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\GroupChatManager.cs">
-      <Link>Modules\MessagesModule\GroupChatManager.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Interfaces\IGroupChatManager.cs">
-      <Link>Modules\MessagesModule\Interfaces\IGroupChatManager.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Interfaces\IMessagesClient.cs">
-      <Link>Modules\MessagesModule\Interfaces\IMessagesClient.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Interfaces\IPrivateChatManager.cs">
-      <Link>Modules\MessagesModule\Interfaces\IPrivateChatManager.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\MessagesClient.cs">
-      <Link>Modules\MessagesModule\MessagesClient.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Models\Attachment.cs">
-      <Link>Modules\MessagesModule\Models\Attachment.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Models\Contact.cs">
-      <Link>Modules\MessagesModule\Models\Contact.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Models\ExtraParams.cs">
-      <Link>Modules\MessagesModule\Models\ExtraParams.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Models\Message.cs">
-      <Link>Modules\MessagesModule\Models\Message.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Models\Presence.cs">
-      <Link>Modules\MessagesModule\Models\Presence.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\Models\PresenceType.cs">
-      <Link>Modules\MessagesModule\Models\PresenceType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\MessagesModule\PrivateChatManager.cs">
-      <Link>Modules\MessagesModule\PrivateChatManager.cs</Link>
-    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\NotificationModule\Models\CreateEvent.cs">
       <Link>Modules\NotificationModule\Models\CreateEvent.cs</Link>
     </Compile>
@@ -457,9 +421,6 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="UbietyXmpp">
-      <HintPath>..\UbietyXmpp\bin\Debug\UbietyXmpp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

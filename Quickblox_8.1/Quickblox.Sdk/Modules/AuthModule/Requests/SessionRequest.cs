@@ -39,7 +39,7 @@ namespace Quickblox.Sdk.Modules.AuthModule.Requests
         public String Provider { get; set; }
 
         [JsonProperty("scope", NullValueHandling = NullValueHandling.Ignore)]
-        public SocialScope? Scope { get; set; }
+        public String Scope { get; set; }
 
         [JsonProperty("keys", NullValueHandling = NullValueHandling.Ignore)]
         public SocialNetworkKey SocialNetworkKey { get; set; }
