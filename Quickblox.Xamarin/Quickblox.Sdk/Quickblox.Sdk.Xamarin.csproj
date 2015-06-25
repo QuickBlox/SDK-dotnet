@@ -245,6 +245,9 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\CustomObjectModule\Models\Permissions.cs">
       <Link>Modules\CustomObjectModule\Models\Permissions.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\CustomObjectModule\Models\RetriveCustomObjectsWithFilter.cs">
+      <Link>Modules\CustomObjectModule\Models\RetriveCustomObjectsWithFilter.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\CustomObjectModule\Models\SuccessfullyDeleted.cs">
       <Link>Modules\CustomObjectModule\Models\SuccessfullyDeleted.cs</Link>
     </Compile>

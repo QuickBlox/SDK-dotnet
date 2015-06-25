@@ -36,8 +36,6 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveCustomObjectsByIdsAsync<T>(
             String className, String ids) where T : BaseCustomObject
         {
-            
-
             if (ids == null) throw new ArgumentNullException("ids");
             if (className == null) throw new ArgumentNullException("className");
 
@@ -50,18 +48,17 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
             return createFileResponse;
         }
 
-        public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveCustomObjectsAsync<T>(String className)
+        public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveCustomObjectsAsync<T>(String className, RetriveCustomObjectsWithFilter filter = null)
             where T : BaseCustomObject
         {
-            
-
             if (className == null) throw new ArgumentNullException("className");
 
             var requestUri = String.Format(QuickbloxMethods.RetriveObjectsMethod, className);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var createFileResponse =
-                await HttpService.GetAsync<RetriveCustomObjectsResponce<T>>(this.quickbloxClient.ApiEndPoint,
+                await HttpService.GetAsync<RetriveCustomObjectsResponce<T>, RetriveCustomObjectsWithFilter>(this.quickbloxClient.ApiEndPoint,
                     requestUri,
+                    filter,
                     headers);
             return createFileResponse;
         }
