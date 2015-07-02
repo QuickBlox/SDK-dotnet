@@ -20,15 +20,18 @@ namespace Quickblox.Sdk
     /// </summary>
     public class QuickbloxClient
     {
-        private String baseUri;
-        private String accountKey;
-        private ICryptographicProvider cryptographicProvider;
-        private string chatUri;
-
         #region Ctor
 
-        public QuickbloxClient()
+        public QuickbloxClient(string apiEndpoint, string chatEndpoint, ICryptographicProvider cryptographicProvider)
         {
+            if (apiEndpoint == null) throw new ArgumentNullException("apiEndpoint");
+            if (chatEndpoint == null) throw new ArgumentNullException("chatEndpoint");
+            if (cryptographicProvider == null) throw new ArgumentNullException("cryptographicProvider");
+
+            ApiEndPoint = apiEndpoint;
+            ChatEndpoint = chatEndpoint;
+            CryptographicProvider = cryptographicProvider;
+
             this.CoreClient = new AuthorizationClient(this);
             this.ChatClient = new ChatClient(this);
             this.UsersClient = new UsersClient(this);
@@ -81,17 +84,20 @@ namespace Quickblox.Sdk
         #endregion
 
         #region Public Members
-        
-        public async Task InitializeClientAsync(String baseUri, String accountKey, ICryptographicProvider cryptographicProvider)
+
+        public async Task GetAccountSettingsAsync(string accountKey)
         {
-            if (baseUri == null) throw new ArgumentNullException("baseUri");
             if (accountKey == null) throw new ArgumentNullException("accountKey");
-            if (cryptographicProvider == null) throw new ArgumentNullException("cryptographicProvider");
-            this.baseUri = baseUri;
-            this.accountKey = accountKey;
-            this.CryptographicProvider = cryptographicProvider;
-            await this.GetAccountSettingsAsync();
-        }
+
+            var accountResponse = await HttpService.GetAsync<AccountResponse>(ApiEndPoint, QuickbloxMethods.AccountMethod,
+                      RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbAccountKey(accountKey));
+
+            if (accountResponse.Result != null)
+            {
+                this.ApiEndPoint = accountResponse.Result.ApiEndPoint;
+                this.ChatEndpoint = accountResponse.Result.ChatEndPoint;
+            }
+        } 
 
         public void Resume(string token)
         {
@@ -101,20 +107,6 @@ namespace Quickblox.Sdk
         public string Suspend()
         {
             return Token;
-        }
-
-        #endregion
-
-        #region Private
-
-        private async Task GetAccountSettingsAsync()
-        {
-                var accountResponse =
-                    await HttpService.GetAsync<AccountResponse>(this.baseUri, QuickbloxMethods.AccountMethod,
-                          RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbAccountKey(this.accountKey));
-
-                this.ApiEndPoint = accountResponse.Result != null ? accountResponse.Result.ApiEndPoint : this.baseUri;
-                this.ChatEndpoint = accountResponse.Result != null ? accountResponse.Result.ChatEndPoint : this.chatUri;
         }
 
         #endregion

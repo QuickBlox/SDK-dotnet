@@ -20,8 +20,7 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            client = new QuickbloxClient();
-            await client.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
+            client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
         }
 
         [TestMethod]
