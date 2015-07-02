@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Quickblox.Sdk.Hmacsha;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 
@@ -34,7 +35,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
-            client1 = new QuickbloxClient();
+            client1 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
             //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
 #if DEBUG
@@ -43,7 +44,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             await client1.MessagesClient.Connect(chatEndpoint, id1, (int)GlobalConstant.ApplicationId, password1);
             chatManager1 = client1.MessagesClient.GetGroupChatManager(groupJid);
 
-            client2 = new QuickbloxClient();
+            client2 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
             //await client2.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client2.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
 #if DEBUG

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="DependencyInjection\InstanceBinding.cs" />
     <Compile Include="DependencyInjection\ServiceLocator.cs" />
     <Compile Include="DependencyInjection\FactoryInitializer.cs" />
     <Compile Include="DependencyInjection\LifetimeMode.cs" />

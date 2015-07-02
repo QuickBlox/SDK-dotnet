@@ -39,6 +39,7 @@
     <Compile Include="GeneralDataModel\Request\ListRequest.cs" />
     <Compile Include="GeneralDataModel\Request\SortOperator.cs" />
     <Compile Include="Http\BytesContent.cs" />
+    <Compile Include="IQuickbloxClient.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSearchOperator.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSortFilter.cs" />
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs" />
@@ -60,8 +61,11 @@
     <Compile Include="Modules\ContentModule\Response\ReadOnlyAccessResponse.cs" />
     <Compile Include="Modules\CustomObjectModule\CustomObjectsClient.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\BaseCustomObject.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\CustomObjectFilter.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\CustomObjectOperator.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\NotFoundsItems.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\Permissions.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\RetriveCustomObjectsWithFilter.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\SuccessfullyDeleted.cs" />
     <Compile Include="Modules\CustomObjectModule\Models\WrongPermissions.cs" />
     <Compile Include="Modules\CustomObjectModule\Requests\CreateCustomObjectRequest.cs" />

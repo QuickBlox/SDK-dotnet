@@ -8,6 +8,7 @@ namespace Quickblox.Sdk.Test
 
         public const string AccountKey = "suLpnYcW2UtK6N7BcRq2";
         public const string ApiBaseEndPoint = "https://api.quickblox.com";
+        public const string ChatEndpoint = "chat.quickblox.com";
 
         #endregion
 

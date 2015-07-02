@@ -13,6 +13,7 @@ using Quickblox.Sdk.Modules.CustomObjectModule.Requests;
 using Quickblox.Sdk.Modules.CustomObjectModule.Responses;
 using System.Collections;
 using System.Text;
+using Quickblox.Sdk.GeneralDataModel.Request;
 
 namespace Quickblox.Sdk.Modules.CustomObjectModule
 {
@@ -21,13 +22,13 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         /// <summary>
         /// The quickblox client
         /// </summary>
-        private readonly QuickbloxClient quickbloxClient;
+        private readonly IQuickbloxClient quickbloxClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomObjectsClient"/> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        public CustomObjectsClient(QuickbloxClient client)
+        public CustomObjectsClient(IQuickbloxClient client)
         {
             this.quickbloxClient = client;
         }
@@ -35,8 +36,6 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveCustomObjectsByIdsAsync<T>(
             String className, String ids) where T : BaseCustomObject
         {
-            
-
             if (ids == null) throw new ArgumentNullException("ids");
             if (className == null) throw new ArgumentNullException("className");
 
@@ -49,18 +48,17 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
             return createFileResponse;
         }
 
-        public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveCustomObjectsAsync<T>(String className)
+        public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveCustomObjectsAsync<T>(String className, RetriveCustomObjectsWithFilter filter = null)
             where T : BaseCustomObject
         {
-            
-
             if (className == null) throw new ArgumentNullException("className");
 
             var requestUri = String.Format(QuickbloxMethods.RetriveObjectsMethod, className);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var createFileResponse =
-                await HttpService.GetAsync<RetriveCustomObjectsResponce<T>>(this.quickbloxClient.ApiEndPoint,
+                await HttpService.GetAsync<RetriveCustomObjectsResponce<T>, RetriveCustomObjectsWithFilter>(this.quickbloxClient.ApiEndPoint,
                     requestUri,
+                    filter,
                     headers);
             return createFileResponse;
         }
@@ -334,8 +332,6 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
 
         public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> RetriveRelationObjectsAsync<T>(String parentClassName, String parentId, String childClassName) where T : BaseCustomObject
         {
-            
-
             if (parentClassName == null) throw new ArgumentNullException("parentClassName");
             if (childClassName == null) throw new ArgumentNullException("childClassName");
             if (parentId == null) throw new ArgumentNullException("parentId");
@@ -347,6 +343,45 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
                                                                         requestUri,
                                                                         headers);
             return createRelationResponse;
+        }
+
+        /// <summary>
+        /// Customs get request for private API
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="requestUri">The request URI.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public async Task<HttpResponse<TResult>> CustomGetRequest<TResult>(String requestUri)
+        {
+            if (requestUri == null) throw new ArgumentNullException("requestUri");
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+
+            var customGetResponse = await HttpService.GetAsync<TResult>(this.quickbloxClient.ApiEndPoint,
+                                                                       requestUri,
+                                                                       headers);
+            return customGetResponse;
+        }
+
+        /// <summary>
+        /// Customs post request for private API
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <typeparam name="TSettings">The type of the settings.</typeparam>
+        /// <param name="requestUri">The request URI.</param>
+        /// <param name="settings">The settings.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public async Task<HttpResponse<TResult>> CustomPostRequest<TResult, TSettings>(String requestUri, TSettings settings) where TSettings : BaseRequestSettings
+        {
+            if (requestUri == null) throw new ArgumentNullException("requestUri");
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+
+            var customPostResponse = await HttpService.PostAsync<TResult, TSettings>(this.quickbloxClient.ApiEndPoint,
+                                                                                                       requestUri,
+                                                                                                       settings,
+                                                                                                       headers);
+            return customPostResponse;
         }
     }
 }

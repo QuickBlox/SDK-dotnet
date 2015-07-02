@@ -15,7 +15,7 @@ namespace QMunicate.ViewModels
         public ViewModel()
         {
             this.NavigationService = ServiceLocator.Locator.Get<INavigationService>();
-            this.QuickbloxClient = ServiceLocator.Locator.Get<QuickbloxClient>();
+            this.QuickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
 
             this.GoBackCommand = new RelayCommand(this.GoBackCommandExecute, this.CanGobackCommandExecute);
         }
@@ -34,7 +34,7 @@ namespace QMunicate.ViewModels
 
         public INavigationService NavigationService { get; protected set; }
 
-        public QuickbloxClient QuickbloxClient { get; protected set; }
+        public IQuickbloxClient QuickbloxClient { get; protected set; }
 
 
         private void GoBackCommandExecute()

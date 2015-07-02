@@ -8,7 +8,7 @@
         [JsonProperty("token")]
         public String Token { get; set; }
 
-        [JsonProperty("secret")]
+        [JsonProperty("secret", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public String Secret { get; set; }
     }
 }

@@ -18,9 +18,9 @@ namespace Quickblox.Sdk.Modules.AuthModule
 {
     public class AuthorizationClient
     {
-        private readonly QuickbloxClient quickbloxClient;
+        private readonly IQuickbloxClient quickbloxClient;
 
-        public AuthorizationClient(QuickbloxClient client)
+        public AuthorizationClient(IQuickbloxClient client)
         {
             this.quickbloxClient = client;
         }
@@ -35,12 +35,14 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
-            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null)
-            this.quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            var tokenHolder = quickbloxClient as ITokenHolder;
+            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
+                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+
             return resultSessionResponse;
         }
 
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLoginAsync(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithLoginAsync(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, String scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
         {
             var settings = this.CreateSessionRequest(applicationId, authKey);
             settings.DeviceRequest = deviceRequestRequest;
@@ -59,19 +61,22 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
-            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null)
-            this.quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            var tokenHolder = quickbloxClient as ITokenHolder;
+            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
+                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+
             return resultSessionResponse;
         }
 
-        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmailAsync(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, SocialScope? scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithEmailAsync(UInt32 applicationId, String authKey, String authSecret, String userLogin, String userPassword, String provider = null, String scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
         {
             var settings = this.CreateSessionRequest(applicationId, authKey);
             settings.DeviceRequest = deviceRequestRequest;
             settings.User = new User() { Email = userLogin, Password = userPassword };
             settings.Scope = scope;
+            settings.Provider = provider;
 
-            if (!string.IsNullOrEmpty(socialToken) && !string.IsNullOrEmpty(socialSecret))
+            if (!string.IsNullOrEmpty(socialToken))
             {
                 settings.SocialNetworkKey = new SocialNetworkKey() { Secret = socialSecret, Token = socialToken };
             }
@@ -82,8 +87,35 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
-            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null)
-            this.quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            var tokenHolder = quickbloxClient as ITokenHolder;
+            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
+                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+
+            return resultSessionResponse;
+        }
+
+        public async Task<HttpResponse<SessionResponse>> CreateSessionWithSocialNetworkKey(UInt32 applicationId, String authKey, String authSecret, String provider = null, String scope = null, String socialToken = null, String socialSecret = null, DeviceRequest deviceRequestRequest = null)
+        {
+            var settings = this.CreateSessionRequest(applicationId, authKey);
+            settings.DeviceRequest = deviceRequestRequest;
+            settings.Scope = scope;
+            settings.Provider = provider;
+
+            if (!string.IsNullOrEmpty(socialToken))
+            {
+                settings.SocialNetworkKey = new SocialNetworkKey() { Secret = socialSecret, Token = socialToken };
+            }
+
+            settings.Signature = this.BuildSignatureFromJsonAttribute(authSecret, settings);
+
+            var resultSessionResponse = await HttpService.PostAsync<SessionResponse, SessionRequest>(this.quickbloxClient.ApiEndPoint,
+                                                                                                        QuickbloxMethods.SessionMethod,
+                                                                                                        settings,
+                                                                                                        RequestHeadersBuilder.GetDefaultHeaders());
+            var tokenHolder = quickbloxClient as ITokenHolder;
+            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
+                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+
             return resultSessionResponse;
         }
 

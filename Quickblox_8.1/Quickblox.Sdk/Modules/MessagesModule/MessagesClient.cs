@@ -21,7 +21,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
     {
         #region Fields
 
-        private QuickbloxClient quickbloxClient;
+        private IQuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
         private int appId;
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
@@ -40,7 +40,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        public MessagesClient(QuickbloxClient quickbloxClient)
+        public MessagesClient(IQuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
             Contacts = new List<Contact>();
