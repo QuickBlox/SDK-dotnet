@@ -138,10 +138,9 @@ namespace QMunicate.ViewModels
             if (tokenHash != storedTokenHash)
             {
                 string storedTokenId = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.PushTokenId);
-                if (storedTokenId != null)
+                if (!string.IsNullOrEmpty(storedTokenId))
                 {
                     var deleteResponse = await QuickbloxClient.NotificationClient.DeletePushTokenAsync(storedTokenId);
-                    if (deleteResponse.StatusCode != HttpStatusCode.OK) return;
                 }
 
                 var settings = new CreatePushTokenRequest()

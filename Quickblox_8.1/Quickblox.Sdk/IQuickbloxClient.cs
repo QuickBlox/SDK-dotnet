@@ -11,7 +11,6 @@ using Quickblox.Sdk.Modules.CustomObjectModule;
 using Quickblox.Sdk.Modules.MessagesModule;
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
-using XMPP.tags.xmpp_stanzas;
 
 namespace Quickblox.Sdk
 {
