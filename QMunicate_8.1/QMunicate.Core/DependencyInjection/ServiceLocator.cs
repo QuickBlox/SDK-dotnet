@@ -30,6 +30,13 @@ namespace QMunicate.Core.DependencyInjection
             this.typeBindings[sourceType] = binding;
         }
 
+        public void Bind<TSource, TReal>(TReal instance) where TReal : TSource
+        {
+            var binding = new InstanceBinding<TSource, TReal>(instance);
+            var sourceType = typeof(TSource);
+            this.typeBindings[sourceType] = binding;
+        }
+
         public TSource Get<TSource>()
         {
             TypeBindingBase binding = null;
