@@ -18,7 +18,7 @@ namespace Quickblox.Sdk
     /// <summary>
     /// QuickbloxClient class.
     /// </summary>
-    public class QuickbloxClient
+    public class QuickbloxClient : IQuickbloxClient, ITokenHolder
     {
         #region Ctor
 
@@ -79,7 +79,7 @@ namespace Quickblox.Sdk
 
         public string ChatEndpoint { get; private set; }
 
-        public string Token { get; internal set; }
+        public string Token { get; private set; }
 
         #endregion
 
@@ -97,7 +97,12 @@ namespace Quickblox.Sdk
                 this.ApiEndPoint = accountResponse.Result.ApiEndPoint;
                 this.ChatEndpoint = accountResponse.Result.ChatEndPoint;
             }
-        } 
+        }
+
+        public void SetToken(string token)
+        {
+            Token = token;
+        }
 
         public void Resume(string token)
         {

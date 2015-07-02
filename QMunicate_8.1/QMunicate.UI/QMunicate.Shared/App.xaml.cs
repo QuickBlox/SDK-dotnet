@@ -44,7 +44,7 @@ namespace QMunicate
         public App()
         {
             ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
-            ServiceLocator.Locator.Bind<QuickbloxClient, QuickbloxClient>(new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider()));
+            ServiceLocator.Locator.Bind<IQuickbloxClient, QuickbloxClient>(new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider()));
             ServiceLocator.Locator.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
             UnhandledException += OnUnhandledException;
 
@@ -107,7 +107,7 @@ namespace QMunicate
             var navigationService = ServiceLocator.Locator.Get<INavigationService>();
             navigationService.Initialize(rootFrame, this.GetPageResolver());
 
-            var quickbloxClient = ServiceLocator.Locator.Get<QuickbloxClient>();
+            var quickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
 
             if (rootFrame.Content == null)
             {
@@ -151,7 +151,7 @@ namespace QMunicate
         }
 
 
-        private async Task DoFirstNavigation(QuickbloxClient quickbloxClient, INavigationService navigationService)
+        private async Task DoFirstNavigation(IQuickbloxClient quickbloxClient, INavigationService navigationService)
         {
             string login = null;
             string password = null;

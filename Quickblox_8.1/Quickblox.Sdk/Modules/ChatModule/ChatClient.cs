@@ -15,14 +15,14 @@ namespace Quickblox.Sdk.Modules.ChatModule
     {
         #region Fields
 
-        private readonly QuickbloxClient quickbloxClient;
+        private readonly IQuickbloxClient quickbloxClient;
 
         #endregion
 
 
         #region Ctor
 
-        public ChatClient(QuickbloxClient quickbloxClient)
+        public ChatClient(IQuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
         }

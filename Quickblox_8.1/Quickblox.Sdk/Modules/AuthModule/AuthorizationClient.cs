@@ -18,9 +18,9 @@ namespace Quickblox.Sdk.Modules.AuthModule
 {
     public class AuthorizationClient
     {
-        private readonly QuickbloxClient quickbloxClient;
+        private readonly IQuickbloxClient quickbloxClient;
 
-        public AuthorizationClient(QuickbloxClient client)
+        public AuthorizationClient(IQuickbloxClient client)
         {
             this.quickbloxClient = client;
         }
@@ -35,8 +35,10 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
-            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null)
-            this.quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            var tokenHolder = quickbloxClient as ITokenHolder;
+            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
+                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+
             return resultSessionResponse;
         }
 
@@ -59,8 +61,10 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
-            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null)
-            this.quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            var tokenHolder = quickbloxClient as ITokenHolder;
+            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
+                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+
             return resultSessionResponse;
         }
 
@@ -83,8 +87,10 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
-            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null)
-            this.quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            var tokenHolder = quickbloxClient as ITokenHolder;
+            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
+                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+
             return resultSessionResponse;
         }
 
@@ -106,8 +112,10 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
-            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null)
-                this.quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            var tokenHolder = quickbloxClient as ITokenHolder;
+            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
+                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+
             return resultSessionResponse;
         }
 
