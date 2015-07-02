@@ -104,15 +104,15 @@ namespace Quickblox.Sdk
             Token = token;
         }
 
-        public void Resume(string token)
-        {
-            Token = token;
-        }
+        //public void Resume(string token)
+        //{
+        //    Token = token;
+        //}
 
-        public string Suspend()
-        {
-            return Token;
-        }
+        //public string Suspend()
+        //{
+        //    return Token;
+        //}
 
         #endregion
     }

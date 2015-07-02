@@ -136,9 +136,9 @@ namespace QMunicate
 
         protected override void OnActivated(IActivatedEventArgs args)
         {
-            var quickbloxClient = ServiceLocator.Locator.Get<QuickbloxClient>();
-            var token = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.QbToken);
-            quickbloxClient.Resume(token);
+            //var quickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
+            //var token = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.QbToken);
+            //quickbloxClient.Resume(token);
 
 #if WINDOWS_PHONE_APP
 
@@ -237,9 +237,8 @@ namespace QMunicate
             // TODO: Save application state and stop any background activity
             deferral.Complete();
 
-            var quickbloxClient = ServiceLocator.Locator.Get<QuickbloxClient>();
-
-            SettingsManager.Instance.WriteToSettings(SettingsKeys.QbToken, quickbloxClient.Token);
+            //var quickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
+            //SettingsManager.Instance.WriteToSettings(SettingsKeys.QbToken, quickbloxClient.Token);
         }
     }
 }
