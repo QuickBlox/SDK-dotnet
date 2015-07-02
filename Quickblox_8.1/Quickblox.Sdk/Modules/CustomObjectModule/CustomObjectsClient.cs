@@ -354,7 +354,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         /// <exception cref="System.ArgumentNullException"></exception>
         public async Task<HttpResponse<TResult>> CustomGetRequest<TResult>(String requestUri)
         {
-            if (requestUri == null) throw new ArgumentNullException(nameof(requestUri));
+            if (requestUri == null) throw new ArgumentNullException("requestUri");
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
 
             var customGetResponse = await HttpService.GetAsync<TResult>(this.quickbloxClient.ApiEndPoint,
@@ -374,7 +374,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         /// <exception cref="System.ArgumentNullException"></exception>
         public async Task<HttpResponse<TResult>> CustomPostRequest<TResult, TSettings>(String requestUri, TSettings settings) where TSettings : BaseRequestSettings
         {
-            if (requestUri == null) throw new ArgumentNullException(nameof(requestUri));
+            if (requestUri == null) throw new ArgumentNullException("requestUri");
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
 
             var customPostResponse = await HttpService.PostAsync<TResult, TSettings>(this.quickbloxClient.ApiEndPoint,

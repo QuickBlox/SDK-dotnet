@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk", "Quickblox_8.1\Quickblox.Sdk\Quickblox.Sdk.csproj", "{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}"
 EndProject
@@ -245,6 +245,7 @@ Global
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Debug|x86.Build.0 = Debug|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Release|ARM.ActiveCfg = Release|Any CPU
@@ -256,7 +257,6 @@ Global
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Debug|x64.Build.0 = Debug|Any CPU
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F5C92500-D225-4473-B169-4C0749FE2A90}.Debug|x86.Build.0 = Debug|Any CPU
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Release|ARM.ActiveCfg = Release|Any CPU
@@ -271,7 +271,6 @@ Global
 		{E44ED153-F352-4576-85EA-D484651A2CCC}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{E44ED153-F352-4576-85EA-D484651A2CCC}.Debug|x64.Build.0 = Debug|Any CPU
 		{E44ED153-F352-4576-85EA-D484651A2CCC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E44ED153-F352-4576-85EA-D484651A2CCC}.Debug|x86.Build.0 = Debug|Any CPU
 		{E44ED153-F352-4576-85EA-D484651A2CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E44ED153-F352-4576-85EA-D484651A2CCC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E44ED153-F352-4576-85EA-D484651A2CCC}.Release|ARM.ActiveCfg = Release|Any CPU
@@ -287,7 +286,6 @@ Global
 		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|x64.Build.0 = Debug|Any CPU
 		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4121980C-B6F9-43EE-895F-FF6552574784}.Debug|x86.Build.0 = Debug|Any CPU
 		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4121980C-B6F9-43EE-895F-FF6552574784}.Release|ARM.ActiveCfg = Release|Any CPU

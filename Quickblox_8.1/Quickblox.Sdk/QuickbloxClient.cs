@@ -1,21 +1,17 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using Quickblox.Sdk.Builder;
-using Quickblox.Sdk.Modules.ChatModule;
+﻿using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Cryptographic;
-using Quickblox.Sdk.GeneralDataModel.Request;
+using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
-using Quickblox.Sdk.GeneralDataModel.Response;
-using Quickblox.Sdk.Http;
+using Quickblox.Sdk.Modules.ChatModule;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.CustomObjectModule;
-//using Quickblox.Sdk.Modules.MessagesModule;
+using Quickblox.Sdk.Modules.MessagesModule;
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
-using Quickblox.Sdk.Serializer;
+using System;
+using System.Threading.Tasks;
 
 namespace Quickblox.Sdk
 {
@@ -37,30 +33,10 @@ namespace Quickblox.Sdk
             this.ChatClient = new ChatClient(this);
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
-            //this.MessagesClient = new MessagesClient(this);
+            this.MessagesClient = new MessagesClient(this);
             this.ContentClient = new ContentClient(this);      
             this.CustomObjectsClient = new CustomObjectsClient(this);
         }
-
-        /// <summary>
-        /// Инициализирует новый экземпляр класса QuickbloxClient.
-        /// </summary>
-        /// <param name="baseUri">Начальный урл.</param>
-        /// <param name="accountKey">Ключ аккаунта</param>
-        /// <param name="cryptographicProvider"></param>
-        //public QuickbloxClient(String baseUri, String accountKey, ICryptographicProvider cryptographicProvider)
-        //{
-        //    this.baseUri = baseUri;
-        //    this.accountKey = accountKey;
-        //    this.CryptographicProvider = cryptographicProvider;
-
-        //    this.CoreClient = new AuthorizationClient(this);
-        //    this.ChatClient = new ChatClient(this);
-        //    this.UsersClient = new UsersClient(this);
-        //    this.NotificationClient = new NotificationClient(this);
-        //    this.MessagesClient = new MessagesClient(this);
-        //    this.ContentClient = new ContentClient(this);
-        //}
 
         #endregion
 
@@ -84,7 +60,7 @@ namespace Quickblox.Sdk
 
         public NotificationClient NotificationClient { get; private set; }
 
-        //public MessagesClient MessagesClient { get; private set; }
+        public MessagesClient MessagesClient { get; private set; }
 
         public CustomObjectsClient CustomObjectsClient { get; private set; }
 
