@@ -23,9 +23,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private IQuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
+        private string chatEndpoint;
         private int appId;
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
-        private const string qbJidPattern = @"{0}-{1}@chat.quickblox.com";
         private bool isReady;
 
         #endregion
@@ -99,7 +99,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public IPrivateChatManager GetPrivateChatManager(int otherUserId)
         {
-            string otherUserJid = string.Format(qbJidPattern, otherUserId, appId);
+            string otherUserJid = BuildJid(otherUserId);
             return new PrivateChatManager(xmppClient, otherUserJid);
         }
 
@@ -117,7 +117,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void AddContact(Contact contact)
         {
-            string jid = string.Format(qbJidPattern, contact.UserId, appId);
+            string jid = BuildJid(contact.UserId);
 
             var rosterItem = new item {jid = jid, name = contact.Name};
             var rosterQuery = new query();
@@ -130,7 +130,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void DeleteContact(int userId)
         {
-            string jid = string.Format(qbJidPattern, userId, appId);
+            string jid = BuildJid(userId);
 
             var rosterItem = new item { jid = jid, subscription = item.subscriptionEnum.remove};
             var rosterQuery = new query();
@@ -145,17 +145,18 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Private methods
 
-        private void OpenConnection(Client client, string chatEndpoint, int userId, int applicationId,
+        private void OpenConnection(Client client, string chatEndpointUrl, int userId, int applicationId,
             string password)
         {
+            chatEndpoint = chatEndpointUrl;
             appId = applicationId;
 
-            client.Settings.Hostname = chatEndpoint;
+            client.Settings.Hostname = chatEndpointUrl;
             client.Settings.SSL = false;
             client.Settings.OldSSL = false;
             client.Settings.Port = 5222;
             client.Settings.AuthenticationTypes = MechanismType.Plain;
-            client.Settings.Id = string.Format(qbJidPattern, userId, applicationId);
+            client.Settings.Id = BuildJid(userId);
             client.Settings.Password = password;
             
             client.OnReceive += ClientOnOnReceive;
@@ -261,6 +262,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                         handler(this, new EventArgs());
                 }
             }
+        }
+
+        private string BuildJid(int userId)
+        {
+            return string.Format("{0}-{1}@{2}", userId, appId, chatEndpoint);
         }
 
         //TODO: parse attachemnts from extraparams with Ubiety
