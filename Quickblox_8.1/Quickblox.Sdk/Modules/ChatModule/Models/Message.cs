@@ -20,7 +20,7 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
         public string MessageText { get; set; }
 
         [JsonProperty("recipient_id")]
-        public int RecipientId { get; set; }
+        public int? RecipientId { get; set; }
 
         [JsonProperty("sender_id")]
         public int SenderId { get; set; }
