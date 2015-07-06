@@ -250,7 +250,7 @@ namespace Quickblox.Sdk.Http
             Debug.WriteLine(String.Concat("CONTENT: ", stringContent));
             HttpResponse<TResult> httpResponse = new HttpResponse<TResult>();
 
-            serializer = serializer ?? FactorySerializer.CreateSerializer(response.Content.Headers.ContentType.MediaType);
+            serializer = serializer ?? (response.Content.Headers.ContentType != null ? FactorySerializer.CreateSerializer(response.Content.Headers.ContentType.MediaType) : FactorySerializer.CreateSerializer());
 
             if (response.IsSuccessStatusCode)
             {

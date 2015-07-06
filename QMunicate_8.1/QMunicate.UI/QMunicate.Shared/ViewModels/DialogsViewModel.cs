@@ -14,7 +14,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Networking.PushNotifications;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
 using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 
@@ -127,8 +129,11 @@ namespace QMunicate.ViewModels
         private async void PushChannelOnPushNotificationReceived(PushNotificationChannel sender,
             PushNotificationReceivedEventArgs args)
         {
-            var messageService = ServiceLocator.Locator.Get<IMessageService>();
-            await messageService.ShowAsync("Message", "Push received");
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                var messageService = ServiceLocator.Locator.Get<IMessageService>();
+                await messageService.ShowAsync("Message", "Push received");
+            });
         }
 
         private async Task CheckAndUpdatePushToken(PushNotificationChannel pushChannel)
