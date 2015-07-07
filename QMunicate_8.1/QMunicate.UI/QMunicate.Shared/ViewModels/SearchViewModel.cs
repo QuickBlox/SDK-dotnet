@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
@@ -58,9 +59,17 @@ namespace QMunicate.ViewModels
 
         private async void Search(string searchQuery)
         {
+            IsLoading = true;
+            await GlobalSearch(searchQuery);
+            LocalSearch(searchQuery);
+            IsLoading = false;
+        }
+
+        private async Task GlobalSearch(string searchQuery)
+        {
+            GlobalResults.Clear();
             if (string.IsNullOrWhiteSpace(searchQuery)) return;
 
-            IsLoading = true;
             var response = await QuickbloxClient.UsersClient.GetUserByFullNameAsync(searchQuery, null, null);
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -70,12 +79,11 @@ namespace QMunicate.ViewModels
                     GlobalResults.Add(UserVm.FromUser(item.User));
                 }
             }
-            else
-            {
-                GlobalResults.Clear();
-            }
+        }
 
-            IsLoading = false;
+        private void LocalSearch(string searchQuery)
+        {
+
         }
 
         private async void LoadLocalUsers()

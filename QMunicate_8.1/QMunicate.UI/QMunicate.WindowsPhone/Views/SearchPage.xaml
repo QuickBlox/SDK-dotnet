@@ -7,16 +7,25 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:behaviors="using:QMunicate.Behaviors"
+    xmlns:controls="using:QMunicate.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
     DataContext="{Binding SearchViewModel, Source={StaticResource Locator}}">
     
     <Page.Resources>
-        <DataTemplate x:Key="UserTemplate">
+        <DataTemplate x:Key="LocalUserTemplate">
             <StackPanel Orientation="Horizontal">
                 <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
-                <TextBlock Text="{Binding FullName}" FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
+                <controls:SelectionsTextBlock Text="{Binding FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"
+                                              FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="GlobalUserTemplate">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
+                <controls:SelectionsTextBlock Text="{Binding FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"
+                                              FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
@@ -26,7 +35,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="{StaticResource DefaultMargin}"/>
+        <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="{StaticResource DefaultMargin}"/>
         <Pivot Grid.Row="1">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
@@ -35,11 +44,11 @@
             </Pivot.HeaderTemplate>
             <PivotItem Header="local">
                 <ListBox ItemsSource="{Binding LocalResults}" Background="Transparent"
-                         ItemTemplate="{StaticResource UserTemplate}" />
+                         ItemTemplate="{StaticResource LocalUserTemplate}" />
             </PivotItem>
             <PivotItem Header="global">
                 <ListBox ItemsSource="{Binding GlobalResults}" Background="Transparent"
-                         ItemTemplate="{StaticResource UserTemplate}" />
+                         ItemTemplate="{StaticResource GlobalUserTemplate}" />
             </PivotItem>
         </Pivot>
     </Grid>

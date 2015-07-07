@@ -11,6 +11,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/RadTextBox.xaml" />
                 <ResourceDictionary Source="Themes/ContentButtonStyle.xaml" />
+                <ResourceDictionary Source="Themes/SelectionsTextBlock.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <x:Double x:Key="SmallFontSize">15</x:Double>
