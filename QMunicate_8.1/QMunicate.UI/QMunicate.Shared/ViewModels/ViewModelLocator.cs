@@ -40,6 +40,11 @@ namespace QMunicate.ViewModels
             get { return new SettingsViewModel(); }
         }
 
+        public SearchViewModel SearchViewModel
+        {
+            get { return new SearchViewModel(); }
+        }
+
         #endregion
 
         #region Public methods

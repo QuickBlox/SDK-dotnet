@@ -93,6 +93,7 @@ namespace QMunicate.ViewModels
         private async Task InitializeChat(int userId, string password)
         {
             await ConnectToChat(userId, password);
+            QuickbloxClient.MessagesClient.ReloadContacts();
             await LoadDialogs();
         }
 
@@ -199,7 +200,7 @@ namespace QMunicate.ViewModels
 
         private void SearchCommandExecute()
         {
-
+            NavigationService.Navigate(ViewLocator.Search);
         }
 
         private void SettingsCommandExecute()

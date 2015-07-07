@@ -196,6 +196,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.Dialogs, typeof(DialogsPage));
             dictionary.Add(ViewLocator.Chat, typeof(ChatPage));
             dictionary.Add(ViewLocator.Settings, typeof(SettingsView));
+            dictionary.Add(ViewLocator.Search, typeof(SearchPage));
             return new PageResolver(dictionary);
         }
 
