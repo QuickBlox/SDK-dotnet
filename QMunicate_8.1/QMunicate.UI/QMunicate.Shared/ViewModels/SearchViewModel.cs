@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Navigation;
-using QMunicate.Models;
+﻿using QMunicate.Models;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Responses;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Navigation;
 
 namespace QMunicate.ViewModels
 {
@@ -19,6 +16,7 @@ namespace QMunicate.ViewModels
         #region Fields
 
         private string searchText;
+        private bool isInGlobalSeachMode;
 
         #endregion
 
@@ -44,6 +42,16 @@ namespace QMunicate.ViewModels
             }
         }
 
+        public bool IsInGlobalSeachMode
+        {
+            get { return isInGlobalSeachMode; }
+            set
+            {
+                if (Set(ref isInGlobalSeachMode, value))
+                    Search(SearchText);
+            }
+        }
+
         public ObservableCollection<UserVm> GlobalResults { get; set; }
 
         public ObservableCollection<UserVm> LocalResults { get; set; }
@@ -52,17 +60,17 @@ namespace QMunicate.ViewModels
 
         public async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            LoadLocalUsers();
+            LocalSearch("");
         }
 
         #region Private methods
 
         private async void Search(string searchQuery)
         {
-            IsLoading = true;
-            await GlobalSearch(searchQuery);
-            LocalSearch(searchQuery);
-            IsLoading = false;
+            if(isInGlobalSeachMode)
+                await GlobalSearch(searchQuery);
+            else
+                LocalSearch(searchQuery);
         }
 
         private async Task GlobalSearch(string searchQuery)
@@ -70,6 +78,7 @@ namespace QMunicate.ViewModels
             GlobalResults.Clear();
             if (string.IsNullOrWhiteSpace(searchQuery)) return;
 
+            IsLoading = true;
             var response = await QuickbloxClient.UsersClient.GetUserByFullNameAsync(searchQuery, null, null);
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -79,29 +88,25 @@ namespace QMunicate.ViewModels
                     GlobalResults.Add(UserVm.FromUser(item.User));
                 }
             }
+
+            IsLoading = false;
         }
 
         private void LocalSearch(string searchQuery)
         {
-
-        }
-
-        private async void LoadLocalUsers()
-        {
-            QuickbloxClient.MessagesClient.OnContactsChanged += MessagesClientOnOnContactsChanged;
-            QuickbloxClient.MessagesClient.ReloadContacts();
-        }
-
-        private void MessagesClientOnOnContactsChanged(object sender, EventArgs eventArgs)
-        {
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => LocalResults.Clear());
-            
-            if (QuickbloxClient.MessagesClient.Contacts != null)
+            LocalResults.Clear();
+            if (string.IsNullOrEmpty(searchQuery))
             {
                 foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
                 {
-                    var contact1 = contact;
-                    CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => LocalResults.Add(UserVm.FromContact(contact1)));
+                    LocalResults.Add(UserVm.FromContact(contact));
+                }
+            }
+            else
+            {
+                foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
+                {
+                    LocalResults.Add(UserVm.FromContact(contact));
                 }
             }
         }

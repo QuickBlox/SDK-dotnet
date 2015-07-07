@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -34,6 +35,18 @@ namespace QMunicate.Views
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+        }
+
+        private void Pivot_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var currentPivotItem = Pivot.SelectedItem as PivotItem;
+            var viewModel = this.DataContext as SearchViewModel;
+            if (currentPivotItem != null && viewModel != null && this.Resources.ContainsKey("GlobalLabel"))
+            {
+                var globalLabel = this.Resources["GlobalLabel"] as string;
+                var pivotItemHeader = currentPivotItem.Header as string;
+                viewModel.IsInGlobalSeachMode = pivotItemHeader == globalLabel;
+            }
         }
     }
 }

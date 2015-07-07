@@ -91,6 +91,7 @@ namespace QMunicate.ViewModels
         private async Task InitializeChat(int userId, string password)
         {
             await ConnectToChat(userId, password);
+            QuickbloxClient.MessagesClient.ReloadContacts();
             await LoadDialogs();
         }
 

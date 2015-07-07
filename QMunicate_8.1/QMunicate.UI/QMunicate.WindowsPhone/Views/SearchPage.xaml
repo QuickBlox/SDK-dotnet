@@ -14,6 +14,9 @@
     DataContext="{Binding SearchViewModel, Source={StaticResource Locator}}">
     
     <Page.Resources>
+        <x:String x:Key="LocalLabel">local</x:String>
+        <x:String x:Key="GlobalLabel">global</x:String>
+        
         <DataTemplate x:Key="LocalUserTemplate">
             <StackPanel Orientation="Horizontal">
                 <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
@@ -36,17 +39,17 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="{StaticResource DefaultMargin}"/>
-        <Pivot Grid.Row="1">
+        <Pivot x:Name="Pivot" Grid.Row="1" SelectionChanged="Pivot_OnSelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" FontSize="{StaticResource LargeFontSize}"/>
                 </DataTemplate>
             </Pivot.HeaderTemplate>
-            <PivotItem Header="local">
+            <PivotItem Header="{StaticResource LocalLabel}">
                 <ListBox ItemsSource="{Binding LocalResults}" Background="Transparent"
                          ItemTemplate="{StaticResource LocalUserTemplate}" />
             </PivotItem>
-            <PivotItem Header="global">
+            <PivotItem Header="{StaticResource GlobalLabel}">
                 <ListBox ItemsSource="{Binding GlobalResults}" Background="Transparent"
                          ItemTemplate="{StaticResource GlobalUserTemplate}" />
             </PivotItem>
