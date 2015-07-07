@@ -31,6 +31,16 @@
                                               FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
+
+        <Style x:Key="ListBoxItemContainerStyle" TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <ContentPresenter Margin="0 0 0 12"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid>
@@ -46,11 +56,11 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem Header="{StaticResource LocalLabel}">
-                <ListBox ItemsSource="{Binding LocalResults}" Background="Transparent"
+                <ListBox ItemsSource="{Binding LocalResults}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
                          ItemTemplate="{StaticResource LocalUserTemplate}" />
             </PivotItem>
             <PivotItem Header="{StaticResource GlobalLabel}">
-                <ListBox ItemsSource="{Binding GlobalResults}" Background="Transparent"
+                <ListBox ItemsSource="{Binding GlobalResults}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
                          ItemTemplate="{StaticResource GlobalUserTemplate}" />
             </PivotItem>
         </Pivot>
