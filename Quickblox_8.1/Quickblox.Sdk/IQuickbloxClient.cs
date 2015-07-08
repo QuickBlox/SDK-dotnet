@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Cryptographic;
 using Quickblox.Sdk.Modules.AuthModule;
+using Quickblox.Sdk.Modules.AuthModule.Models;
 using Quickblox.Sdk.Modules.ChatModule;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.CustomObjectModule;
@@ -40,12 +41,15 @@ namespace Quickblox.Sdk
 
         string Token { get; }
 
+        int CurrentUserId { get; }
+
         Task GetAccountSettingsAsync(string accountKey);
     }
 
-    internal interface ITokenHolder
+    internal interface ISessionHolder
     {
         string Token { get; }
-        void SetToken(string token);
+        int CurrentUserId { get; }
+        void SetSession(Session session);
     }
 }

@@ -12,13 +12,14 @@ using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 using System;
 using System.Threading.Tasks;
+using Quickblox.Sdk.Modules.AuthModule.Models;
 
 namespace Quickblox.Sdk
 {
     /// <summary>
     /// QuickbloxClient class.
     /// </summary>
-    public class QuickbloxClient : IQuickbloxClient, ITokenHolder
+    public class QuickbloxClient : IQuickbloxClient, ISessionHolder
     {
         #region Ctor
 
@@ -81,6 +82,8 @@ namespace Quickblox.Sdk
 
         public string Token { get; private set; }
 
+        public int CurrentUserId { get; private set; }
+
         #endregion
 
         #region Public Members
@@ -99,9 +102,11 @@ namespace Quickblox.Sdk
             }
         }
 
-        public void SetToken(string token)
+        public void SetSession(Session session)
         {
-            Token = token;
+            if (session == null) throw new ArgumentNullException("session");
+            Token = session.Token;
+            CurrentUserId = session.UserId;
         }
 
         //public void Resume(string token)

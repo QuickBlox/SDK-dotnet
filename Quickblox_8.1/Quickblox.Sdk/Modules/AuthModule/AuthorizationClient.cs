@@ -35,9 +35,9 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
-            var tokenHolder = quickbloxClient as ITokenHolder;
-            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
-                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+            var sessionHolder = quickbloxClient as ISessionHolder;
+            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
+                sessionHolder.SetSession(resultSessionResponse.Result.Session);
 
             return resultSessionResponse;
         }
@@ -61,9 +61,9 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
-            var tokenHolder = quickbloxClient as ITokenHolder;
-            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
-                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+            var sessionHolder = quickbloxClient as ISessionHolder;
+            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
+                sessionHolder.SetSession(resultSessionResponse.Result.Session);
 
             return resultSessionResponse;
         }
@@ -87,9 +87,9 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
-            var tokenHolder = quickbloxClient as ITokenHolder;
-            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
-                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+            var sessionHolder = quickbloxClient as ISessionHolder;
+            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
+                sessionHolder.SetSession(resultSessionResponse.Result.Session);
 
             return resultSessionResponse;
         }
@@ -112,9 +112,9 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
-            var tokenHolder = quickbloxClient as ITokenHolder;
-            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && tokenHolder != null)
-                tokenHolder.SetToken(resultSessionResponse.Result.Session.Token);
+            var sessionHolder = quickbloxClient as ISessionHolder;
+            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
+                sessionHolder.SetSession(resultSessionResponse.Result.Session);
 
             return resultSessionResponse;
         }
