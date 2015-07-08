@@ -45,6 +45,11 @@ namespace QMunicate.ViewModels
             get { return new SearchViewModel(); }
         }
 
+        public SendRequestViewModel SendRequestViewModel
+        {
+            get { return new SendRequestViewModel(); }
+        }
+
         #endregion
 
         #region Public methods

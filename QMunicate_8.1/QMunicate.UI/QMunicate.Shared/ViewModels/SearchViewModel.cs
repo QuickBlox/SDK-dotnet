@@ -132,7 +132,7 @@ namespace QMunicate.ViewModels
 
         private void OpenGlobalCommandExecute(UserVm user)
         {
-
+            NavigationService.Navigate(ViewLocator.SendRequest);
         }
 
         #endregion
