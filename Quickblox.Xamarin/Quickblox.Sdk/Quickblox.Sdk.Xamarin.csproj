@@ -95,6 +95,9 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Http\HttpService.cs">
       <Link>Http\HttpService.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\IQuickbloxClient.cs">
+      <Link>IQuickbloxClient.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\AuthModule\AuthorizationClient.cs">
       <Link>Modules\AuthModule\AuthorizationClient.cs</Link>
     </Compile>
