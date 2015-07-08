@@ -46,6 +46,7 @@ namespace QMunicate
             ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
             ServiceLocator.Locator.Bind<IQuickbloxClient, QuickbloxClient>(new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider()));
             ServiceLocator.Locator.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
+            ServiceLocator.Locator.Bind<IDialogsManager, DialogsManager>(LifetimeMode.Singleton);
             UnhandledException += OnUnhandledException;
 
             this.InitializeComponent();

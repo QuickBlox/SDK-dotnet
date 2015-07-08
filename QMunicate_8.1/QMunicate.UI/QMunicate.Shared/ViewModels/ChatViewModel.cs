@@ -19,7 +19,6 @@ namespace QMunicate.ViewModels
     {
         #region Fields
 
-        private int curentUserId;
         private string newMessageText;
         private string chatName;
         private string chatImage;
@@ -98,15 +97,13 @@ namespace QMunicate.ViewModels
         {
             IsLoading = true;
 
-            curentUserId = chatParameter.CurrentUserId;
-
             if (chatParameter.Dialog != null)
             {
                 dialog = chatParameter.Dialog;
                 ChatName = chatParameter.Dialog.Name;
                 ChatImage = chatParameter.Dialog.Image;
 
-                int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != curentUserId);
+                int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
                 if (otherUserId != 0)
                 {
                     privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
@@ -126,7 +123,7 @@ namespace QMunicate.ViewModels
             {
                 foreach (Message message in response.Result.Items)
                 {
-                    var msg = MessageVm.FromMessage(message, curentUserId);
+                    var msg = MessageVm.FromMessage(message, QuickbloxClient.CurrentUserId);
                     Messages.Add(msg);
                 }
             }

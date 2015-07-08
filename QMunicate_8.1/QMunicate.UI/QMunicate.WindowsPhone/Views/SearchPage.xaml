@@ -8,24 +8,28 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:behaviors="using:QMunicate.Behaviors"
     xmlns:controls="using:QMunicate.Controls"
+    xmlns:tapListener="using:QMunicate.Core.TapListener"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
-    DataContext="{Binding SearchViewModel, Source={StaticResource Locator}}">
+    DataContext="{Binding SearchViewModel, Source={StaticResource Locator}}"
+    x:Name="Page">
     
     <Page.Resources>
         <x:String x:Key="LocalLabel">local</x:String>
         <x:String x:Key="GlobalLabel">global</x:String>
         
         <DataTemplate x:Key="LocalUserTemplate">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" tapListener:TapListener.TapCommand="{Binding DataContext.OpenLocalCommand, ElementName=Page}"
+                              tapListener:TapListener.TapCommandParameter="{Binding }">
                 <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
                 <controls:SelectionsTextBlock Text="{Binding FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"
                                               FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Key="GlobalUserTemplate">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" tapListener:TapListener.TapCommand="{Binding DataContext.OpenGlobalCommand, ElementName=Page}"
+                              tapListener:TapListener.TapCommandParameter="{Binding }">
                 <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
                 <controls:SelectionsTextBlock Text="{Binding FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"
                                               FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>

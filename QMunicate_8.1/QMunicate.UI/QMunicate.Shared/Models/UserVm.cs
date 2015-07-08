@@ -17,17 +17,21 @@ namespace QMunicate.Models
 
         protected UserVm(User user)
         {
+            UserId = user.Id;
             FullName = user.FullName;
         }
 
         protected UserVm(Contact contact)
         {
+            UserId = contact.UserId;
             FullName = contact.Name;
         }
 
         #endregion
 
         #region Properties
+
+        public int UserId { get; set; }
 
         public string FullName { get; set; }
 

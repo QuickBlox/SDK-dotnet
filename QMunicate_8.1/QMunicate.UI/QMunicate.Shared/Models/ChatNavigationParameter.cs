@@ -6,7 +6,6 @@ namespace QMunicate.Models
 {
     public class ChatNavigationParameter
     {
-        public int CurrentUserId { get; set; }
         public DialogVm Dialog { get; set; }
     }
 }

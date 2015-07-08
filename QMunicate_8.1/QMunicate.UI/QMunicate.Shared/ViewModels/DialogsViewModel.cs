@@ -69,6 +69,7 @@ namespace QMunicate.ViewModels
                 
                 await InitializeChat(parameter.CurrentUserId, parameter.Password);
             }
+            await LoadDialogs();
             await InitializePush();
             IsLoading = false;
         }
@@ -94,7 +95,6 @@ namespace QMunicate.ViewModels
         {
             await ConnectToChat(userId, password);
             QuickbloxClient.MessagesClient.ReloadContacts();
-            await LoadDialogs();
         }
 
         private async Task ConnectToChat(int userId, string password)
@@ -106,14 +106,12 @@ namespace QMunicate.ViewModels
         private async Task LoadDialogs()
         {
             Dialogs.Clear();
-            RetrieveDialogsRequest retrieveDialogsRequest = new RetrieveDialogsRequest();
-            var response = await QuickbloxClient.ChatClient.GetDialogsAsync(retrieveDialogsRequest);
-            if (response.StatusCode == HttpStatusCode.OK)
+
+            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            if(!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
+            foreach (Dialog dialog in dialogsManager.Dialogs)
             {
-                foreach (Dialog dialog in response.Result.Items)
-                {
-                    Dialogs.Add(DialogVm.FromDialog(dialog));
-                }
+                Dialogs.Add(DialogVm.FromDialog(dialog));
             }
         }
 
@@ -190,7 +188,7 @@ namespace QMunicate.ViewModels
 
         private void OpenChatCommandExecute(object dialog)
         {
-            NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter {CurrentUserId = currentUserId, Dialog = dialog as DialogVm});
+            NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter {Dialog = dialog as DialogVm});
         }
 
         private async void NewMessageCommandExecute()

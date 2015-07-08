@@ -1,5 +1,9 @@
-﻿using QMunicate.Models;
+﻿using QMunicate.Core.Command;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Helper;
+using QMunicate.Models;
 using Quickblox.Sdk;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Responses;
 using System;
@@ -26,6 +30,8 @@ namespace QMunicate.ViewModels
         {
             GlobalResults = new ObservableCollection<UserVm>();
             LocalResults = new ObservableCollection<UserVm>();
+            OpenLocalCommand = new RelayCommand<UserVm>(u => OpenLocalCommandExecute(u));
+            OpenGlobalCommand = new RelayCommand<UserVm>(OpenGlobalCommandExecute);
         }
 
         #endregion
@@ -55,6 +61,10 @@ namespace QMunicate.ViewModels
         public ObservableCollection<UserVm> GlobalResults { get; set; }
 
         public ObservableCollection<UserVm> LocalResults { get; set; }
+
+        public RelayCommand<UserVm> OpenLocalCommand { get; set; }
+
+        public RelayCommand<UserVm> OpenGlobalCommand { get; set; }
 
         #endregion
 
@@ -109,6 +119,20 @@ namespace QMunicate.ViewModels
                     LocalResults.Add(UserVm.FromContact(contact));
                 }
             }
+        }
+
+        private async Task OpenLocalCommandExecute(UserVm user)
+        {
+            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            if (!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
+            var userDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Type == DialogType.Private && d.OccupantsIds.Contains(user.UserId));
+            if(userDialog != null)
+                NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = DialogVm.FromDialog(userDialog) });
+        }
+
+        private void OpenGlobalCommandExecute(UserVm user)
+        {
+
         }
 
         #endregion
