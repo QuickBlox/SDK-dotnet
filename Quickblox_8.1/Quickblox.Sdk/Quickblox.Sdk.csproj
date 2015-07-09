@@ -77,6 +77,7 @@
     <Compile Include="Modules\MessagesModule\Interfaces\IPrivateChatManager.cs" />
     <Compile Include="Modules\MessagesModule\Models\Attachment.cs" />
     <Compile Include="Modules\MessagesModule\Models\Contact.cs" />
+    <Compile Include="Modules\MessagesModule\Models\ContactRequest.cs" />
     <Compile Include="Modules\MessagesModule\Models\ExtraParams.cs" />
     <Compile Include="Modules\MessagesModule\Models\Presence.cs" />
     <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />

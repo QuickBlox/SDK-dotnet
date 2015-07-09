@@ -44,6 +44,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         {
             this.quickbloxClient = quickbloxClient;
             Contacts = new List<Contact>();
+            Presences = new List<Presence>();
+            ContactRequests = new List<ContactRequest>();
         }
 
         #endregion
@@ -53,6 +55,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         public List<Contact> Contacts { get; private set; }
 
         public List<Presence> Presences { get; private set; }
+
+        public List<ContactRequest> ContactRequests { get; private set; }
 
         public bool IsConnected { get { return xmppClient != null && xmppClient.Connected && isReady; } }
 
@@ -218,10 +222,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                 PresenceType = (PresenceType) presence.type
             };
 
-            if (Presences == null) Presences = new List<Presence>();
-
             Presences.RemoveAll(p => p.From == receivedPresence.From);
             Presences.Add(receivedPresence);
+
+            if (presence.type == presence.typeEnum.subscribe)
+            {
+                int userId = GetUserIdFromJid(presence.from);
+
+                if(userId != 0)
+                    ContactRequests.Add(new ContactRequest() {FromUserId = userId});
+            }
 
             var handler = OnPresenceReceived;
             if (handler != null)
@@ -242,11 +252,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
                     foreach (var item in query.itemElements)
                     {
-                        var match = qbJidRegex.Match(item.jid);
-
-                        if (!match.Success || match.Groups.Count == 0) continue;
-                        int userId;
-                        if (!int.TryParse(match.Groups[1].Value, out userId)) continue;
+                        int userId = GetUserIdFromJid(item.jid);
+                        if (userId == 0) continue;
 
                         Contacts.RemoveAll(c => c.UserId == userId);
 
@@ -267,6 +274,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private string BuildJid(int userId)
         {
             return string.Format("{0}-{1}@{2}", userId, appId, chatEndpoint);
+        }
+
+        private int GetUserIdFromJid(string jid)
+        {
+            var match = qbJidRegex.Match(jid);
+
+            if (!match.Success || match.Groups.Count == 0) return 0;
+            int userId;
+            if (!int.TryParse(match.Groups[1].Value, out userId)) return 0;
+            return userId;
         }
 
         //TODO: parse attachemnts from extraparams with Ubiety
