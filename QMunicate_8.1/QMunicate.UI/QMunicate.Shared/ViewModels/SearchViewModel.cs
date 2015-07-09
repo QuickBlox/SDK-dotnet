@@ -68,10 +68,14 @@ namespace QMunicate.ViewModels
 
         #endregion
 
-        public async override void OnNavigatedTo(NavigationEventArgs e)
+        #region Navigation
+
+        public override async void OnNavigatedTo(NavigationEventArgs e)
         {
             LocalSearch("");
         }
+
+        #endregion
 
         #region Private methods
 
@@ -132,7 +136,7 @@ namespace QMunicate.ViewModels
 
         private void OpenGlobalCommandExecute(UserVm user)
         {
-            NavigationService.Navigate(ViewLocator.SendRequest);
+            NavigationService.Navigate(ViewLocator.SendRequest, user);
         }
 
         #endregion

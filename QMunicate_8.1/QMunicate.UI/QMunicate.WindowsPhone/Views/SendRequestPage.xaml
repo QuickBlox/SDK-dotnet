@@ -11,6 +11,10 @@
     DataContext="{Binding SendRequestViewModel, Source={StaticResource Locator}}">
 
     <Grid>
-
+        <StackPanel Margin="{StaticResource DefaultMargin}">
+            <TextBlock Text="{Binding UserName}" FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}"/>
+            <Image Source="{Binding UserImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="140" Height="140" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Left"/>
+            <Button Content="send contact request" Margin="{StaticResource DefaultMargin}" Command="{Binding SendCommand}"/>
+        </StackPanel>
     </Grid>
 </Page>
