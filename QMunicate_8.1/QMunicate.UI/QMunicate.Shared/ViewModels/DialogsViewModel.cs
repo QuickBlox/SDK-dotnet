@@ -18,6 +18,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Networking.PushNotifications;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 
 namespace QMunicate.ViewModels
@@ -106,6 +107,19 @@ namespace QMunicate.ViewModels
         private async Task LoadDialogs()
         {
             Dialogs.Clear();
+
+            QuickbloxClient.MessagesClient.OnContactRequestReceived += (sender, request) =>
+            {
+                CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    Dialogs.Add(DialogVm.FromContactRequest(request, QuickbloxClient.CurrentUserId));
+                });
+            };
+            foreach (ContactRequest contactRequest in QuickbloxClient.MessagesClient.ContactRequests)
+            {
+                Dialogs.Add(DialogVm.FromContactRequest(contactRequest, QuickbloxClient.CurrentUserId));
+            }
+            
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             if(!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();

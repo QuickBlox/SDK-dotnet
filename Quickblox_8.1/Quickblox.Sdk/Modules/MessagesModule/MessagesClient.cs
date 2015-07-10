@@ -34,6 +34,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public event EventHandler<Message> OnMessageReceived;
         public event EventHandler<Presence> OnPresenceReceived;
+        public event EventHandler<ContactRequest> OnContactRequestReceived;
         public event EventHandler OnContactsChanged;
 
         #endregion
@@ -229,8 +230,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             {
                 int userId = GetUserIdFromJid(presence.from);
 
+                var receivedRequest = new ContactRequest() {FromUserId = userId};
+
+                var contactHandler = OnContactRequestReceived;
+                if (contactHandler != null)
+                    contactHandler(this, receivedRequest);
+
                 if(userId != 0)
-                    ContactRequests.Add(new ContactRequest() {FromUserId = userId});
+                    ContactRequests.Add(receivedRequest);
             }
 
             var handler = OnPresenceReceived;

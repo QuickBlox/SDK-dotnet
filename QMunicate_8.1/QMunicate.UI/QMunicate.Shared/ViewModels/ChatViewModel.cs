@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
@@ -22,6 +23,7 @@ namespace QMunicate.ViewModels
         private string newMessageText;
         private string chatName;
         private string chatImage;
+        private bool activeContactRequest;
         private DialogVm dialog;
         private IPrivateChatManager privateChatManager;
 
@@ -33,6 +35,8 @@ namespace QMunicate.ViewModels
         {
             Messages = new ObservableCollection<MessageVm>();
             SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading);
+            AcceptRequestCommand = new RelayCommand(AcceptRequestCommandExecute, () => !IsLoading);
+            RejectRequestCommand = new RelayCommand(RejectCRequestCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -59,7 +63,17 @@ namespace QMunicate.ViewModels
             set { Set(ref chatImage, value); }
         }
 
-        public RelayCommand SendCommand { get; set; }
+        public bool ActiveContactRequest
+        {
+            get { return activeContactRequest; }
+            set { Set(ref activeContactRequest, value); }
+        }
+
+        public RelayCommand SendCommand { get; private set; }
+
+        public RelayCommand AcceptRequestCommand { get; private set; }
+
+        public RelayCommand RejectRequestCommand { get; private set; }
 
         #endregion
 
@@ -87,6 +101,7 @@ namespace QMunicate.ViewModels
         protected override void OnIsLoadingChanged()
         {
             SendCommand.RaiseCanExecuteChanged();
+            
         }
 
         #endregion
@@ -102,6 +117,7 @@ namespace QMunicate.ViewModels
                 dialog = chatParameter.Dialog;
                 ChatName = chatParameter.Dialog.Name;
                 ChatImage = chatParameter.Dialog.Image;
+                ActiveContactRequest = chatParameter.Dialog.ActiveContactRequest;
 
                 int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
                 if (otherUserId != 0)
@@ -109,8 +125,8 @@ namespace QMunicate.ViewModels
                     privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
                     privateChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
                 }
-
-                await LoadMessages(chatParameter.Dialog.Id);
+                if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))
+                    await LoadMessages(chatParameter.Dialog.Id);
             }
 
             IsLoading = false;
@@ -154,6 +170,24 @@ namespace QMunicate.ViewModels
             privateChatManager.SendMessage(NewMessageText);
 
             NewMessageText = "";
+        }
+
+        private void AcceptRequestCommandExecute()
+        {
+            if (privateChatManager == null) return;
+
+            privateChatManager.ApproveSubscribtionRequest();
+
+            ActiveContactRequest = false;
+        }
+
+        private void RejectCRequestCommandExecute()
+        {
+            if (privateChatManager == null) return;
+
+            privateChatManager.DeclineSubscribtionRequest();
+
+            ActiveContactRequest = false;
         }
 
         private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)

@@ -27,6 +27,7 @@
 
             <converters:StringFormatConverter x:Key="StringFormatConverter" />
             <converters:BooleanToNegationConverter x:Key="BooleanToNegationConverter"/>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
             <viewModels:ViewModelLocator x:Key="Locator"  />
             <resources:LocalizedStrings x:Key="LocalizedStrings"  />

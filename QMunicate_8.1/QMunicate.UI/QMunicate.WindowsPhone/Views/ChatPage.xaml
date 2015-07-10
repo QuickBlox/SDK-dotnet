@@ -69,6 +69,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -81,7 +82,20 @@
             <TextBlock Text="{Binding ChatName}" FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}"/>
             <Image Grid.Column="1" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55"  HorizontalAlignment="Right" Margin="0 0 12 0"/>
         </Grid>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Messages}"
+        <Grid Row="1" Visibility="{Binding ActiveContactRequest, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="You have a contact request" FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}" Grid.ColumnSpan="2"/>
+            <Button Command="{Binding AcceptRequestCommand}" Grid.Row="1" Grid.Column="0" Content="Accept" Margin="{StaticResource DefaultMargin}"/>
+            <Button Command="{Binding RejectRequestCommand}" Grid.Row="1" Grid.Column="1" Content="Reject" Margin="{StaticResource DefaultMargin}"/>
+        </Grid>
+        <ListBox Grid.Row="2" ItemsSource="{Binding Messages}"
                  ItemTemplateSelector="{StaticResource MessageTemplateSelector}"
                  Background="Transparent">
             <ListBox.ItemContainerStyle>
@@ -95,8 +109,8 @@
             </i:Interaction.Behaviors>
         </ListBox>
         
-        <Border Grid.Row="2" Height="1" Background="Gray"/>
-        <Grid Grid.Row="3">
+        <Border Grid.Row="3" Height="1" Background="Gray"/>
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
