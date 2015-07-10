@@ -132,6 +132,11 @@ namespace QMunicate.ViewModels
             var userDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Type == DialogType.Private && d.OccupantsIds.Contains(user.UserId));
             if(userDialog != null)
                 NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = DialogVm.FromDialog(userDialog) });
+            else
+            {
+                var response = await QuickbloxClient.ChatClient.CreateDialogAsync(user.FullName, DialogType.Private, string.Format("{0},{1}", QuickbloxClient.CurrentUserId, user.UserId));
+                //TODO: convert dialog response to dialog
+            }
         }
 
         private void OpenGlobalCommandExecute(UserVm user)
