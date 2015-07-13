@@ -8,7 +8,7 @@ namespace QMunicate.Helper
 {
     public interface IDialogsManager
     {
-        List<Dialog> Dialogs { get; }
+        List<Dialog> Dialogs { get; set; }
         Task ReloadDialogs();
     }
 }

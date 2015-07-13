@@ -25,8 +25,6 @@ namespace QMunicate.ViewModels
 {
     public class DialogsViewModel : ViewModel
     {
-        private int currentUserId;
-
         #region Ctor
 
         public DialogsViewModel()
@@ -66,8 +64,6 @@ namespace QMunicate.ViewModels
             if (parameter != null && e.NavigationMode != NavigationMode.Back)
             {
                 NavigationService.BackStack.Clear();
-                currentUserId = parameter.CurrentUserId;
-                
                 await InitializeChat(parameter.CurrentUserId, parameter.Password);
             }
             await LoadDialogs();
@@ -123,8 +119,10 @@ namespace QMunicate.ViewModels
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             if(!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
+            dialogsManager.Dialogs = dialogsManager.Dialogs.OrderByDescending(d => d.LastMessageDateSent).ToList();
             foreach (Dialog dialog in dialogsManager.Dialogs)
             {
+                //int otherUserId = dialog.OccupantsIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
                 Dialogs.Add(DialogVm.FromDialog(dialog));
             }
         }

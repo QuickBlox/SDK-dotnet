@@ -13,6 +13,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
+using QMunicate.Helper;
 
 namespace QMunicate.ViewModels
 {
@@ -165,7 +166,10 @@ namespace QMunicate.ViewModels
             };
 
             Messages.Add(msg);
-            dialog.LastActivity = NewMessageText;
+            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            var dlg = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialog.Id);
+            dlg.LastMessage = NewMessageText;
+
 
             privateChatManager.SendMessage(NewMessageText);
 

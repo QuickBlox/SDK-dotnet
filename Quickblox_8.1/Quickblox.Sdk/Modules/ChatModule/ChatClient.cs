@@ -31,14 +31,14 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
         #region Public methods
         
-        public async Task<HttpResponse<DialogResponse>> CreateDialogAsync(string dialogName, DialogType dialogType, string occupantsIds = null, string photoId = null)
+        public async Task<HttpResponse<Dialog>> CreateDialogAsync(string dialogName, DialogType dialogType, string occupantsIds = null, string photoId = null)
         {
             if (dialogName == null)
                 throw new ArgumentNullException("dialogName");
 
             var createDialogRequest = new CreateDialogRequest {Type = (int) dialogType, Name = dialogName, OccupantsIds = occupantsIds, Photo = photoId};
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.PostAsync<DialogResponse, CreateDialogRequest>(this.quickbloxClient.ApiEndPoint,
+            return await HttpService.PostAsync<Dialog, CreateDialogRequest>(this.quickbloxClient.ApiEndPoint,
                         QuickbloxMethods.CreateDialogMethod, createDialogRequest, headers);
         }
 

@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Windows.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageService;
+using QMunicate.Helper;
 using QMunicate.Models;
+using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 
 namespace QMunicate.ViewModels
 {
@@ -62,10 +68,24 @@ namespace QMunicate.ViewModels
 
         #region Private methods
 
-        private void SendCommandExecute()
+        private async void SendCommandExecute()
         {
-            var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
-            privateChatManager.SubsribeForPresence();
+            IsLoading = true;
+            var response = await QuickbloxClient.ChatClient.CreateDialogAsync(UserName, DialogType.Private, otherUserId.ToString());
+            if (response.StatusCode == HttpStatusCode.Created)
+            {
+                var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+                dialogsManager.Dialogs.Add(response.Result);
+                QuickbloxClient.MessagesClient.AddContact(new Contact(){Name = UserName, UserId = otherUserId});
+                var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
+                privateChatManager.SubsribeForPresence();
+
+                var messagesService = ServiceLocator.Locator.Get<IMessageService>();
+                await messagesService.ShowAsync("Sent", "A contact request was sent");
+                IsLoading = false;
+                NavigationService.GoBack();
+            }
+            IsLoading = false;
         }
 
         #endregion

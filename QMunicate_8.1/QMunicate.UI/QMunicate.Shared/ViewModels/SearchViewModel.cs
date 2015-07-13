@@ -134,8 +134,12 @@ namespace QMunicate.ViewModels
                 NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = DialogVm.FromDialog(userDialog) });
             else
             {
-                var response = await QuickbloxClient.ChatClient.CreateDialogAsync(user.FullName, DialogType.Private, string.Format("{0},{1}", QuickbloxClient.CurrentUserId, user.UserId));
-                //TODO: convert dialog response to dialog
+                var response = await QuickbloxClient.ChatClient.CreateDialogAsync(user.FullName, DialogType.Private, string.Format("{0}", user.UserId));
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    dialogsManager.Dialogs.Add(response.Result);
+                    NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = DialogVm.FromDialog(response.Result) });
+                }
             }
         }
 

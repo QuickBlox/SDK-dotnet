@@ -10,7 +10,9 @@ using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
+using QMunicate.Helper;
 using Quickblox.Sdk;
+using Quickblox.Sdk.Modules.Models;
 using Quickblox.Sdk.Modules.NotificationModule.Models;
 
 namespace QMunicate.ViewModels
@@ -151,6 +153,9 @@ namespace QMunicate.ViewModels
             }
 
             SettingsManager.Instance.DeleteFromSettings(SettingsKeys.QbToken);
+
+            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            dialogsManager.Dialogs = new List<Dialog>();
 
             NavigationService.Navigate(ViewLocator.SignUp);
             NavigationService.BackStack.Clear();

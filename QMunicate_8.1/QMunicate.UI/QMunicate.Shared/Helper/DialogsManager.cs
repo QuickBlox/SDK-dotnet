@@ -13,7 +13,7 @@ namespace QMunicate.Helper
 {
     public class DialogsManager : IDialogsManager
     {
-        public List<Dialog> Dialogs { get; private set; }
+        public List<Dialog> Dialogs { get; set; }
 
         public DialogsManager()
         {
