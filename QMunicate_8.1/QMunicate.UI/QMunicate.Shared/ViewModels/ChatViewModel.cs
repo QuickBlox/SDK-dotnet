@@ -168,7 +168,8 @@ namespace QMunicate.ViewModels
             Messages.Add(msg);
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             var dlg = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialog.Id);
-            dlg.LastMessage = NewMessageText;
+            if(dlg != null)
+                dlg.LastMessage = NewMessageText;
 
 
             privateChatManager.SendMessage(NewMessageText);
