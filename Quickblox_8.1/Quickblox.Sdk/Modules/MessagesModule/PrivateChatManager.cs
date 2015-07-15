@@ -32,7 +32,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region IPrivateChatManager members
 
-        public void SendMessage(string message, Attachment attachment = null)
+        public bool SendMessage(string message, Attachment attachment = null)
         {
             if (attachment != null)
             {
@@ -61,8 +61,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             extraParams.Add(new SaveToHistory {Value = "1"});
             
             msg.Add(body, extraParams);
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
 
             xmppClient.Send(msg);
+            return true;
         }
 
         #region Presence

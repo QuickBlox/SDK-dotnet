@@ -27,6 +27,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private int appId;
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
         private bool isReady;
+        private bool isUserDisconnected;
 
         #endregion
 
@@ -36,6 +37,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         public event EventHandler<Presence> OnPresenceReceived;
         public event EventHandler<ContactRequest> OnContactRequestReceived;
         public event EventHandler OnContactsChanged;
+        public event EventHandler OnDisconnected;
 
         #endregion
 
@@ -97,6 +99,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         {
             if (!IsConnected) return;
 
+            isUserDisconnected = true;
             xmppClient.Send(new presence { type = presence.typeEnum.unavailable });
             xmppClient.Disconnect();
             isReady = false;
@@ -155,6 +158,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         {
             chatEndpoint = chatEndpointUrl;
             appId = applicationId;
+            isUserDisconnected = false;
 
             client.Settings.Hostname = chatEndpointUrl;
             client.Settings.SSL = false;
@@ -172,6 +176,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                     throw new QuickbloxSdkException(string.Format("XMPP connection exception. Message: {0}. Type: {1}",
                         args.message, args.type));
                 };
+
+            client.OnDisconnected += (sender, args) =>
+            {
+                if(!isUserDisconnected)
+                    client.Connect();
+
+                var handler = OnDisconnected;
+                if (handler != null)
+                    handler(this, new EventArgs());
+            };
 
 #if DEBUG
             client.OnLogMessage +=

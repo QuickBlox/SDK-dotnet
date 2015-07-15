@@ -11,7 +11,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
     {
         event EventHandler<Message> OnMessageReceived;
 
-        void SendMessage(string message, Attachment attachment = null);
+        bool SendMessage(string message, Attachment attachment = null);
 
         void SubsribeForPresence();
         void ApproveSubscribtionRequest();

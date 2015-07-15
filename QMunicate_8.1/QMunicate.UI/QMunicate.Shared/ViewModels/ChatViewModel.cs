@@ -158,6 +158,15 @@ namespace QMunicate.ViewModels
                 return;
             }
 
+            bool isMessageSent = privateChatManager.SendMessage(NewMessageText);
+
+            if (!isMessageSent)
+            {
+                var messageService = ServiceLocator.Locator.Get<IMessageService>();
+                await messageService.ShowAsync("Message", "Failed to send a message");
+                return;
+            }
+
             var msg = new MessageVm()
             {
                 MessageText = NewMessageText,
@@ -170,9 +179,6 @@ namespace QMunicate.ViewModels
             var dlg = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialog.Id);
             if(dlg != null)
                 dlg.LastMessage = NewMessageText;
-
-
-            privateChatManager.SendMessage(NewMessageText);
 
             NewMessageText = "";
         }
