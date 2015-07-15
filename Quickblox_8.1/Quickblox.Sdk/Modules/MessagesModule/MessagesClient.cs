@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Quickblox.Sdk.Common;
 using XMPP;
 using XMPP.common;
 using XMPP.tags.jabber.client;
@@ -63,7 +64,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public bool IsConnected { get { return xmppClient != null && xmppClient.Connected && isReady; } }
 
-#if DEBUG
+#if DEBUG || TEST_RELEASE
         public string DebugClientName { get; set; }
 #endif
 
@@ -187,9 +188,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                     handler(this, new EventArgs());
             };
 
-#if DEBUG
+#if DEBUG || TEST_RELEASE
             client.OnLogMessage +=
-                (sender, args) => Debug.WriteLine("XMPP {0} LOG: {1} {2}", DebugClientName, args.type, args.message);
+                async (sender, args) => await QuickbloxLogger.Instance.Log(LogLevel.Debug, string.Format("XMPP {0} LOG: {1} {2}", DebugClientName, args.type, args.message));
 #endif
 
             xmppClient = client;

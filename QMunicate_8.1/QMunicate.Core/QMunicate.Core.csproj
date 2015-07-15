@@ -44,6 +44,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\..\Quickblox.Sdk.Common\Quickblox.Sdk.Common.csproj">
+      <Project>{a16f8799-3a99-446e-91c9-2d2c525d66ae}</Project>
+      <Name>Quickblox.Sdk.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
@@ -58,6 +62,7 @@
     <Compile Include="DependencyInjection\TypeBinding.cs" />
     <Compile Include="DependencyInjection\TypeBindingBase.cs" />
     <Compile Include="Extensions\AsyncExtensions.cs" />
+    <Compile Include="Logger\Logger.cs" />
     <Compile Include="MessageService\DialogCommand.cs" />
     <Compile Include="MessageService\IMessageService.cs" />
     <Compile Include="MessageService\MessageService.cs" />
@@ -68,6 +73,17 @@
     <Compile Include="Observable\ObservableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TapListener\TapListener.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Nito.AsyncEx">
+      <HintPath>..\..\packages\Nito.AsyncEx.3.0.0\lib\portable-net45+netcore45+wpa81+MonoTouch+MonoAndroid\Nito.AsyncEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Concurrent">
+      <HintPath>..\..\packages\Nito.AsyncEx.3.0.0\lib\portable-net45+netcore45+wpa81+MonoTouch+MonoAndroid\Nito.AsyncEx.Concurrent.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
