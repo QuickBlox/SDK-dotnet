@@ -75,7 +75,7 @@ namespace QMunicate.ViewModels
             if (response.StatusCode == HttpStatusCode.Created)
             {
                 var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-                dialogsManager.Dialogs.Add(response.Result);
+                dialogsManager.Dialogs.Insert(0, DialogVm.FromDialog(response.Result));
                 QuickbloxClient.MessagesClient.AddContact(new Contact(){Name = UserName, UserId = otherUserId});
                 var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
                 privateChatManager.SubsribeForPresence();

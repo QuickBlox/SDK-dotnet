@@ -44,10 +44,12 @@ namespace QMunicate
         /// </summary>
         public App()
         {
+            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider());
+
             ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
-            ServiceLocator.Locator.Bind<IQuickbloxClient, QuickbloxClient>(new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider()));
+            ServiceLocator.Locator.Bind<IQuickbloxClient, QuickbloxClient>(quickbloxClient);
             ServiceLocator.Locator.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
-            ServiceLocator.Locator.Bind<IDialogsManager, DialogsManager>(LifetimeMode.Singleton);
+            ServiceLocator.Locator.Bind<IDialogsManager, IDialogsManager>(new DialogsManager(quickbloxClient));
             UnhandledException += OnUnhandledException;
 
             this.InitializeComponent();

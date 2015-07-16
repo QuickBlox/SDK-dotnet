@@ -178,7 +178,7 @@ namespace QMunicate.ViewModels
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             var dlg = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialog.Id);
             if(dlg != null)
-                dlg.LastMessage = NewMessageText;
+                dlg.LastActivity = NewMessageText;
 
             NewMessageText = "";
         }

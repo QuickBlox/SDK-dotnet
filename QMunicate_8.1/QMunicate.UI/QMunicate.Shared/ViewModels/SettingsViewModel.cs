@@ -155,7 +155,7 @@ namespace QMunicate.ViewModels
             SettingsManager.Instance.DeleteFromSettings(SettingsKeys.QbToken);
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-            dialogsManager.Dialogs = new List<Dialog>();
+            dialogsManager.Dialogs.Clear();
 
             NavigationService.Navigate(ViewLocator.SignUp);
             NavigationService.BackStack.Clear();

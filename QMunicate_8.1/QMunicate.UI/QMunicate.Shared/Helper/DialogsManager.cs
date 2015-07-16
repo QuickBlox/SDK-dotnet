@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using QMunicate.Core.DependencyInjection;
+using QMunicate.Models;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.Models;
@@ -13,22 +15,27 @@ namespace QMunicate.Helper
 {
     public class DialogsManager : IDialogsManager
     {
-        public List<Dialog> Dialogs { get; set; }
+        private readonly IQuickbloxClient quickbloxClient;
 
-        public DialogsManager()
+        public ObservableCollection<DialogVm> Dialogs { get; private set; }
+
+        public DialogsManager(IQuickbloxClient quickbloxClient)
         {
-            Dialogs = new List<Dialog>();
+            this.quickbloxClient = quickbloxClient; //TODO: subscribe to xmpp and update dialogs on xmpp events
+            Dialogs = new ObservableCollection<DialogVm>();
         }
 
         public async Task ReloadDialogs()
         {
-            var quickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
             var retrieveDialogsRequest = new RetrieveDialogsRequest();
             var response = await quickbloxClient.ChatClient.GetDialogsAsync(retrieveDialogsRequest);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 Dialogs.Clear();
-                Dialogs = response.Result.Items.ToList();
+                foreach (var dialog in response.Result.Items)
+                {
+                    Dialogs.Add(DialogVm.FromDialog(dialog));
+                }
             }
         }
     }
