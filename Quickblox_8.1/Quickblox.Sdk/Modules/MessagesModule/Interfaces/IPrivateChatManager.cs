@@ -12,6 +12,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         event EventHandler<Message> OnMessageReceived;
 
         bool SendMessage(string message, Attachment attachment = null);
+        Task<bool> AddToFriends(string friendName);
 
         void SubsribeForPresence();
         void ApproveSubscribtionRequest();

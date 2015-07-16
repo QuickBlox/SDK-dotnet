@@ -1,9 +1,13 @@
 ﻿using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
+using System.Net;
 using System.Threading.Tasks;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 using XMPP.common;
 using XMPP.tags.jabber.client;
+using Attachment = Quickblox.Sdk.Modules.MessagesModule.Models.Attachment;
+using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -11,10 +15,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
     {
         #region Fields
 
+        private IQuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
         private string banListName = "banList";
+        private readonly int otherUserId;
         private readonly string otherUserJid;
-        private readonly string dialogId;
+        private string dialogId;
 
         #endregion
 
@@ -22,12 +28,15 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        public PrivateChatManager(XMPP.Client xmppClient, string otherUserJid, string dialogId)
+        public PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId = null)
         {
-            this.otherUserJid = otherUserJid;
-            this.dialogId = dialogId;
+            this.quickbloxClient = quickbloxClient;
             this.xmppClient = xmppClient;
             this.xmppClient.OnReceive += XmppClientOnOnReceive;
+
+            this.otherUserId = otherUserId;
+            this.otherUserJid = quickbloxClient.MessagesClient.BuildJid(otherUserId);
+            this.dialogId = dialogId;
         }
 
         #endregion
@@ -63,6 +72,41 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             extraParams.Add(new SaveToHistory {Value = "1"});
             extraParams.Add(new DialogId {Value = dialogId});
             
+            msg.Add(body, extraParams);
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
+
+        public async Task<bool> AddToFriends(string friendName)
+        {
+            if (string.IsNullOrEmpty(dialogId))
+            {
+                var response = await quickbloxClient.ChatClient.CreateDialogAsync(friendName, DialogType.Private, otherUserId.ToString());
+                if (response.StatusCode != HttpStatusCode.Created) return false;
+
+                dialogId = response.Result.Id;
+            }
+
+            quickbloxClient.MessagesClient.AddContact(new Contact() {Name = friendName, UserId = otherUserId});
+            SubsribeForPresence();
+
+            var msg = new message
+            {
+                to = otherUserJid,
+                type = message.typeEnum.chat
+            };
+            var body = new body { Value = "Contact request"};
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory { Value = "1" });
+            extraParams.Add(new DialogId { Value = dialogId });
+            extraParams.Add(new NotificationType {Value = ((int)NotificationTypes.FriendsRequest).ToString()});
+
             msg.Add(body, extraParams);
             if (!xmppClient.Connected)
             {

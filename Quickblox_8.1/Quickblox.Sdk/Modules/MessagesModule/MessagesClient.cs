@@ -108,10 +108,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             isReady = false;
         }
 
-        public IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId)
+        public IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId = null)
         {
-            string otherUserJid = BuildJid(otherUserId);
-            return new PrivateChatManager(xmppClient, otherUserJid, dialogId);
+            return new PrivateChatManager(quickbloxClient, xmppClient, otherUserId, dialogId);
         }
 
         public IGroupChatManager GetGroupChatManager(string groupJid)
@@ -316,12 +315,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             }
         }
 
-        private string BuildJid(int userId)
+        internal string BuildJid(int userId)
         {
             return string.Format("{0}-{1}@{2}", userId, appId, chatEndpoint);
         }
 
-        private int GetUserIdFromJid(string jid)
+        internal int GetUserIdFromJid(string jid)
         {
             var match = qbJidRegex.Match(jid);
 
