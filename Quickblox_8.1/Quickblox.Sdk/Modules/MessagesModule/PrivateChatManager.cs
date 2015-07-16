@@ -14,6 +14,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private XMPP.Client xmppClient;
         private string banListName = "banList";
         private readonly string otherUserJid;
+        private readonly string dialogId;
 
         #endregion
 
@@ -21,9 +22,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        public PrivateChatManager(XMPP.Client xmppClient, string otherUserJid)
+        public PrivateChatManager(XMPP.Client xmppClient, string otherUserJid, string dialogId)
         {
             this.otherUserJid = otherUserJid;
+            this.dialogId = dialogId;
             this.xmppClient = xmppClient;
             this.xmppClient.OnReceive += XmppClientOnOnReceive;
         }
@@ -59,6 +61,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             
             var extraParams = new ExtraParams();
             extraParams.Add(new SaveToHistory {Value = "1"});
+            extraParams.Add(new DialogId {Value = dialogId});
             
             msg.Add(body, extraParams);
             if (!xmppClient.Connected)

@@ -123,7 +123,7 @@ namespace QMunicate.ViewModels
                 int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
                 if (otherUserId != 0)
                 {
-                    privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
+                    privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);
                     privateChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
                 }
                 if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))

@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Quickblox.Logger;
+using Quickblox.Sdk.Serializer;
 using XMPP;
 using XMPP.common;
 using XMPP.tags.jabber.client;
@@ -106,10 +108,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             isReady = false;
         }
 
-        public IPrivateChatManager GetPrivateChatManager(int otherUserId)
+        public IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId)
         {
             string otherUserJid = BuildJid(otherUserId);
-            return new PrivateChatManager(xmppClient, otherUserJid);
+            return new PrivateChatManager(xmppClient, otherUserJid, dialogId);
         }
 
         public IGroupChatManager GetGroupChatManager(string groupJid)
@@ -222,11 +224,32 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             }
         }
 
-        private void OnMessage(message message)
+        private void OnMessage(message msg)
         {
+            var receivedMessage = new Message {From = msg.from, To = msg.to, MessageText = msg.body};
+
+            var extraParams = msg.Element(ExtraParams.XName);
+            if (extraParams != null)
+            {
+                var dialogId = extraParams.Element(DialogId.XName);
+                if (dialogId != null) receivedMessage.DialogId = dialogId.Value;
+
+                var notificationType = extraParams.Element(NotificationType.XName);
+                if (notificationType != null)
+                {
+                    int intValue;
+                    if (int.TryParse(notificationType.Value, out intValue))
+                    {
+                        if (Enum.IsDefined(typeof (NotificationTypes), intValue))
+                            receivedMessage.NotificationType = (NotificationTypes) intValue;
+                    }
+                }
+            }
+            
+
             var handler = OnMessageReceived;
             if (handler != null)
-                handler(this, new Message { From = message.from, To = message.to, MessageText = message.body });
+                handler(this, receivedMessage);
         }
 
         private void OnPresence(presence presence)

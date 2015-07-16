@@ -9,5 +9,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
         public string MessageText { get; set; }
         public Attachment[] Attachments { get; set; }
         public DateTime DateTimeSent { get; set; }
+        public string DialogId { get; set; }
+        public NotificationTypes NotificationType { get; set; }
     }
 }
