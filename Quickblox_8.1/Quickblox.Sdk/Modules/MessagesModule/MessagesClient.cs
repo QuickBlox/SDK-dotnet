@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Quickblox.Sdk.Common;
+using Quickblox.Logger;
 using XMPP;
 using XMPP.common;
 using XMPP.tags.jabber.client;
@@ -190,7 +190,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
 #if DEBUG || TEST_RELEASE
             client.OnLogMessage +=
-                async (sender, args) => await QuickbloxLogger.Instance.Log(LogLevel.Debug, string.Format("XMPP {0} LOG: {1} {2}", DebugClientName, args.type, args.message));
+                async (sender, args) => await FileLogger.Instance.Log(LogLevel.Debug, string.Format("XMPP {0} LOG: {1} {2}", DebugClientName, args.type, args.message));
 #endif
 
             xmppClient = client;

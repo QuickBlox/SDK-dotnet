@@ -7,8 +7,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Quickblox.Logger;
 using Quickblox.Sdk.Builder;
-using Quickblox.Sdk.Common;
 using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Serializer;
@@ -78,12 +78,12 @@ namespace Quickblox.Sdk.Http
             if (response.IsSuccessStatusCode)
             {
                 httpResponse.Result = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-                await QuickbloxLogger.Instance.Log(LogLevel.Debug, String.Concat("CONTENT: ", "Byte[] content. Length:", httpResponse.Result.Length));
+                await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("CONTENT: ", "Byte[] content. Length:", httpResponse.Result.Length));
             }
             else
             {
                 var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                await QuickbloxLogger.Instance.Log(LogLevel.Debug, String.Concat("CONTENT: ", stringContent));
+                await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("CONTENT: ", stringContent));
 
                 try
                 {
@@ -248,7 +248,7 @@ namespace Quickblox.Sdk.Http
         private static async Task<HttpResponse<TResult>> ParseResult<TResult>(ISerializer serializer, HttpResponseMessage response)
         {
             var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            await QuickbloxLogger.Instance.Log(LogLevel.Debug, String.Concat("CONTENT: ", stringContent));
+            await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("CONTENT: ", stringContent));
             HttpResponse<TResult> httpResponse = new HttpResponse<TResult>();
 
             serializer = serializer ?? (response.Content.Headers.ContentType != null ? FactorySerializer.CreateSerializer(response.Content.Headers.ContentType.MediaType) : FactorySerializer.CreateSerializer());

@@ -84,9 +84,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\..\Quickblox.Sdk.Common\Quickblox.Sdk.Common.csproj">
-      <Project>{a16f8799-3a99-446e-91c9-2d2c525d66ae}</Project>
-      <Name>Quickblox.Sdk.Common</Name>
+    <ProjectReference Include="..\..\..\Quickblox.Logger\Quickblox.Logger.csproj">
+      <Project>{BFA0A45E-35CC-4EBF-A597-51C9BD9B383E}</Project>
+      <Name>Quickblox.Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Quickblox_8.1\Quickblox.Sdk\Quickblox.Sdk.csproj">
       <Project>{08fdea8c-a156-4f7e-8b8a-31228d88b3bc}</Project>

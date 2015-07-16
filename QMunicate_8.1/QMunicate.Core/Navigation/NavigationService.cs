@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Quickblox.Logger;
 
 namespace QMunicate.Core.Navigation
 {
@@ -33,9 +34,9 @@ namespace QMunicate.Core.Navigation
             Debug.WriteLine("Frame initialized");
         }
 
-        private void OnNavigationStopped(object sender, NavigationEventArgs e)
+        private async void OnNavigationStopped(object sender, NavigationEventArgs e)
         {
-            Debug.WriteLine("OnNavigationStopped. SourcePageType=" + e.SourcePageType + "Mode = " + e.NavigationMode);
+            await FileLogger.Instance.Log(LogLevel.Debug, "OnNavigationStopped. SourcePageType=" + e.SourcePageType + " Mode=" + e.NavigationMode);
             var handler = NavigationStopped;
             if (handler != null)
             {
@@ -43,9 +44,9 @@ namespace QMunicate.Core.Navigation
             }
         }
 
-        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private async void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
-            Debug.WriteLine("OnNavigationFailed. SourcePageType=" + e.SourcePageType + "\n Exception=" + e.Exception);
+            await FileLogger.Instance.Log(LogLevel.Debug, "OnNavigationFailed. SourcePageType=" + e.SourcePageType + "\n Exception=" + e.Exception);
             var handler = NavigationFailed;
             if (handler != null)
             {
@@ -53,9 +54,9 @@ namespace QMunicate.Core.Navigation
             }
         }
 
-        private void OnNavigating(object sender, NavigatingCancelEventArgs e)
+        private async void OnNavigating(object sender, NavigatingCancelEventArgs e)
         {
-            Debug.WriteLine("OnNavigating. SourcePageType=" + e.SourcePageType + "Mode = " + e.NavigationMode);
+            await FileLogger.Instance.Log(LogLevel.Debug, "OnNavigating. SourcePageType=" + e.SourcePageType + " Mode=" + e.NavigationMode);
             var handler = Navigating;
             if (handler != null)
             {
@@ -80,9 +81,9 @@ namespace QMunicate.Core.Navigation
             }
         }
 
-        private void OnNavigated(object sender, NavigationEventArgs e)
+        private async void OnNavigated(object sender, NavigationEventArgs e)
         {
-            Debug.WriteLine("OnNavigated. SourcePageType=" + e.SourcePageType + "Mode = " + e.NavigationMode);
+            await FileLogger.Instance.Log(LogLevel.Debug, "OnNavigated. SourcePageType=" + e.SourcePageType + " Mode=" + e.NavigationMode);
             var handler = Navigated;
             if (handler != null)
             {

@@ -7,7 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Quickblox.Sdk.Common;
+using Quickblox.Logger;
 using Quickblox.Sdk.GeneralDataModel.Response;
 
 namespace Quickblox.Sdk.Http
@@ -39,7 +39,7 @@ namespace Quickblox.Sdk.Http
             var response = await GetBaseAsync(baseAddress, requestUri, headers, token).ConfigureAwait(false);
 
             var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            await QuickbloxLogger.Instance.Log(LogLevel.Debug, "GET RESPONSE CONTENT: " + stringContent);
+            await FileLogger.Instance.Log(LogLevel.Debug, "GET RESPONSE CONTENT: " + stringContent);
             return stringContent;
         }
 
@@ -52,7 +52,7 @@ namespace Quickblox.Sdk.Http
             }
 
             var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            await QuickbloxLogger.Instance.Log(LogLevel.Debug, "POST RESPONSE CONTENT: " + stringContent);
+            await FileLogger.Instance.Log(LogLevel.Debug, "POST RESPONSE CONTENT: " + stringContent);
             return stringContent;
         }
 
@@ -68,7 +68,7 @@ namespace Quickblox.Sdk.Http
             }
 
             var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            await QuickbloxLogger.Instance.Log(LogLevel.Debug, "POST RESPONSE CONTENT: " + stringContent);
+            await FileLogger.Instance.Log(LogLevel.Debug, "POST RESPONSE CONTENT: " + stringContent);
             return stringContent;
 
         }
@@ -78,7 +78,7 @@ namespace Quickblox.Sdk.Http
             var response = await DeleteBaseAsync(baseAddress, requestUri, headers, token).ConfigureAwait(false);
 
             var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            await QuickbloxLogger.Instance.Log(LogLevel.Debug, "DELETE RESPONSE CONTENT: " + stringContent);
+            await FileLogger.Instance.Log(LogLevel.Debug, "DELETE RESPONSE CONTENT: " + stringContent);
             return stringContent;
         }
 
@@ -91,7 +91,7 @@ namespace Quickblox.Sdk.Http
             }
 
             var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            await QuickbloxLogger.Instance.Log(LogLevel.Debug, "PUT RESPONSE CONTENT: " + stringContent);
+            await FileLogger.Instance.Log(LogLevel.Debug, "PUT RESPONSE CONTENT: " + stringContent);
             return stringContent;
         }
 
@@ -127,7 +127,7 @@ namespace Quickblox.Sdk.Http
                     client.DefaultRequestHeaders.SetRequestHeaders(headers);
 
 
-                    await QuickbloxLogger.Instance.Log(LogLevel.Debug, string.Format("==> GET REQUEST: {0}{1}", baseAddress, requestUri));
+                    await FileLogger.Instance.Log(LogLevel.Debug, string.Format("==> GET REQUEST: {0}{1}", baseAddress, requestUri));
                     try
                     {
                         response = await client.GetAsync(requestUri, token).ConfigureAwait(false);
@@ -142,7 +142,7 @@ namespace Quickblox.Sdk.Http
                         response = new HttpResponseMessage(HttpStatusCode.NotFound);
                         response.Content = new StringContent("Error internet connection");
                     }
-                    await QuickbloxLogger.Instance.Log(LogLevel.Debug, string.Format("<== GET RESPONSE: {0}", response));
+                    await FileLogger.Instance.Log(LogLevel.Debug, string.Format("<== GET RESPONSE: {0}", response));
                     Interlocked.Exchange(ref ticks, DateTime.UtcNow.Ticks);
                 }
             }
@@ -175,7 +175,7 @@ namespace Quickblox.Sdk.Http
                     stringBuilder.AppendLine(String.Concat("==> POST HEADERS: ", client.DefaultRequestHeaders));
                     stringBuilder.AppendLine(String.Concat("==> POST CONTENT: ", await content.ReadAsStringAsync()));
 
-                    await QuickbloxLogger.Instance.Log(LogLevel.Debug, stringBuilder.ToString());
+                    await FileLogger.Instance.Log(LogLevel.Debug, stringBuilder.ToString());
                     try
                     {
                         response = await client.PostAsync(requestUri, content, token).ConfigureAwait(false);
@@ -190,7 +190,7 @@ namespace Quickblox.Sdk.Http
                         response = new HttpResponseMessage(HttpStatusCode.NotFound);
                         response.Content = new StringContent("Error internet connection");
                     }
-                    await QuickbloxLogger.Instance.Log(LogLevel.Debug, String.Concat("<== POST RESPONSE: ", response));
+                    await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("<== POST RESPONSE: ", response));
                     Interlocked.Exchange(ref ticks, DateTime.UtcNow.Ticks);
                 }
             }
@@ -218,7 +218,7 @@ namespace Quickblox.Sdk.Http
                     client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true, NoStore = true };
                     client.DefaultRequestHeaders.SetRequestHeaders(headers);
 
-                    await QuickbloxLogger.Instance.Log(LogLevel.Debug, String.Concat("==> DELETE REQUEST: ", baseAddress, requestUri));
+                    await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("==> DELETE REQUEST: ", baseAddress, requestUri));
                     try
                     {
                         response = await client.DeleteAsync(requestUri, token).ConfigureAwait(false);
@@ -233,7 +233,7 @@ namespace Quickblox.Sdk.Http
                         response = new HttpResponseMessage(HttpStatusCode.NotFound);
                         response.Content = new StringContent("Error internet connection");
                     }
-                    await QuickbloxLogger.Instance.Log(LogLevel.Debug, String.Concat("<== DELETE RESPONSE: ", response));
+                    await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("<== DELETE RESPONSE: ", response));
                     Interlocked.Exchange(ref ticks, DateTime.UtcNow.Ticks);
                 }
             }
@@ -262,7 +262,7 @@ namespace Quickblox.Sdk.Http
                     client.DefaultRequestHeaders.SetRequestHeaders(headers);
 
                     string logMessage = string.Format("==> PUT REQUEST: {0}{1} {2} ==> PUT CONTENT: {3}", baseAddress, requestUri, Environment.NewLine, await content.ReadAsStringAsync());
-                    await QuickbloxLogger.Instance.Log(LogLevel.Debug, logMessage);
+                    await FileLogger.Instance.Log(LogLevel.Debug, logMessage);
 
                     try
                     {
@@ -278,7 +278,7 @@ namespace Quickblox.Sdk.Http
                         response = new HttpResponseMessage(HttpStatusCode.NotFound);
                         response.Content = new StringContent("Error internet connection");
                     }
-                    await QuickbloxLogger.Instance.Log(LogLevel.Debug, String.Concat("<== PUT RESPONSE: ", response));
+                    await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("<== PUT RESPONSE: ", response));
                     Interlocked.Exchange(ref ticks, DateTime.UtcNow.Ticks);
                 }
             }
