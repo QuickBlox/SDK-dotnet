@@ -61,11 +61,6 @@ namespace QMunicate
             unhandledExceptionEventArgs.Handled = true;
 
             await FileLogger.Instance.Log(LogLevel.Error, unhandledExceptionEventArgs.Exception.ToString());
-
-            var messageService = ServiceLocator.Locator.Get<IMessageService>();
-            var yesCommand = new DialogCommand("yes", new RelayCommand(async () => await EmailException(unhandledExceptionEventArgs.Exception.ToString())));
-            var noCommand = new DialogCommand("no", new RelayCommand(() => {  }), false, true);
-            await messageService.ShowAsync("Report error?", "Error happened. Do you want to email developers about it?", new[] { yesCommand, noCommand });
         }
 
         private async Task EmailException(string exception)
