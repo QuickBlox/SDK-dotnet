@@ -13,11 +13,11 @@ namespace Quickblox.Sdk.Modules.LocationModule.Models
             Longitude2 = longitude2;
         }
 
-        public float Latitude1 { get; }
-        public float Longitude1 { get; }
+        public float Latitude1 { get; private set; }
+        public float Longitude1 { get; private set; }
 
-        public float Latitude2 { get; }
-        public float Longitude2 { get; }
+        public float Latitude2 { get; private set; }
+        public float Longitude2 { get; private set; }
 
         public override string ToString()
         {
