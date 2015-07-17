@@ -88,11 +88,11 @@ namespace Quickblox.Sdk.Modules.LocationModule
         /// </summary>
         /// <param name="geoDataId">The geo data identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<GeoDataWithUserResponse>> GetGeoDataByIdAsync(Int32 geoDataId)
+        public async Task<HttpResponse<GeoDatumWithUserResponse>> GetGeoDataByIdAsync(Int32 geoDataId)
         {
             var uri = String.Format(QuickbloxMethods.GetByIdGeoDataMethod, geoDataId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var getGeoDataResponse = await HttpService.GetAsync<GeoDataWithUserResponse>(this.quickbloxClient.ApiEndPoint,
+            var getGeoDataResponse = await HttpService.GetAsync<GeoDatumWithUserResponse>(this.quickbloxClient.ApiEndPoint,
                                                                                                         uri,
                                                                                                         headers);
             return getGeoDataResponse;

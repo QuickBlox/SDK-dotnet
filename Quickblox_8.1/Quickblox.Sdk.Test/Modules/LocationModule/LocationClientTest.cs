@@ -65,7 +65,7 @@ namespace Quickblox.Sdk.Test.Modules.LocationModule
                 Status = "Hello world",
                 PushEnvironment = PushEnvironment.development,
                 Radius = 150,
-                PushMessage = "Test push method"
+                PushMessage = Convert.ToBase64String(Encoding.UTF8.GetBytes("Test push method"))
             };
 
             var response = await this.client.LocationClient.CreatePushGeoDataAsync(geoData);

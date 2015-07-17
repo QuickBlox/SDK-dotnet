@@ -13,10 +13,10 @@ namespace Quickblox.Sdk.Modules.LocationModule.Requests
         #region Filters
 
         [JsonProperty(PropertyName = "created_at", NullValueHandling = NullValueHandling.Ignore)]
-        public TimeSpan CreatedAt { get; set; }
+        public TimeSpan? CreatedAt { get; set; }
 
         [JsonProperty(PropertyName = "user.id", NullValueHandling = NullValueHandling.Ignore)]
-        public Int32 UserId { get; set; }
+        public Int32? UserId { get; set; }
 
         [JsonProperty(PropertyName = "user.ids", NullValueHandling = NullValueHandling.Ignore)]
         public String UserIds { get; set; }
@@ -32,16 +32,16 @@ namespace Quickblox.Sdk.Modules.LocationModule.Requests
         #region Diapasons
 
         [JsonProperty(PropertyName = "min_created_at", NullValueHandling = NullValueHandling.Ignore)]
-        public TimeSpan MinCreatedAt { get; set; }
+        public TimeSpan? MinCreatedAt { get; set; }
 
         [JsonProperty(PropertyName = "max_created_at", NullValueHandling = NullValueHandling.Ignore)]
-        public TimeSpan MaxCreatedAt { get; set; }
+        public TimeSpan? MaxCreatedAt { get; set; }
 
         [JsonProperty(PropertyName = "geo_rect", NullValueHandling = NullValueHandling.Ignore)]
         public GeoRect GeoRect { get; set; }
 
         [JsonProperty(PropertyName = "radius", NullValueHandling = NullValueHandling.Ignore)]
-        public Int32 Radius { get; set; }
+        public Int32? Radius { get; set; }
 
         #endregion
 
@@ -64,10 +64,10 @@ namespace Quickblox.Sdk.Modules.LocationModule.Requests
         #region Paginal conclusion
 
         [JsonProperty(PropertyName = "page", NullValueHandling = NullValueHandling.Ignore)]
-        public UInt32 Page { get; set; }
+        public UInt32? Page { get; set; }
 
         [JsonProperty(PropertyName = "per_page", NullValueHandling = NullValueHandling.Ignore)]
-        public UInt32 PerPage { get; set; }
+        public UInt32? PerPage { get; set; }
 
         #endregion
 
@@ -78,13 +78,13 @@ namespace Quickblox.Sdk.Modules.LocationModule.Requests
         // </summary>
 
         [JsonProperty(PropertyName = "last_only", NullValueHandling = NullValueHandling.Ignore)]
-        public UInt32 IsLastOnly { get; set; }
+        public UInt32? IsLastOnly { get; set; }
 
         [JsonProperty(PropertyName = "status", NullValueHandling = NullValueHandling.Ignore)]
-        public UInt32 IsOnlyWithStatus { get; set; }
+        public UInt32? IsOnlyWithStatus { get; set; }
         
         [JsonProperty(PropertyName = "sort_asc", NullValueHandling = NullValueHandling.Ignore)]
-        public UInt32 SortAsc { get; set; }
+        public UInt32? SortAsc { get; set; }
 
         /// <summary>
         /// The current position of the user. Used only in conjunction with the keys 'radius' (Diapasons) and 'distance' (Sort). 

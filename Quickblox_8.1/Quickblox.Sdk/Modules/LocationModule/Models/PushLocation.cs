@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Quickblox.Sdk.Modules.LocationModule.Models
 {
@@ -24,6 +25,7 @@ namespace Quickblox.Sdk.Modules.LocationModule.Models
         /// Environment of the notification
         /// </summary>
         [JsonProperty(PropertyName = "push_environment")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public PushEnvironment PushEnvironment { get; set; }
     }
 

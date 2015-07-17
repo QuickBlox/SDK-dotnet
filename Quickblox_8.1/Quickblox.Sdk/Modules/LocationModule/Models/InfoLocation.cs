@@ -18,7 +18,7 @@ namespace Quickblox.Sdk.Modules.LocationModule.Models
         public DateTime CreatedAt { get; set; }
         
         [JsonProperty(PropertyName = "created_at_timestamp")]
-        public TimeSpan CreatedAtTimeSpan { get; set; }
+        public int CreatedAtTimeSpan { get; set; }
 
         [JsonProperty(PropertyName = "updated_at")]
         public DateTime UpdatedAt { get; set; }
