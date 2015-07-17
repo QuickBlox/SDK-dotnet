@@ -100,7 +100,19 @@ namespace QMunicate.ViewModels
                 {
                     var subscription = createSubscriptionsResponse.Result.FirstOrDefault();
                     if (subscription != null)
+                    {
                         SettingsManager.Instance.WriteToSettings(SettingsKeys.PushSubscriptionId, subscription.Subscription.Id);
+                    }
+                    else
+                    {
+                        var subscriptions = await QuickbloxClient.NotificationClient.GetSubscriptionsAsync();
+                        if (subscriptions.StatusCode == HttpStatusCode.OK)
+                        {
+                            var subs = subscriptions.Result.FirstOrDefault(s => s.Subscription != null && s.Subscription.NotificationChannel != null && s.Subscription.NotificationChannel.Name == NotificationChannelType.mpns);
+                            if (subs != null)
+                                SettingsManager.Instance.WriteToSettings(SettingsKeys.PushSubscriptionId, subs.Subscription.Id);
+                        }
+                    }
                 }
                 else
                 {
