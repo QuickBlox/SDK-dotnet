@@ -51,7 +51,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             this.quickbloxClient = quickbloxClient;
             Contacts = new List<Contact>();
             Presences = new List<Presence>();
-            ContactRequests = new List<ContactRequest>();
         }
 
         #endregion
@@ -61,8 +60,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         public List<Contact> Contacts { get; private set; }
 
         public List<Presence> Presences { get; private set; }
-
-        public List<ContactRequest> ContactRequests { get; private set; }
 
         public bool IsConnected { get { return xmppClient != null && xmppClient.Connected && isReady; } }
 
@@ -158,6 +155,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private void OpenConnection(Client client, string chatEndpointUrl, int userId, int applicationId,
             string password)
         {
+            Contacts = new List<Contact>();
+            Presences = new List<Presence>();
+
             chatEndpoint = chatEndpointUrl;
             appId = applicationId;
             isUserDisconnected = false;
@@ -262,20 +262,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             Presences.RemoveAll(p => p.From == receivedPresence.From);
             Presences.Add(receivedPresence);
-
-            if (presence.type == presence.typeEnum.subscribe)
-            {
-                int userId = GetUserIdFromJid(presence.from);
-
-                var receivedRequest = new ContactRequest() {FromUserId = userId};
-
-                var contactHandler = OnContactRequestReceived;
-                if (contactHandler != null)
-                    contactHandler(this, receivedRequest);
-
-                if(userId != 0)
-                    ContactRequests.Add(receivedRequest);
-            }
 
             var handler = OnPresenceReceived;
             if (handler != null)

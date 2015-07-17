@@ -27,5 +27,8 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
 
         [JsonProperty("read")]
         public int Read { get; set; }
+
+        [JsonProperty("notification_type")]
+        public int? NotificationType { get; set; }
     }
 }

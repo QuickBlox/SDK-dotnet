@@ -13,10 +13,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
 
         bool SendMessage(string message, Attachment attachment = null);
         Task<bool> AddToFriends(string friendName);
+        Task<bool> AcceptFriend();
+        Task<bool> RejectFriend();
 
         void SubsribeForPresence();
         void ApproveSubscribtionRequest();
-        void DeclineSubscribtionRequest();
+        void RejectSubscribtionRequest();
         void Unsubscribe();
 
         Task Block();

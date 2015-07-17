@@ -83,11 +83,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
+        #region Friends
+
         public async Task<bool> AddToFriends(string friendName)
         {
             if (string.IsNullOrEmpty(dialogId))
             {
-                var response = await quickbloxClient.ChatClient.CreateDialogAsync(friendName, DialogType.Private, otherUserId.ToString());
+                var response =
+                    await
+                        quickbloxClient.ChatClient.CreateDialogAsync(friendName, DialogType.Private,
+                            otherUserId.ToString());
                 if (response.StatusCode != HttpStatusCode.Created) return false;
 
                 dialogId = response.Result.Id;
@@ -101,11 +106,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                 to = otherUserJid,
                 type = message.typeEnum.chat
             };
-            var body = new body { Value = "Contact request"};
+            var body = new body {Value = "Contact request"};
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
-            extraParams.Add(new NotificationType {Value = ((int)NotificationTypes.FriendsRequest).ToString()});
+            extraParams.Add(new SaveToHistory {Value = "1"});
+            extraParams.Add(new DialogId {Value = dialogId});
+            extraParams.Add(new NotificationType {Value = ((int) NotificationTypes.FriendsRequest).ToString()});
 
             msg.Add(body, extraParams);
             if (!xmppClient.Connected)
@@ -117,6 +122,69 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             xmppClient.Send(msg);
             return true;
         }
+
+        public async Task<bool> AcceptFriend()
+        {
+            var userResponse = await quickbloxClient.UsersClient.GetUserByIdAsync(otherUserId);
+            if (userResponse.StatusCode != HttpStatusCode.OK) return false;
+
+            quickbloxClient.MessagesClient.AddContact(new Contact()
+            {
+                Name = userResponse.Result.User.FullName,
+                UserId = otherUserId
+            });
+            ApproveSubscribtionRequest();
+
+            var msg = new message
+            {
+                to = otherUserJid,
+                type = message.typeEnum.chat
+            };
+            var body = new body {Value = "Request accepted"};
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory {Value = "1"});
+            extraParams.Add(new DialogId {Value = dialogId});
+            extraParams.Add(new NotificationType {Value = ((int) NotificationTypes.FriendsAccept).ToString()});
+
+            msg.Add(body, extraParams);
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
+
+        public async Task<bool> RejectFriend()
+        {
+            RejectSubscribtionRequest();
+
+            var msg = new message
+            {
+                to = otherUserJid,
+                type = message.typeEnum.chat
+            };
+            var body = new body {Value = "Request rejected"};
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory {Value = "1"});
+            extraParams.Add(new DialogId {Value = dialogId});
+            extraParams.Add(new NotificationType {Value = ((int) NotificationTypes.FriendsReject).ToString()});
+
+            msg.Add(body, extraParams);
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
+
+        #endregion
+
 
         #region Presence
 
@@ -130,7 +198,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             SendPresenceInformation(presence.typeEnum.subscribed);
         }
 
-        public void DeclineSubscribtionRequest()
+        public void RejectSubscribtionRequest()
         {
             SendPresenceInformation(presence.typeEnum.unsubscribed);
         }
