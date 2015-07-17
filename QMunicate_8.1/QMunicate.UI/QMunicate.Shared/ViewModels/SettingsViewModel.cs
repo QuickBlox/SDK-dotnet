@@ -11,6 +11,7 @@ using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
+using Quickblox.Logger;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.Models;
 using Quickblox.Sdk.Modules.NotificationModule.Models;
@@ -137,6 +138,7 @@ namespace QMunicate.ViewModels
 
         private async void SignOutCommandExecute()
         {
+            await FileLogger.Instance.Log(LogLevel.Debug, "Qmunicate. SignOutCommandExecute called");
             var messageService = ServiceLocator.Locator.Get<IMessageService>();
             DialogCommand logoutCommand = new DialogCommand("logout", new RelayCommand(SignOut));
             DialogCommand cancelCommand = new DialogCommand("cancel", new RelayCommand(() => { }), false, true);
