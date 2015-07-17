@@ -125,5 +125,16 @@ namespace Quickblox.Sdk.Core
         public const string GetRelatedObjectsMethod = "/data/{0}/{1}/{2}.json";
 
         #endregion
+
+        #region Location
+
+        public const string CreateGeoDataMethod = "/geodata.json";
+        public const string UpdateByIdGeoDataMethod = "/geodata/{0}.json";
+        public const string GetByIdGeoDataMethod = "/geodata/{0}.json";
+        public const string FindGeoDataMethod = "/geodata/find.json";
+        public const string DeleteByIdGeoDataMethod = "/geodata/{0}.json";
+        public const string DeleteGeoWithDaysDataMethod = "/geodata.json?days={0}";
+
+        #endregion
     }
 }

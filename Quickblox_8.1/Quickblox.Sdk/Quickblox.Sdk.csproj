@@ -82,6 +82,21 @@
     <Compile Include="Modules\CustomObjectModule\Requests\UpdateCustomObjectRequest.cs" />
     <Compile Include="Modules\CustomObjectModule\Responses\MultipleDeletesResponse.cs" />
     <Compile Include="Modules\CustomObjectModule\Responses\RetriveCustomObjectsResponce.cs" />
+    <Compile Include="Modules\LocationModule\LocationClient.cs" />
+    <Compile Include="Modules\LocationModule\Models\GeoRect.cs" />
+    <Compile Include="Modules\LocationModule\Models\InfoLocation.cs" />
+    <Compile Include="Modules\LocationModule\Models\Location.cs" />
+    <Compile Include="Modules\LocationModule\Models\PushLocation.cs" />
+    <Compile Include="Modules\LocationModule\Models\UserInfoLocation.cs" />
+    <Compile Include="Modules\LocationModule\Requests\CreateGeodataRequest.cs" />
+    <Compile Include="Modules\LocationModule\Requests\CreateGeoDataWithPushRequest.cs" />
+    <Compile Include="Modules\LocationModule\Requests\FindGeoDataRequest.cs" />
+    <Compile Include="Modules\LocationModule\Requests\UpdateGeoDataRequest.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDataListResponse.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDatumWithUserResponse.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDataWithUserResponse.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDatumResponse.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDataResponse.cs" />
     <Compile Include="Modules\MessagesModule\Interfaces\IMessagesClient.cs" />
     <Compile Include="Modules\MessagesModule\Interfaces\IGroupChatManager.cs" />
     <Compile Include="Modules\MessagesModule\Interfaces\IPrivateChatManager.cs" />
@@ -224,6 +239,7 @@
     <TargetPlatform Include="Windows, Version=8.1" />
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
