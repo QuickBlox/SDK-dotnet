@@ -104,6 +104,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\..\..\Quickblox.Logger\Quickblox.Logger.csproj">
+      <Project>{BFA0A45E-35CC-4EBF-A597-51C9BD9B383E}</Project>
+      <Name>Quickblox.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Quickblox.Xamarin\UbietyXmpp\UbietyXmpp.csproj">
       <Project>{4121980C-B6F9-43EE-895F-FF6552574784}</Project>
       <Name>UbietyXmpp</Name>
