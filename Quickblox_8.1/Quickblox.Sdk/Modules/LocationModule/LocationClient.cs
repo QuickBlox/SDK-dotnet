@@ -107,7 +107,7 @@ namespace Quickblox.Sdk.Modules.LocationModule
         /// Filters require an exact match property values ​​with an instance of the corresponding parameter value.
         /// </param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<GeoDatumWithUserResponse>> FindGeoDataAsyn(FindGeoDataRequest findGeoDataRequest)
+        public async Task<HttpResponse<GeoDatumWithUserResponse>> FindGeoDataAsync(FindGeoDataRequest findGeoDataRequest)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var getGeoDataResponse = await HttpService.GetAsync<GeoDatumWithUserResponse, FindGeoDataRequest>(this.quickbloxClient.ApiEndPoint,
@@ -126,7 +126,7 @@ namespace Quickblox.Sdk.Modules.LocationModule
         {
             var uri = String.Format(QuickbloxMethods.DeleteByIdGeoDataMethod, geoDataId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var getGeoDataResponse = await HttpService.GetAsync<Object>(this.quickbloxClient.ApiEndPoint,
+            var getGeoDataResponse = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint,
                                                                         uri,
                                                                         headers);
             return getGeoDataResponse;
@@ -141,7 +141,7 @@ namespace Quickblox.Sdk.Modules.LocationModule
         {
             var uri = String.Format(QuickbloxMethods.DeleteGeoWithDaysDataMethod, days);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var getGeoDataResponse = await HttpService.GetAsync<Object>(this.quickbloxClient.ApiEndPoint,
+            var getGeoDataResponse = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint,
                                                                         uri,
                                                                         headers);
             return getGeoDataResponse;

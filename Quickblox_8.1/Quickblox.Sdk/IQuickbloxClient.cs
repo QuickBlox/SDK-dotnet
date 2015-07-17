@@ -9,6 +9,7 @@ using Quickblox.Sdk.Modules.AuthModule.Models;
 using Quickblox.Sdk.Modules.ChatModule;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.CustomObjectModule;
+using Quickblox.Sdk.Modules.LocationModule;
 #if !Xamarin
 using Quickblox.Sdk.Modules.MessagesModule;
 #endif
@@ -28,6 +29,8 @@ namespace Quickblox.Sdk
         ChatClient ChatClient { get; }
 
         UsersClient UsersClient { get; }
+
+        LocationClient LocationClient { get; }
 
         NotificationClient NotificationClient { get; }
 #if !Xamarin

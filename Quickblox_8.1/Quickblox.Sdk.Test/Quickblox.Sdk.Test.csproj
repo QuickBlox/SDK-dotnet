@@ -115,6 +115,7 @@
     <Compile Include="Modules\ChatModule\ChatClientTest.cs" />
     <Compile Include="GlobalConstant.cs" />
     <Compile Include="Modules\ContentModule\ContentClientTest.cs" />
+    <Compile Include="Modules\LocationModule\LocationClientTest.cs" />
     <Compile Include="Modules\MessagesModule\GroupChatManagerTest.cs" />
     <Compile Include="Modules\MessagesModule\MessagesClientTest.cs" />
     <Compile Include="Modules\CustomObjectModule\CustomObjectClientTest.cs" />
