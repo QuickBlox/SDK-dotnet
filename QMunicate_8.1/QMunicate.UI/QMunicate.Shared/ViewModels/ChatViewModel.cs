@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Message = Quickblox.Sdk.Modules.ChatModule.Models.Message;
 
 namespace QMunicate.ViewModels
 {
@@ -118,16 +120,19 @@ namespace QMunicate.ViewModels
                 dialog = chatParameter.Dialog;
                 ChatName = chatParameter.Dialog.Name;
                 ChatImage = chatParameter.Dialog.Image;
-                ActiveContactRequest = chatParameter.Dialog.ActiveContactRequest;
 
                 int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
                 if (otherUserId != 0)
                 {
-                    privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
+                    privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);
                     privateChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
                 }
                 if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))
                     await LoadMessages(chatParameter.Dialog.Id);
+
+                if (Messages.Any(m => m.MessageType == MessageType.Incoming && m.NotificationType == NotificationTypes.FriendsRequest)
+                    && !Messages.Any(m => m.MessageType == MessageType.Outgoing && (m.NotificationType == NotificationTypes.FriendsAccept || m.NotificationType == NotificationTypes.FriendsReject)))
+                    ActiveContactRequest = true;
             }
 
             IsLoading = false;
@@ -138,6 +143,7 @@ namespace QMunicate.ViewModels
             var response = await QuickbloxClient.ChatClient.GetMessagesAsync(dialogId);
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                Messages.Clear();
                 foreach (Message message in response.Result.Items)
                 {
                     var msg = MessageVm.FromMessage(message, QuickbloxClient.CurrentUserId);
@@ -178,27 +184,42 @@ namespace QMunicate.ViewModels
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             var dlg = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialog.Id);
             if(dlg != null)
-                dlg.LastMessage = NewMessageText;
+                dlg.LastActivity = NewMessageText;
 
             NewMessageText = "";
         }
 
-        private void AcceptRequestCommandExecute()
+        private async void AcceptRequestCommandExecute()
         {
             if (privateChatManager == null) return;
+            IsLoading = true;
+            bool accepted = await privateChatManager.AcceptFriend();
 
-            privateChatManager.ApproveSubscribtionRequest();
+            if (accepted)
+            {
+                ActiveContactRequest = false;
+                
+            }
+            
 
-            ActiveContactRequest = false;
+            IsLoading = false;
         }
 
-        private void RejectCRequestCommandExecute()
+        private async void RejectCRequestCommandExecute()
         {
             if (privateChatManager == null) return;
 
-            privateChatManager.DeclineSubscribtionRequest();
+            IsLoading = true;
+            bool rejected = await privateChatManager.RejectFriend();
 
-            ActiveContactRequest = false;
+            if (rejected)
+            {
+                ActiveContactRequest = false;
+                await LoadMessages(dialog.Id);
+            }
+
+            IsLoading = false;
+
         }
 
         private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)

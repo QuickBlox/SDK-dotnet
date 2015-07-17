@@ -11,6 +11,7 @@ using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
+using Quickblox.Logger;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.Models;
 using Quickblox.Sdk.Modules.NotificationModule.Models;
@@ -100,7 +101,19 @@ namespace QMunicate.ViewModels
                 {
                     var subscription = createSubscriptionsResponse.Result.FirstOrDefault();
                     if (subscription != null)
+                    {
                         SettingsManager.Instance.WriteToSettings(SettingsKeys.PushSubscriptionId, subscription.Subscription.Id);
+                    }
+                    else
+                    {
+                        var subscriptions = await QuickbloxClient.NotificationClient.GetSubscriptionsAsync();
+                        if (subscriptions.StatusCode == HttpStatusCode.OK)
+                        {
+                            var subs = subscriptions.Result.FirstOrDefault(s => s.Subscription != null && s.Subscription.NotificationChannel != null && s.Subscription.NotificationChannel.Name == NotificationChannelType.mpns);
+                            if (subs != null)
+                                SettingsManager.Instance.WriteToSettings(SettingsKeys.PushSubscriptionId, subs.Subscription.Id);
+                        }
+                    }
                 }
                 else
                 {
@@ -125,6 +138,7 @@ namespace QMunicate.ViewModels
 
         private async void SignOutCommandExecute()
         {
+            await FileLogger.Instance.Log(LogLevel.Debug, "Qmunicate. SignOutCommandExecute called");
             var messageService = ServiceLocator.Locator.Get<IMessageService>();
             DialogCommand logoutCommand = new DialogCommand("logout", new RelayCommand(SignOut));
             DialogCommand cancelCommand = new DialogCommand("cancel", new RelayCommand(() => { }), false, true);
@@ -155,7 +169,7 @@ namespace QMunicate.ViewModels
             SettingsManager.Instance.DeleteFromSettings(SettingsKeys.QbToken);
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-            dialogsManager.Dialogs = new List<Dialog>();
+            dialogsManager.Dialogs.Clear();
 
             NavigationService.Navigate(ViewLocator.SignUp);
             NavigationService.BackStack.Clear();

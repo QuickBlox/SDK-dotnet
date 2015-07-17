@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.Hmacsha;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule
 {
@@ -34,6 +30,8 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         private static Message lastMessageClient2;
         private static List<Presence> lastPresencesClient2;
 
+        private static string dialogId = "55a3a744535c1219ce001064";
+
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
@@ -44,7 +42,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             client1.MessagesClient.DebugClientName = "1";
 #endif
             await client1.MessagesClient.Connect("chat.quickblox.com", id1, (int)GlobalConstant.ApplicationId, password1);
-            chatManager1 = client1.MessagesClient.GetPrivateChatManager(id2);
+            chatManager1 = client1.MessagesClient.GetPrivateChatManager(id2, dialogId);
             client1.MessagesClient.OnPresenceReceived += (sender, presence) => { if (lastPresencesClient1 != null) lastPresencesClient1.Add(presence); };
 
             client2 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
@@ -54,7 +52,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             client2.MessagesClient.DebugClientName = "2";
 #endif
             await client2.MessagesClient.Connect("chat.quickblox.com", id2, (int)GlobalConstant.ApplicationId, password2);
-            chatManager2 = client2.MessagesClient.GetPrivateChatManager(id1);
+            chatManager2 = client2.MessagesClient.GetPrivateChatManager(id1, dialogId);
             client2.MessagesClient.OnMessageReceived += (sender, message) => lastMessageClient2 = message;
             client2.MessagesClient.OnPresenceReceived += (sender, presence) => { if(lastPresencesClient2 != null) lastPresencesClient2.Add(presence); };
         }

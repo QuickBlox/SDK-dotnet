@@ -21,10 +21,9 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
-using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
 using QMunicate.Models;
-using Quickblox.Sdk.Common;
+using Quickblox.Logger;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -45,12 +44,13 @@ namespace QMunicate
         /// </summary>
         public App()
         {
+            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider());
+
             ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
-            ServiceLocator.Locator.Bind<IQuickbloxClient, QuickbloxClient>(new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider()));
+            ServiceLocator.Locator.Bind<IQuickbloxClient, QuickbloxClient>(quickbloxClient);
             ServiceLocator.Locator.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
-            ServiceLocator.Locator.Bind<IDialogsManager, DialogsManager>(LifetimeMode.Singleton);
+            ServiceLocator.Locator.Bind<IDialogsManager, IDialogsManager>(new DialogsManager(quickbloxClient));
             UnhandledException += OnUnhandledException;
-            QuickbloxLogger.Instance.LoggerProvider = new Logger();
 
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
@@ -60,7 +60,7 @@ namespace QMunicate
         {
             unhandledExceptionEventArgs.Handled = true;
 
-            await QuickbloxLogger.Instance.Log(LogLevel.Error, unhandledExceptionEventArgs.Exception.ToString());
+            await FileLogger.Instance.Log(LogLevel.Error, unhandledExceptionEventArgs.Exception.ToString());
 
             var messageService = ServiceLocator.Locator.Get<IMessageService>();
             var yesCommand = new DialogCommand("yes", new RelayCommand(async () => await EmailException(unhandledExceptionEventArgs.Exception.ToString())));
@@ -89,7 +89,7 @@ namespace QMunicate
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
-            QuickbloxLogger.Instance.Log(LogLevel.Debug, "QMunicate application launched.");
+            FileLogger.Instance.Log(LogLevel.Debug, "QMunicate application launched.");
 
             Frame rootFrame = Window.Current.Content as Frame;
 

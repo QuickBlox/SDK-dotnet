@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using Quickblox.Sdk.Builder;
-using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Message = Quickblox.Sdk.Modules.ChatModule.Models.Message;
 
 namespace QMunicate.Models
 {
@@ -25,6 +26,9 @@ namespace QMunicate.Models
             DateTime = message.DateSent.ToDateTime();
             if (curentUserId != default(int))
                 MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
+
+            if (message.NotificationType.HasValue && Enum.IsDefined(typeof (NotificationTypes), message.NotificationType))
+                NotificationType = (NotificationTypes) message.NotificationType;
         }
 
         #endregion
@@ -34,6 +38,7 @@ namespace QMunicate.Models
         public string MessageText { get; set; }
         public MessageType MessageType { get; set; }
         public DateTime DateTime { get; set; }
+        public NotificationTypes NotificationType { get; set; }
 
         #endregion
 

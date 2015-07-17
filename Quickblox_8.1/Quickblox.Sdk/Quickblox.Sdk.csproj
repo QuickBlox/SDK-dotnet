@@ -49,7 +49,6 @@
     <Compile Include="GeneralDataModel\Request\SortOperator.cs" />
     <Compile Include="Http\BytesContent.cs" />
     <Compile Include="IQuickbloxClient.cs" />
-    <Compile Include="Logger\QuickbloxLogger.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSearchOperator.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSortFilter.cs" />
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs" />
@@ -222,9 +221,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Quickblox.Sdk.Common\Quickblox.Sdk.Common.csproj">
-      <Project>{a16f8799-3a99-446e-91c9-2d2c525d66ae}</Project>
-      <Name>Quickblox.Sdk.Common</Name>
+    <ProjectReference Include="..\..\Quickblox.Logger\Quickblox.Logger.csproj">
+      <Project>{BFA0A45E-35CC-4EBF-A597-51C9BD9B383E}</Project>
+      <Name>Quickblox.Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj">
       <Project>{b9ff8451-9750-4b80-bcf6-8d151b10486b}</Project>

@@ -29,7 +29,7 @@ namespace QMunicate.ViewModels
 
         public DialogsViewModel()
         {
-            Dialogs = new ObservableCollection<DialogVm>();
+            DialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             OpenChatCommand = new RelayCommand<object>(OpenChatCommandExecute, obj => !IsLoading);
             NewMessageCommand = new RelayCommand(NewMessageCommandExecute, () => !IsLoading);
             SearchCommand = new RelayCommand(SearchCommandExecute, () => !IsLoading);
@@ -41,7 +41,7 @@ namespace QMunicate.ViewModels
 
         #region Properties
 
-        public ObservableCollection<DialogVm> Dialogs { get; set; }
+        public IDialogsManager DialogsManager { get; set; }
 
         public RelayCommand<object> OpenChatCommand { get; set; }
 
@@ -102,29 +102,10 @@ namespace QMunicate.ViewModels
 
         private async Task LoadDialogs()
         {
-            Dialogs.Clear();
-
-            QuickbloxClient.MessagesClient.OnContactRequestReceived += (sender, request) =>
-            {
-                CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                {
-                    Dialogs.Add(DialogVm.FromContactRequest(request, QuickbloxClient.CurrentUserId));
-                });
-            };
-            foreach (ContactRequest contactRequest in QuickbloxClient.MessagesClient.ContactRequests)
-            {
-                Dialogs.Add(DialogVm.FromContactRequest(contactRequest, QuickbloxClient.CurrentUserId));
-            }
             
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             if(!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
-            dialogsManager.Dialogs = dialogsManager.Dialogs.OrderByDescending(d => d.LastMessageDateSent).ToList();
-            foreach (Dialog dialog in dialogsManager.Dialogs)
-            {
-                //int otherUserId = dialog.OccupantsIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
-                Dialogs.Add(DialogVm.FromDialog(dialog));
-            }
         }
 
         #region Push notifications

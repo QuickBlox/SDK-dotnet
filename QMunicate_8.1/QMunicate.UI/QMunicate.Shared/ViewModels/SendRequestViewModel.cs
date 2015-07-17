@@ -71,21 +71,18 @@ namespace QMunicate.ViewModels
         private async void SendCommandExecute()
         {
             IsLoading = true;
-            var response = await QuickbloxClient.ChatClient.CreateDialogAsync(UserName, DialogType.Private, otherUserId.ToString());
-            if (response.StatusCode == HttpStatusCode.Created)
-            {
-                var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-                dialogsManager.Dialogs.Add(response.Result);
-                QuickbloxClient.MessagesClient.AddContact(new Contact(){Name = UserName, UserId = otherUserId});
-                var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
-                privateChatManager.SubsribeForPresence();
 
-                var messagesService = ServiceLocator.Locator.Get<IMessageService>();
-                await messagesService.ShowAsync("Sent", "A contact request was sent");
-                IsLoading = false;
-                NavigationService.GoBack();
-            }
+            var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId);
+            await privateChatManager.AddToFriends(UserName);
+
+            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            await dialogsManager.ReloadDialogs();
+
+            var messagesService = ServiceLocator.Locator.Get<IMessageService>();
+            await messagesService.ShowAsync("Sent", "A contact request was sent");
+
             IsLoading = false;
+            NavigationService.GoBack();
         }
 
         #endregion

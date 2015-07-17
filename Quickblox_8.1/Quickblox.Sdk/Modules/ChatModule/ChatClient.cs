@@ -33,9 +33,6 @@ namespace Quickblox.Sdk.Modules.ChatModule
         
         public async Task<HttpResponse<Dialog>> CreateDialogAsync(string dialogName, DialogType dialogType, string occupantsIds = null, string photoId = null)
         {
-            if (dialogName == null)
-                throw new ArgumentNullException("dialogName");
-
             var createDialogRequest = new CreateDialogRequest {Type = (int) dialogType, Name = dialogName, OccupantsIds = occupantsIds, Photo = photoId};
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.PostAsync<Dialog, CreateDialogRequest>(this.quickbloxClient.ApiEndPoint,

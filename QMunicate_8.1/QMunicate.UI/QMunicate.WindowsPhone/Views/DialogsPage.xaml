@@ -25,7 +25,7 @@
             <TextBlock Text="chats" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource LargeFontSize}"/>
         </StackPanel>
         <ScrollViewer Grid.Row="1">
-            <ItemsControl ItemsSource="{Binding Dialogs}">
+            <ItemsControl ItemsSource="{Binding DialogsManager.Dialogs}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="{StaticResource DefaultMargin}" tapListener:TapListener.TapCommand="{Binding DataContext.OpenChatCommand, ElementName=Page}"

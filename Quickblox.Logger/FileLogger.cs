@@ -1,24 +1,52 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Nito.AsyncEx;
-using Quickblox.Sdk.Common;
 
-namespace QMunicate.Core.Logger
+namespace Quickblox.Logger
 {
-    public class Logger : ILogger
+    public class FileLogger : ILogger
     {
+        #region Singleton
+
+        private static readonly FileLogger instance = new FileLogger();
+
+        private FileLogger()
+        {
+        }
+
+        public static FileLogger Instance
+        {
+            get { return instance; }
+        }
+
+        #endregion
+
+        #region Fields
+
         private const string LogFileName = "Logs.txt";
         private readonly AsyncLock mutex = new AsyncLock();
 
+        #endregion
+
+        #region ILogger methods
+
         public async Task Log(LogLevel logLevel, string message)
         {
+#if TEST_RELEASE || DEBUG
             await AppendToFile(LogFileName, string.Format("{0} {1}: {2}{3}", DateTime.Now, logLevel, message, Environment.NewLine));
             Debug.WriteLine("{0}: {1}", logLevel, message);
+#endif
         }
+
+        #endregion
+
+        #region Private methods
 
         private async Task AppendToFile(string filename, string content)
         {
@@ -49,7 +77,8 @@ namespace QMunicate.Core.Logger
 
             return text;
         }
-    }
 
-    
+        #endregion
+
+    }
 }

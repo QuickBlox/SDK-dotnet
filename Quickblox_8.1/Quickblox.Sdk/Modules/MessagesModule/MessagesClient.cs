@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Quickblox.Sdk.Common;
+using System.Xml.Linq;
+using Quickblox.Logger;
+using Quickblox.Sdk.Serializer;
 using XMPP;
 using XMPP.common;
 using XMPP.tags.jabber.client;
@@ -49,7 +51,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             this.quickbloxClient = quickbloxClient;
             Contacts = new List<Contact>();
             Presences = new List<Presence>();
-            ContactRequests = new List<ContactRequest>();
         }
 
         #endregion
@@ -59,8 +60,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         public List<Contact> Contacts { get; private set; }
 
         public List<Presence> Presences { get; private set; }
-
-        public List<ContactRequest> ContactRequests { get; private set; }
 
         public bool IsConnected { get { return xmppClient != null && xmppClient.Connected && isReady; } }
 
@@ -106,10 +105,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             isReady = false;
         }
 
-        public IPrivateChatManager GetPrivateChatManager(int otherUserId)
+        public IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId = null)
         {
-            string otherUserJid = BuildJid(otherUserId);
-            return new PrivateChatManager(xmppClient, otherUserJid);
+            return new PrivateChatManager(quickbloxClient, xmppClient, otherUserId, dialogId);
         }
 
         public IGroupChatManager GetGroupChatManager(string groupJid)
@@ -157,6 +155,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private void OpenConnection(Client client, string chatEndpointUrl, int userId, int applicationId,
             string password)
         {
+            Contacts = new List<Contact>();
+            Presences = new List<Presence>();
+
             chatEndpoint = chatEndpointUrl;
             appId = applicationId;
             isUserDisconnected = false;
@@ -190,7 +191,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
 #if DEBUG || TEST_RELEASE
             client.OnLogMessage +=
-                async (sender, args) => await QuickbloxLogger.Instance.Log(LogLevel.Debug, string.Format("XMPP {0} LOG: {1} {2}", DebugClientName, args.type, args.message));
+                async (sender, args) => await FileLogger.Instance.Log(LogLevel.Debug, string.Format("XMPP {0} LOG: {1} {2}", DebugClientName, args.type, args.message));
 #endif
 
             xmppClient = client;
@@ -222,11 +223,32 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             }
         }
 
-        private void OnMessage(message message)
+        private void OnMessage(message msg)
         {
+            var receivedMessage = new Message {From = msg.from, To = msg.to, MessageText = msg.body};
+
+            var extraParams = msg.Element(ExtraParams.XName);
+            if (extraParams != null)
+            {
+                var dialogId = extraParams.Element(DialogId.XName);
+                if (dialogId != null) receivedMessage.DialogId = dialogId.Value;
+
+                var notificationType = extraParams.Element(NotificationType.XName);
+                if (notificationType != null)
+                {
+                    int intValue;
+                    if (int.TryParse(notificationType.Value, out intValue))
+                    {
+                        if (Enum.IsDefined(typeof (NotificationTypes), intValue))
+                            receivedMessage.NotificationType = (NotificationTypes) intValue;
+                    }
+                }
+            }
+            
+
             var handler = OnMessageReceived;
             if (handler != null)
-                handler(this, new Message { From = message.from, To = message.to, MessageText = message.body });
+                handler(this, receivedMessage);
         }
 
         private void OnPresence(presence presence)
@@ -240,20 +262,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             Presences.RemoveAll(p => p.From == receivedPresence.From);
             Presences.Add(receivedPresence);
-
-            if (presence.type == presence.typeEnum.subscribe)
-            {
-                int userId = GetUserIdFromJid(presence.from);
-
-                var receivedRequest = new ContactRequest() {FromUserId = userId};
-
-                var contactHandler = OnContactRequestReceived;
-                if (contactHandler != null)
-                    contactHandler(this, receivedRequest);
-
-                if(userId != 0)
-                    ContactRequests.Add(receivedRequest);
-            }
 
             var handler = OnPresenceReceived;
             if (handler != null)
@@ -293,12 +301,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             }
         }
 
-        private string BuildJid(int userId)
+        internal string BuildJid(int userId)
         {
             return string.Format("{0}-{1}@{2}", userId, appId, chatEndpoint);
         }
 
-        private int GetUserIdFromJid(string jid)
+        internal int GetUserIdFromJid(string jid)
         {
             var match = qbJidRegex.Match(jid);
 
