@@ -5,10 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Models;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.Models;
 
 namespace QMunicate.Helper
@@ -21,8 +24,26 @@ namespace QMunicate.Helper
 
         public DialogsManager(IQuickbloxClient quickbloxClient)
         {
-            this.quickbloxClient = quickbloxClient; //TODO: subscribe to xmpp and update dialogs on xmpp events
+            this.quickbloxClient = quickbloxClient;
+            quickbloxClient.MessagesClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
             Dialogs = new ObservableCollection<DialogVm>();
+        }
+
+        private void MessagesClientOnOnMessageReceived(object sender, Message message)
+        {
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                var dialog = Dialogs.FirstOrDefault(d => d.Id == message.DialogId);
+                if (dialog != null)
+                {
+                    dialog.LastActivity = message.MessageText;
+                    dialog.LastMessageSent = message.DateTimeSent;
+                }
+                else
+                {
+                    await ReloadDialogs();
+                }
+            });
         }
 
         public async Task ReloadDialogs()
