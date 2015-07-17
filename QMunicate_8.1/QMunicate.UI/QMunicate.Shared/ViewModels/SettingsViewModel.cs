@@ -138,15 +138,18 @@ namespace QMunicate.ViewModels
 
         private async void SignOutCommandExecute()
         {
+            IsLoading = true;
             await FileLogger.Instance.Log(LogLevel.Debug, "Qmunicate. SignOutCommandExecute called");
             var messageService = ServiceLocator.Locator.Get<IMessageService>();
             DialogCommand logoutCommand = new DialogCommand("logout", new RelayCommand(SignOut));
             DialogCommand cancelCommand = new DialogCommand("cancel", new RelayCommand(() => { }), false, true);
             await messageService.ShowAsync("Logout", "Do you really want to logout?", new [] {logoutCommand, cancelCommand});
+            IsLoading = false;
         }
 
         private async void SignOut()
         {
+            IsLoading = true;
             try
             {
                 var passwordVault = new PasswordVault();
@@ -171,6 +174,7 @@ namespace QMunicate.ViewModels
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             dialogsManager.Dialogs.Clear();
 
+            IsLoading = false;
             NavigationService.Navigate(ViewLocator.SignUp);
             NavigationService.BackStack.Clear();
         }

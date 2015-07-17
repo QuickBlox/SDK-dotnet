@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Quickblox.Logger;
+using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Serializer;
 using XMPP;
 using XMPP.common;
@@ -241,6 +242,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                     {
                         if (Enum.IsDefined(typeof (NotificationTypes), intValue))
                             receivedMessage.NotificationType = (NotificationTypes) intValue;
+                    }
+                }
+
+                var dateSent = extraParams.Element(DateSent.XName);
+                if (dateSent != null)
+                {
+                    long longValue;
+                    if (long.TryParse(dateSent.Value, out longValue))
+                    {
+                        receivedMessage.DateTimeSent = longValue.ToDateTime();
                     }
                 }
             }

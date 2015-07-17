@@ -12,6 +12,7 @@ namespace QMunicate.Models
     public class DialogVm : ObservableObject
     {
         private string lastActivity;
+        private DateTime? lastMessageSent;
 
         #region Ctor
 
@@ -40,7 +41,6 @@ namespace QMunicate.Models
         public string Id { get; set; }
         public string Image { get; set; }
         public string Name { get; set; }
-        public DateTime? LastMessageSent { get; set; }
         public int? UnreadMessageCount { get; set; }
         public IList<int> OccupantIds { get; set; }
         public DialogType DialogType { get; set; }
@@ -49,6 +49,12 @@ namespace QMunicate.Models
         {
             get { return lastActivity; }
             set { Set(ref lastActivity, value); }
+        }
+
+        public DateTime? LastMessageSent
+        {
+            get { return lastMessageSent; }
+            set { Set(ref lastMessageSent, value); }
         }
 
         #endregion
