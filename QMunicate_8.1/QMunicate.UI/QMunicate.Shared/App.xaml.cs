@@ -89,7 +89,7 @@ namespace QMunicate
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
-            FileLogger.Instance.Log(LogLevel.Debug, "QMunicate application launched.");
+            FileLogger.Instance.Log(LogLevel.Debug, "===================== QMunicate. OnLaunched");
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -112,13 +112,13 @@ namespace QMunicate
                 Window.Current.Content = rootFrame;
             }
 
-            var navigationService = ServiceLocator.Locator.Get<INavigationService>();
-            navigationService.Initialize(rootFrame, this.GetPageResolver());
-
             var quickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
 
             if (rootFrame.Content == null)
             {
+                var navigationService = ServiceLocator.Locator.Get<INavigationService>();
+                navigationService.Initialize(rootFrame, this.GetPageResolver());
+
 #if WINDOWS_PHONE_APP
                 // Removes the turnstile navigation for startup.
                 if (rootFrame.ContentTransitions != null)
@@ -240,12 +240,16 @@ namespace QMunicate
         /// </summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
 
+            await FileLogger.Instance.Log(LogLevel.Debug, "===================== QMunicate. OnSuspending");
+
             // TODO: Save application state and stop any background activity
             deferral.Complete();
+
+
 
             //var quickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
             //SettingsManager.Instance.WriteToSettings(SettingsKeys.QbToken, quickbloxClient.Token);
