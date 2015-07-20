@@ -139,7 +139,6 @@ namespace QMunicate.ViewModels
         private async void SignOutCommandExecute()
         {
             IsLoading = true;
-            await FileLogger.Instance.Log(LogLevel.Debug, "Qmunicate. SignOutCommandExecute called");
             var messageService = ServiceLocator.Locator.Get<IMessageService>();
             DialogCommand logoutCommand = new DialogCommand("logout", new RelayCommand(SignOut));
             DialogCommand cancelCommand = new DialogCommand("cancel", new RelayCommand(() => { }), false, true);

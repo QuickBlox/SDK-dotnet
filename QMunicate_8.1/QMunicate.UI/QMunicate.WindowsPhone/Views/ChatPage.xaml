@@ -34,7 +34,7 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding MessageText}" Foreground="Black" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
+                            <TextBlock Text="{Binding MessageText}" TextWrapping="Wrap" Foreground="Black" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
                             <TextBlock Grid.Row="1" Text="{Binding DateTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:HH:mm}'}"
                                        FontSize="{StaticResource NormalFontSize}" Foreground="Gray" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Right"/>
                         </Grid>
@@ -54,7 +54,7 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding MessageText}" Foreground="White" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
+                            <TextBlock Text="{Binding MessageText}" TextWrapping="Wrap" Foreground="White" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
                             <TextBlock Grid.Row="1" Text="{Binding DateTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:HH:mm}'}"
                                        FontSize="{StaticResource NormalFontSize}" Foreground="Gainsboro" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Right"/>
                         </Grid>
