@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
+using Quickblox.Logger;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Message = Quickblox.Sdk.Modules.ChatModule.Models.Message;
 
@@ -122,6 +123,8 @@ namespace QMunicate.ViewModels
                 ChatImage = chatParameter.Dialog.Image;
 
                 int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
+                await FileLogger.Instance.Log(LogLevel.Debug, string.Format("Initializing Chat page. CurrentUserId: {0}. OtherUserId: {1}.", QuickbloxClient.CurrentUserId, otherUserId));
+
                 if (otherUserId != 0)
                 {
                     privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);

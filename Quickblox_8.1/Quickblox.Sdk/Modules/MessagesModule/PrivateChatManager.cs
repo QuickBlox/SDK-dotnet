@@ -30,13 +30,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId = null)
         {
-            this.quickbloxClient = quickbloxClient;
-            this.xmppClient = xmppClient;
-            this.xmppClient.OnReceive += XmppClientOnOnReceive;
-
             this.otherUserId = otherUserId;
             this.otherUserJid = quickbloxClient.MessagesClient.BuildJid(otherUserId);
             this.dialogId = dialogId;
+            this.quickbloxClient = quickbloxClient;
+            this.xmppClient = xmppClient;
+            quickbloxClient.MessagesClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
         }
 
         #endregion
@@ -251,15 +250,13 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Private methods
 
-        private void XmppClientOnOnReceive(object sender, TagEventArgs tagEventArgs)
+        private void MessagesClientOnOnMessageReceived(object sender, Message message1)
         {
-            var message = tagEventArgs.tag as message;
-            if (message != null && message.from.Contains(otherUserJid))
+            if (message1.From.Contains(otherUserJid))
             {
                 var handler = OnMessageReceived;
                 if (handler != null)
-                    handler(this, new Message { From = message.from, To = message.to, MessageText = message.body });
-                return;
+                    handler(this, message1);
             }
         }
 

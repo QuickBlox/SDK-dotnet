@@ -112,9 +112,16 @@ namespace Quickblox.Sdk
 
         public void SetSession(Session session)
         {
-            if (session == null) throw new ArgumentNullException("session");
-            Token = session.Token;
-            CurrentUserId = session.UserId;
+            if (session != null)
+            {
+                Token = session.Token;
+                CurrentUserId = session.UserId;
+            }
+            else
+            {
+                Token = null;
+                CurrentUserId = -1;
+            }
         }
 
         //public void Resume(string token)

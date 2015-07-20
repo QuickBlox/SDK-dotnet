@@ -35,6 +35,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
+            quickbloxClient.MessagesClient.Contacts.Clear();
             var sessionHolder = quickbloxClient as ISessionHolder;
             if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
                 sessionHolder.SetSession(resultSessionResponse.Result.Session);
@@ -61,6 +62,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
+            quickbloxClient.MessagesClient.Contacts.Clear();
             var sessionHolder = quickbloxClient as ISessionHolder;
             if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
                 sessionHolder.SetSession(resultSessionResponse.Result.Session);
@@ -87,6 +89,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
+            quickbloxClient.MessagesClient.Contacts.Clear();
             var sessionHolder = quickbloxClient as ISessionHolder;
             if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
                 sessionHolder.SetSession(resultSessionResponse.Result.Session);
@@ -112,6 +115,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
+            quickbloxClient.MessagesClient.Contacts.Clear();
             var sessionHolder = quickbloxClient as ISessionHolder;
             if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
                 sessionHolder.SetSession(resultSessionResponse.Result.Session);
@@ -122,11 +126,23 @@ namespace Quickblox.Sdk.Modules.AuthModule
         public async Task<HttpResponse> DeleteSessionAsync(String token)
         {
             
-            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(token);
             var result = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, 
                                                                 QuickbloxMethods.SessionMethod,
                                                                 headers);
             return result;
+        }
+
+        public async Task<HttpResponse> DeleteCurrentSession()
+        {
+            var response = await DeleteSessionAsync(quickbloxClient.Token);
+
+            quickbloxClient.MessagesClient.Contacts.Clear();
+            var sessionHolder = quickbloxClient as ISessionHolder;
+            if (sessionHolder != null)
+                sessionHolder.SetSession(null);
+
+            return response;
         }
 
         public async Task<HttpResponse<SessionResponse>> GetSessionAsync()

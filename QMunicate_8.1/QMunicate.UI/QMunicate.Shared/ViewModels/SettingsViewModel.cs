@@ -149,6 +149,21 @@ namespace QMunicate.ViewModels
         private async void SignOut()
         {
             IsLoading = true;
+
+            int pushSubscriptionId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.PushSubscriptionId);
+            if (pushSubscriptionId != default(int))
+            {
+                var deleteResponse = await QuickbloxClient.NotificationClient.DeleteSubscriptionsAsync(pushSubscriptionId);
+                if (deleteResponse.StatusCode == HttpStatusCode.OK)
+                    SettingsManager.Instance.DeleteFromSettings(SettingsKeys.PushSubscriptionId);
+            }
+
+            QuickbloxClient.MessagesClient.Disconnect();
+            await QuickbloxClient.CoreClient.DeleteCurrentSession();
+
+            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            dialogsManager.Dialogs.Clear();
+
             try
             {
                 var passwordVault = new PasswordVault();
@@ -160,18 +175,7 @@ namespace QMunicate.ViewModels
             }
             catch (Exception) { }
 
-            int pushSubscriptionId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.PushSubscriptionId);
-            if (pushSubscriptionId != default(int))
-            {
-                var deleteResponse = await QuickbloxClient.NotificationClient.DeleteSubscriptionsAsync(pushSubscriptionId);
-                if (deleteResponse.StatusCode == HttpStatusCode.OK)
-                    SettingsManager.Instance.DeleteFromSettings(SettingsKeys.PushSubscriptionId);
-            }
-
-            SettingsManager.Instance.DeleteFromSettings(SettingsKeys.QbToken);
-
-            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-            dialogsManager.Dialogs.Clear();
+            
 
             IsLoading = false;
             NavigationService.Navigate(ViewLocator.SignUp);
