@@ -182,9 +182,7 @@ namespace QMunicate.ViewModels
 
             Messages.Add(msg);
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-            var dlg = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialog.Id);
-            if(dlg != null)
-                dlg.LastActivity = NewMessageText;
+            await dialogsManager.UpdateDialog(dialog.Id, NewMessageText, DateTime.Now);
 
             NewMessageText = "";
         }

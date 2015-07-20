@@ -12,5 +12,6 @@ namespace QMunicate.Helper
     {
         ObservableCollection<DialogVm> Dialogs { get; }
         Task ReloadDialogs();
+        Task UpdateDialog(string dialogId, string lastActivity, DateTime lastMessageSent);
     }
 }

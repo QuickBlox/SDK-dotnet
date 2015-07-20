@@ -102,8 +102,6 @@ namespace QMunicate.ViewModels
 
         private async Task LoadDialogs()
         {
-            
-
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             if(!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
         }
