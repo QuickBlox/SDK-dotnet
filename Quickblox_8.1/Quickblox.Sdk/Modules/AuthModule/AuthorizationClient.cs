@@ -35,10 +35,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
-            var sessionHolder = quickbloxClient as ISessionHolder;
-            if(resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
-                sessionHolder.SetSession(resultSessionResponse.Result.Session);
-
             return resultSessionResponse;
         }
 

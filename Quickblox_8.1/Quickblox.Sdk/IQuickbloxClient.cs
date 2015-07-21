@@ -44,9 +44,9 @@ namespace Quickblox.Sdk
 
         string ChatEndpoint { get; }
 
-        string Token { get; }
+        string Token { get; set; }
 
-        int CurrentUserId { get; }
+        int CurrentUserId { get; set; }
 
         Task GetAccountSettingsAsync(string accountKey);
     }

@@ -88,9 +88,9 @@ namespace Quickblox.Sdk
 
         public string ChatEndpoint { get; private set; }
 
-        public string Token { get; private set; }
+        public string Token { get; set; }
 
-        public int CurrentUserId { get; private set; }
+        public int CurrentUserId { get; set; }
 
 #endregion
 

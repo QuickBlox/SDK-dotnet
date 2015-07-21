@@ -54,12 +54,23 @@ namespace QMunicate.ViewModels
 
         private async void ResetCommandExecute()
         {
-            await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
+
+            var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
                         ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
                         new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
-            var response = await QuickbloxClient.UsersClient.ResetUserPasswordByEmailAsync(Email);
 
-            var messageService = ServiceLocator.Locator.Get<IMessageService>();
+            if (sessionResponse.StatusCode == HttpStatusCode.Created)
+            {
+                QuickbloxClient.Token = sessionResponse.Result.Session.Token;
+            }
+            else
+            {
+                await Helpers.ShowErrors(sessionResponse.Errors, messageService);
+                return;
+            }
+
+            var response = await QuickbloxClient.UsersClient.ResetUserPasswordByEmailAsync(Email);
 
             if (response.StatusCode == HttpStatusCode.OK)
             {

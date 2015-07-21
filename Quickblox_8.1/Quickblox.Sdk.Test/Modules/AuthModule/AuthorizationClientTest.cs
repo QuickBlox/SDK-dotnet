@@ -71,6 +71,7 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         public async Task ByLoginTest()
         {
             var sessionResponse = await client.CoreClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
+            client.Token = sessionResponse.Result.Session.Token;
 
             var response = await client.CoreClient.ByLoginAsync(Login, Password);
 
@@ -81,6 +82,7 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         public async Task ByEmailTest()
         {
             var sessionResponse = await client.CoreClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
+            client.Token = sessionResponse.Result.Session.Token;
 
             var response = await client.CoreClient.ByEmailAsync(Email, Password);
 
