@@ -2,7 +2,7 @@
 
 namespace Quickblox.Sdk.Modules.CustomObjectModule.Models
 {
-    public class RetriveCustomObjectsWithFilter : BaseRequestSettings
+    public class RetriveCustomObjectsWithFilter : ListRequest
     {
     }
 }
