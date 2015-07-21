@@ -278,6 +278,51 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\CustomObjectModule\Responses\RetriveCustomObjectsResponce.cs">
       <Link>Modules\CustomObjectModule\Responses\RetriveCustomObjectsResponce.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\LocationClient.cs">
+      <Link>Modules\LocationModule\LocationClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Models\GeoRect.cs">
+      <Link>Modules\LocationModule\Models\GeoRect.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Models\InfoLocation.cs">
+      <Link>Modules\LocationModule\Models\InfoLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Models\Location.cs">
+      <Link>Modules\LocationModule\Models\Location.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Models\PushLocation.cs">
+      <Link>Modules\LocationModule\Models\PushLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Models\UserInfoLocation.cs">
+      <Link>Modules\LocationModule\Models\UserInfoLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Requests\CreateGeodataRequest.cs">
+      <Link>Modules\LocationModule\Requests\CreateGeodataRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Requests\CreateGeoDataWithPushRequest.cs">
+      <Link>Modules\LocationModule\Requests\CreateGeoDataWithPushRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Requests\FindGeoDataRequest.cs">
+      <Link>Modules\LocationModule\Requests\FindGeoDataRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Requests\UpdateGeoDataRequest.cs">
+      <Link>Modules\LocationModule\Requests\UpdateGeoDataRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Responses\GeoDataListResponse.cs">
+      <Link>Modules\LocationModule\Responses\GeoDataListResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Responses\GeoDataResponse.cs">
+      <Link>Modules\LocationModule\Responses\GeoDataResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Responses\GeoDataWithUserResponse.cs">
+      <Link>Modules\LocationModule\Responses\GeoDataWithUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Responses\GeoDatumResponse.cs">
+      <Link>Modules\LocationModule\Responses\GeoDatumResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\LocationModule\Responses\GeoDatumWithUserResponse.cs">
+      <Link>Modules\LocationModule\Responses\GeoDatumWithUserResponse.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\NotificationModule\Models\CreateEvent.cs">
       <Link>Modules\NotificationModule\Models\CreateEvent.cs</Link>
     </Compile>
@@ -444,6 +489,13 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Xamarin.Logger\Xamarin.Logger.csproj">
+      <Project>{e675f410-7b0a-4890-8297-18a03a44ec39}</Project>
+      <Name>Xamarin.Logger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
