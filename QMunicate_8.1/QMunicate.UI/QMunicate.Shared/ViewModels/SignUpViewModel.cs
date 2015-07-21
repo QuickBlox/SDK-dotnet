@@ -106,7 +106,7 @@ namespace QMunicate.ViewModels
                         ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
                         new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
 
-            var response = await QuickbloxClient.UsersClient.SignUpUserAsync(FullName, Password, email: Email);
+            var response = await QuickbloxClient.UsersClient.SignUpUserAsync(null, Password, email: Email, fullName: FullName);
 
             if (response.StatusCode == HttpStatusCode.Created)
             {

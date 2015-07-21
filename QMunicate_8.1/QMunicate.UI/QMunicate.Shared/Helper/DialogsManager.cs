@@ -69,9 +69,7 @@ namespace QMunicate.Helper
 
                         var dialogVm = DialogVm.FromDialog(dialog);
                         int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != quickbloxClient.CurrentUserId);
-                        var otherContact = quickbloxClient.MessagesClient.Contacts.FirstOrDefault(c => c.UserId == otherUserId);
-                        if (otherContact != null)
-                            dialogVm.Name = otherContact.Name;
+                        dialogVm.Name = await GetUserName(otherUserId);
 
                         Dialogs.Add(dialogVm);
                     }
@@ -110,6 +108,19 @@ namespace QMunicate.Helper
             {
                 await UpdateDialog(message.DialogId, message.MessageText, message.DateTimeSent);
             });
+        }
+
+        private async Task<string> GetUserName(int userId)
+        {
+            var otherContact = quickbloxClient.MessagesClient.Contacts.FirstOrDefault(c => c.UserId == userId);
+            if (otherContact != null)
+                return otherContact.Name;
+
+            var response = await quickbloxClient.UsersClient.GetUserByIdAsync(userId);
+            if (response.StatusCode == HttpStatusCode.OK)
+                return response.Result.User.FullName;
+
+            return null;
         }
 
         #endregion
