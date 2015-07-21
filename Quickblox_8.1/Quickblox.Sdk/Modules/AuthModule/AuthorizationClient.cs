@@ -121,7 +121,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
 
         public async Task<HttpResponse> DeleteSessionAsync(String token)
         {
-            
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(token);
             var result = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, 
                                                                 QuickbloxMethods.SessionMethod,
