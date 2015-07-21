@@ -90,14 +90,11 @@ namespace QMunicate.ViewModels
 
         private async Task InitializeChat(int userId, string password)
         {
-            await ConnectToChat(userId, password);
-            QuickbloxClient.MessagesClient.ReloadContacts();
-        }
-
-        private async Task ConnectToChat(int userId, string password)
-        {
             if (!QuickbloxClient.MessagesClient.IsConnected)
+            {
                 await QuickbloxClient.MessagesClient.Connect(QuickbloxClient.ChatEndpoint, userId, ApplicationKeys.ApplicationId, password);
+                QuickbloxClient.MessagesClient.ReloadContacts();
+            }
         }
 
         private async Task LoadDialogs()
@@ -112,81 +109,22 @@ namespace QMunicate.ViewModels
         {
             var pushChannel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
             pushChannel.PushNotificationReceived += PushChannelOnPushNotificationReceived;
-            await CheckAndUpdatePushToken(pushChannel);
-            await CreatePushSubscriptionIfNeeded();
+
+            var pushNotificationsManager = ServiceLocator.Locator.Get<IPushNotificationsManager>();
+            await pushNotificationsManager.UpdatePushTokenIfNeeded(pushChannel);
+
+            bool userDisabledPush = SettingsManager.Instance.ReadFromSettings<bool>(SettingsKeys.UserDisabledPush);
+            if (!userDisabledPush)
+                await pushNotificationsManager.CreateSubscriptionIfNeeded();
         }
 
-        private async void PushChannelOnPushNotificationReceived(PushNotificationChannel sender,
-            PushNotificationReceivedEventArgs args)
+        private async void PushChannelOnPushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 var messageService = ServiceLocator.Locator.Get<IMessageService>();
                 await messageService.ShowAsync("Message", "Push received");
             });
-        }
-
-        private async Task CheckAndUpdatePushToken(PushNotificationChannel pushChannel)
-        {
-            string tokenHash = Helpers.ComputeMD5(pushChannel.Uri);
-            string storedTokenHash = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.PushTokenHash);
-            if (tokenHash != storedTokenHash)
-            {
-                string storedTokenId = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.PushTokenId);
-                if (!string.IsNullOrEmpty(storedTokenId))
-                {
-                    var deleteResponse = await QuickbloxClient.NotificationClient.DeletePushTokenAsync(storedTokenId);
-                }
-
-                var settings = new CreatePushTokenRequest()
-                {
-                    DeviceRequest =
-                        new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()},
-                    PushToken =
-                        new PushToken()
-                        {
-                            Environment = Environment.production,
-                            ClientIdentificationSequence = pushChannel.Uri
-                        }
-                };
-                var createPushTokenResponse = await QuickbloxClient.NotificationClient.CreatePushTokenAsync(settings);
-                if (createPushTokenResponse.StatusCode == HttpStatusCode.Created)
-                {
-                    SettingsManager.Instance.WriteToSettings(SettingsKeys.PushTokenId,
-                        createPushTokenResponse.Result.PushToken.PushTokenId);
-                    SettingsManager.Instance.WriteToSettings(SettingsKeys.PushTokenHash, tokenHash);
-                }
-            }
-        }
-
-        private async Task CreatePushSubscriptionIfNeeded()
-        {
-            int pushSubscriptionId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.PushSubscriptionId);
-            bool userDisabledPush = SettingsManager.Instance.ReadFromSettings<bool>(SettingsKeys.UserDisabledPush);
-            if (pushSubscriptionId == default(int) && !userDisabledPush)
-            {
-                var createSubscriptionsResponse = await QuickbloxClient.NotificationClient.CreateSubscriptionsAsync(NotificationChannelType.mpns);
-                if (createSubscriptionsResponse.StatusCode == HttpStatusCode.Created)
-                {
-                    var subscription = createSubscriptionsResponse.Result.FirstOrDefault();
-                    if (subscription != null)
-                    {
-                        SettingsManager.Instance.WriteToSettings(SettingsKeys.PushSubscriptionId, subscription.Subscription.Id);
-                    }
-                    else
-                    {
-                        var subscriptions = await QuickbloxClient.NotificationClient.GetSubscriptionsAsync();
-                        if (subscriptions.StatusCode == HttpStatusCode.OK)
-                        {
-                            var subs = subscriptions.Result.FirstOrDefault(s => s.Subscription != null && s.Subscription.NotificationChannel != null && s.Subscription.NotificationChannel.Name == NotificationChannelType.mpns);
-                            if (subs != null)
-                                SettingsManager.Instance.WriteToSettings(SettingsKeys.PushSubscriptionId, subs.Subscription.Id);
-                        }
-                    }
-
-                    
-                }
-            }
         }
 
         #endregion

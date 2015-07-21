@@ -98,9 +98,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void Disconnect()
         {
-            if (!IsConnected) return;
-
             isUserDisconnected = true;
+            Contacts.Clear();
             xmppClient.Send(new presence { type = presence.typeEnum.unavailable });
             xmppClient.Disconnect();
             isReady = false;

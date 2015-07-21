@@ -92,30 +92,15 @@ namespace QMunicate.ViewModels
         private async void ChangePushsEnabled(bool newValue)
         {
             IsLoading = true;
+
+            var pushNotificationsManager = ServiceLocator.Locator.Get<IPushNotificationsManager>();
+
             if (newValue)
             {
                 SettingsManager.Instance.WriteToSettings(SettingsKeys.UserDisabledPush, false);
 
-                var createSubscriptionsResponse = await QuickbloxClient.NotificationClient.CreateSubscriptionsAsync(NotificationChannelType.mpns);
-                if (createSubscriptionsResponse.StatusCode == HttpStatusCode.Created)
-                {
-                    var subscription = createSubscriptionsResponse.Result.FirstOrDefault();
-                    if (subscription != null)
-                    {
-                        SettingsManager.Instance.WriteToSettings(SettingsKeys.PushSubscriptionId, subscription.Subscription.Id);
-                    }
-                    else
-                    {
-                        var subscriptions = await QuickbloxClient.NotificationClient.GetSubscriptionsAsync();
-                        if (subscriptions.StatusCode == HttpStatusCode.OK)
-                        {
-                            var subs = subscriptions.Result.FirstOrDefault(s => s.Subscription != null && s.Subscription.NotificationChannel != null && s.Subscription.NotificationChannel.Name == NotificationChannelType.mpns);
-                            if (subs != null)
-                                SettingsManager.Instance.WriteToSettings(SettingsKeys.PushSubscriptionId, subs.Subscription.Id);
-                        }
-                    }
-                }
-                else
+                bool isEnabled = await pushNotificationsManager.CreateSubscriptionIfNeeded();
+                if (!isEnabled)
                 {
                     isSettingPushEnabledFromCode = true;
                     IsPushEnabled = false;
@@ -124,14 +109,7 @@ namespace QMunicate.ViewModels
             else
             {
                 SettingsManager.Instance.WriteToSettings(SettingsKeys.UserDisabledPush, true);
-
-                int pushSubscriptionId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.PushSubscriptionId);
-                if (pushSubscriptionId != default(int))
-                {
-                    var deleteResponse = await QuickbloxClient.NotificationClient.DeleteSubscriptionsAsync(pushSubscriptionId);
-                    if(deleteResponse.StatusCode == HttpStatusCode.OK)
-                        SettingsManager.Instance.DeleteFromSettings(SettingsKeys.PushSubscriptionId);
-                }
+                await pushNotificationsManager.DeleteSubscription();
             }
             IsLoading = false;
         }
@@ -150,13 +128,7 @@ namespace QMunicate.ViewModels
         {
             IsLoading = true;
 
-            int pushSubscriptionId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.PushSubscriptionId);
-            if (pushSubscriptionId != default(int))
-            {
-                var deleteResponse = await QuickbloxClient.NotificationClient.DeleteSubscriptionsAsync(pushSubscriptionId);
-                if (deleteResponse.StatusCode == HttpStatusCode.OK)
-                    SettingsManager.Instance.DeleteFromSettings(SettingsKeys.PushSubscriptionId);
-            }
+            await TurnOffPushNotifications();
 
             QuickbloxClient.MessagesClient.Disconnect();
             await QuickbloxClient.CoreClient.DeleteCurrentSession();
@@ -164,6 +136,24 @@ namespace QMunicate.ViewModels
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             dialogsManager.Dialogs.Clear();
 
+            DeleteStoredCredentials();
+            
+            IsLoading = false;
+            NavigationService.Navigate(ViewLocator.SignUp);
+            NavigationService.BackStack.Clear();
+        }
+
+        private async Task TurnOffPushNotifications()
+        {
+            var pushNotificationsManager = ServiceLocator.Locator.Get<IPushNotificationsManager>();
+            await pushNotificationsManager.DeleteSubscription();
+            await pushNotificationsManager.DeletePushToken();
+
+            SettingsManager.Instance.DeleteFromSettings(SettingsKeys.UserDisabledPush);
+        }
+
+        private void DeleteStoredCredentials()
+        {
             try
             {
                 var passwordVault = new PasswordVault();
@@ -174,12 +164,6 @@ namespace QMunicate.ViewModels
                 }
             }
             catch (Exception) { }
-
-            
-
-            IsLoading = false;
-            NavigationService.Navigate(ViewLocator.SignUp);
-            NavigationService.BackStack.Clear();
         }
 
         private async void DeleteAccountCommandExecute()
