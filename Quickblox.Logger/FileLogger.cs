@@ -39,8 +39,12 @@ namespace Quickblox.Logger
         public async Task Log(LogLevel logLevel, string message)
         {
 #if TEST_RELEASE || DEBUG
-            await AppendToFile(LogFileName, string.Format("{0} {1}: {2}{3}", DateTime.Now, logLevel, message, Environment.NewLine));
-            Debug.WriteLine("{0}: {1}", logLevel, message);
+            try
+            {
+                await AppendToFile(LogFileName, string.Format("{0} {1}: {2}{3}", DateTime.Now, logLevel, message, Environment.NewLine));
+                Debug.WriteLine("{0}: {1}", logLevel, message);
+            }
+            catch (Exception) { }
 #endif
         }
 
