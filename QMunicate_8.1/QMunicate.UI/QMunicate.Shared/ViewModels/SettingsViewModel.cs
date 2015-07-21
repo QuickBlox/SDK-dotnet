@@ -24,6 +24,7 @@ namespace QMunicate.ViewModels
 
         private bool isPushEnabled;
         private bool isSettingPushEnabledFromCode;
+        private string packageVersion;
 
         #endregion
 
@@ -57,6 +58,12 @@ namespace QMunicate.ViewModels
             }
         }
 
+        public string PackageVersion
+        {
+            get { return packageVersion; }
+            set { Set(ref packageVersion, value); }
+        }
+
         public RelayCommand SignOutCommand { get; set; }
 
         public RelayCommand DeleteAccountCommand { get; set; }
@@ -73,6 +80,8 @@ namespace QMunicate.ViewModels
                 isSettingPushEnabledFromCode = true;
                 IsPushEnabled = true;
             }
+
+            PackageVersion = Helpers.GetAppVersion();
         }
 
         #endregion
