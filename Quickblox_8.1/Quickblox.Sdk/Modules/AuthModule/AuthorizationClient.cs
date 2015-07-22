@@ -100,10 +100,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
-            var sessionHolder = quickbloxClient as ISessionHolder;
-            if (resultSessionResponse.Result != null && resultSessionResponse.Result.Session != null && sessionHolder != null)
-                sessionHolder.SetSession(resultSessionResponse.Result.Session);
-
             return resultSessionResponse;
         }
 
@@ -114,17 +110,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                 QuickbloxMethods.SessionMethod,
                                                                 headers);
             return result;
-        }
-
-        public async Task<HttpResponse> DeleteCurrentSession()
-        {
-            var response = await DeleteSessionAsync(quickbloxClient.Token);
-
-            var sessionHolder = quickbloxClient as ISessionHolder;
-            if (sessionHolder != null)
-                sessionHolder.SetSession(null);
-
-            return response;
         }
 
         public async Task<HttpResponse<SessionResponse>> GetSessionAsync()

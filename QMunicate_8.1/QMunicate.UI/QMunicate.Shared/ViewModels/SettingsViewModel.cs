@@ -140,7 +140,9 @@ namespace QMunicate.ViewModels
             await TurnOffPushNotifications();
 
             QuickbloxClient.MessagesClient.Disconnect();
-            await QuickbloxClient.CoreClient.DeleteCurrentSession();
+            await QuickbloxClient.CoreClient.DeleteSessionAsync(QuickbloxClient.Token);
+            QuickbloxClient.Token = null;
+            QuickbloxClient.CurrentUserId = -1;
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             dialogsManager.Dialogs.Clear();
