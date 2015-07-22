@@ -23,10 +23,11 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
-            await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId,
+            var sessionResponse = await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId,
                     GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345",
                     deviceRequestRequest:
                         new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
+            client.Token = sessionResponse.Result.Session.Token;
         }
 
         [TestMethod]
