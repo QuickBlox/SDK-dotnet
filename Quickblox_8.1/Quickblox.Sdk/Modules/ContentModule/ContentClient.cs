@@ -215,35 +215,5 @@ namespace Quickblox.Sdk.Modules.ContentModule
                                                                                             headers);
             return deleteFileById;
         }
-
-        public async Task UploadFile(byte[] fileBytes, string contentType)
-        {
-            var settings = new CreateFileRequest()
-            {
-                Blob = new BlobRequest()
-                {
-                    Name = Guid.NewGuid().ToString(),
-                }
-            };
-
-            var createFileInfoResponse = await CreateFileInfoAsync(settings);
-            var uploadFileRequest = new UploadFileRequest
-            {
-                BlobObjectAccess = createFileInfoResponse.Result.Blob.BlobObjectAccess,
-                FileContent = new BytesContent()
-                {
-                    Bytes = fileBytes,
-                    ContentType = contentType,
-                }
-            };
-
-            var uploadFileResponse = await FileUploadAsync(uploadFileRequest);
-
-            var blobUploadCompleteRequest = new BlobUploadCompleteRequest
-            {
-                BlobUploadSize = new BlobUploadSize() {Size = (uint) fileBytes.Length}
-            };
-            var uploadFileCompleteResponse = await FileUploadCompleteAsync(createFileInfoResponse.Result.Blob.Id, blobUploadCompleteRequest);
-        }
     }
 }

@@ -15,6 +15,10 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using Quickblox.Logger;
+using Quickblox.Sdk.Modules.ContentModule;
+using Quickblox.Sdk.Modules.UsersModule.Models;
+using Quickblox.Sdk.Modules.UsersModule.Requests;
 
 namespace QMunicate.ViewModels
 {
@@ -25,6 +29,7 @@ namespace QMunicate.ViewModels
         private string fullName;
         private string email;
         private string password;
+        private byte[] userImageBytes;
         private ImageSource userImage;
         private readonly IMessageService messageService;
 
@@ -92,47 +97,34 @@ namespace QMunicate.ViewModels
 
         public async void ContinueFileOpenPicker(IReadOnlyList<StorageFile> files)
         {
-            await CreateSession();
-
             if (files != null && files.Any())
             {
-                FileRandomAccessStream stream = (FileRandomAccessStream) await files[0].OpenAsync(FileAccessMode.Read);
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.SetSource(stream);
-                UserImage = bitmapImage;
+                var stream = (FileRandomAccessStream) await files[0].OpenAsync(FileAccessMode.Read);
+                var streamForImage = stream.CloneStream();
+                
+                userImageBytes = new byte[stream.Size];
+                using (var dataReader = new DataReader(stream))
+                {
+                    await dataReader.LoadAsync((uint)stream.Size);
+                    dataReader.ReadBytes(userImageBytes);
+                }
 
-                //CONTENT: {"errors":{"base":["Forbidden. Need user."]}}
-
-                //var bytes = new byte[stream.Size];
-                //using (var dataReader = new DataReader(stream))
-                //{
-                //    await dataReader.LoadAsync((uint)stream.Size);
-                //    dataReader.ReadBytes(bytes);
-                //}
-
-                //await QuickbloxClient.ContentClient.UploadFile(bytes, "image/jpg");
+                try
+                {
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.SetSource(streamForImage);
+                    UserImage = bitmapImage;
+                }
+                catch (Exception ex)
+                {
+                    FileLogger.Instance.Log(LogLevel.Warn, "SignUpViewModel. Failed to create BitmapImage. " + ex);
+                }
             }
         }
 
         #endregion
 
         #region Private methods
-
-        private async Task CreateSession()
-        {
-            if (!string.IsNullOrEmpty(QuickbloxClient.Token)) return;
-
-            var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
-                ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
-            if (sessionResponse.StatusCode == HttpStatusCode.Created)
-            {
-                QuickbloxClient.Token = sessionResponse.Result.Session.Token;
-            }
-            else
-            {
-                await Helpers.ShowErrors(sessionResponse.Errors, messageService);
-            }
-        }
 
         private async void ChoosePhotoCommandExecute()
         {
@@ -160,23 +152,69 @@ namespace QMunicate.ViewModels
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
-                var loginResponse = await QuickbloxClient.CoreClient.ByEmailAsync(Email, Password);
-                if (loginResponse.StatusCode == HttpStatusCode.Accepted)
+                int? userId = await Login();
+
+                if (userId != null)
                 {
-                    QuickbloxClient.CurrentUserId = loginResponse.Result.User.Id;
+                    if (userImageBytes != null)
+                        await UploadUserImage(response.Result.User, userImageBytes);
 
                     NavigationService.Navigate(ViewLocator.Dialogs,
-                        new DialogsNavigationParameter
-                        {
-                            CurrentUserId = loginResponse.Result.User.Id,
-                            Password = Password
-                        });
+                                                    new DialogsNavigationParameter
+                                                    {
+                                                        CurrentUserId = userId.Value,
+                                                        Password = Password
+                                                    });
                 }
-                else await Helpers.ShowErrors(response.Errors, messageService);
             }
             else await Helpers.ShowErrors(response.Errors, messageService);
 
             IsLoading = false;
+        }
+
+        private async Task CreateSession()
+        {
+            if (!string.IsNullOrEmpty(QuickbloxClient.Token)) return;
+
+            var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
+                ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
+            if (sessionResponse.StatusCode == HttpStatusCode.Created)
+            {
+                QuickbloxClient.Token = sessionResponse.Result.Session.Token;
+            }
+            else
+            {
+                await Helpers.ShowErrors(sessionResponse.Errors, messageService);
+            }
+        }
+
+        private async Task<int?> Login()
+        {
+            var loginResponse = await QuickbloxClient.CoreClient.ByEmailAsync(Email, Password);
+            if (loginResponse.StatusCode == HttpStatusCode.Accepted)
+            {
+                QuickbloxClient.CurrentUserId = loginResponse.Result.User.Id;
+                return loginResponse.Result.User.Id;
+            }
+            else
+            {
+                await Helpers.ShowErrors(loginResponse.Errors, messageService);
+                return null;
+            }
+        }
+
+        private async Task UploadUserImage(User user, byte[] imageBytes)
+        {
+            var contentHelper = new ContentClientHelper(QuickbloxClient.ContentClient);
+            var uploadId = await contentHelper.UploadPrivateImage(imageBytes);
+            if (uploadId == null)
+            {
+                await FileLogger.Instance.Log(LogLevel.Warn, "SignUpViewModel. Failed to upload user image");
+                return;
+            }
+
+            UpdateUserRequest updateUserRequest = new UpdateUserRequest { User = new UserRequest { BlobId = uploadId } };
+            await QuickbloxClient.UsersClient.UpdateUserAsync(user.Id, updateUserRequest);
         }
 
         private void LoginCommandExecute()
