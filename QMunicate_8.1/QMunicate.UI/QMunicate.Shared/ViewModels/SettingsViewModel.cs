@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Security.Credentials;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
@@ -22,6 +26,8 @@ namespace QMunicate.ViewModels
     {
         #region Fields
 
+        private ImageSource userImage;
+        private string userName;
         private bool isPushEnabled;
         private bool isSettingPushEnabledFromCode;
         private string packageVersion;
@@ -39,6 +45,18 @@ namespace QMunicate.ViewModels
         #endregion
 
         #region Properties
+
+        public ImageSource UserImage
+        {
+            get { return userImage; }
+            set { Set(ref userImage, value); }
+        }
+
+        public string UserName
+        {
+            get { return userName; }
+            set { Set(ref userName, value); }
+        }
 
         public bool IsPushEnabled
         {
@@ -82,6 +100,8 @@ namespace QMunicate.ViewModels
             }
 
             PackageVersion = Helpers.GetAppVersion();
+
+            await LoadUserData();
         }
 
         #endregion
@@ -97,6 +117,44 @@ namespace QMunicate.ViewModels
         #endregion
 
         #region Private methods
+
+        private async Task LoadUserData()
+        {
+            IsLoading = true;
+            var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(QuickbloxClient.CurrentUserId);
+            if (userResponse.StatusCode == HttpStatusCode.OK)
+            {
+                UserName = userResponse.Result.User.FullName;
+                if (userResponse.Result.User.BlobId != null)
+                {
+                    var downloadResponse = await QuickbloxClient.ContentClient.DownloadFileById(userResponse.Result.User.BlobId.Value);
+                    if (downloadResponse.StatusCode == HttpStatusCode.OK)
+                    {
+                        UserImage = await ByteArrayToBitmapImage(downloadResponse.Result);
+                    }
+                }
+            }
+            IsLoading = false;
+        }
+
+        private async Task<BitmapImage> ByteArrayToBitmapImage(byte[] byteArray)
+        {
+            try
+            {
+                var bitmapImage = new BitmapImage();
+
+                var stream = new InMemoryRandomAccessStream();
+                await stream.WriteAsync(byteArray.AsBuffer());
+                stream.Seek(0);
+
+                bitmapImage.SetSource(stream);
+                return bitmapImage;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
         private async void ChangePushsEnabled(bool newValue)
         {

@@ -52,7 +52,7 @@ namespace Quickblox.Sdk.Modules.UsersModule.Models
         public string TwitterId { get; set; }
 
         [JsonProperty("blob_id")]
-        public object BlobId { get; set; }
+        public int? BlobId { get; set; }
 
         [JsonProperty("custom_data")]
         public object CustomData { get; set; }

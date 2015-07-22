@@ -15,6 +15,19 @@
     <Grid>
         <StackPanel>
             <TextBlock Text="SETTINGS" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Image Grid.RowSpan="2" Source="{Binding UserImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Height="100" Width="100" Margin="{StaticResource DefaultMargin}"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding UserName}" FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}"/> 
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="online" Foreground="Gray" FontSize="{StaticResource NormalFontSize}" Margin="12 0 12 0" Visibility="{Binding UserName, Converter={StaticResource NullToVisibilityConverter}}"/>
+            </Grid>
             <ToggleSwitch Header="Push notifications" Margin="{StaticResource DefaultMargin}" IsOn="{Binding IsPushEnabled, Mode=TwoWay}"
                           IsEnabled="{Binding IsLoading, Converter={StaticResource BooleanToNegationConverter}}"/>
             <HyperlinkButton Content="logout" Command="{Binding SignOutCommand}"  Margin="{StaticResource DefaultMargin}"/>
