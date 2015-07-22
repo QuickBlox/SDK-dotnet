@@ -15,10 +15,12 @@
     <Grid>
         <StackPanel>
             <TextBlock Text="Login" FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}" />
-            <TextBox PlaceholderText="Email" Margin="{StaticResource DefaultMargin}" Text="{Binding Email, Mode=TwoWay}" />
-            <PasswordBox PlaceholderText="Password" Margin="{StaticResource DefaultMargin}" Password="{Binding Password, Mode=TwoWay}" />
+            <TextBox PlaceholderText="Email" Margin="{StaticResource DefaultMargin}" Text="{Binding Email, Mode=TwoWay}"
+                     IsEnabled="{Binding IsLoading, Converter={StaticResource BooleanToNegationConverter}}" />
+            <PasswordBox PlaceholderText="Password" Margin="{StaticResource DefaultMargin}" Password="{Binding Password, Mode=TwoWay}"
+                         IsEnabled="{Binding IsLoading, Converter={StaticResource BooleanToNegationConverter}}" />
 
-            <ToggleSwitch Header="Remember me" Margin="{StaticResource DefaultMargin}" IsOn="{Binding RememberMe, Mode=TwoWay}" />
+            <ToggleSwitch Header="Remember me" Margin="{StaticResource DefaultMargin}" IsOn="{Binding RememberMe, Mode=TwoWay}" IsEnabled="{Binding IsLoading, Converter={StaticResource BooleanToNegationConverter}}" />
             <HyperlinkButton Content="Forgot password?" Command="{Binding ForgotPasswordCommand}" FontSize="{StaticResource SmallFontSize}" Foreground="Gray" Margin="{StaticResource DefaultMargin}"/>
         </StackPanel>
     </Grid>
