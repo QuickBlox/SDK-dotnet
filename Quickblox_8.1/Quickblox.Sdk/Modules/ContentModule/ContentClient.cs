@@ -143,10 +143,23 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileGuid">The file unique identifier.</param>
         /// <returns>Success HTTP Status Code 301</returns>
-        public async Task<HttpResponse<Byte[]>> DownloadFileAsync(String fileGuid)
+        public async Task<HttpResponse<Byte[]>> DownloadFileByUid(String fileGuid)
         {
             
-            var uriMethod = String.Format(QuickbloxMethods.DownloadFileByIdMethod, fileGuid);
+            var uriMethod = String.Format(QuickbloxMethods.DownloadFileByUIdMethod, fileGuid);
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+            var downloadFileResponse = await HttpService.GetBytesAsync(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
+            return downloadFileResponse;
+        }
+
+        /// <summary>
+        /// Download File (Get File as a redirect to the S3 object) by Id.
+        /// </summary>
+        /// <param name="uploadId">UploadId</param>
+        /// <returns>Success HTTP Status Code 301</returns>
+        public async Task<HttpResponse<Byte[]>> DownloadFileById(int uploadId)
+        {
+            var uriMethod = String.Format(QuickbloxMethods.DownloadFileByIdMethod, uploadId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var downloadFileResponse = await HttpService.GetBytesAsync(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
             return downloadFileResponse;
@@ -203,7 +216,6 @@ namespace Quickblox.Sdk.Modules.ContentModule
             return deleteFileById;
         }
 
-        //DO it only after user creation!!!
         public async Task UploadFile(byte[] fileBytes, string contentType)
         {
             var settings = new CreateFileRequest()

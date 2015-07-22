@@ -98,7 +98,9 @@ namespace Quickblox.Sdk.Core
 
         public const string GetFileByIdMethod = "/blobs/{0}";
 
-        public const string DownloadFileByIdMethod = "/blobs/{0}";
+        public const string DownloadFileByUIdMethod = "/blobs/{0}";
+
+        public const string DownloadFileByIdMethod = "/blobs/{0}/download.json";
 
         public const string GetFileByIdReadOnlyMethod = "/blobs/{0}/getblobobjectbyid";
 

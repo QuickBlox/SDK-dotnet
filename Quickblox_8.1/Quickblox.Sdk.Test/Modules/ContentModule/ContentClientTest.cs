@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Hmacsha;
 using Quickblox.Sdk.Http;
+using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.ContentModule.Models;
 using Quickblox.Sdk.Modules.ContentModule.Requests;
 using Quickblox.Sdk.Test.Helper;
@@ -122,7 +123,7 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
             //Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
             //var firstFile = getFilesResponse.Result.Items.Last();
 
-            var downloadFileResponse = await this.client.ContentClient.DownloadFileAsync("35f6c9cb777340d989ba01770bcc4e2000");
+            var downloadFileResponse = await this.client.ContentClient.DownloadFileByUid("35f6c9cb777340d989ba01770bcc4e2000");
             Assert.AreEqual(downloadFileResponse.StatusCode, HttpStatusCode.OK);
         }
 
@@ -133,8 +134,52 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
             Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
             var firstFile = getFilesResponse.Result.Items.Last();
 
-            var downloadFileResponse = await this.client.ContentClient.DownloadFileAsync(firstFile.Blob.Uid);
+            var downloadFileResponse = await this.client.ContentClient.DownloadFileByUid(firstFile.Blob.Uid);
             Assert.IsNotNull(downloadFileResponse.Errors);
+        }
+
+        [TestMethod]
+        public async Task UploadFileViaHelperTest()
+        {
+            var contentHelper = new ContentClientHelper(client.ContentClient);
+
+            var uri = new Uri("ms-appx:///Modules/ContentModule/Assets/1.jpg");
+            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+            var stream = await storageFile.OpenReadAsync();
+            var bytes = new byte[stream.Size];
+
+            using (var dataReader = new DataReader(stream))
+            {
+                await dataReader.LoadAsync((uint)stream.Size);
+                dataReader.ReadBytes(bytes);
+            }
+
+            var imageLink = await contentHelper.UploadPublicImage(bytes);
+
+            Assert.IsNotNull(imageLink);
+        }
+
+        [TestMethod]
+        public async Task DownloadByIdTest()
+        {
+            var contentHelper = new ContentClientHelper(client.ContentClient);
+
+            var uri = new Uri("ms-appx:///Modules/ContentModule/Assets/1.jpg");
+            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
+            var stream = await storageFile.OpenReadAsync();
+            var bytes = new byte[stream.Size];
+
+            using (var dataReader = new DataReader(stream))
+            {
+                await dataReader.LoadAsync((uint)stream.Size);
+                dataReader.ReadBytes(bytes);
+            }
+
+            var uploadId = await contentHelper.UploadPrivateImage(bytes);
+            Assert.IsNotNull(uploadId);
+
+            var downloadedBytes = await client.ContentClient.DownloadFileById(uploadId.Value);
+            Assert.AreEqual(bytes.Length, downloadedBytes.Result.Length);
         }
     }
 }
