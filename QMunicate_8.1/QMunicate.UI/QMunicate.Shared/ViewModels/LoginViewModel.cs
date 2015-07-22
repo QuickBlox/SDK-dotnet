@@ -106,6 +106,7 @@ namespace QMunicate.ViewModels
 
             if (response.StatusCode == HttpStatusCode.Created)
             {
+                QuickbloxClient.Token = response.Result.Session.Token;
                 NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
             }
             else await Helpers.ShowErrors(response.Errors, messageService);
