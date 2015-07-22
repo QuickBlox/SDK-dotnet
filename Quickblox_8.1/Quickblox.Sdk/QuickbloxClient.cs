@@ -22,7 +22,7 @@ namespace Quickblox.Sdk
     /// <summary>
     /// QuickbloxClient class.
     /// </summary>
-    public class QuickbloxClient : IQuickbloxClient, ISessionHolder
+    public class QuickbloxClient : IQuickbloxClient
     {
 #region Ctor
 
@@ -107,20 +107,6 @@ namespace Quickblox.Sdk
             {
                 this.ApiEndPoint = accountResponse.Result.ApiEndPoint;
                 this.ChatEndpoint = accountResponse.Result.ChatEndPoint;
-            }
-        }
-
-        public void SetSession(Session session)
-        {
-            if (session != null)
-            {
-                Token = session.Token;
-                CurrentUserId = session.UserId;
-            }
-            else
-            {
-                Token = null;
-                CurrentUserId = -1;
             }
         }
 

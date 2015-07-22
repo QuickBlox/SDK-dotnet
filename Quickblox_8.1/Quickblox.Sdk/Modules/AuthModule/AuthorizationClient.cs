@@ -114,7 +114,6 @@ namespace Quickblox.Sdk.Modules.AuthModule
 
         public async Task<HttpResponse<SessionResponse>> GetSessionAsync()
         {
-            
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var result = await HttpService.GetAsync<SessionResponse>(this.quickbloxClient.ApiEndPoint,
                                                                 QuickbloxMethods.SessionMethod,

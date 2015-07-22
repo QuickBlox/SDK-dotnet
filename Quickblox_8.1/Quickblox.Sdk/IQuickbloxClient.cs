@@ -50,11 +50,4 @@ namespace Quickblox.Sdk
 
         Task GetAccountSettingsAsync(string accountKey);
     }
-
-    internal interface ISessionHolder
-    {
-        string Token { get; }
-        int CurrentUserId { get; }
-        void SetSession(Session session);
-    }
 }
