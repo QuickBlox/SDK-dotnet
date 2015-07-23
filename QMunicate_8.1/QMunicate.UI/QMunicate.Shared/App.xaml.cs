@@ -51,6 +51,8 @@ namespace QMunicate
             ServiceLocator.Locator.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
             ServiceLocator.Locator.Bind<IDialogsManager, IDialogsManager>(new DialogsManager(quickbloxClient));
             ServiceLocator.Locator.Bind<IPushNotificationsManager, IPushNotificationsManager>(new PushNotificationsManager(quickbloxClient));
+            ServiceLocator.Locator.Bind<IImageService, IImageService>(new ImagesService(quickbloxClient));
+            
             UnhandledException += OnUnhandledException;
 
             this.InitializeComponent();

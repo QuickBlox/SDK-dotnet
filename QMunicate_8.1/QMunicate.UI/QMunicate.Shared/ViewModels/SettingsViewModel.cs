@@ -127,33 +127,11 @@ namespace QMunicate.ViewModels
                 UserName = userResponse.Result.User.FullName;
                 if (userResponse.Result.User.BlobId != null)
                 {
-                    var downloadResponse = await QuickbloxClient.ContentClient.DownloadFileById(userResponse.Result.User.BlobId.Value);
-                    if (downloadResponse.StatusCode == HttpStatusCode.OK)
-                    {
-                        UserImage = await ByteArrayToBitmapImage(downloadResponse.Result);
-                    }
+                    var imageService = ServiceLocator.Locator.Get<IImageService>();
+                    UserImage = await imageService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
                 }
             }
             IsLoading = false;
-        }
-
-        private async Task<BitmapImage> ByteArrayToBitmapImage(byte[] byteArray)
-        {
-            try
-            {
-                var bitmapImage = new BitmapImage();
-
-                var stream = new InMemoryRandomAccessStream();
-                await stream.WriteAsync(byteArray.AsBuffer());
-                stream.Seek(0);
-
-                bitmapImage.SetSource(stream);
-                return bitmapImage;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         private async void ChangePushsEnabled(bool newValue)
