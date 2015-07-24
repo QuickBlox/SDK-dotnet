@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
@@ -26,7 +27,7 @@ namespace QMunicate.ViewModels
 
         private string newMessageText;
         private string chatName;
-        private string chatImage;
+        private ImageSource chatImage;
         private bool activeContactRequest;
         private DialogVm dialog;
         private IPrivateChatManager privateChatManager;
@@ -61,7 +62,7 @@ namespace QMunicate.ViewModels
             set { Set(ref chatName, value); }
         }
 
-        public string ChatImage
+        public ImageSource ChatImage
         {
             get { return chatImage; }
             set { Set(ref chatImage, value); }
