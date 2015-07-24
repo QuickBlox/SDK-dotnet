@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using Windows.UI.Xaml.Media;
+using QMunicate.Core.Observable;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Models;
+using XMPP.tags.jabber.protocol.resultset;
 
 namespace QMunicate.Models
 {
-    public class UserVm
+    public class UserVm : ObservableObject
     {
+        private ImageSource image;
+
         #region Ctor
 
         public UserVm()
@@ -19,6 +23,7 @@ namespace QMunicate.Models
         {
             UserId = user.Id;
             FullName = user.FullName;
+            ImageUploadId = user.BlobId;
         }
 
         protected UserVm(Contact contact)
@@ -35,7 +40,13 @@ namespace QMunicate.Models
 
         public string FullName { get; set; }
 
-        public ImageSource Image { get; set; }
+        public int? ImageUploadId { get; set; }
+
+        public ImageSource Image
+        {
+            get { return image; }
+            set { Set(ref image, value); }
+        }
 
         #endregion
 

@@ -101,6 +101,15 @@ namespace QMunicate.ViewModels
                 {
                     GlobalResults.Add(UserVm.FromUser(item.User));
                 }
+
+                foreach (UserVm userVm in GlobalResults)
+                {
+                    if (userVm.ImageUploadId.HasValue)
+                    {
+                        var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                        userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value);
+                    }
+                }
             }
 
             IsLoading = false;
