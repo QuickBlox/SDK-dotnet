@@ -72,7 +72,7 @@ namespace QMunicate.ViewModels
 
         public override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            LocalSearch("");
+            await LocalSearch("");
         }
 
         #endregion
@@ -84,7 +84,7 @@ namespace QMunicate.ViewModels
             if(isInGlobalSeachMode)
                 await GlobalSearch(searchQuery);
             else
-                LocalSearch(searchQuery);
+                await LocalSearch(searchQuery);
         }
 
         private async Task GlobalSearch(string searchQuery)
@@ -115,7 +115,7 @@ namespace QMunicate.ViewModels
             IsLoading = false;
         }
 
-        private void LocalSearch(string searchQuery)
+        private async Task LocalSearch(string searchQuery)
         {
             LocalResults.Clear();
             if (string.IsNullOrEmpty(searchQuery))
@@ -130,6 +130,16 @@ namespace QMunicate.ViewModels
                 foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
                 {
                     LocalResults.Add(UserVm.FromContact(contact));
+                }
+            }
+
+            var imagesService = ServiceLocator.Locator.Get<IImageService>();
+            foreach (UserVm userVm in LocalResults)
+            {
+                var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(userVm.UserId);
+                if (userResponse.StatusCode == HttpStatusCode.OK && userResponse.Result.User.BlobId.HasValue)
+                {
+                    userVm.Image = await imagesService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
                 }
             }
         }
