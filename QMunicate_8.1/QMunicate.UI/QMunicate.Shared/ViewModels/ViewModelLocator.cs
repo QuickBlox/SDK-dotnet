@@ -50,6 +50,11 @@ namespace QMunicate.ViewModels
             get { return new SendRequestViewModel(); }
         }
 
+        public GroupChatViewModel GroupChatViewModel
+        {
+            get { return new GroupChatViewModel(); }
+        }
+
         #endregion
 
         #region Public methods

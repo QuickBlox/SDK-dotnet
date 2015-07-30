@@ -14,5 +14,6 @@ namespace QMunicate
         public const string Settings = "Settings";
         public const string Search = "Search";
         public const string SendRequest = "SendRequest";
+        public const string GroupChat = "GroupChat";
     }
 }
