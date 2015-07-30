@@ -18,6 +18,7 @@ using Windows.ApplicationModel.Core;
 using Windows.Networking.PushNotifications;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 
@@ -131,7 +132,19 @@ namespace QMunicate.ViewModels
 
         private void OpenChatCommandExecute(object dialog)
         {
-            NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter {Dialog = dialog as DialogVm});
+            var dialogVm = dialog as DialogVm;
+            if (dialogVm == null) return;
+
+            if (dialogVm.DialogType == DialogType.Private)
+            {
+                NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = dialogVm });
+            }
+            else if (dialogVm.DialogType == DialogType.Group)
+            {
+                NavigationService.Navigate(ViewLocator.GroupChat, new ChatNavigationParameter { Dialog = dialogVm });
+            }
+
+
         }
 
         private async void NewMessageCommandExecute()

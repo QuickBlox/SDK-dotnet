@@ -25,6 +25,7 @@ namespace QMunicate.Models
         protected DialogVm(Dialog dialog)
         {
             Id = dialog.Id;
+            XmppRoomJid = dialog.XmppRoomJid;
             Name = dialog.Name;
             LastMessageSent = dialog.LastMessageDateSent.HasValue
                 ? dialog.LastMessageDateSent.Value.ToDateTime()
@@ -43,6 +44,7 @@ namespace QMunicate.Models
         #region Properties
 
         public string Id { get; set; }
+        public string XmppRoomJid { get; set; }
         public int? ImageUploadId { get; set; }
         public int? UnreadMessageCount { get; set; }
         public IList<int> OccupantIds { get; set; }

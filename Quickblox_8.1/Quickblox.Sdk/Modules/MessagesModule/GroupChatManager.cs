@@ -14,24 +14,29 @@ namespace Quickblox.Sdk.Modules.MessagesModule
     {
         #region Fields
 
+        private IQuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
         private readonly string groupJid;
+
+        public event EventHandler<Message> OnMessageReceived;
 
         #endregion
 
         #region Ctor
 
-        public GroupChatManager(XMPP.Client client, string groupJid)
+        public GroupChatManager(IQuickbloxClient quickbloxClient, XMPP.Client client, string groupJid)
         {
+            this.quickbloxClient = quickbloxClient;
             xmppClient = client;
             this.groupJid = groupJid;
+            quickbloxClient.MessagesClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
         }
 
         #endregion
 
         #region IGroupChatManager members
 
-        public void SendMessage(string message)
+        public bool SendMessage(string message)
         {
             var msg = new message
             {
@@ -46,7 +51,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             msg.Add(body, extraParams);
 
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
             xmppClient.Send(msg);
+            return true;
         }
 
         public void JoinGroup(string nickName)
@@ -91,6 +103,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         //}
 
         #endregion
+
+        private void MessagesClientOnOnMessageReceived(object sender, Message message1)
+        {
+            if (message1.From.Contains(groupJid))
+            {
+                var handler = OnMessageReceived;
+                if (handler != null)
+                    handler(this, message1);
+            }
+        }
 
     }
 }

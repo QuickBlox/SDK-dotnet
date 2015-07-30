@@ -112,7 +112,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public IGroupChatManager GetGroupChatManager(string groupJid)
         {
-            return new GroupChatManager(xmppClient, groupJid);
+            return new GroupChatManager(quickbloxClient, xmppClient, groupJid);
         }
 
         public void ReloadContacts()
