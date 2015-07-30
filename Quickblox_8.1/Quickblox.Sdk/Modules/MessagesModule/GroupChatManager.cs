@@ -1,7 +1,8 @@
-﻿using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+﻿using System;
+using System.Net.Http.Headers;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using XMPP.tags.jabber.client;
-using XMPP.tags.jabber.x.dataforms;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -51,37 +52,43 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         public void JoinGroup(string nickName)
         {
             string fullJid = string.Format("{0}/{1}", groupJid, nickName);
-            xmppClient.Send(new presence { to = fullJid });
+
+            var presense = new presence {to = fullJid};
+            X x = new X();
+            x.Add(new History() {Maxstanzas = "0"});
+            presense.Add(x);
+
+            xmppClient.Send(presense);
         }
 
-        public void RequestVoice()
-        {
-            var msg = new message
-            {
-                to = groupJid
-            };
+        //public void RequestVoice()
+        //{
+        //    var msg = new message
+        //    {
+        //        to = groupJid
+        //    };
 
-            x x = new x {type = x.typeEnum.submit};
+        //    x x = new x { type = x.typeEnum.submit };
 
-            var formTypeField = new field
-            {
-                var = "FORM_TYPE"
-            };
-            formTypeField.Add(new value { Value = "http://jabber.org/protocol/muc#request" });
+        //    var formTypeField = new field
+        //    {
+        //        var = "FORM_TYPE"
+        //    };
+        //    formTypeField.Add(new value { Value = "http://jabber.org/protocol/muc#request" });
 
-            var mucRoleField = new field
-            {
-                type = field.typeEnum.text_single,
-                label = "Requested role",
-                var = "muc#role"
-            };
-            mucRoleField.Add(new value {Value = "participant"});
+        //    var mucRoleField = new field
+        //    {
+        //        type = field.typeEnum.text_single,
+        //        label = "Requested role",
+        //        var = "muc#role"
+        //    };
+        //    mucRoleField.Add(new value { Value = "participant" });
 
-            x.Add(formTypeField, mucRoleField);
-            msg.Add(x);
+        //    x.Add(formTypeField, mucRoleField);
+        //    msg.Add(x);
 
-            xmppClient.Send(msg);
-        }
+        //    xmppClient.Send(msg);
+        //}
 
         #endregion
 

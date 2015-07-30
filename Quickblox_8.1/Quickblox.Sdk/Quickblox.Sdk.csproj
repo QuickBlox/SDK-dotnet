@@ -106,6 +106,7 @@
     <Compile Include="Modules\MessagesModule\Models\ExtraParams.cs" />
     <Compile Include="Modules\MessagesModule\Models\Presence.cs" />
     <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />
+    <Compile Include="Modules\MessagesModule\Models\X.cs" />
     <Compile Include="Modules\NotificationModule\Models\EditEvent.cs" />
     <Compile Include="Modules\NotificationModule\Models\IMessage.cs" />
     <Compile Include="Modules\NotificationModule\Models\PushMessage.cs" />
