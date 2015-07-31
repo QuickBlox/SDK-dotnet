@@ -39,7 +39,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public event EventHandler<Message> OnMessageReceived;
         public event EventHandler<Presence> OnPresenceReceived;
-        public event EventHandler<ContactRequest> OnContactRequestReceived;
         public event EventHandler OnContactsChanged;
         public event EventHandler OnDisconnected;
 
