@@ -55,6 +55,11 @@ namespace QMunicate.ViewModels
             get { return new GroupChatViewModel(); }
         }
 
+        public NewMessageViewModel NewMessageViewModel
+        {
+            get { return new NewMessageViewModel(); }
+        }
+
         #endregion
 
         #region Public methods

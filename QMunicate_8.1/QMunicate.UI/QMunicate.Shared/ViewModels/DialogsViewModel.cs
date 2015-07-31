@@ -149,7 +149,7 @@ namespace QMunicate.ViewModels
 
         private async void NewMessageCommandExecute()
         {
-
+            NavigationService.Navigate(ViewLocator.NewMessage);
         }
 
         private void SearchCommandExecute()
