@@ -5,12 +5,52 @@
     xmlns:local="using:QMunicate.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:QMunicate.Controls"
+    xmlns:tapListener="using:QMunicate.Core.TapListener"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
     DataContext="{Binding GroupAddMemberViewModel, Source={StaticResource Locator}}">
 
-    <Grid>
+    <Page.Resources>
+        <DataTemplate x:Key="LocalUserTemplate">
+            <StackPanel Orientation="Horizontal" tapListener:TapListener.TapCommand="{Binding DataContext.OpenContactCommand, ElementName=Page}"
+                              tapListener:TapListener.TapCommandParameter="{Binding }">
+                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
+                <controls:SelectionsTextBlock Text="{Binding FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"
+                                              FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
 
+        <Style x:Key="ListBoxItemContainerStyle" TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <ContentPresenter Margin="0 0 0 12"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="ADD MEMBERS" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
+        <TextBox Grid.Row="1" x:Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  PlaceholderText="Search" Margin="{StaticResource DefaultMargin}"/>
+        <ListBox Grid.Row="2" ItemsSource="{Binding Contacts}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
+                         ItemTemplate="{StaticResource LocalUserTemplate}" Margin="{StaticResource DefaultMargin}" />
     </Grid>
+    <Page.BottomAppBar>
+        <CommandBar Background="{StaticResource AppBarBrush}">
+            <AppBarButton Label="create" Command="{Binding CreateGroupCommand}">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Accept" Foreground="White"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>
