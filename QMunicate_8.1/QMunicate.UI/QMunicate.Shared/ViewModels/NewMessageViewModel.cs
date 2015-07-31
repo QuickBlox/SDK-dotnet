@@ -103,7 +103,7 @@ namespace QMunicate.ViewModels
 
         private void CreateGroupCommandExecute()
         {
-           
+            NavigationService.Navigate(ViewLocator.GroupAddMember);
         }
 
 

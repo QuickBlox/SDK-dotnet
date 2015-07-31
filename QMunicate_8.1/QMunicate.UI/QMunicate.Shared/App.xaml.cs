@@ -208,6 +208,8 @@ namespace QMunicate
             dictionary.Add(ViewLocator.SendRequest, typeof(SendRequestPage));
             dictionary.Add(ViewLocator.GroupChat, typeof(GroupChatPage));
             dictionary.Add(ViewLocator.NewMessage, typeof(NewMessagePage));
+            dictionary.Add(ViewLocator.GroupAddMember, typeof(GroupAddMemberPage));
+            
 
             return new PageResolver(dictionary);
         }
