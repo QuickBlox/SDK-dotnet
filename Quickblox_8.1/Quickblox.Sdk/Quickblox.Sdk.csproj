@@ -213,6 +213,7 @@
     <None Include="Diagrams\ContentClient.dgml" />
     <None Include="Diagrams\CoreClient.dgml" />
     <None Include="Diagrams\HttpService.dgml" />
+    <None Include="Diagrams\LocationClient.dgml" />
     <None Include="Diagrams\MessagesModule.cd" />
     <None Include="Diagrams\NotificationModule%28push%29.dgml" />
     <None Include="Diagrams\QuickbloxClient.dgml" />
