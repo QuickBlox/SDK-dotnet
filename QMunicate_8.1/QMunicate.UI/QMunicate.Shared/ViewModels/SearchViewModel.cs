@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
+using Nito.AsyncEx;
 
 namespace QMunicate.ViewModels
 {
@@ -21,6 +22,8 @@ namespace QMunicate.ViewModels
 
         private string searchText;
         private bool isInGlobalSeachMode;
+        private readonly AsyncLock localResultsLock = new AsyncLock();
+        private readonly AsyncLock globalResultsLock = new AsyncLock();
 
         #endregion
 
@@ -96,18 +99,21 @@ namespace QMunicate.ViewModels
             var response = await QuickbloxClient.UsersClient.GetUserByFullNameAsync(searchQuery, null, null);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                GlobalResults.Clear();
-                foreach (UserResponse item in response.Result.Items)
+                using (await globalResultsLock.LockAsync())
                 {
-                    GlobalResults.Add(UserVm.FromUser(item.User));
-                }
-
-                foreach (UserVm userVm in GlobalResults)
-                {
-                    if (userVm.ImageUploadId.HasValue)
+                    GlobalResults.Clear();
+                    foreach (UserResponse item in response.Result.Items)
                     {
-                        var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                        userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value);
+                        GlobalResults.Add(UserVm.FromUser(item.User));
+                    }
+
+                    foreach (UserVm userVm in GlobalResults)
+                    {
+                        if (userVm.ImageUploadId.HasValue)
+                        {
+                            var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value);
+                        }
                     }
                 }
             }
@@ -117,29 +123,32 @@ namespace QMunicate.ViewModels
 
         private async Task LocalSearch(string searchQuery)
         {
-            LocalResults.Clear();
-            if (string.IsNullOrEmpty(searchQuery))
+            using (await localResultsLock.LockAsync())
             {
-                foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
+                LocalResults.Clear();
+                if (string.IsNullOrEmpty(searchQuery))
                 {
-                    LocalResults.Add(UserVm.FromContact(contact));
+                    foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
+                    {
+                        LocalResults.Add(UserVm.FromContact(contact));
+                    }
                 }
-            }
-            else
-            {
-                foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
+                else
                 {
-                    LocalResults.Add(UserVm.FromContact(contact));
+                    foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
+                    {
+                        LocalResults.Add(UserVm.FromContact(contact));
+                    }
                 }
-            }
 
-            var imagesService = ServiceLocator.Locator.Get<IImageService>();
-            foreach (UserVm userVm in LocalResults)
-            {
-                var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(userVm.UserId);
-                if (userResponse.StatusCode == HttpStatusCode.OK && userResponse.Result.User.BlobId.HasValue)
+                var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                foreach (UserVm userVm in LocalResults)
                 {
-                    userVm.Image = await imagesService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
+                    var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(userVm.UserId);
+                    if (userResponse.StatusCode == HttpStatusCode.OK && userResponse.Result.User.BlobId.HasValue)
+                    {
+                        userVm.Image = await imagesService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
+                    }
                 }
             }
         }

@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Navigation;
-using Nito.AsyncEx;
+﻿using Nito.AsyncEx;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Helper;
 using QMunicate.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
-using XMPP.registries;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Navigation;
 
 namespace QMunicate.ViewModels
 {
@@ -22,7 +20,7 @@ namespace QMunicate.ViewModels
         private string groupName;
         private string searchText;
         private string membersText;
-        private readonly AsyncLock mutex = new AsyncLock();
+        private readonly AsyncLock contactsLock = new AsyncLock();
 
         #region Ctor
 
@@ -75,7 +73,7 @@ namespace QMunicate.ViewModels
 
         private async Task Search(string searchQuery)
         {
-            using (await mutex.LockAsync())
+            using (await contactsLock.LockAsync())
             {
                 Contacts.Clear();
                 if (string.IsNullOrEmpty(searchQuery))
@@ -120,7 +118,7 @@ namespace QMunicate.ViewModels
 
             IsLoading = true;
             var userIdsBuilder = new StringBuilder();
-            using (await mutex.LockAsync())
+            using (await contactsLock.LockAsync())
             {
                 foreach (var contact in Contacts.Where(c => c.IsSelected))
                 {
