@@ -77,6 +77,11 @@ namespace QMunicate.ViewModels
             var chatParameter = e.Parameter as ChatNavigationParameter;
             if (chatParameter == null) return;
 
+            while (NavigationService.BackStack.Count > 1)
+            {
+                NavigationService.BackStack.RemoveAt(NavigationService.BackStack.Count - 1);
+            }
+
             await Initialize(chatParameter);
         }
 
@@ -141,14 +146,6 @@ namespace QMunicate.ViewModels
         private async void SendCommandExecute()
         {
             if (string.IsNullOrWhiteSpace(NewMessageText)) return;
-
-            //TODO: check is not needed. Navigate to proper page when opening dialog or do not show public dialogs
-            if (dialog.DialogType != DialogType.Private)
-            {
-                var messageService = ServiceLocator.Locator.Get<IMessageService>();
-                await messageService.ShowAsync("Message", "This is a public group dialog. You cannot send messages to public groups yet.");
-                return;
-            }
 
             bool isMessageSent = groupChatManager.SendMessage(NewMessageText);
 

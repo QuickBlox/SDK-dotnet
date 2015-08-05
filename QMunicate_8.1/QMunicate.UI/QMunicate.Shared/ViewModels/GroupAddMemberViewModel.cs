@@ -6,31 +6,41 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
+using Nito.AsyncEx;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Helper;
 using QMunicate.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
+using XMPP.registries;
 
 namespace QMunicate.ViewModels
 {
     public class GroupAddMemberViewModel : ViewModel
     {
+        private string groupName;
         private string searchText;
         private string membersText;
+        private readonly AsyncLock mutex = new AsyncLock();
 
         #region Ctor
 
-         public GroupAddMemberViewModel()
+        public GroupAddMemberViewModel()
         {
-            Contacts = new ObservableCollection<UserVm>();
-            CreateGroupCommand = new RelayCommand(CreateGroupCommandExecute);
+            Contacts = new ObservableCollection<SelectableListBoxItem<UserVm>>();
+            CreateGroupCommand = new RelayCommand(CreateGroupCommandExecute, () => !IsLoading);
         }
 
         #endregion
 
         #region Properties
+
+        public string GroupName
+        {
+            get { return groupName; }
+            set { Set(ref groupName, value); }
+        }
 
         public string SearchText
         {
@@ -48,7 +58,7 @@ namespace QMunicate.ViewModels
             set { Set(ref membersText, value); }
         }
 
-        public ObservableCollection<UserVm> Contacts { get; set; }
+        public ObservableCollection<SelectableListBoxItem<UserVm>> Contacts { get; set; }
 
         public RelayCommand CreateGroupCommand { get; set; }
 
@@ -58,56 +68,77 @@ namespace QMunicate.ViewModels
 
         public override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
-            {
-                Contacts.Add(UserVm.FromContact(contact));
-            }
-
-            var imagesService = ServiceLocator.Locator.Get<IImageService>();
-            foreach (UserVm userVm in Contacts)
-            {
-                var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(userVm.UserId);
-                if (userResponse.StatusCode == HttpStatusCode.OK && userResponse.Result.User.BlobId.HasValue)
-                {
-                    userVm.Image = await imagesService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
-                }
-            }
+            await Search(null);
         }
 
         #endregion
 
-        private async void Search(string searchQuery)
+        private async Task Search(string searchQuery)
         {
-            Contacts.Clear();
-            if (string.IsNullOrEmpty(searchQuery))
+            using (await mutex.LockAsync())
             {
-                foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
+                Contacts.Clear();
+                if (string.IsNullOrEmpty(searchQuery))
                 {
-                    Contacts.Add(UserVm.FromContact(contact));
+                    foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
+                    {
+                        var userVm = UserVm.FromContact(contact);
+                        Contacts.Add(new SelectableListBoxItem<UserVm>(userVm));
+                    }
                 }
-            }
-            else
-            {
-                foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
+                else
                 {
-                    Contacts.Add(UserVm.FromContact(contact));
+                    foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
+                    {
+                        var userVm = UserVm.FromContact(contact);
+                        Contacts.Add(new SelectableListBoxItem<UserVm>(userVm));
+                    }
                 }
+
+                await LoadImages();
             }
 
+            
+        }
+
+        private async Task LoadImages()
+        {
             var imagesService = ServiceLocator.Locator.Get<IImageService>();
-            foreach (UserVm userVm in Contacts)
+            foreach (var userVm in Contacts)
             {
-                var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(userVm.UserId);
+                var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(userVm.Item.UserId);
                 if (userResponse.StatusCode == HttpStatusCode.OK && userResponse.Result.User.BlobId.HasValue)
                 {
-                    userVm.Image = await imagesService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
+                    userVm.Item.Image = await imagesService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
                 }
             }
         }
 
-        private void CreateGroupCommandExecute()
+        private async void CreateGroupCommandExecute()
         {
-            
+            if (string.IsNullOrEmpty(GroupName)) return;
+
+            IsLoading = true;
+            var userIdsBuilder = new StringBuilder();
+            using (await mutex.LockAsync())
+            {
+                foreach (var contact in Contacts.Where(c => c.IsSelected))
+                {
+                    userIdsBuilder.Append(contact.Item.UserId + ",");
+                }
+            }
+            if (userIdsBuilder.Length == 0) return;
+            userIdsBuilder.Remove(userIdsBuilder.Length - 1, 1);
+
+            var createDialogResponse = await QuickbloxClient.ChatClient.CreateDialogAsync(GroupName, DialogType.Group, userIdsBuilder.ToString());
+            if (createDialogResponse.StatusCode == HttpStatusCode.Created)
+            {
+                ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter();
+                chatNavigationParameter.Dialog = DialogVm.FromDialog(createDialogResponse.Result);
+                NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
+            }
+
+            IsLoading = false;
         }
     }
 }
