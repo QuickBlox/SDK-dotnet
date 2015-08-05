@@ -156,14 +156,6 @@ namespace QMunicate.ViewModels
                 return;
             }
 
-            var msg = new MessageVm()
-            {
-                MessageText = NewMessageText,
-                MessageType = MessageType.Outgoing,
-                DateTime = DateTime.Now
-            };
-
-            Messages.Add(msg);
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             await dialogsManager.UpdateDialog(dialog.Id, NewMessageText, DateTime.Now);
 
@@ -172,14 +164,31 @@ namespace QMunicate.ViewModels
 
         private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)
         {
-            var incomingMessage = new MessageVm
+            var messageVm = new MessageVm
             {
                 MessageText = message.MessageText,
                 MessageType = MessageType.Incoming,
                 DateTime = DateTime.Now
             };
 
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(incomingMessage));
+            var senderId = GetSenderIdFromJid(message.From);
+            if (senderId == QuickbloxClient.CurrentUserId)
+            {
+                messageVm.MessageType = MessageType.Outgoing;
+            }
+
+
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(messageVm));
+        }
+
+        private int GetSenderIdFromJid(string jid)
+        {
+            int senderId;
+            var jidParts = jid.Split('/');
+            if(int.TryParse(jidParts.Last(), out senderId))
+                return senderId;
+
+            return 0;
         }
 
         #endregion
