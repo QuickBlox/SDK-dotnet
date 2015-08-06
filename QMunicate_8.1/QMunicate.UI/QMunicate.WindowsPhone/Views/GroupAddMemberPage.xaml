@@ -102,7 +102,7 @@
                                     </VisualState>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <Grid x:Name="Grid" Margin="{ThemeResource PhoneTouchTargetLargeOverhang}">
+                            <Grid x:Name="Grid" Margin="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="25.5"/>
                                     <ColumnDefinition Width="*"/>
@@ -121,8 +121,8 @@
         </Style>
         
         <DataTemplate x:Key="LocalUserTemplate">
-            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}" BorderBrush="Gray">
+                <StackPanel Orientation="Horizontal">
                     <Image Source="{Binding Item.Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="12 0 12 0"/>
                     <controls:SelectionsTextBlock Text="{Binding Item.FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"
                                               FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>

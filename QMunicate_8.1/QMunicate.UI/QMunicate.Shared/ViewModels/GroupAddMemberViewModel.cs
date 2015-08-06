@@ -12,6 +12,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.MessageService;
 
 namespace QMunicate.ViewModels
 {
@@ -114,7 +115,12 @@ namespace QMunicate.ViewModels
 
         private async void CreateGroupCommandExecute()
         {
-            if (string.IsNullOrEmpty(GroupName)) return;
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
+            if (string.IsNullOrEmpty(GroupName))
+            {
+                await messageService.ShowAsync("Group name", "A Group name field must not be empty.");
+                return;
+            }
 
             IsLoading = true;
             var userIdsBuilder = new StringBuilder();
@@ -125,7 +131,12 @@ namespace QMunicate.ViewModels
                     userIdsBuilder.Append(contact.Item.UserId + ",");
                 }
             }
-            if (userIdsBuilder.Length == 0) return;
+            if (userIdsBuilder.Length == 0)
+            {
+                await messageService.ShowAsync("No users", "Please, select some users to add to the group.");
+                IsLoading = false;
+                return;
+            }
             userIdsBuilder.Remove(userIdsBuilder.Length - 1, 1);
 
             var createDialogResponse = await QuickbloxClient.ChatClient.CreateDialogAsync(GroupName, DialogType.Group, userIdsBuilder.ToString());
@@ -133,7 +144,11 @@ namespace QMunicate.ViewModels
             {
                 ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter();
                 chatNavigationParameter.Dialog = DialogVm.FromDialog(createDialogResponse.Result);
-                NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
+                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid);
+                groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
+                var isGroupMessageSent = groupChatManager.SendMessage("A new group chat was created");
+                if(isGroupMessageSent)
+                    NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
             }
 
             IsLoading = false;
