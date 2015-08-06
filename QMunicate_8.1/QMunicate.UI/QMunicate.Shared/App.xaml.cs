@@ -45,13 +45,15 @@ namespace QMunicate
         public App()
         {
             var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider());
+            var fileStorage = new FileStorage();
 
             ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
             ServiceLocator.Locator.Bind<IQuickbloxClient, QuickbloxClient>(quickbloxClient);
             ServiceLocator.Locator.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
             ServiceLocator.Locator.Bind<IDialogsManager, IDialogsManager>(new DialogsManager(quickbloxClient));
             ServiceLocator.Locator.Bind<IPushNotificationsManager, IPushNotificationsManager>(new PushNotificationsManager(quickbloxClient));
-            ServiceLocator.Locator.Bind<IImageService, IImageService>(new ImagesService(quickbloxClient));
+            ServiceLocator.Locator.Bind<IFileStorage, IFileStorage>(fileStorage);
+            ServiceLocator.Locator.Bind<IImageService, IImageService>(new ImagesService(quickbloxClient, fileStorage));
             
             UnhandledException += OnUnhandledException;
 
