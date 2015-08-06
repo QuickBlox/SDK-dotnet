@@ -6,6 +6,7 @@ using QMunicate.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
@@ -22,6 +23,7 @@ namespace QMunicate.ViewModels
         private string searchText;
         private string membersText;
         private readonly AsyncLock contactsLock = new AsyncLock();
+        private List<SelectableListBoxItem<UserVm>> allContacts;
 
         #region Ctor
 
@@ -67,43 +69,34 @@ namespace QMunicate.ViewModels
 
         public override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            IsLoading = true;
+            await InitializeAllContacts();
             await Search(null);
+            IsLoading = false;
         }
 
         #endregion
 
-        private async Task Search(string searchQuery)
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
         {
-            using (await contactsLock.LockAsync())
-            {
-                Contacts.Clear();
-                if (string.IsNullOrEmpty(searchQuery))
-                {
-                    foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
-                    {
-                        var userVm = UserVm.FromContact(contact);
-                        Contacts.Add(new SelectableListBoxItem<UserVm>(userVm));
-                    }
-                }
-                else
-                {
-                    foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
-                    {
-                        var userVm = UserVm.FromContact(contact);
-                        Contacts.Add(new SelectableListBoxItem<UserVm>(userVm));
-                    }
-                }
-
-                await LoadImages();
-            }
-
-            
+            CreateGroupCommand.RaiseCanExecuteChanged();
         }
 
-        private async Task LoadImages()
+        #endregion
+
+        private async Task InitializeAllContacts()
         {
+            allContacts = new List<SelectableListBoxItem<UserVm>>();
+            foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
+            {
+                var userVm = UserVm.FromContact(contact);
+                allContacts.Add(new SelectableListBoxItem<UserVm>(userVm));
+            }
+
             var imagesService = ServiceLocator.Locator.Get<IImageService>();
-            foreach (var userVm in Contacts)
+            foreach (var userVm in allContacts)
             {
                 var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(userVm.Item.UserId);
                 if (userResponse.StatusCode == HttpStatusCode.OK && userResponse.Result.User.BlobId.HasValue)
@@ -113,10 +106,34 @@ namespace QMunicate.ViewModels
             }
         }
 
+        private async Task Search(string searchQuery)
+        {
+            using (await contactsLock.LockAsync())
+            {
+                Contacts.Clear();
+                if (string.IsNullOrEmpty(searchQuery))
+                {
+                    foreach (var userVm in allContacts)
+                    {
+                        Contacts.Add(userVm);
+                    }
+                }
+                else
+                {
+                    foreach (var userVm in allContacts.Where(c => !string.IsNullOrEmpty(c.Item.FullName) && c.Item.FullName.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
+                    {
+                        Contacts.Add(userVm);
+                    }
+                }
+            }
+
+            
+        }
+
         private async void CreateGroupCommandExecute()
         {
             var messageService = ServiceLocator.Locator.Get<IMessageService>();
-            if (string.IsNullOrEmpty(GroupName))
+            if (string.IsNullOrWhiteSpace(GroupName))
             {
                 await messageService.ShowAsync("Group name", "A Group name field must not be empty.");
                 return;
@@ -124,12 +141,9 @@ namespace QMunicate.ViewModels
 
             IsLoading = true;
             var userIdsBuilder = new StringBuilder();
-            using (await contactsLock.LockAsync())
+            foreach (var contact in allContacts.Where(c => c.IsSelected))
             {
-                foreach (var contact in Contacts.Where(c => c.IsSelected))
-                {
-                    userIdsBuilder.Append(contact.Item.UserId + ",");
-                }
+                userIdsBuilder.Append(contact.Item.UserId + ",");
             }
             if (userIdsBuilder.Length == 0)
             {
