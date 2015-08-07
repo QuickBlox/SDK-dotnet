@@ -102,7 +102,7 @@ namespace QMunicate.ViewModels
                 using (await globalResultsLock.LockAsync())
                 {
                     GlobalResults.Clear();
-                    foreach (UserResponse item in response.Result.Items)
+                    foreach (UserResponse item in response.Result.Items.Where(i => i.User.Id != QuickbloxClient.CurrentUserId))
                     {
                         GlobalResults.Add(UserVm.FromUser(item.User));
                     }

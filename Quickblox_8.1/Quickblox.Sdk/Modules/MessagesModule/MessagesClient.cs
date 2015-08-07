@@ -296,7 +296,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
                         Contacts.RemoveAll(c => c.UserId == userId);
 
-                        if (item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.both)
+                        if (item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.both
+                            || item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.from
+                            || item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.to)
                         {
                             Contact contact = new Contact { Name = item.name, UserId = userId };
                             Contacts.Add(contact);
