@@ -140,8 +140,11 @@ namespace QMunicate.ViewModels
             }
 
             IsLoading = true;
+
+            var selectedContacts = allContacts.Where(c => c.IsSelected).ToList();
+
             var userIdsBuilder = new StringBuilder();
-            foreach (var contact in allContacts.Where(c => c.IsSelected))
+            foreach (var contact in selectedContacts)
             {
                 userIdsBuilder.Append(contact.Item.UserId + ",");
             }
@@ -158,7 +161,14 @@ namespace QMunicate.ViewModels
             {
                 ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter();
                 chatNavigationParameter.Dialog = DialogVm.FromDialog(createDialogResponse.Result);
-                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid);
+
+                foreach (var contact in selectedContacts)
+                {
+                    var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId);
+                    await privateChatManager.SendNotificationMessage(createDialogResponse.Result.Id);
+                }
+
+                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
                 groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
                 var isGroupMessageSent = groupChatManager.SendMessage("A new group chat was created");
                 if(isGroupMessageSent)

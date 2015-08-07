@@ -17,6 +17,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private IQuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
         private readonly string groupJid;
+        private readonly string dialogId;
 
         public event EventHandler<Message> OnMessageReceived;
 
@@ -24,11 +25,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        public GroupChatManager(IQuickbloxClient quickbloxClient, XMPP.Client client, string groupJid)
+        public GroupChatManager(IQuickbloxClient quickbloxClient, XMPP.Client client, string groupJid, string dialogId)
         {
             this.quickbloxClient = quickbloxClient;
             xmppClient = client;
             this.groupJid = groupJid;
+            this.dialogId = dialogId;
             quickbloxClient.MessagesClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
         }
 
@@ -48,6 +50,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             var extraParams = new ExtraParams();
             extraParams.Add(new SaveToHistory { Value = "1" });
+            extraParams.Add(new DialogId { Value = dialogId });
 
             msg.Add(body, extraParams);
 

@@ -56,6 +56,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
 
     public enum NotificationTypes
     {
+        NotificationMessage = 1,
         FriendsRequest = 4,
         FriendsAccept = 5,
         FriendsReject = 6,

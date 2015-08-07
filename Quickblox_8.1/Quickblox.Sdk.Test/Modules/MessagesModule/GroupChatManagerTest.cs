@@ -58,8 +58,8 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             var createDialogResponse = await client1.ChatClient.CreateDialogAsync("TestDialog1", DialogType.Group, string.Format("{0},{1}", id2, "3125358"));
             Assert.AreEqual(createDialogResponse.StatusCode, HttpStatusCode.Created);
 
-            IGroupChatManager chatManager1 = client1.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid);
-            IGroupChatManager chatManager2 = client2.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid);
+            IGroupChatManager chatManager1 = client1.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
+            IGroupChatManager chatManager2 = client2.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
 
             chatManager1.JoinGroup(id1.ToString());
             chatManager2.JoinGroup(id2.ToString());

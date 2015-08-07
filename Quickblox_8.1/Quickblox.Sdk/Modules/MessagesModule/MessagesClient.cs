@@ -109,9 +109,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return new PrivateChatManager(quickbloxClient, xmppClient, otherUserId, dialogId);
         }
 
-        public IGroupChatManager GetGroupChatManager(string groupJid)
+        public IGroupChatManager GetGroupChatManager(string groupJid, string dialogId)
         {
-            return new GroupChatManager(quickbloxClient, xmppClient, groupJid);
+            return new GroupChatManager(quickbloxClient, xmppClient, groupJid, dialogId);
         }
 
         public void ReloadContacts()

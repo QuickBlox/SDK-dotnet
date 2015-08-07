@@ -113,7 +113,7 @@ namespace QMunicate.ViewModels
 
                 await FileLogger.Instance.Log(LogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", QuickbloxClient.CurrentUserId, dialog.XmppRoomJid));
 
-                groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(dialog.XmppRoomJid);
+                groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(dialog.XmppRoomJid, chatParameter.Dialog.Id);
                 groupChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
                 groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
 

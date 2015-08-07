@@ -12,7 +12,8 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
-    DataContext="{Binding GroupAddMemberViewModel, Source={StaticResource Locator}}">
+    DataContext="{Binding GroupAddMemberViewModel, Source={StaticResource Locator}}"
+    x:Name="Page">
 
     <Page.Resources>
         <Style x:Key="CheckBoxStyle1" TargetType="CheckBox">
@@ -121,7 +122,7 @@
         </Style>
         
         <DataTemplate x:Key="LocalUserTemplate">
-            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}" BorderBrush="Gray">
+            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Style="{StaticResource CheckBoxStyle1}" BorderBrush="Gray" IsEnabled="{Binding DataContext.IsLoading, ElementName=Page, Converter={StaticResource BooleanToNegationConverter}}">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="{Binding Item.Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="12 0 12 0"/>
                     <controls:SelectionsTextBlock Text="{Binding Item.FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"

@@ -1,10 +1,9 @@
-﻿using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+﻿using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using Quickblox.Sdk.Modules.ChatModule.Models;
-using XMPP.common;
 using XMPP.tags.jabber.client;
 using Attachment = Quickblox.Sdk.Modules.MessagesModule.Models.Attachment;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
@@ -182,6 +181,29 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
+        public async Task<bool> SendNotificationMessage(string notificationDialogId)
+        {
+            var msg = new message
+            {
+                to = otherUserJid,
+                type = message.typeEnum.chat
+            };
+            var body = new body { Value = "Notification message" };
+            var extraParams = new ExtraParams();
+            extraParams.Add(new DialogId { Value = notificationDialogId });
+            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.NotificationMessage).ToString() });
+
+            msg.Add(body, extraParams);
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
+
         #endregion
 
 
@@ -252,7 +274,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private void MessagesClientOnOnMessageReceived(object sender, Message message1)
         {
-            if (message1.From.Contains(otherUserJid))
+            if (message1.From.Contains(otherUserJid) && message1.NotificationType != NotificationTypes.NotificationMessage)
             {
                 var handler = OnMessageReceived;
                 if (handler != null)
