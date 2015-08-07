@@ -141,13 +141,14 @@ namespace QMunicate.ViewModels
                     }
                 }
 
+                var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
                 var imagesService = ServiceLocator.Locator.Get<IImageService>();
                 foreach (UserVm userVm in LocalResults)
                 {
-                    var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(userVm.UserId);
-                    if (userResponse.StatusCode == HttpStatusCode.OK && userResponse.Result.User.BlobId.HasValue)
+                    var user = await cachingQbClient.GetUserById(userVm.UserId);
+                    if (user != null && user.BlobId.HasValue)
                     {
-                        userVm.Image = await imagesService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
+                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value);
                     }
                 }
             }

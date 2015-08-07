@@ -95,13 +95,14 @@ namespace QMunicate.ViewModels
                 allContacts.Add(new SelectableListBoxItem<UserVm>(userVm));
             }
 
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
             var imagesService = ServiceLocator.Locator.Get<IImageService>();
             foreach (var userVm in allContacts)
             {
-                var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(userVm.Item.UserId);
-                if (userResponse.StatusCode == HttpStatusCode.OK && userResponse.Result.User.BlobId.HasValue)
+                var user = await cachingQbClient.GetUserById(userVm.Item.UserId);
+                if (user != null && user.BlobId.HasValue)
                 {
-                    userVm.Item.Image = await imagesService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
+                    userVm.Item.Image = await imagesService.GetPrivateImage(user.BlobId.Value);
                 }
             }
         }

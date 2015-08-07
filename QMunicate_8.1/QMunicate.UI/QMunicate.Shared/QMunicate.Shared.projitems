@@ -24,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringFormatConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\CachingQuickbloxClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\DialogsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\FileStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\Helpers.cs" />

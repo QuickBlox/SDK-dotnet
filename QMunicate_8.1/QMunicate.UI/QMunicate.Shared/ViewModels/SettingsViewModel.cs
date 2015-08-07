@@ -121,14 +121,15 @@ namespace QMunicate.ViewModels
         private async Task LoadUserData()
         {
             IsLoading = true;
-            var userResponse = await QuickbloxClient.UsersClient.GetUserByIdAsync(QuickbloxClient.CurrentUserId);
-            if (userResponse.StatusCode == HttpStatusCode.OK)
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            var user = await cachingQbClient.GetUserById(QuickbloxClient.CurrentUserId);
+            if (user != null)
             {
-                UserName = userResponse.Result.User.FullName;
-                if (userResponse.Result.User.BlobId != null)
+                UserName = user.FullName;
+                if (user.BlobId.HasValue)
                 {
                     var imageService = ServiceLocator.Locator.Get<IImageService>();
-                    UserImage = await imageService.GetPrivateImage(userResponse.Result.User.BlobId.Value);
+                    UserImage = await imageService.GetPrivateImage(user.BlobId.Value);
                 }
             }
             IsLoading = false;

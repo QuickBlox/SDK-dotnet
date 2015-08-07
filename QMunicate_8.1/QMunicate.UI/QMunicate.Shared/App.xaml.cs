@@ -54,6 +54,7 @@ namespace QMunicate
             ServiceLocator.Locator.Bind<IPushNotificationsManager, IPushNotificationsManager>(new PushNotificationsManager(quickbloxClient));
             ServiceLocator.Locator.Bind<IFileStorage, IFileStorage>(fileStorage);
             ServiceLocator.Locator.Bind<IImageService, IImageService>(new ImagesService(quickbloxClient, fileStorage));
+            ServiceLocator.Locator.Bind<ICachingQuickbloxClient, ICachingQuickbloxClient>(new CachingQuickbloxClient(quickbloxClient));
             
             UnhandledException += OnUnhandledException;
 

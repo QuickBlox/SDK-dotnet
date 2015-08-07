@@ -145,14 +145,15 @@ namespace QMunicate.Helper
             string name = null;
             ImageSource image = null;
 
-            var response = await quickbloxClient.UsersClient.GetUserByIdAsync(userId);
-            if (response.StatusCode == HttpStatusCode.OK)
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            var user = await cachingQbClient.GetUserById(userId);
+            if (user != null)
             {
-                name = response.Result.User.FullName;
-                if (response.Result.User.BlobId.HasValue)
+                name = user.FullName;
+                if (user.BlobId.HasValue)
                 {
                     var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                    image = await imagesService.GetPrivateImage(response.Result.User.BlobId.Value);
+                    image = await imagesService.GetPrivateImage(user.BlobId.Value);
                 }
             }
 
