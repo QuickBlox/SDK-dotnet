@@ -1,26 +1,15 @@
 ﻿using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
+using Quickblox.Logger;
 using Quickblox.Sdk;
-using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.ChatModule.Requests;
-using Quickblox.Sdk.Modules.Models;
-using Quickblox.Sdk.Modules.NotificationModule.Models;
-using Quickblox.Sdk.Modules.NotificationModule.Requests;
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
-using Windows.Networking.PushNotifications;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Navigation;
 using Quickblox.Sdk.Modules.ChatModule.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.Networking.PushNotifications;
+using Windows.UI.Xaml.Navigation;
 
 namespace QMunicate.ViewModels
 {
@@ -121,11 +110,7 @@ namespace QMunicate.ViewModels
 
         private async void PushChannelOnPushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-            {
-                var messageService = ServiceLocator.Locator.Get<IMessageService>();
-                await messageService.ShowAsync("Message", "Push received");
-            });
+            await FileLogger.Instance.Log(LogLevel.Debug, "Push notification was received.");
         }
 
         #endregion
