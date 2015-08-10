@@ -17,5 +17,6 @@ namespace QMunicate
         public const string GroupChat = "GroupChat";
         public const string NewMessage = "NewMessage";
         public const string GroupAddMember = "GroupAddMember";
+        public const string GroupInfo = "GroupInfo";
     }
 }

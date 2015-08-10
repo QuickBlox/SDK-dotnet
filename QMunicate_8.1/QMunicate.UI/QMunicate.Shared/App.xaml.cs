@@ -212,7 +212,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.GroupChat, typeof(GroupChatPage));
             dictionary.Add(ViewLocator.NewMessage, typeof(NewMessagePage));
             dictionary.Add(ViewLocator.GroupAddMember, typeof(GroupAddMemberPage));
-            
+            dictionary.Add(ViewLocator.GroupInfo, typeof(GroupInfoPage));
 
             return new PageResolver(dictionary);
         }
