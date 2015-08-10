@@ -102,10 +102,10 @@
     <Compile Include="Modules\MessagesModule\Interfaces\IPrivateChatManager.cs" />
     <Compile Include="Modules\MessagesModule\Models\Attachment.cs" />
     <Compile Include="Modules\MessagesModule\Models\Contact.cs" />
-    <Compile Include="Modules\MessagesModule\Models\ContactRequest.cs" />
     <Compile Include="Modules\MessagesModule\Models\ExtraParams.cs" />
     <Compile Include="Modules\MessagesModule\Models\Presence.cs" />
     <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />
+    <Compile Include="Modules\MessagesModule\Models\Tag.cs" />
     <Compile Include="Modules\MessagesModule\Models\X.cs" />
     <Compile Include="Modules\NotificationModule\Models\EditEvent.cs" />
     <Compile Include="Modules\NotificationModule\Models\IMessage.cs" />

@@ -27,7 +27,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        public PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId = null)
+        internal PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId = null)
         {
             this.otherUserId = otherUserId;
             this.otherUserJid = quickbloxClient.MessagesClient.BuildJid(otherUserId);

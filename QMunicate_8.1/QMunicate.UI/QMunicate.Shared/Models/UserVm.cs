@@ -5,7 +5,6 @@ using Windows.UI.Xaml.Media;
 using QMunicate.Core.Observable;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Models;
-using XMPP.tags.jabber.protocol.resultset;
 
 namespace QMunicate.Models
 {

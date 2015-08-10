@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using XMPP.tags;
 
 namespace Quickblox.Sdk.Modules.MessagesModule.Models
 {
