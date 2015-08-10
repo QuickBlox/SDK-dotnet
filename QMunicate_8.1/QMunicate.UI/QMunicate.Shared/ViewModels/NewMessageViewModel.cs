@@ -24,8 +24,8 @@ namespace QMunicate.ViewModels
         public NewMessageViewModel()
         {
             Contacts = new ObservableCollection<UserVm>();
-            CreateGroupCommand = new RelayCommand(CreateGroupCommandExecute);
-            OpenContactCommand = new RelayCommand<UserVm>(u => OpenContactCommandExecute(u));
+            CreateGroupCommand = new RelayCommand(CreateGroupCommandExecute, () => !IsLoading);
+            OpenContactCommand = new RelayCommand<UserVm>(u => OpenContactCommandExecute(u), u => !IsLoading);
         }
 
         #endregion
@@ -55,6 +55,16 @@ namespace QMunicate.ViewModels
         public override async void OnNavigatedTo(NavigationEventArgs e)
         {
             Search(null);
+        }
+
+        #endregion
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            CreateGroupCommand.RaiseCanExecuteChanged();
+            OpenContactCommand.RaiseCanExecuteChanged();
         }
 
         #endregion

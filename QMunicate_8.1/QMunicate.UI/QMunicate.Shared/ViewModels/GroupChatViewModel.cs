@@ -35,6 +35,7 @@ namespace QMunicate.ViewModels
         {
             Messages = new ObservableCollection<MessageVm>();
             SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading);
+            ShowGroupInfoCommand = new RelayCommand(ShowGroupInfoCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -62,6 +63,8 @@ namespace QMunicate.ViewModels
         }
 
         public RelayCommand SendCommand { get; private set; }
+
+        public RelayCommand ShowGroupInfoCommand { get; private set; }
 
         #endregion
 
@@ -94,7 +97,7 @@ namespace QMunicate.ViewModels
         protected override void OnIsLoadingChanged()
         {
             SendCommand.RaiseCanExecuteChanged();
-            
+            ShowGroupInfoCommand.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -184,6 +187,11 @@ namespace QMunicate.ViewModels
                 return senderId;
 
             return 0;
+        }
+
+        private void ShowGroupInfoCommandExecute()
+        {
+            NavigationService.Navigate(ViewLocator.GroupInfo, dialog);
         }
 
         #endregion
