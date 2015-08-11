@@ -7,14 +7,11 @@ using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.Modules.ChatModule;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.CustomObjectModule;
-#if !Xamarin
 using Quickblox.Sdk.Modules.MessagesModule;
-#endif
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 using System;
 using System.Threading.Tasks;
-using Quickblox.Sdk.Modules.AuthModule.Models;
 using Quickblox.Sdk.Modules.LocationModule;
 
 namespace Quickblox.Sdk
@@ -41,9 +38,7 @@ namespace Quickblox.Sdk
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
             this.LocationClient = new LocationClient(this);
-#if !Xamarin
             this.MessagesClient = new MessagesClient(this);
-#endif
             this.ContentClient = new ContentClient(this);      
             this.CustomObjectsClient = new CustomObjectsClient(this);
         }
@@ -71,9 +66,9 @@ namespace Quickblox.Sdk
         public NotificationClient NotificationClient { get; private set; }
 
         public LocationClient LocationClient { get; private set; }
-#if !Xamarin
+
         public MessagesClient MessagesClient { get; private set; }
-#endif
+
         public CustomObjectsClient CustomObjectsClient { get; private set; }
 
         /// <summary>
