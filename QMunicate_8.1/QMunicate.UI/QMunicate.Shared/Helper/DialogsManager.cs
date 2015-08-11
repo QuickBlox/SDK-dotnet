@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using Windows.UI.Xaml.Media;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Models;
 using Quickblox.Logger;
@@ -60,18 +61,38 @@ namespace QMunicate.Helper
                     Dialogs.Clear();
                     foreach (var dialog in response.Result.Items)
                     {
-                        //TODO: remove this when group chats are ready
-                        if (dialog.Type != DialogType.Private)
+                        if (dialog.Type == DialogType.Private)
                         {
-                            await FileLogger.Instance.Log(LogLevel.Debug, "Ignoring not private chat");
-                            continue;
+                            var dialogVm = DialogVm.FromDialog(dialog);
+                            int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != quickbloxClient.CurrentUserId);
+                            dialogVm.Name = GetUserName(otherUserId);
+
+                            Dialogs.Add(dialogVm);
                         }
+                        else if(dialog.Type == DialogType.Group)
+                        {
+                            var dialogVm = DialogVm.FromDialog(dialog);
 
-                        var dialogVm = DialogVm.FromDialog(dialog);
-                        int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != quickbloxClient.CurrentUserId);
-                        dialogVm.Name = await GetUserName(otherUserId);
+                            //// For group dialogs
+                            //if (dialogVm.ImageUploadId.HasValue)
+                            //{
+                            //    var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                            //    dialogVm.Image = await imagesService.GetPrivateImage(dialogVm.ImageUploadId.Value);
+                            //}
 
-                        Dialogs.Add(dialogVm);
+                            Dialogs.Add(dialogVm);
+                        }
+                    }
+
+                    foreach (DialogVm dialogVm in Dialogs)
+                    {
+                        if (dialogVm.DialogType == DialogType.Private)
+                        {
+                            int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != quickbloxClient.CurrentUserId);
+                            var nameAndImage = await GetUserNameAndImage(otherUserId);
+                            dialogVm.Name = nameAndImage.Item1;
+                            dialogVm.Image = nameAndImage.Item2;
+                        }
                     }
                 }
             }
@@ -110,17 +131,33 @@ namespace QMunicate.Helper
             });
         }
 
-        private async Task<string> GetUserName(int userId)
+        private string GetUserName(int userId)
         {
             var otherContact = quickbloxClient.MessagesClient.Contacts.FirstOrDefault(c => c.UserId == userId);
             if (otherContact != null)
                 return otherContact.Name;
 
-            var response = await quickbloxClient.UsersClient.GetUserByIdAsync(userId);
-            if (response.StatusCode == HttpStatusCode.OK)
-                return response.Result.User.FullName;
-
             return null;
+        }
+
+        private async Task<Tuple<string, ImageSource>> GetUserNameAndImage(int userId)
+        {
+            string name = null;
+            ImageSource image = null;
+
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            var user = await cachingQbClient.GetUserById(userId);
+            if (user != null)
+            {
+                name = user.FullName;
+                if (user.BlobId.HasValue)
+                {
+                    var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                    image = await imagesService.GetPrivateImage(user.BlobId.Value);
+                }
+            }
+
+            return new Tuple<string, ImageSource>(name, image);
         }
 
         #endregion

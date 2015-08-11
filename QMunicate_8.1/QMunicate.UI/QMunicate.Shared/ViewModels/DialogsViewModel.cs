@@ -1,25 +1,15 @@
 ﻿using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
+using Quickblox.Logger;
 using Quickblox.Sdk;
-using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.ChatModule.Requests;
-using Quickblox.Sdk.Modules.Models;
-using Quickblox.Sdk.Modules.NotificationModule.Models;
-using Quickblox.Sdk.Modules.NotificationModule.Requests;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 using Windows.Networking.PushNotifications;
-using Windows.UI.Core;
 using Windows.UI.Xaml.Navigation;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 
 namespace QMunicate.ViewModels
 {
@@ -120,23 +110,31 @@ namespace QMunicate.ViewModels
 
         private async void PushChannelOnPushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-            {
-                var messageService = ServiceLocator.Locator.Get<IMessageService>();
-                await messageService.ShowAsync("Message", "Push received");
-            });
+            await FileLogger.Instance.Log(LogLevel.Debug, "Push notification was received.");
         }
 
         #endregion
 
         private void OpenChatCommandExecute(object dialog)
         {
-            NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter {Dialog = dialog as DialogVm});
+            var dialogVm = dialog as DialogVm;
+            if (dialogVm == null) return;
+
+            if (dialogVm.DialogType == DialogType.Private)
+            {
+                NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = dialogVm });
+            }
+            else if (dialogVm.DialogType == DialogType.Group)
+            {
+                NavigationService.Navigate(ViewLocator.GroupChat, new ChatNavigationParameter { Dialog = dialogVm });
+            }
+
+
         }
 
         private async void NewMessageCommandExecute()
         {
-
+            NavigationService.Navigate(ViewLocator.NewMessage);
         }
 
         private void SearchCommandExecute()

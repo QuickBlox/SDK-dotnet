@@ -39,7 +39,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public event EventHandler<Message> OnMessageReceived;
         public event EventHandler<Presence> OnPresenceReceived;
-        public event EventHandler<ContactRequest> OnContactRequestReceived;
         public event EventHandler OnContactsChanged;
         public event EventHandler OnDisconnected;
 
@@ -110,9 +109,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return new PrivateChatManager(quickbloxClient, xmppClient, otherUserId, dialogId);
         }
 
-        public IGroupChatManager GetGroupChatManager(string groupJid)
+        public IGroupChatManager GetGroupChatManager(string groupJid, string dialogId)
         {
-            return new GroupChatManager(xmppClient, groupJid);
+            return new GroupChatManager(quickbloxClient, xmppClient, groupJid, dialogId);
         }
 
         public void ReloadContacts()
@@ -297,7 +296,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
                         Contacts.RemoveAll(c => c.UserId == userId);
 
-                        if (item.subscription != XMPP.tags.jabber.iq.roster.item.subscriptionEnum.remove)
+                        if (item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.both
+                            || item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.from
+                            || item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.to)
                         {
                             Contact contact = new Contact { Name = item.name, UserId = userId };
                             Contacts.Add(contact);

@@ -45,13 +45,16 @@ namespace QMunicate
         public App()
         {
             var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider());
+            var fileStorage = new FileStorage();
 
             ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
             ServiceLocator.Locator.Bind<IQuickbloxClient, QuickbloxClient>(quickbloxClient);
             ServiceLocator.Locator.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
             ServiceLocator.Locator.Bind<IDialogsManager, IDialogsManager>(new DialogsManager(quickbloxClient));
             ServiceLocator.Locator.Bind<IPushNotificationsManager, IPushNotificationsManager>(new PushNotificationsManager(quickbloxClient));
-            ServiceLocator.Locator.Bind<IImageService, IImageService>(new ImagesService(quickbloxClient));
+            ServiceLocator.Locator.Bind<IFileStorage, IFileStorage>(fileStorage);
+            ServiceLocator.Locator.Bind<IImageService, IImageService>(new ImagesService(quickbloxClient, fileStorage));
+            ServiceLocator.Locator.Bind<ICachingQuickbloxClient, ICachingQuickbloxClient>(new CachingQuickbloxClient(quickbloxClient));
             
             UnhandledException += OnUnhandledException;
 
@@ -206,6 +209,11 @@ namespace QMunicate
             dictionary.Add(ViewLocator.Settings, typeof(SettingsPage));
             dictionary.Add(ViewLocator.Search, typeof(SearchPage));
             dictionary.Add(ViewLocator.SendRequest, typeof(SendRequestPage));
+            dictionary.Add(ViewLocator.GroupChat, typeof(GroupChatPage));
+            dictionary.Add(ViewLocator.NewMessage, typeof(NewMessagePage));
+            dictionary.Add(ViewLocator.GroupAddMember, typeof(GroupAddMemberPage));
+            dictionary.Add(ViewLocator.GroupInfo, typeof(GroupInfoPage));
+
             return new PageResolver(dictionary);
         }
 

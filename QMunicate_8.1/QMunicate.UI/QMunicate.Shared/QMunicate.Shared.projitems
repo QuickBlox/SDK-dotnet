@@ -24,7 +24,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringFormatConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\CachingQuickbloxClient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\DialogsManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\FileStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\Helpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\IDialogsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\ImagesService.cs" />
@@ -34,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\DialogsNavigationParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DialogVm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MessageVm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SelectableListBoxItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\UserVm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Selectors\MessageTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SettingsManager.cs" />
@@ -41,7 +44,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DialogsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ChatViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ForgotPasswordViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupAddMemberViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupChatViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupInfoViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\LoginViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\NewMessageViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SearchViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SendRequestViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\SettingsViewModel.cs" />

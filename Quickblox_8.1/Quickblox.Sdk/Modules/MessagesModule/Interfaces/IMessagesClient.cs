@@ -18,7 +18,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         Task Connect(string chatEndpoint, int userId, int applicationId, string password);
         void Disconnect();
         IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId);
-        IGroupChatManager GetGroupChatManager(string groupJid);
+        IGroupChatManager GetGroupChatManager(string groupJid, string dialogId);
         void ReloadContacts();
         void AddContact(Contact contact);
         void DeleteContact(int userId);

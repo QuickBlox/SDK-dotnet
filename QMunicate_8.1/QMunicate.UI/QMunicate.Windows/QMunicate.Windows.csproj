@@ -108,10 +108,6 @@
       <Project>{BFA0A45E-35CC-4EBF-A597-51C9BD9B383E}</Project>
       <Name>Quickblox.Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Quickblox.Xamarin\UbietyXmpp\UbietyXmpp.csproj">
-      <Project>{4121980C-B6F9-43EE-895F-FF6552574784}</Project>
-      <Name>UbietyXmpp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Quickblox_8.1\Quickblox.Sdk\Quickblox.Sdk.csproj">
       <Project>{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}</Project>
       <Name>Quickblox.Sdk</Name>
@@ -143,11 +139,23 @@
     <Compile Include="Views\ForgotPasswordPage.xaml.cs">
       <DependentUpon>ForgotPasswordPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GroupAddMemberPage.xaml.cs">
+      <DependentUpon>GroupAddMemberPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GroupChatPage.xaml.cs">
+      <DependentUpon>GroupChatPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GroupInfoPage.xaml.cs">
+      <DependentUpon>GroupInfoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\NewMessagePage.xaml.cs">
+      <DependentUpon>NewMessagePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
     </Compile>
@@ -187,7 +195,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GroupAddMemberPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GroupChatPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GroupInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NewMessagePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

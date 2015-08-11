@@ -13,6 +13,8 @@ namespace QMunicate.Models
     {
         private string lastActivity;
         private DateTime? lastMessageSent;
+        private string name;
+        private ImageSource image;
 
         #region Ctor
 
@@ -23,15 +25,18 @@ namespace QMunicate.Models
         protected DialogVm(Dialog dialog)
         {
             Id = dialog.Id;
+            XmppRoomJid = dialog.XmppRoomJid;
             Name = dialog.Name;
             LastMessageSent = dialog.LastMessageDateSent.HasValue
                 ? dialog.LastMessageDateSent.Value.ToDateTime()
                 : (DateTime?) null;
             LastActivity = dialog.LastMessage;
             UnreadMessageCount = dialog.UnreadMessagesCount;
-            Image = dialog.Photo;
             OccupantIds = dialog.OccupantsIds;
             DialogType = dialog.Type;
+            int imageUploadId;
+            if (int.TryParse(dialog.Photo, out imageUploadId))
+                ImageUploadId = imageUploadId;
         }
 
         #endregion
@@ -39,8 +44,8 @@ namespace QMunicate.Models
         #region Properties
 
         public string Id { get; set; }
-        public string Image { get; set; }
-        public string Name { get; set; }
+        public string XmppRoomJid { get; set; }
+        public int? ImageUploadId { get; set; }
         public int? UnreadMessageCount { get; set; }
         public IList<int> OccupantIds { get; set; }
         public DialogType DialogType { get; set; }
@@ -55,6 +60,18 @@ namespace QMunicate.Models
         {
             get { return lastMessageSent; }
             set { Set(ref lastMessageSent, value); }
+        }
+
+        public string Name
+        {
+            get { return name; }
+            set { Set(ref name, value); }
+        }
+
+        public ImageSource Image
+        {
+            get { return image; }
+            set { Set(ref image, value); }
         }
 
         #endregion
