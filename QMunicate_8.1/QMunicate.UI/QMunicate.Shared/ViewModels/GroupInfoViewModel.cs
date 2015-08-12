@@ -18,6 +18,7 @@ namespace QMunicate.ViewModels
 
         private string chatName;
         private ImageSource chatImage;
+        private DialogVm currentDialog;
 
         #endregion
 
@@ -61,6 +62,7 @@ namespace QMunicate.ViewModels
             var dialog = e.Parameter as DialogVm;
             if (dialog == null) return;
 
+            currentDialog = dialog;
             await Initialize(dialog);
         }
 
@@ -107,7 +109,7 @@ namespace QMunicate.ViewModels
 
         private void AddMembersCommandExecute()
         {
-
+            NavigationService.Navigate(ViewLocator.GroupAddMember, currentDialog);
         }
 
         private void EditCommandExecute()
