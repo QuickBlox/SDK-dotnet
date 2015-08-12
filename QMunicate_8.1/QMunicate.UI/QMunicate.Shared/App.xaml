@@ -28,6 +28,7 @@
             <converters:StringFormatConverter x:Key="StringFormatConverter" />
             <converters:BooleanToNegationConverter x:Key="BooleanToNegationConverter"/>
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:BooleanToVisibilityConverter Invert="True" x:Key="InverseBooleanToVisibilityConverter"/>
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
 
             <viewModels:ViewModelLocator x:Key="Locator"  />

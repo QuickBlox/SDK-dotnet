@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.MessageService;
+using Quickblox.Sdk.Modules.ChatModule.Requests;
 
 namespace QMunicate.ViewModels
 {
@@ -24,6 +25,8 @@ namespace QMunicate.ViewModels
         private string membersText;
         private readonly AsyncLock contactsLock = new AsyncLock();
         private List<SelectableListBoxItem<UserVm>> allContacts;
+        private bool isEditMode;
+        private DialogVm editedDialog;
 
         #region Ctor
 
@@ -63,14 +66,27 @@ namespace QMunicate.ViewModels
 
         public RelayCommand CreateGroupCommand { get; set; }
 
+        public bool IsEditMode
+        {
+            get { return isEditMode; }
+            set { Set(ref isEditMode, value); }
+        }
+
         #endregion
 
         #region Navigation
 
         public override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            var dialog = e.Parameter as DialogVm;
+            if (dialog != null)
+            {
+                IsEditMode = true;
+                editedDialog = dialog;
+            }
+
             IsLoading = true;
-            await InitializeAllContacts();
+            await InitializeAllContacts(editedDialog);
             await Search(null);
             IsLoading = false;
         }
@@ -86,7 +102,7 @@ namespace QMunicate.ViewModels
 
         #endregion
 
-        private async Task InitializeAllContacts()
+        private async Task InitializeAllContacts(DialogVm existingDialog)
         {
             allContacts = new List<SelectableListBoxItem<UserVm>>();
             foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
@@ -94,7 +110,34 @@ namespace QMunicate.ViewModels
                 var userVm = UserVm.FromContact(contact);
                 allContacts.Add(new SelectableListBoxItem<UserVm>(userVm));
             }
+            if (existingDialog != null)
+            {
+                var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+                foreach (int occupantId in existingDialog.OccupantIds)
+                {
+                    var correspondingContact = allContacts.FirstOrDefault(c => c.Item.UserId == occupantId);
+                    if (correspondingContact != null)
+                    {
+                        correspondingContact.IsSelected = true;
+                    }
+                    else if(occupantId != QuickbloxClient.CurrentUserId)
+                    {
+                        var notInContactsUser = await cachingQbClient.GetUserById(occupantId);
+                        if (notInContactsUser != null)
+                        {
+                            var selectableUser = new SelectableListBoxItem<UserVm>(UserVm.FromUser(notInContactsUser)) {IsSelected = true};
+                            allContacts.Add(selectableUser);
+                        }
+                    }
+                }
+            }
 
+
+            await LoadAllContactsImages();
+        }
+
+        private async Task LoadAllContactsImages()
+        {
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
             var imagesService = ServiceLocator.Locator.Get<IImageService>();
             foreach (var userVm in allContacts)
@@ -133,50 +176,91 @@ namespace QMunicate.ViewModels
 
         private async void CreateGroupCommandExecute()
         {
-            var messageService = ServiceLocator.Locator.Get<IMessageService>();
-            if (string.IsNullOrWhiteSpace(GroupName))
-            {
-                await messageService.ShowAsync("Group name", "A Group name field must not be empty.");
-                return;
-            }
-
             IsLoading = true;
 
-            var selectedContacts = allContacts.Where(c => c.IsSelected).ToList();
-
-            var userIdsBuilder = new StringBuilder();
-            foreach (var contact in selectedContacts)
+            if (!await Validate())
             {
-                userIdsBuilder.Append(contact.Item.UserId + ",");
-            }
-            if (userIdsBuilder.Length == 0)
-            {
-                await messageService.ShowAsync("No users", "Please, select some users to add to the group.");
                 IsLoading = false;
                 return;
             }
-            userIdsBuilder.Remove(userIdsBuilder.Length - 1, 1);
 
-            var createDialogResponse = await QuickbloxClient.ChatClient.CreateDialogAsync(GroupName, DialogType.Group, userIdsBuilder.ToString());
-            if (createDialogResponse.StatusCode == HttpStatusCode.Created)
+            var selectedContacts = allContacts.Where(c => c.IsSelected).ToList();
+
+            string selectedUsersString = BuildUsersString(selectedContacts.Select(c => c.Item.UserId));
+
+            if (IsEditMode)
             {
-                ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter();
-                chatNavigationParameter.Dialog = DialogVm.FromDialog(createDialogResponse.Result);
+                var updateDialogRequest = new UpdateDialogRequest();
+                updateDialogRequest.DialogId = editedDialog.Id;
+                var addedUsers = selectedContacts.Where(c => !editedDialog.OccupantIds.Contains(c.Item.UserId)).Select(u => u.Item.UserId).ToArray();
+                var removedUsers = editedDialog.OccupantIds.Where(c => selectedContacts.All(sc => sc.Item.UserId != c) && c != QuickbloxClient.CurrentUserId).ToArray();
+                if(addedUsers.Any())
+                    updateDialogRequest.PushAll = new EditedOccupants() {OccupantsIds = addedUsers};
+                if(removedUsers.Any())
+                    updateDialogRequest.PullAll = new EditedOccupants() { OccupantsIds = removedUsers };
 
-                foreach (var contact in selectedContacts)
+                var updateDialogResponse = await QuickbloxClient.ChatClient.UpdateDialogAsync(updateDialogRequest);
+
+                if (updateDialogResponse.StatusCode == HttpStatusCode.OK)
                 {
-                    var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId);
-                    await privateChatManager.SendNotificationMessage(createDialogResponse.Result.Id);
-                }
-
-                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
-                groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
-                var isGroupMessageSent = groupChatManager.SendMessage("A new group chat was created");
-                if(isGroupMessageSent)
+                    ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter { Dialog = DialogVm.FromDialog(updateDialogResponse.Result) };
                     NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
+                }
+            }
+            else
+            {
+                var createDialogResponse = await QuickbloxClient.ChatClient.CreateDialogAsync(GroupName, DialogType.Group, selectedUsersString);
+                if (createDialogResponse.StatusCode == HttpStatusCode.Created)
+                {
+                    ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter {Dialog = DialogVm.FromDialog(createDialogResponse.Result)};
+
+                    foreach (var contact in selectedContacts)
+                    {
+                        var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId);
+                        await privateChatManager.SendNotificationMessage(createDialogResponse.Result.Id);
+                    }
+
+                    var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
+                    groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
+                    var isGroupMessageSent = groupChatManager.SendMessage("A new group chat was created");
+                    if (isGroupMessageSent)
+                        NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
+                }
             }
 
             IsLoading = false;
+        }
+
+        private async Task<bool> Validate()
+        {
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
+            if (!isEditMode && string.IsNullOrWhiteSpace(GroupName))
+            {
+                await messageService.ShowAsync("Group name", "A Group name field must not be empty.");
+                return false;
+            }
+
+            if (!allContacts.Any(c => c.IsSelected))
+            {
+                await messageService.ShowAsync("No users", "Please, select some users to add to the group.");
+                IsLoading = false;
+                return false;
+            }
+
+            return true;
+        }
+
+        private string BuildUsersString(IEnumerable<int> users)
+        {
+            var userIdsBuilder = new StringBuilder();
+            foreach (int userId in users)
+            {
+                userIdsBuilder.Append(userId + ",");
+            }
+            if(userIdsBuilder.Length > 1)
+                userIdsBuilder.Remove(userIdsBuilder.Length - 1, 1);
+
+            return userIdsBuilder.ToString();
         }
     }
 }
