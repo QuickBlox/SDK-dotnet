@@ -497,7 +497,6 @@
     <Compile Include="Modules\MessagesModule\Models\Message.cs" />
     <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />
     <Compile Include="Modules\MessagesModule\Interfaces\IPrivateChatManager.cs" />
-    <Compile Include="Modules\MessagesModule\Interfaces\IMessagesClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="bouncy_castle_hmac_sha_pcl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">

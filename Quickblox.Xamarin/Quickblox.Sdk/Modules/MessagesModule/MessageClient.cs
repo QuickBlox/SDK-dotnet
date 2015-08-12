@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
-    public class MessagesClient : IMessagesClient
+    public class MessagesClient
     {
         #region Fields
 
