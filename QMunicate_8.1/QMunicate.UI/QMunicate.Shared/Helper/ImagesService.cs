@@ -88,11 +88,13 @@ namespace QMunicate.Helper
             {
                 var bitmapImage = new BitmapImage();
 
-                var stream = new InMemoryRandomAccessStream();
-                await stream.WriteAsync(imageBytes.AsBuffer());
-                stream.Seek(0);
+                using (var stream = new InMemoryRandomAccessStream())
+                {
+                    await stream.WriteAsync(imageBytes.AsBuffer());
+                    stream.Seek(0);
 
-                bitmapImage.SetSource(stream);
+                    bitmapImage.SetSource(stream);
+                }
                 return bitmapImage;
             }
             catch (Exception)

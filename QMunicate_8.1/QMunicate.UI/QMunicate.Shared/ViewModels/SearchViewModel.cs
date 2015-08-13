@@ -92,7 +92,10 @@ namespace QMunicate.ViewModels
 
         private async Task GlobalSearch(string searchQuery)
         {
-            GlobalResults.Clear();
+            using (await globalResultsLock.LockAsync())
+            {
+                GlobalResults.Clear();
+            }
             if (string.IsNullOrWhiteSpace(searchQuery)) return;
 
             IsLoading = true;
