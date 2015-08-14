@@ -184,51 +184,61 @@ namespace QMunicate.ViewModels
                 return;
             }
 
-            var selectedContacts = allContacts.Where(c => c.IsSelected).ToList();
-
-            string selectedUsersString = BuildUsersString(selectedContacts.Select(c => c.Item.UserId));
-
             if (IsEditMode)
             {
-                var updateDialogRequest = new UpdateDialogRequest();
-                updateDialogRequest.DialogId = editedDialog.Id;
-                var addedUsers = selectedContacts.Where(c => !editedDialog.OccupantIds.Contains(c.Item.UserId)).Select(u => u.Item.UserId).ToArray();
-                var removedUsers = editedDialog.OccupantIds.Where(c => selectedContacts.All(sc => sc.Item.UserId != c) && c != QuickbloxClient.CurrentUserId).ToArray();
-                if(addedUsers.Any())
-                    updateDialogRequest.PushAll = new EditedOccupants() {OccupantsIds = addedUsers};
-                if(removedUsers.Any())
-                    updateDialogRequest.PullAll = new EditedOccupants() { OccupantsIds = removedUsers };
-
-                var updateDialogResponse = await QuickbloxClient.ChatClient.UpdateDialogAsync(updateDialogRequest);
-
-                if (updateDialogResponse.StatusCode == HttpStatusCode.OK)
-                {
-                    ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter { Dialog = DialogVm.FromDialog(updateDialogResponse.Result) };
-                    NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
-                }
+                await UpdateGroup();
             }
             else
             {
-                var createDialogResponse = await QuickbloxClient.ChatClient.CreateDialogAsync(GroupName, DialogType.Group, selectedUsersString);
-                if (createDialogResponse.StatusCode == HttpStatusCode.Created)
-                {
-                    ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter {Dialog = DialogVm.FromDialog(createDialogResponse.Result)};
-
-                    foreach (var contact in selectedContacts)
-                    {
-                        var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId);
-                        await privateChatManager.SendNotificationMessage(createDialogResponse.Result.Id);
-                    }
-
-                    var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
-                    groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
-                    var isGroupMessageSent = groupChatManager.SendMessage("A new group chat was created");
-                    if (isGroupMessageSent)
-                        NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
-                }
+                await CreateGroup();
             }
 
             IsLoading = false;
+        }
+
+        private async Task UpdateGroup()
+        {
+            var selectedContacts = allContacts.Where(c => c.IsSelected).ToList();
+
+            var updateDialogRequest = new UpdateDialogRequest {DialogId = editedDialog.Id};
+            var addedUsers = selectedContacts.Where(c => !editedDialog.OccupantIds.Contains(c.Item.UserId)).Select(u => u.Item.UserId).ToArray();
+            var removedUsers = editedDialog.OccupantIds.Where(c => selectedContacts.All(sc => sc.Item.UserId != c) && c != QuickbloxClient.CurrentUserId).ToArray();
+            if (addedUsers.Any())
+                updateDialogRequest.PushAll = new EditedOccupants() { OccupantsIds = addedUsers };
+            if (removedUsers.Any())
+                updateDialogRequest.PullAll = new EditedOccupants() { OccupantsIds = removedUsers };
+
+            var updateDialogResponse = await QuickbloxClient.ChatClient.UpdateDialogAsync(updateDialogRequest);
+
+            if (updateDialogResponse.StatusCode == HttpStatusCode.OK)
+            {
+                ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter { Dialog = DialogVm.FromDialog(updateDialogResponse.Result) };
+                NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
+            }
+        }
+
+        private async Task CreateGroup()
+        {
+            var selectedContacts = allContacts.Where(c => c.IsSelected).ToList();
+            string selectedUsersString = BuildUsersString(selectedContacts.Select(c => c.Item.UserId));
+
+            var createDialogResponse = await QuickbloxClient.ChatClient.CreateDialogAsync(GroupName, DialogType.Group, selectedUsersString);
+            if (createDialogResponse.StatusCode == HttpStatusCode.Created)
+            {
+                ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter { Dialog = DialogVm.FromDialog(createDialogResponse.Result) };
+
+                foreach (var contact in selectedContacts)
+                {
+                    var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId);
+                    await privateChatManager.SendNotificationMessage(createDialogResponse.Result.Id);
+                }
+
+                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
+                groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
+                var isGroupMessageSent = groupChatManager.SendMessage("A new group chat was created");
+                if (isGroupMessageSent)
+                    NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
+            }
         }
 
         private async Task<bool> Validate()

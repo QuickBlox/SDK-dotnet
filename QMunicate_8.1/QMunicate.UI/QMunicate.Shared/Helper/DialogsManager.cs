@@ -73,12 +73,11 @@ namespace QMunicate.Helper
                         {
                             var dialogVm = DialogVm.FromDialog(dialog);
 
-                            //// For group dialogs
-                            //if (dialogVm.ImageUploadId.HasValue)
-                            //{
-                            //    var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                            //    dialogVm.Image = await imagesService.GetPrivateImage(dialogVm.ImageUploadId.Value);
-                            //}
+                            if (!string.IsNullOrEmpty(dialogVm.Photo))
+                            {
+                                var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                                dialogVm.Image = await imagesService.GetPublicImage(dialogVm.Photo);
+                            }
 
                             Dialogs.Add(dialogVm);
                         }

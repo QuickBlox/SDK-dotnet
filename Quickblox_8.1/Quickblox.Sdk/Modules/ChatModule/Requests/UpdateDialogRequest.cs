@@ -23,7 +23,8 @@ namespace Quickblox.Sdk.Modules.ChatModule.Requests
         [JsonProperty("push_all", NullValueHandling = NullValueHandling.Ignore)]
         public EditedOccupants PushAll { get; set; }
 
-
+        [JsonProperty("photo", NullValueHandling = NullValueHandling.Ignore)]
+        public string PhotoLink { get; set; }
     }
 
     public class EditedOccupants

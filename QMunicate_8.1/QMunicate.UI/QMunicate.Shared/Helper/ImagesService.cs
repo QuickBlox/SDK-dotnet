@@ -14,6 +14,7 @@ namespace QMunicate.Helper
     public interface IImageService
     {
         Task<ImageSource> GetPrivateImage(int imageUploadId);
+        Task<ImageSource> GetPublicImage(string imageUrl);
     }
 
     public class ImagesService : IImageService
@@ -47,6 +48,11 @@ namespace QMunicate.Helper
                 return await GetImageFromStorage(imageUploadId);
 
             return await GetImageFromServer(imageUploadId);
+        }
+
+        public async Task<ImageSource> GetPublicImage(string imageUrl)
+        {
+            return new BitmapImage(new System.Uri(imageUrl));
         }
 
         #endregion
