@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
@@ -59,11 +60,13 @@ namespace QMunicate.ViewModels
 
         public async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var dialog = e.Parameter as DialogVm;
-            if (dialog == null) return;
+            var dialogId = e.Parameter as string;
+            if (dialogId == null) return;
 
-            currentDialog = dialog;
-            await Initialize(dialog);
+            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            currentDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialogId);
+            if(currentDialog != null)
+                await Initialize(currentDialog);
         }
 
         #endregion

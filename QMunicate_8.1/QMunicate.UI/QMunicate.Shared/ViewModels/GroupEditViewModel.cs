@@ -11,6 +11,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Helper;
 using QMunicate.Models;
 using Quickblox.Logger;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
@@ -162,6 +164,17 @@ namespace QMunicate.ViewModels
 
                 if (updateDialogResponse.StatusCode == HttpStatusCode.OK)
                 {
+                    var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+                    var dialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == currentDialog.Id);
+                    if (!string.IsNullOrEmpty(updateDialogRequest.Name))
+                        dialog.Name = updateDialogRequest.Name;
+
+                    if (!string.IsNullOrEmpty(updateDialogRequest.PhotoLink))
+                    {
+                        dialog.Photo = updateDialogRequest.PhotoLink;
+                        dialog.Image = ChatImage;
+                    }
+                    
                     IsLoading = false;
                     NavigationService.GoBack();
                 }

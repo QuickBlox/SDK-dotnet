@@ -191,7 +191,7 @@ namespace QMunicate.ViewModels
 
         private void ShowGroupInfoCommandExecute()
         {
-            NavigationService.Navigate(ViewLocator.GroupInfo, dialog);
+            NavigationService.Navigate(ViewLocator.GroupInfo, dialog.Id);
         }
 
         #endregion
