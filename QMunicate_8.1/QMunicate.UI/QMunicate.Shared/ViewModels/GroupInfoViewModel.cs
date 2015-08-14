@@ -114,7 +114,7 @@ namespace QMunicate.ViewModels
 
         private void EditCommandExecute()
         {
-
+            NavigationService.Navigate(ViewLocator.GroupEdit, currentDialog);
         }
 
         #endregion
