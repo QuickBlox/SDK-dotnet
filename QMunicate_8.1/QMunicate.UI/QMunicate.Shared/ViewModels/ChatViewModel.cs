@@ -28,7 +28,9 @@ namespace QMunicate.ViewModels
         private string newMessageText;
         private string chatName;
         private ImageSource chatImage;
-        private bool activeContactRequest;
+        private bool isActiveContactRequest;
+        private bool isWaitingForContactResponse;
+        private bool isRequestRejected;
         private DialogVm dialog;
         private IPrivateChatManager privateChatManager;
 
@@ -39,7 +41,7 @@ namespace QMunicate.ViewModels
         public ChatViewModel()
         {
             Messages = new ObservableCollection<MessageVm>();
-            SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading);
+            SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading && IsMessageSendingAllowed);
             AcceptRequestCommand = new RelayCommand(AcceptRequestCommandExecute, () => !IsLoading);
             RejectRequestCommand = new RelayCommand(RejectCRequestCommandExecute, () => !IsLoading);
         }
@@ -68,10 +70,40 @@ namespace QMunicate.ViewModels
             set { Set(ref chatImage, value); }
         }
 
-        public bool ActiveContactRequest
+        public bool IsActiveContactRequest
         {
-            get { return activeContactRequest; }
-            set { Set(ref activeContactRequest, value); }
+            get { return isActiveContactRequest; }
+            set
+            {
+                Set(ref isActiveContactRequest, value);
+                RaisePropertyChanged(()=> IsMessageSendingAllowed);
+            }
+        }
+
+        public bool IsWaitingForContactResponse
+        {
+            get { return isWaitingForContactResponse; }
+            set
+            {
+                Set(ref isWaitingForContactResponse, value);
+                RaisePropertyChanged(() => IsMessageSendingAllowed);
+                
+            }
+        }
+
+        public bool IsRequestRejected
+        {
+            get { return isRequestRejected; }
+            set
+            {
+                Set(ref isRequestRejected, value);
+                RaisePropertyChanged(() => IsMessageSendingAllowed);                
+            }
+        }
+
+        public bool IsMessageSendingAllowed
+        {
+            get { return !IsActiveContactRequest && !IsRequestRejected && !IsWaitingForContactResponse; }
         }
 
         public RelayCommand SendCommand { get; private set; }
@@ -134,9 +166,35 @@ namespace QMunicate.ViewModels
                 if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))
                     await LoadMessages(chatParameter.Dialog.Id);
 
+                for (int i = Messages.Count - 1; i >= 0; i--)
+                {
+                    if (Messages[i].NotificationType == NotificationTypes.FriendsAccept)
+                    {
+                        break;
+                    }
+
+                    if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
+                    {
+                        IsActiveContactRequest = true;
+                        break;
+                    }
+
+                    if (Messages[i].MessageType == MessageType.Outgoing && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
+                    {
+                        IsWaitingForContactResponse = true;
+                        break;
+                    }
+
+                    if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsReject)
+                    {
+                        IsRequestRejected = true;
+                        break;
+                    }
+                }
+
                 if (Messages.Any(m => m.MessageType == MessageType.Incoming && m.NotificationType == NotificationTypes.FriendsRequest)
                     && !Messages.Any(m => m.MessageType == MessageType.Outgoing && (m.NotificationType == NotificationTypes.FriendsAccept || m.NotificationType == NotificationTypes.FriendsReject)))
-                    ActiveContactRequest = true;
+                    IsActiveContactRequest = true;
             }
 
             IsLoading = false;
@@ -199,8 +257,8 @@ namespace QMunicate.ViewModels
 
             if (accepted)
             {
-                ActiveContactRequest = false;
-                
+                IsActiveContactRequest = false;
+                await LoadMessages(dialog.Id);
             }
             
 
@@ -216,7 +274,7 @@ namespace QMunicate.ViewModels
 
             if (rejected)
             {
-                ActiveContactRequest = false;
+                IsActiveContactRequest = false;
                 await LoadMessages(dialog.Id);
             }
 
