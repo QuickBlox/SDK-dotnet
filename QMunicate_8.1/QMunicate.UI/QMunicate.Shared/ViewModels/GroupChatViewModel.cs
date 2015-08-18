@@ -26,6 +26,7 @@ namespace QMunicate.ViewModels
         private ImageSource chatImage;
         private DialogVm dialog;
         private IGroupChatManager groupChatManager;
+        private int numberOfMembers;
 
         #endregion
 
@@ -60,6 +61,12 @@ namespace QMunicate.ViewModels
         {
             get { return chatImage; }
             set { Set(ref chatImage, value); }
+        }
+
+        public int NumberOfMembers
+        {
+            get { return numberOfMembers; }
+            set { Set(ref numberOfMembers, value); }
         }
 
         public RelayCommand SendCommand { get; private set; }
@@ -113,6 +120,7 @@ namespace QMunicate.ViewModels
                 dialog = chatParameter.Dialog;
                 ChatName = chatParameter.Dialog.Name;
                 ChatImage = chatParameter.Dialog.Image;
+                NumberOfMembers = chatParameter.Dialog.OccupantIds.Count;
 
                 await FileLogger.Instance.Log(LogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", QuickbloxClient.CurrentUserId, dialog.XmppRoomJid));
 

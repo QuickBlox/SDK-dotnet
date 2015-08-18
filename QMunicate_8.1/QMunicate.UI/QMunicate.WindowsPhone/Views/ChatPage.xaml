@@ -79,7 +79,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding ChatName}" FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}"/>
+            <TextBlock Text="{Binding ChatName}" FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}"/>
             <Image Grid.Column="1" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55"  HorizontalAlignment="Right" Margin="0 0 12 0"/>
         </Grid>
         <Grid Row="1" Visibility="{Binding IsActiveContactRequest, Converter={StaticResource BooleanToVisibilityConverter}}">
