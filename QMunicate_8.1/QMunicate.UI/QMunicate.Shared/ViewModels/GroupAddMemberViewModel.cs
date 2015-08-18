@@ -320,10 +320,19 @@ namespace QMunicate.ViewModels
         private async Task<bool> Validate()
         {
             var messageService = ServiceLocator.Locator.Get<IMessageService>();
-            if (!isEditMode && string.IsNullOrWhiteSpace(GroupName))
+            if (!isEditMode)
             {
-                await messageService.ShowAsync("Group name", "A Group name field must not be empty.");
-                return false;
+                if (string.IsNullOrWhiteSpace(GroupName))
+                {
+                    await messageService.ShowAsync("Group name", "A Group name field must not be empty.");
+                    return false;
+                }
+
+                if (!GroupName.Any(char.IsLetter))
+                {
+                    await messageService.ShowAsync("Group name", "A Group name field must contain at least one letter.");
+                    return false;
+                }
             }
 
             if (!allContacts.Any(c => c.IsSelected))
