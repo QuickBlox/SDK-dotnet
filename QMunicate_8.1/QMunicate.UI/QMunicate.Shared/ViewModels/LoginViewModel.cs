@@ -29,7 +29,7 @@ namespace QMunicate.ViewModels
         {
             ForgotPasswordCommand = new RelayCommand(ForgotPasswordCommandExecute, () => !IsLoading);
             LoginCommand = new RelayCommand(LoginCommandExecute, () => !IsLoading);
-#if TEST_RELEASE || DEBUG
+#if DEBUG
             Email = "user1@test.com";
             Password = "12345678";
 #endif
