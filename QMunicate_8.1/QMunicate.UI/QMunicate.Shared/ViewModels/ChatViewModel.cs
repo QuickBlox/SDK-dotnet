@@ -166,38 +166,39 @@ namespace QMunicate.ViewModels
                 if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))
                     await LoadMessages(chatParameter.Dialog.Id);
 
-                for (int i = Messages.Count - 1; i >= 0; i--)
-                {
-                    if (Messages[i].NotificationType == NotificationTypes.FriendsAccept)
-                    {
-                        break;
-                    }
-
-                    if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
-                    {
-                        IsActiveContactRequest = true;
-                        break;
-                    }
-
-                    if (Messages[i].MessageType == MessageType.Outgoing && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
-                    {
-                        IsWaitingForContactResponse = true;
-                        break;
-                    }
-
-                    if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsReject)
-                    {
-                        IsRequestRejected = true;
-                        break;
-                    }
-                }
-
-                if (Messages.Any(m => m.MessageType == MessageType.Incoming && m.NotificationType == NotificationTypes.FriendsRequest)
-                    && !Messages.Any(m => m.MessageType == MessageType.Outgoing && (m.NotificationType == NotificationTypes.FriendsAccept || m.NotificationType == NotificationTypes.FriendsReject)))
-                    IsActiveContactRequest = true;
+                CheckIsMessageSendingAllowed();
             }
 
             IsLoading = false;
+        }
+
+        private void CheckIsMessageSendingAllowed()
+        {
+            for (int i = Messages.Count - 1; i >= 0; i--)
+            {
+                if (Messages[i].NotificationType == NotificationTypes.FriendsAccept)
+                {
+                    break;
+                }
+
+                if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
+                {
+                    IsActiveContactRequest = true;
+                    break;
+                }
+
+                if (Messages[i].MessageType == MessageType.Outgoing && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
+                {
+                    IsWaitingForContactResponse = true;
+                    break;
+                }
+
+                if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsReject)
+                {
+                    IsRequestRejected = true;
+                    break;
+                }
+            }
         }
 
         private async Task LoadMessages(string dialogId)
@@ -291,7 +292,11 @@ namespace QMunicate.ViewModels
                 DateTime = DateTime.Now
             };
 
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(incomingMessage));
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                Messages.Add(incomingMessage);
+                CheckIsMessageSendingAllowed();
+            });
         }
 
         #endregion
