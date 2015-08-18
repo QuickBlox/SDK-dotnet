@@ -154,7 +154,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="NEW GROUP" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
+        <TextBlock Text="NEW GROUP" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}" Visibility="{Binding IsEditMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+        <TextBlock Text="ADD MEMBERS" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}" Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         <TextBox Grid.Row="1" Visibility="{Binding IsEditMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Text="{Binding GroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  PlaceholderText="Group name" Margin="{StaticResource DefaultMargin}"/>
         <TextBox Grid.Row="2" x:Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  PlaceholderText="Search" Margin="{StaticResource DefaultMargin}"/>
         <ListBox Grid.Row="3" ItemsSource="{Binding Contacts}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
