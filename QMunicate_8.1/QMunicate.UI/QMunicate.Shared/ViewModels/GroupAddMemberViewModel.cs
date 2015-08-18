@@ -309,12 +309,30 @@ namespace QMunicate.ViewModels
                     await privateChatManager.SendNotificationMessage(createDialogResponse.Result.Id);
                 }
 
+                var groupNotificationMessage = await BuildGroupNotificationMessage(selectedContacts);
+
                 var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
                 groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
-                var isGroupMessageSent = groupChatManager.SendMessage("A new group chat was created");
+                var isGroupMessageSent = groupChatManager.SendMessage(groupNotificationMessage);
                 if (isGroupMessageSent)
                     NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
             }
+        }
+
+        private async Task<string> BuildGroupNotificationMessage(List<SelectableListBoxItem<UserVm>> selectedContacts)
+        {
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            var currentUser = await cachingQbClient.GetUserById(QuickbloxClient.CurrentUserId);
+
+            var addedUsersBuilder = new StringBuilder();
+            foreach (var user in selectedContacts)
+            {
+                addedUsersBuilder.Append(user.Item.FullName + ", ");
+            }
+            if (addedUsersBuilder.Length > 1)
+                addedUsersBuilder.Remove(addedUsersBuilder.Length - 2, 2);
+
+            return string.Format("{0} has added {1} to the group chat", currentUser.FullName, addedUsersBuilder);
         }
 
         private async Task<bool> Validate()
