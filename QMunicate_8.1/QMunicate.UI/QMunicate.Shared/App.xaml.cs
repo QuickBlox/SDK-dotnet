@@ -208,6 +208,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.GroupAddMember, typeof(GroupAddMemberPage));
             dictionary.Add(ViewLocator.GroupInfo, typeof(GroupInfoPage));
             dictionary.Add(ViewLocator.GroupEdit, typeof(GroupEditPage));
+            dictionary.Add(ViewLocator.SettingsEdit, typeof(SettingsEditPage));
 
             return new PageResolver(dictionary);
         }

@@ -146,6 +146,9 @@
     <Compile Include="Views\SendRequestPage.xaml.cs">
       <DependentUpon>SendRequestPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SettingsEditPage.xaml.cs">
+      <DependentUpon>SettingsEditPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -211,6 +214,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SendRequestPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsEditPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

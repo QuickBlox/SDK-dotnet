@@ -40,6 +40,7 @@ namespace QMunicate.ViewModels
         {
             SignOutCommand = new RelayCommand(SignOutCommandExecute, () => !IsLoading);
             DeleteAccountCommand = new RelayCommand(DeleteAccountCommandExecute, () => !IsLoading);
+            EditCommand = new RelayCommand(EditCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -85,6 +86,8 @@ namespace QMunicate.ViewModels
         public RelayCommand SignOutCommand { get; set; }
 
         public RelayCommand DeleteAccountCommand { get; set; }
+
+        public RelayCommand EditCommand { get; set; }
 
         #endregion
 
@@ -217,6 +220,11 @@ namespace QMunicate.ViewModels
         private async void DeleteAccountCommandExecute()
         {
 
+        }
+
+        private void EditCommandExecute()
+        {
+            NavigationService.Navigate(ViewLocator.SettingsEdit);
         }
 
         #endregion
