@@ -25,7 +25,7 @@
         <TextBlock Text="EDIT" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
         <Image Grid.Row="1" Grid.Column="0" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Height="90" Width="90" Margin="{StaticResource DefaultMargin}"/>
         <Button Grid.Row="1" Grid.Column="1" Content="change group picture" Command="{Binding ChangeImageCommand}"/>
-        <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ChatName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="{StaticResource DefaultMargin}">
+        <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ChatName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="{StaticResource DefaultMargin}" IsReadOnly="{Binding IsLoading}">
             <TextBox.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="Group name" Foreground="Gray"/>

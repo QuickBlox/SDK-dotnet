@@ -52,7 +52,15 @@ namespace QMunicate.Helper
 
         public async Task<ImageSource> GetPublicImage(string imageUrl)
         {
-            return new BitmapImage(new System.Uri(imageUrl));
+            try
+            {
+                return new BitmapImage(new System.Uri(imageUrl));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            
         }
 
         #endregion

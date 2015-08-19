@@ -115,6 +115,7 @@ namespace QMunicate.ViewModels
         {
             SignOutCommand.RaiseCanExecuteChanged();
             DeleteAccountCommand.RaiseCanExecuteChanged();
+            EditCommand.RaiseCanExecuteChanged();
         }
 
         #endregion
