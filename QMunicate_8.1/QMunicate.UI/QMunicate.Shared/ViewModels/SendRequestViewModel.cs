@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows.Input;
@@ -22,6 +23,7 @@ namespace QMunicate.ViewModels
         private int otherUserId;
         private string userName;
         private ImageSource userImage;
+        private bool isAdded;
 
         #endregion
 
@@ -29,7 +31,7 @@ namespace QMunicate.ViewModels
 
         public SendRequestViewModel()
         {
-            SendCommand = new RelayCommand(SendCommandExecute, () =>  !IsLoading);
+            SendCommand = new RelayCommand(SendCommandExecute, () =>  !IsLoading && !IsAdded);
         }
 
         #endregion
@@ -48,7 +50,17 @@ namespace QMunicate.ViewModels
             set { Set(ref userImage, value); }
         }
 
-        public ICommand SendCommand { get; private set; }
+        public RelayCommand SendCommand { get; private set; }
+
+        public bool IsAdded
+        {
+            get { return isAdded; }
+            set
+            {
+                Set(ref isAdded, value);
+                SendCommand.RaiseCanExecuteChanged();
+            }
+        }
 
         #endregion
 
@@ -59,9 +71,20 @@ namespace QMunicate.ViewModels
             var user = e.Parameter as UserVm;
             if (user == null) return;
 
+            IsAdded = QuickbloxClient.MessagesClient.Contacts.Any(c => c.UserId == user.UserId);
+
             UserImage = user.Image;
             UserName = user.FullName;
             otherUserId = user.UserId;
+        }
+
+        #endregion
+
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            SendCommand.RaiseCanExecuteChanged();
         }
 
         #endregion

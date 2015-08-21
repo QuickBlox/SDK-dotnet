@@ -15,6 +15,8 @@
             <TextBlock Text="{Binding UserName}" FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}"/>
             <Image Source="{Binding UserImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="140" Height="140" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Left"/>
             <Button Content="send contact request" Margin="{StaticResource DefaultMargin}" Command="{Binding SendCommand}"/>
+            <TextBlock Text="The user is already in your contact list." FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}"
+                       Visibility="{Binding IsAdded, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </StackPanel>
     </Grid>
 </Page>
