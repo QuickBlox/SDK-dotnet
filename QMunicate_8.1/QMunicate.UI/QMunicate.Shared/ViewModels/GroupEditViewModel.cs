@@ -108,17 +108,7 @@ namespace QMunicate.ViewModels
                         dataReader.ReadBytes(newImageBytes);
                     }
 
-                    try
-                    {
-                        BitmapImage bitmapImage = new BitmapImage();
-                        bitmapImage.DecodePixelWidth = 100;
-                        bitmapImage.SetSource(streamForImage);
-                        ChatImage = bitmapImage;
-                    }
-                    catch (Exception ex)
-                    {
-                        FileLogger.Instance.Log(LogLevel.Warn, "GroupEditViewModel. Failed to create BitmapImage. " + ex);
-                    }
+                    ChatImage = Helpers.CreateBitmapImage(streamForImage, 100);
                 }
             }
         }

@@ -77,7 +77,7 @@ namespace QMunicate.Helper
                 {
                     thisSessionImages.Add(imageUploadId);
                 }
-                return await CreateBitmapImage(downloadResponse.Result, decodePixelWidth, decodePixelHeight);
+                return await Helpers.CreateBitmapImage(downloadResponse.Result, decodePixelWidth, decodePixelHeight);
             }
 
             return null;
@@ -88,34 +88,10 @@ namespace QMunicate.Helper
             var imageBytes = await fileStorage.ReadFile(imagesFolder, string.Format(fileNameFormat, imageUploadId));
             if (imageBytes != null)
             {
-                return await CreateBitmapImage(imageBytes, decodePixelWidth, decodePixelHeight);
+                return await Helpers.CreateBitmapImage(imageBytes, decodePixelWidth, decodePixelHeight);
             }
 
             return null;
-        }
-
-        private async Task<BitmapImage> CreateBitmapImage(byte[] imageBytes, int? decodePixelWidth = null, int? decodePixelHeight = null)
-        {
-            if (imageBytes == null) return null;
-
-            try
-            {
-                var bitmapImage = new BitmapImage();
-                if (decodePixelWidth.HasValue) bitmapImage.DecodePixelWidth = decodePixelWidth.Value;
-                if (decodePixelHeight.HasValue) bitmapImage.DecodePixelHeight = decodePixelHeight.Value;
-                using (var stream = new InMemoryRandomAccessStream())
-                {
-                    await stream.WriteAsync(imageBytes.AsBuffer());
-                    stream.Seek(0);
-
-                    bitmapImage.SetSource(stream);
-                }
-                return bitmapImage;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         #endregion
