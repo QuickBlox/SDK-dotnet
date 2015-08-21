@@ -44,6 +44,7 @@ namespace QMunicate.Models
         public string Id { get; set; }
         public string XmppRoomJid { get; set; }
         public string Photo { get; set; }
+        public int? PrivatePhotoId { get; set; }
         public int? UnreadMessageCount { get; set; }
         public IList<int> OccupantIds { get; set; }
         public DialogType DialogType { get; set; }

@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Media;
-using QMunicate.Core.DependencyInjection;
+﻿using QMunicate.Core.DependencyInjection;
 using QMunicate.Models;
 using Quickblox.Logger;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
-using Quickblox.Sdk.Modules.Models;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
 namespace QMunicate.Helper
@@ -83,14 +79,18 @@ namespace QMunicate.Helper
                         }
                     }
 
+                    var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
                     foreach (DialogVm dialogVm in Dialogs)
                     {
                         if (dialogVm.DialogType == DialogType.Private)
                         {
                             int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != quickbloxClient.CurrentUserId);
-                            var nameAndImage = await GetUserNameAndImage(otherUserId);
-                            dialogVm.Name = nameAndImage.Item1;
-                            dialogVm.Image = nameAndImage.Item2;
+                            var user = await cachingQbClient.GetUserById(otherUserId);
+                            if (user != null)
+                            {
+                                dialogVm.Name = user.FullName;
+                                dialogVm.PrivatePhotoId = user.BlobId;
+                            }
                         }
                     }
                 }
@@ -118,6 +118,24 @@ namespace QMunicate.Helper
             }
         }
 
+        public async Task LoadDialogImages(int? decodePixelWidth = null, int? decodePixelHeight = null)
+        {
+            var imagesService = ServiceLocator.Locator.Get<IImageService>();
+            foreach (DialogVm dialogVm in Dialogs.Where(d => d.DialogType == DialogType.Private))
+            {
+                if(dialogVm.PrivatePhotoId.HasValue)
+                    dialogVm.Image = await imagesService.GetPrivateImage(dialogVm.PrivatePhotoId.Value, decodePixelWidth, decodePixelHeight);
+            }
+        }
+
+        public void UnloadDialogImages()
+        {
+            foreach (DialogVm dialogVm in Dialogs.Where(d => d.DialogType == DialogType.Private))
+            {
+                dialogVm.Image = null;
+            }
+        }
+
         #endregion
 
         #region Private methods
@@ -137,26 +155,6 @@ namespace QMunicate.Helper
                 return otherContact.Name;
 
             return null;
-        }
-
-        private async Task<Tuple<string, ImageSource>> GetUserNameAndImage(int userId)
-        {
-            string name = null;
-            ImageSource image = null;
-
-            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var user = await cachingQbClient.GetUserById(userId);
-            if (user != null)
-            {
-                name = user.FullName;
-                if (user.BlobId.HasValue)
-                {
-                    var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                    image = await imagesService.GetPrivateImage(user.BlobId.Value);
-                }
-            }
-
-            return new Tuple<string, ImageSource>(name, image);
         }
 
         #endregion

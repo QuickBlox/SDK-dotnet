@@ -13,7 +13,7 @@ namespace QMunicate.Helper
 {
     public interface IImageService
     {
-        Task<ImageSource> GetPrivateImage(int imageUploadId);
+        Task<ImageSource> GetPrivateImage(int imageUploadId, int? decodePixelWidth = null, int? decodePixelHeight = null);
         Task<ImageSource> GetPublicImage(string imageUrl);
     }
 
@@ -42,12 +42,12 @@ namespace QMunicate.Helper
 
         #region IImageService Members
 
-        public async Task<ImageSource> GetPrivateImage(int imageUploadId)
+        public async Task<ImageSource> GetPrivateImage(int imageUploadId, int? decodePixelWidth = null, int? decodePixelHeight = null)
         {
             if (thisSessionImages.Contains(imageUploadId))
-                return await GetImageFromStorage(imageUploadId);
+                return await GetImageFromStorage(imageUploadId, decodePixelWidth, decodePixelHeight);
 
-            return await GetImageFromServer(imageUploadId);
+            return await GetImageFromServer(imageUploadId, decodePixelWidth, decodePixelHeight);
         }
 
         public async Task<ImageSource> GetPublicImage(string imageUrl)
@@ -67,7 +67,7 @@ namespace QMunicate.Helper
 
         #region Private methods
 
-        private async Task<ImageSource> GetImageFromServer(int imageUploadId)
+        private async Task<ImageSource> GetImageFromServer(int imageUploadId, int? decodePixelWidth = null, int? decodePixelHeight = null)
         {
             var downloadResponse = await quickbloxClient.ContentClient.DownloadFileById(imageUploadId);
             if (downloadResponse.StatusCode == HttpStatusCode.OK)
@@ -77,31 +77,32 @@ namespace QMunicate.Helper
                 {
                     thisSessionImages.Add(imageUploadId);
                 }
-                return await CreateBitmapImage(downloadResponse.Result);
+                return await CreateBitmapImage(downloadResponse.Result, decodePixelWidth, decodePixelHeight);
             }
 
             return null;
         }
 
-        private async Task<ImageSource> GetImageFromStorage(int imageUploadId)
+        private async Task<ImageSource> GetImageFromStorage(int imageUploadId, int? decodePixelWidth = null, int? decodePixelHeight = null)
         {
             var imageBytes = await fileStorage.ReadFile(imagesFolder, string.Format(fileNameFormat, imageUploadId));
             if (imageBytes != null)
             {
-                return await CreateBitmapImage(imageBytes);
+                return await CreateBitmapImage(imageBytes, decodePixelWidth, decodePixelHeight);
             }
 
             return null;
         }
 
-        private async Task<BitmapImage> CreateBitmapImage(byte[] imageBytes)
+        private async Task<BitmapImage> CreateBitmapImage(byte[] imageBytes, int? decodePixelWidth = null, int? decodePixelHeight = null)
         {
             if (imageBytes == null) return null;
 
             try
             {
                 var bitmapImage = new BitmapImage();
-
+                if (decodePixelWidth.HasValue) bitmapImage.DecodePixelWidth = decodePixelWidth.Value;
+                if (decodePixelHeight.HasValue) bitmapImage.DecodePixelHeight = decodePixelHeight.Value;
                 using (var stream = new InMemoryRandomAccessStream())
                 {
                     await stream.WriteAsync(imageBytes.AsBuffer());

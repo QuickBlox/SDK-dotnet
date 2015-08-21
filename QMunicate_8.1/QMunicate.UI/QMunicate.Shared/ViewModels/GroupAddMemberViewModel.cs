@@ -1,9 +1,13 @@
 ﻿using Nito.AsyncEx;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
+using Quickblox.Logger;
 using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk.Modules.ChatModule.Requests;
+using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
 using System.Collections.Generic;
@@ -18,10 +22,6 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using QMunicate.Core.MessageService;
-using Quickblox.Logger;
-using Quickblox.Sdk.Modules.ChatModule.Requests;
-using Quickblox.Sdk.Modules.ContentModule;
 
 namespace QMunicate.ViewModels
 {
@@ -110,6 +110,14 @@ namespace QMunicate.ViewModels
             IsLoading = false;
         }
 
+        public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
+        {
+            foreach (var contact in Contacts)
+            {
+                contact.Item.Image = null;
+            }
+        }
+
         #endregion
 
         #region Base members
@@ -140,6 +148,7 @@ namespace QMunicate.ViewModels
                     try
                     {
                         BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.DecodePixelWidth = 100;
                         bitmapImage.SetSource(streamForImage);
                         ChatImage = bitmapImage;
                     }
@@ -208,7 +217,7 @@ namespace QMunicate.ViewModels
                 var user = await cachingQbClient.GetUserById(userVm.Item.UserId);
                 if (user != null && user.BlobId.HasValue)
                 {
-                    userVm.Item.Image = await imagesService.GetPrivateImage(user.BlobId.Value);
+                    userVm.Item.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100, 100);
                 }
             }
         }

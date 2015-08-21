@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-using QMunicate.Core.Command;
+﻿using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Helper;
 using QMunicate.Models;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
 namespace QMunicate.ViewModels
 {
@@ -69,6 +66,14 @@ namespace QMunicate.ViewModels
                 await Initialize(currentDialog);
         }
 
+        public async override void OnNavigatedFrom(NavigatingCancelEventArgs e)
+        {
+            foreach (UserVm userVm in Participants)
+            {
+                userVm.Image = null;
+            }
+        }
+
         #endregion
 
         #region Base members
@@ -103,7 +108,7 @@ namespace QMunicate.ViewModels
             {
                 if (userVm.ImageUploadId.HasValue)
                 {
-                    userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value);
+                    userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100, 100);
                 }
             }
 

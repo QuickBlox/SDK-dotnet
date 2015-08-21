@@ -115,7 +115,7 @@ namespace QMunicate.ViewModels
                         if (userVm.ImageUploadId.HasValue)
                         {
                             var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value);
+                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100, 100);
                         }
                     }
                 }
@@ -151,7 +151,7 @@ namespace QMunicate.ViewModels
                     var user = await cachingQbClient.GetUserById(userVm.UserId);
                     if (user != null && user.BlobId.HasValue)
                     {
-                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value);
+                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100, 100);
                     }
                 }
             }

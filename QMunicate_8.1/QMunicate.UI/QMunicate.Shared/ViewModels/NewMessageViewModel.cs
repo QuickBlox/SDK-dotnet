@@ -94,7 +94,7 @@ namespace QMunicate.ViewModels
                 var user = await cachingQbClient.GetUserById(userVm.UserId);
                 if (user != null && user.BlobId.HasValue)
                 {
-                    userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value);
+                    userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100, 100);
                 }
             }
         }

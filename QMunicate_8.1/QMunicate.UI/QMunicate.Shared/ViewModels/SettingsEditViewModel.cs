@@ -110,6 +110,7 @@ namespace QMunicate.ViewModels
                     try
                     {
                         BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.DecodePixelWidth = 100;
                         bitmapImage.SetSource(streamForImage);
                         UserImage = bitmapImage;
                     }
@@ -136,7 +137,7 @@ namespace QMunicate.ViewModels
                 if (currentUser.BlobId.HasValue)
                 {
                     var imageService = ServiceLocator.Locator.Get<IImageService>();
-                    UserImage = await imageService.GetPrivateImage(currentUser.BlobId.Value);
+                    UserImage = await imageService.GetPrivateImage(currentUser.BlobId.Value, 100, 100);
                 }
             }
             IsLoading = false;

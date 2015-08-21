@@ -111,6 +111,7 @@ namespace QMunicate.ViewModels
                     try
                     {
                         BitmapImage bitmapImage = new BitmapImage();
+                        bitmapImage.DecodePixelWidth = 100;
                         bitmapImage.SetSource(streamForImage);
                         ChatImage = bitmapImage;
                     }
