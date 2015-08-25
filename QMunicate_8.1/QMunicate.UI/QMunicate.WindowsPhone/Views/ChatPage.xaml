@@ -8,6 +8,7 @@
     xmlns:selectors="using:QMunicate.Selectors"
     xmlns:behaviors="using:QMunicate.Behaviors"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:tapListener="using:QMunicate.Core.TapListener"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
@@ -74,7 +75,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" tapListener:TapListener.TapCommand="{Binding ShowUserInfoCommand}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
