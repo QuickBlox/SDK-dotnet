@@ -251,6 +251,15 @@
       <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Nito.AsyncEx">
+      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\netcore45\Nito.AsyncEx.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Concurrent">
+      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\netcore45\Nito.AsyncEx.Concurrent.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Enlightenment">
+      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\netcore45\Nito.AsyncEx.Enlightenment.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
