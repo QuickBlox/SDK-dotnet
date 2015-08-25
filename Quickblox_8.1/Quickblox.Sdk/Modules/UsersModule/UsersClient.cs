@@ -7,6 +7,7 @@ using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.UsersModule.Requests;
 using Quickblox.Sdk.Modules.UsersModule.Responses;
 using Quickblox.Sdk.Serializer;
+using Quickblox.Sdk.Modules.UsersModule.Models;
 
 namespace Quickblox.Sdk.Modules.UsersModule
 {
@@ -101,6 +102,18 @@ namespace Quickblox.Sdk.Modules.UsersModule
             var uriBuilder = String.Format(QuickbloxMethods.GetUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.GetAsync<UserResponse>(this.quickbloxClient.ApiEndPoint, uriBuilder, headers);
+        }
+
+        /// <summary>
+        /// Show API User by identifier (generic)
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        public async Task<HttpResponse<UserResponse<T>>> GetUserByIdAsync<T>(Int32 userId) where T : User
+        {
+            var uriBuilder = String.Format(QuickbloxMethods.GetUserMethod, userId);
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+            return await HttpService.GetAsync<UserResponse<T>>(this.quickbloxClient.ApiEndPoint, uriBuilder, headers);
         }
 
         /// <summary>
@@ -212,6 +225,20 @@ namespace Quickblox.Sdk.Modules.UsersModule
             var uriMethod = string.Format(QuickbloxMethods.UpdateUserMethod, userId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.PutAsync<UserResponse, UpdateUserRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, userRequest, headers);
+        }
+
+        /// <summary>
+        /// Updates the user by Id (generic).
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="userRequest">The user request.</param>
+        /// <returns></returns>
+        public async Task<HttpResponse<UserResponse>> UpdateUserAsync<T>(Int32 userId, UpdateUserRequest<T> userRequest) where T : UserRequest
+        {
+            var uriMethod = string.Format(QuickbloxMethods.UpdateUserMethod, userId);
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+            return await HttpService.PutAsync<UserResponse, UpdateUserRequest<T>>(this.quickbloxClient.ApiEndPoint, uriMethod, userRequest, headers);
         }
 
         /// <summary>

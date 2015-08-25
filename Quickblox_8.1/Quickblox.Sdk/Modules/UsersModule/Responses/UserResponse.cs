@@ -8,4 +8,10 @@ namespace Quickblox.Sdk.Modules.UsersModule.Responses
         [JsonProperty("user")]
         public User User { get; set; }
     }
+
+    public class UserResponse<T> where T : User
+    {
+        [JsonProperty("user")]
+        public T User { get; set; }
+    }
 }

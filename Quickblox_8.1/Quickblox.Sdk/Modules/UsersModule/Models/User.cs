@@ -55,7 +55,7 @@ namespace Quickblox.Sdk.Modules.UsersModule.Models
         public int? BlobId { get; set; }
 
         [JsonProperty("custom_data")]
-        public object CustomData { get; set; }
+        public string CustomData { get; set; }
 
         [JsonProperty("user_tags")]
         public string UserTags { get; set; }

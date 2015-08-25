@@ -8,4 +8,10 @@ namespace Quickblox.Sdk.Modules.UsersModule.Requests
         [JsonProperty("user")]
         public UserRequest User { get; set; }
     }
+
+    public class UpdateUserRequest<T> : BaseRequestSettings where T : UserRequest
+    {
+        [JsonProperty("user")]
+        public T User { get; set; }
+    }
 }
