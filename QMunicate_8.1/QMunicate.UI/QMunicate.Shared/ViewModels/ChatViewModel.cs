@@ -44,6 +44,7 @@ namespace QMunicate.ViewModels
             SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading && IsMessageSendingAllowed);
             AcceptRequestCommand = new RelayCommand(AcceptRequestCommandExecute, () => !IsLoading);
             RejectRequestCommand = new RelayCommand(RejectCRequestCommandExecute, () => !IsLoading);
+            ShowUserInfoCommand = new RelayCommand(ShowUserInfoCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -111,6 +112,8 @@ namespace QMunicate.ViewModels
         public RelayCommand AcceptRequestCommand { get; private set; }
 
         public RelayCommand RejectRequestCommand { get; private set; }
+
+        public RelayCommand ShowUserInfoCommand { get; private set; }
 
         #endregion
 
@@ -281,6 +284,11 @@ namespace QMunicate.ViewModels
 
             IsLoading = false;
 
+        }
+
+        private void ShowUserInfoCommandExecute()
+        {
+            NavigationService.Navigate(ViewLocator.UserInfo, dialog == null ? null : dialog.Id);
         }
 
         private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)
