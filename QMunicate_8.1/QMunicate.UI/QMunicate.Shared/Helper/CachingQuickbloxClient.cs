@@ -13,6 +13,7 @@ namespace QMunicate.Helper
     public interface ICachingQuickbloxClient
     {
         Task<User> GetUserById(int userId);
+        void DeleteUserFromCacheById(int userId);
     }
 
     public class CachingQuickbloxClient : ICachingQuickbloxClient
@@ -48,6 +49,11 @@ namespace QMunicate.Helper
             }
 
             return null;
+        }
+
+        public void DeleteUserFromCacheById(int userId)
+        {
+            users.RemoveAll(u => u.Id == userId);
         }
 
         #endregion

@@ -15,7 +15,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{76F1466A-8B6D-4E39-A767-685A06062A39};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SynthesizeLinkMetadata>true</SynthesizeLinkMetadata>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxPackageDir>D:\QMunicate Builds\</AppxPackageDir>
     <AppxBundlePlatforms>arm</AppxBundlePlatforms>
   </PropertyGroup>
@@ -127,6 +127,9 @@
     <Compile Include="Views\GroupChatPage.xaml.cs">
       <DependentUpon>GroupChatPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GroupEditPage.xaml.cs">
+      <DependentUpon>GroupEditPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GroupInfoPage.xaml.cs">
       <DependentUpon>GroupInfoPage.xaml</DependentUpon>
     </Compile>
@@ -142,6 +145,9 @@
     </Compile>
     <Compile Include="Views\SendRequestPage.xaml.cs">
       <DependentUpon>SendRequestPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsEditPage.xaml.cs">
+      <DependentUpon>SettingsEditPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -187,6 +193,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GroupEditPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GroupInfoPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -204,6 +214,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SendRequestPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsEditPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

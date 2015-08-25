@@ -70,6 +70,16 @@ namespace QMunicate.ViewModels
             get { return new GroupInfoViewModel(); }
         }
 
+        public GroupEditViewModel GroupEditViewModel
+        {
+            get { return new GroupEditViewModel(); }
+        }
+
+        public SettingsEditViewModel SettingsEditViewModel
+        {
+            get { return new SettingsEditViewModel(); }
+        }
+
         #endregion
 
         #region Public methods

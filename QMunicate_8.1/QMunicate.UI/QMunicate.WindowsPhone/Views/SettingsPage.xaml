@@ -36,6 +36,16 @@
         </StackPanel>
     </Grid>
 
+    <Page.BottomAppBar>
+        <CommandBar Background="{StaticResource AppBarBrush}">
+            <AppBarButton Label="edit" Command="{Binding EditCommand}">
+                <AppBarButton.Icon>
+                    <SymbolIcon Symbol="Edit" Foreground="White"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+
     <interactivity:Interaction.Behaviors>
         <behaviors:StatusBarBehavior IsLoading="{Binding IsLoading}"/>
     </interactivity:Interaction.Behaviors>

@@ -154,8 +154,17 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="NEW GROUP" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
-        <TextBox Grid.Row="1" Visibility="{Binding IsEditMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Text="{Binding GroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  PlaceholderText="Group name" Margin="{StaticResource DefaultMargin}"/>
+        <TextBlock Text="NEW GROUP" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}" Visibility="{Binding IsEditMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+        <TextBlock Text="ADD MEMBERS" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}" Visibility="{Binding IsEditMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Grid Grid.Row="1" Visibility="{Binding IsEditMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Height="70" Width="70" Margin="12 12 6 0"
+                   tapListener:TapListener.TapCommand="{Binding ChangeImageCommand}"/>
+            <TextBox Grid.Column="1" VerticalAlignment="Bottom" Text="{Binding GroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  PlaceholderText="Group name" Margin="6 12 12 0"/>
+        </Grid>
         <TextBox Grid.Row="2" x:Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  PlaceholderText="Search" Margin="{StaticResource DefaultMargin}"/>
         <ListBox Grid.Row="3" ItemsSource="{Binding Contacts}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
                          ItemTemplate="{StaticResource LocalUserTemplate}" Margin="{StaticResource DefaultMargin}" />

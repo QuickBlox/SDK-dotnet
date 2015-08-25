@@ -40,6 +40,7 @@ namespace QMunicate.ViewModels
         {
             SignOutCommand = new RelayCommand(SignOutCommandExecute, () => !IsLoading);
             DeleteAccountCommand = new RelayCommand(DeleteAccountCommandExecute, () => !IsLoading);
+            EditCommand = new RelayCommand(EditCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -86,6 +87,8 @@ namespace QMunicate.ViewModels
 
         public RelayCommand DeleteAccountCommand { get; set; }
 
+        public RelayCommand EditCommand { get; set; }
+
         #endregion
 
         #region Navigation
@@ -112,6 +115,7 @@ namespace QMunicate.ViewModels
         {
             SignOutCommand.RaiseCanExecuteChanged();
             DeleteAccountCommand.RaiseCanExecuteChanged();
+            EditCommand.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -129,7 +133,7 @@ namespace QMunicate.ViewModels
                 if (user.BlobId.HasValue)
                 {
                     var imageService = ServiceLocator.Locator.Get<IImageService>();
-                    UserImage = await imageService.GetPrivateImage(user.BlobId.Value);
+                    UserImage = await imageService.GetPrivateImage(user.BlobId.Value, 100, 100);
                 }
             }
             IsLoading = false;
@@ -217,6 +221,11 @@ namespace QMunicate.ViewModels
         private async void DeleteAccountCommandExecute()
         {
 
+        }
+
+        private void EditCommandExecute()
+        {
+            NavigationService.Navigate(ViewLocator.SettingsEdit);
         }
 
         #endregion

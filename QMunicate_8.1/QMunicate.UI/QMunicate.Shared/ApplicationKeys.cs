@@ -4,18 +4,18 @@
     {
         #region Account
 
-        public const string AccountKey = "L2bWSQkrtVCkihnLqK36";
-        public const string ApiBaseEndPoint = "https://apistage3.quickblox.com";
-        public const string ChatEndpoint = "chatstage3.quickblox.com";
+        public const string AccountKey = "vQJA66pMjHDtuNrpAVoq";
+        public const string ApiBaseEndPoint = "https://apistage5.quickblox.com";
+        public const string ChatEndpoint = "chatstage5.quickblox.com";
 
 
         #endregion
 
         #region Application
 
-        public const int ApplicationId = 1;
-        public const string AuthorizationKey = "PbyzYKc33jaVaAQ";
-        public const string AuthorizationSecret = "9y28hmJr-tRAUFH";
+        public const int ApplicationId = 11;
+        public const string AuthorizationKey = "b93JELTaGSLvWpv";
+        public const string AuthorizationSecret = "mf-dBWzc2-NAgUg";
 
 
         #endregion

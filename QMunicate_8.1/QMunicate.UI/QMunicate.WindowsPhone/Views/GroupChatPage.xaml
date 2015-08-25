@@ -75,12 +75,18 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" tapListener:TapListener.TapCommand="{Binding ShowGroupInfoCommand}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding ChatName}" FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}"/>
-            <Image Grid.Column="1" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55"  HorizontalAlignment="Right" Margin="0 0 12 0"/>
+            <TextBlock Text="{Binding ChatName}" FontSize="{StaticResource LargeFontSize}" Margin="12 12 12 0"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding NumberOfMembers, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0} members'}"
+                       FontSize="{StaticResource NormalFontSize}" Margin="12 0 12 12" Foreground="Gray"/>
+            <Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55"  HorizontalAlignment="Right" Margin="0 0 12 0"/>
         </Grid>
         
         <ListBox Grid.Row="1" ItemsSource="{Binding Messages}"

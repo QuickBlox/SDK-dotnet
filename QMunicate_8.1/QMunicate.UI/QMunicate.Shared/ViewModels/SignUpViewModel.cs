@@ -109,16 +109,7 @@ namespace QMunicate.ViewModels
                     dataReader.ReadBytes(userImageBytes);
                 }
 
-                try
-                {
-                    BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.SetSource(streamForImage);
-                    UserImage = bitmapImage;
-                }
-                catch (Exception ex)
-                {
-                    FileLogger.Instance.Log(LogLevel.Warn, "SignUpViewModel. Failed to create BitmapImage. " + ex);
-                }
+                UserImage = Helpers.CreateBitmapImage(streamForImage, 100);
             }
         }
 

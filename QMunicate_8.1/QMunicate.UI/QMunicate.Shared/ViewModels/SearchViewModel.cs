@@ -92,7 +92,10 @@ namespace QMunicate.ViewModels
 
         private async Task GlobalSearch(string searchQuery)
         {
-            GlobalResults.Clear();
+            using (await globalResultsLock.LockAsync())
+            {
+                GlobalResults.Clear();
+            }
             if (string.IsNullOrWhiteSpace(searchQuery)) return;
 
             IsLoading = true;
@@ -112,7 +115,7 @@ namespace QMunicate.ViewModels
                         if (userVm.ImageUploadId.HasValue)
                         {
                             var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value);
+                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100, 100);
                         }
                     }
                 }
@@ -148,7 +151,7 @@ namespace QMunicate.ViewModels
                     var user = await cachingQbClient.GetUserById(userVm.UserId);
                     if (user != null && user.BlobId.HasValue)
                     {
-                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value);
+                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100, 100);
                     }
                 }
             }
@@ -159,18 +162,7 @@ namespace QMunicate.ViewModels
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             if (!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
             var userDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.DialogType == DialogType.Private && d.OccupantIds.Contains(user.UserId));
-            if(userDialog != null)
-                NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = userDialog });
-            else
-            {
-                //TODO: review this
-                var response = await QuickbloxClient.ChatClient.CreateDialogAsync(user.FullName, DialogType.Private, string.Format("{0}", user.UserId));
-                if (response.StatusCode == HttpStatusCode.Created)
-                {
-                    dialogsManager.Dialogs.Add(DialogVm.FromDialog(response.Result));
-                    NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = DialogVm.FromDialog(response.Result) });
-                }
-            }
+            if(userDialog != null) NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = userDialog });
         }
 
         private void OpenGlobalCommandExecute(UserVm user)

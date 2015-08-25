@@ -34,9 +34,7 @@ namespace QMunicate.Models
             UnreadMessageCount = dialog.UnreadMessagesCount;
             OccupantIds = dialog.OccupantsIds;
             DialogType = dialog.Type;
-            int imageUploadId;
-            if (int.TryParse(dialog.Photo, out imageUploadId))
-                ImageUploadId = imageUploadId;
+            Photo = dialog.Photo;
         }
 
         #endregion
@@ -45,7 +43,8 @@ namespace QMunicate.Models
 
         public string Id { get; set; }
         public string XmppRoomJid { get; set; }
-        public int? ImageUploadId { get; set; }
+        public string Photo { get; set; }
+        public int? PrivatePhotoId { get; set; }
         public int? UnreadMessageCount { get; set; }
         public IList<int> OccupantIds { get; set; }
         public DialogType DialogType { get; set; }

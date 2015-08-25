@@ -69,12 +69,6 @@ namespace QMunicate
             await FileLogger.Instance.Log(LogLevel.Error, unhandledExceptionEventArgs.Exception.ToString());
         }
 
-        private async Task EmailException(string exception)
-        {
-            var mailto = new Uri(string.Format("mailto:?to={0}&subject={1}&body={2}", "anatoliy.krivchenko@injoit.com", "Q-municate exception", exception));
-            await Windows.System.Launcher.LaunchUriAsync(mailto);
-        }
-
         /// <summary>
         /// 
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -213,6 +207,8 @@ namespace QMunicate
             dictionary.Add(ViewLocator.NewMessage, typeof(NewMessagePage));
             dictionary.Add(ViewLocator.GroupAddMember, typeof(GroupAddMemberPage));
             dictionary.Add(ViewLocator.GroupInfo, typeof(GroupInfoPage));
+            dictionary.Add(ViewLocator.GroupEdit, typeof(GroupEditPage));
+            dictionary.Add(ViewLocator.SettingsEdit, typeof(SettingsEditPage));
 
             return new PageResolver(dictionary);
         }
