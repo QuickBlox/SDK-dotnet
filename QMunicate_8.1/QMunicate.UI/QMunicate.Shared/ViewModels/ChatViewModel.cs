@@ -288,7 +288,7 @@ namespace QMunicate.ViewModels
 
         private void ShowUserInfoCommandExecute()
         {
-            NavigationService.Navigate(ViewLocator.UserInfo);
+            NavigationService.Navigate(ViewLocator.UserInfo, dialog == null ? null : dialog.Id);
         }
 
         private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)
