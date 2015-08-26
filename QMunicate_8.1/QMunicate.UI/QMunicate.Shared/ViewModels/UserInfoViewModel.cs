@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
@@ -112,18 +113,51 @@ namespace QMunicate.ViewModels
 
         private async void DeleteHistoryCommandExecute()
         {
+            IsLoading = true;
+            if(await DeleteDialog())
+                GoToDialogsPage();
+            IsLoading = false;
+        }
+
+        private async  void RemoveContactCommandExecute()
+        {
+            IsLoading = true;
+            int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
+            var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, dialog.Id);
+            bool isDeleted = privateChatManager.DeleteFromFriends();
+
+            if (isDeleted)
+            {
+                bool isDialogDeleted = await DeleteDialog();
+                if (isDialogDeleted)
+                {
+                    GoToDialogsPage();
+                }
+            }
+            IsLoading = false;
+        }
+
+        private async Task<bool> DeleteDialog()
+        {
             var deleteResponse = await QuickbloxClient.ChatClient.DeleteDialogAsync(dialog.Id);
             if (deleteResponse.StatusCode == HttpStatusCode.OK)
             {
                 var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
                 var thisDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialog.Id);
                 if (thisDialog != null) dialogsManager.Dialogs.Remove(thisDialog);
+                return true;
             }
+
+            return false;
         }
 
-        private void RemoveContactCommandExecute()
+        private void GoToDialogsPage()
         {
-
+            while (NavigationService.BackStack.Count > 1)
+            {
+                NavigationService.BackStack.RemoveAt(NavigationService.BackStack.Count - 1);
+            }
+            NavigationService.GoBack();
         }
 
         #endregion

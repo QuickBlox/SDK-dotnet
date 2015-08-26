@@ -151,6 +151,7 @@ namespace QMunicate.ViewModels
                     var user = await cachingQbClient.GetUserById(userVm.UserId);
                     if (user != null && user.BlobId.HasValue)
                     {
+                        userVm.ImageUploadId = user.BlobId;
                         userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100, 100);
                     }
                 }
@@ -173,6 +174,7 @@ namespace QMunicate.ViewModels
                 {
                     var dialogVm = DialogVm.FromDialog(response.Result);
                     dialogVm.Image = user.Image;
+                    dialogVm.PrivatePhotoId = user.ImageUploadId;
                     dialogVm.Name = user.FullName;
                     dialogsManager.Dialogs.Insert(0, dialogVm);
                     NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = dialogVm });

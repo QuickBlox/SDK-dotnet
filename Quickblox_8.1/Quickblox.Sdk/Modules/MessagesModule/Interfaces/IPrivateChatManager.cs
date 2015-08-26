@@ -15,6 +15,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         Task<bool> AddToFriends(string friendName);
         Task<bool> AcceptFriend();
         Task<bool> RejectFriend();
+        bool DeleteFromFriends();
         Task<bool> SendNotificationMessage(string notificationDialogId);
 
         void SubsribeForPresence();

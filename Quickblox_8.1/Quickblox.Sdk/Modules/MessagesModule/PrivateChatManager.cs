@@ -181,6 +181,41 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
+        public bool DeleteFromFriends()
+        {
+            var msg = new message
+            {
+                to = otherUserJid,
+                type = message.typeEnum.chat
+            };
+            var body = new body { Value = "Contact removed" };
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory { Value = "1" });
+            extraParams.Add(new DialogId { Value = dialogId });
+            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.FriendsRemove).ToString() });
+
+            msg.Add(body, extraParams);
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+
+            quickbloxClient.MessagesClient.DeleteContact(otherUserId);
+            Unsubscribe();
+            SendPresenceInformation(presence.typeEnum.unsubscribed);
+
+            
+            return true;
+        }
+
+        /// <summary>
+        /// Notify a user about a created group dialog.
+        /// </summary>
+        /// <param name="notificationDialogId"></param>
+        /// <returns></returns>
         public async Task<bool> SendNotificationMessage(string notificationDialogId)
         {
             var msg = new message
