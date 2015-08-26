@@ -184,9 +184,9 @@ namespace QMunicate.ViewModels
                     break;
                 }
 
-                if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
+                if (Messages[i].NotificationType == NotificationTypes.FriendsReject)
                 {
-                    IsActiveContactRequest = true;
+                    IsRequestRejected = true;
                     break;
                 }
 
@@ -196,9 +196,9 @@ namespace QMunicate.ViewModels
                     break;
                 }
 
-                if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsReject)
+                if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
                 {
-                    IsRequestRejected = true;
+                    IsActiveContactRequest = true;
                     break;
                 }
             }
@@ -263,6 +263,7 @@ namespace QMunicate.ViewModels
             {
                 IsActiveContactRequest = false;
                 await LoadMessages(dialog.Id);
+                CheckIsMessageSendingAllowed();
             }
             
 
@@ -280,6 +281,7 @@ namespace QMunicate.ViewModels
             {
                 IsActiveContactRequest = false;
                 await LoadMessages(dialog.Id);
+                CheckIsMessageSendingAllowed();
             }
 
             IsLoading = false;
