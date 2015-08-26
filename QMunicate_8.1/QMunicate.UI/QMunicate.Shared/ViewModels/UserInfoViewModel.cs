@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -65,7 +66,6 @@ namespace QMunicate.ViewModels
 
         public async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            MobilePhone = "38095461613";
             var dialogId = e.Parameter as string;
             if (!string.IsNullOrEmpty(dialogId))
             {
@@ -79,7 +79,7 @@ namespace QMunicate.ViewModels
                     if (user != null)
                     {
                         UserName = user.FullName;
-                        //MobilePhone = user.Phone;
+                        MobilePhone = user.Phone;
                         if (user.BlobId.HasValue)
                         {
                             var imageService = ServiceLocator.Locator.Get<IImageService>();
@@ -110,9 +110,15 @@ namespace QMunicate.ViewModels
             NavigationService.GoBack();
         }
 
-        private void DeleteHistoryCommandExecute()
+        private async void DeleteHistoryCommandExecute()
         {
-
+            var deleteResponse = await QuickbloxClient.ChatClient.DeleteDialogAsync(dialog.Id);
+            if (deleteResponse.StatusCode == HttpStatusCode.OK)
+            {
+                var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+                var thisDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialog.Id);
+                if (thisDialog != null) dialogsManager.Dialogs.Remove(thisDialog);
+            }
         }
 
         private void RemoveContactCommandExecute()

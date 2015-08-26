@@ -162,7 +162,22 @@ namespace QMunicate.ViewModels
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             if (!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
             var userDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.DialogType == DialogType.Private && d.OccupantIds.Contains(user.UserId));
-            if(userDialog != null) NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = userDialog });
+            if (userDialog != null)
+            {
+                NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = userDialog });
+            }
+            else
+            {
+                var response = await QuickbloxClient.ChatClient.CreateDialogAsync(user.FullName, DialogType.Private, user.UserId.ToString());
+                if (response.StatusCode == HttpStatusCode.Created)
+                {
+                    var dialogVm = DialogVm.FromDialog(response.Result);
+                    dialogVm.Image = user.Image;
+                    dialogVm.Name = user.FullName;
+                    dialogsManager.Dialogs.Insert(0, dialogVm);
+                    NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = dialogVm });
+                }
+            }
         }
 
         private void OpenGlobalCommandExecute(UserVm user)
