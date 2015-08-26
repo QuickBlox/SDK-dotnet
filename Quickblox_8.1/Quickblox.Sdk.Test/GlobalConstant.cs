@@ -20,9 +20,13 @@ namespace Quickblox.Sdk.Test
 
         public const string ApiBaseEndPoint = "https://apidateifi.quickblox.com";
 
-        public const UInt32 ApplicationId = 8;
-        public const string AuthorizationKey = "XbBTtxTKGfP7ZNK";
-        public const string AuthorizationSecret = "887W4dN3nuAzFY9";
+        //public const UInt32 ApplicationId = 8;
+        //public const string AuthorizationKey = "XbBTtxTKGfP7ZNK";
+        //public const string AuthorizationSecret = "887W4dN3nuAzFY9";
+
+        public const UInt32 ApplicationId = 6;
+        public const string AuthorizationKey = "n5bxC3eeKtqAXFu";
+        public const string AuthorizationSecret = "zcqRqh3gCuFdMRd";
 
         #endregion
     }

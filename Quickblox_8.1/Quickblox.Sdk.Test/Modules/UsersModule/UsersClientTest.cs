@@ -7,15 +7,16 @@ using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Hmacsha;
 using Quickblox.Sdk.Modules.UsersModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Requests;
+using Quickblox.Sdk.Test.Modules.UsersModule.Models;
 
 namespace Quickblox.Sdk.Test.Modules.UsersModule
 {
     [TestClass]
     public class UsersClientTest
     {
-        private const int ApplicationId = 21183;
-        private const string AuthorizationKey = "LxnQksQJsXA2NLU";
-        private const string AuthorizationSecret = "7v2Jkrc7e-99JJX";
+        private const uint ApplicationId = GlobalConstant.ApplicationId;
+        private const string AuthorizationKey = GlobalConstant.AuthorizationKey;
+        private const string AuthorizationSecret = GlobalConstant.AuthorizationSecret;
         private const string Login = "Test654321";
         private const string Password = "Test12345";
 
@@ -121,6 +122,28 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
             Assert.IsTrue(responseUpdateUser.StatusCode == HttpStatusCode.OK);
             Assert.IsTrue(responseUpdateUser.Result.User.FullName == updateUserRequest.User.FullName);
             Assert.IsTrue(responseUpdateUser.Result.User.Email == updateUserRequest.User.Email);
+        }
+
+        [TestMethod]
+        public async Task UpdateUserGericSuccess()
+        {
+            var accessTokenFB = "CAAFYnUVKERcBAPPgCYPqm4UZB19SZBZAlkTMQMhZByMipETIJfeZAbjVYp6xf9usgAbxRsLEmvsuPHzgASr4HW62Bj71HKGgDBTdq4PamjQWpQgBbm9OVHoDoJPMluxLOZA73KVfMS5OeL529WCYJbdRTgAgNcZAlrQxRZBTcFknwJZC5bZCNiGhbbjTDE6DcZAbWcZD";
+            var sessionResponse = await client.CoreClient.CreateSessionWithSocialNetworkKey(ApplicationId, AuthorizationKey, AuthorizationSecret, "facebook",
+                                                                "public_profile",
+                                                                accessTokenFB,
+                                                                null,
+                                                                null);
+            this.client.Token = sessionResponse.Result.Session.Token;
+
+            var extndedRequest = new UpdateUserRequest<ExtendedUserRequest>();
+            extndedRequest.User = new ExtendedUserRequest();
+            extndedRequest.User.ShowMe = ShowMe.all;
+            extndedRequest.User.Gender = Gender.female;
+            extndedRequest.User.AboutMe = "asdasdad";
+            extndedRequest.User.Email = "dasdad@mail.ru";
+            var responseUpdateUser = await this.client.UsersClient.UpdateUserAsync(sessionResponse.Result.Session.UserId, extndedRequest);
+
+            Assert.IsTrue(responseUpdateUser.StatusCode == HttpStatusCode.Created);
         }
 
         [TestMethod]
