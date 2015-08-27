@@ -11,5 +11,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
         public DateTime DateTimeSent { get; set; }
         public string DialogId { get; set; }
         public NotificationTypes NotificationType { get; set; }
+        public bool IsTyping { get; set; }
+        public bool IsPausedTyping { get; set; }
     }
 }

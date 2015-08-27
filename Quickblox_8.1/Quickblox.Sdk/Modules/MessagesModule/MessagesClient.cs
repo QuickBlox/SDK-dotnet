@@ -225,6 +225,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private void OnMessage(message msg)
         {
             var receivedMessage = new Message {From = msg.from, To = msg.to, MessageText = msg.body};
+            receivedMessage.IsTyping =  msg.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.composing) != null;
+            receivedMessage.IsPausedTyping = msg.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.paused) != null;
 
             var extraParams = msg.Element(ExtraParams.XName);
             if (extraParams != null)
