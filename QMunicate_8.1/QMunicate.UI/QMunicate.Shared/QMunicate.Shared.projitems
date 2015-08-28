@@ -19,6 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ContinuationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\RadTextBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\SelectionsTextBlock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\TypingIndicator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ValidationState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToNegationConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
@@ -63,6 +64,10 @@
     <Content Include="$(MSBuildThisFileDirectory)Assets\AvatarPlaceholder.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Themes\TypingIndicator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Themes\ContentButtonStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

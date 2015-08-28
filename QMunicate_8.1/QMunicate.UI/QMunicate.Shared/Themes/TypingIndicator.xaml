@@ -1,0 +1,51 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:QMunicate.Controls">
+
+    <Style TargetType="controls:TypingIndicator">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:TypingIndicator">
+                    <StackPanel  Orientation="Horizontal" HorizontalAlignment="Left" x:Name="PointsStackPanel" Height="20" Visibility="Collapsed">
+                        <StackPanel.Resources>
+                            <Storyboard Duration="0:0:2" x:Name="JumpAnimation">
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Point1Transform" Storyboard.TargetProperty="Y">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-15"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Point2Transform" Storyboard.TargetProperty="Y">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-15"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Point3Transform" Storyboard.TargetProperty="Y">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="-15"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0"/>
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </StackPanel.Resources>
+                        <Ellipse Height="10" Width="10"  Fill="Gray" Margin="3">
+                            <Ellipse.RenderTransform>
+                                <TranslateTransform x:Name="Point1Transform" X="0" Y="0"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                        <Ellipse Height="10" Width="10"  Fill="Gray" Margin="3">
+                            <Ellipse.RenderTransform>
+                                <TranslateTransform x:Name="Point2Transform"  X="0" Y="0"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                        <Ellipse Height="10" Width="10"  Fill="Gray" Margin="3">
+                            <Ellipse.RenderTransform>
+                                <TranslateTransform x:Name="Point3Transform" X="0" Y="0"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,22 +1,22 @@
 ﻿using QMunicate.Core.Command;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageService;
+using QMunicate.Helper;
 using QMunicate.Models;
+using Quickblox.Logger;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.MessageService;
-using QMunicate.Helper;
-using Quickblox.Logger;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Message = Quickblox.Sdk.Modules.ChatModule.Models.Message;
 
 namespace QMunicate.ViewModels
@@ -33,6 +33,13 @@ namespace QMunicate.ViewModels
         private bool isRequestRejected;
         private DialogVm dialog;
         private IPrivateChatManager privateChatManager;
+        private bool isMeTyping;
+        private bool isOtherUserTyping;
+        private readonly DispatcherTimer typingIndicatorTimer = new DispatcherTimer();
+        private readonly TimeSpan typingIndicatorTimeout = new TimeSpan(0, 0, 10);
+        private readonly DispatcherTimer pausedTypingTimer = new DispatcherTimer();
+        private readonly TimeSpan pausedTypingTimeout = new TimeSpan(0, 0, 10);
+        
 
         #endregion
 
@@ -45,6 +52,10 @@ namespace QMunicate.ViewModels
             AcceptRequestCommand = new RelayCommand(AcceptRequestCommandExecute, () => !IsLoading);
             RejectRequestCommand = new RelayCommand(RejectCRequestCommandExecute, () => !IsLoading);
             ShowUserInfoCommand = new RelayCommand(ShowUserInfoCommandExecute, () => !IsLoading);
+            typingIndicatorTimer.Interval = typingIndicatorTimeout;
+            typingIndicatorTimer.Tick += (sender, o) => IsOtherUserTyping = false;
+            pausedTypingTimer.Interval = pausedTypingTimeout;
+            pausedTypingTimer.Tick += PausedTypingTimerOnTick;
         }
 
         #endregion
@@ -56,7 +67,11 @@ namespace QMunicate.ViewModels
         public string NewMessageText
         {
             get { return newMessageText; }
-            set { Set(ref newMessageText, value); }
+            set
+            {
+                Set(ref newMessageText, value);
+                NotifyIsTyping();
+            }
         }
 
         public string ChatName
@@ -105,6 +120,12 @@ namespace QMunicate.ViewModels
         public bool IsMessageSendingAllowed
         {
             get { return !IsActiveContactRequest && !IsRequestRejected && !IsWaitingForContactResponse; }
+        }
+
+        public bool IsOtherUserTyping
+        {
+            get { return isOtherUserTyping; }
+            set { Set(ref isOtherUserTyping, value); }
         }
 
         public RelayCommand SendCommand { get; private set; }
@@ -165,6 +186,8 @@ namespace QMunicate.ViewModels
                 {
                     privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);
                     privateChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
+                    privateChatManager.OnIsTyping += PrivateChatManagerOnOnIsTyping;
+                    privateChatManager.OnPausedTyping += PrivateChatManagerOnOnPausedTyping;
                 }
                 if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))
                     await LoadMessages(chatParameter.Dialog.Id);
@@ -174,6 +197,51 @@ namespace QMunicate.ViewModels
 
             IsLoading = false;
         }
+
+        #region IsTyping functionality
+
+        private void PrivateChatManagerOnOnIsTyping(object sender, EventArgs eventArgs)
+        {
+            var dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+            dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                IsOtherUserTyping = true;
+
+                typingIndicatorTimer.Stop();
+                typingIndicatorTimer.Start();
+            });
+        }
+
+        private void PrivateChatManagerOnOnPausedTyping(object sender, EventArgs eventArgs)
+        {
+            var dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
+            dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                IsOtherUserTyping = false;
+            });
+        }
+
+        private void NotifyIsTyping()
+        {
+            if (privateChatManager == null || isMeTyping) return;
+
+            pausedTypingTimer.Start();
+
+            isMeTyping = true;
+            privateChatManager.NotifyIsTyping();
+        }
+
+        private void PausedTypingTimerOnTick(object sender, object o)
+        {
+            pausedTypingTimer.Stop();
+            if (privateChatManager == null) return;
+
+            privateChatManager.NotifyPausedTyping();
+
+            isMeTyping = false;
+        }
+
+        #endregion
 
         private void CheckIsMessageSendingAllowed()
         {
