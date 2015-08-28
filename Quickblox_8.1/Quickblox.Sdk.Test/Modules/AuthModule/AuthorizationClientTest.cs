@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Hmacsha;
 
 namespace Quickblox.Sdk.Test.Modules.AuthModule
 {
@@ -20,7 +19,7 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
+            client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
         }
 
         [TestMethod]

@@ -50,12 +50,6 @@
     <Compile Include="HmacSha1CryptographicProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj">
-      <Project>{b9ff8451-9750-4b80-bcf6-8d151b10486b}</Project>
-      <Name>Quickblox.Sdk.Cryptographic</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Hmacsha;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System.Collections.Generic;
@@ -42,7 +41,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
-            client1 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, new HmacSha1CryptographicProvider());
+            client1 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint);
             //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
 #if DEBUG
@@ -52,7 +51,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             chatManager1 = client1.MessagesClient.GetPrivateChatManager(id2, dialogId);
             client1.MessagesClient.OnPresenceReceived += (sender, presence) => { if (lastPresencesClient1 != null) lastPresencesClient1.Add(presence); };
 
-            client2 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, new HmacSha1CryptographicProvider());
+            client2 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint);
             //await client2.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client2.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
 #if DEBUG

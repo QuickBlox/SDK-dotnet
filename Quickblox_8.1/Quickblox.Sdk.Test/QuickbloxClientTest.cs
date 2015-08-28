@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Windows.Foundation.Metadata;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Hmacsha;
 
 namespace Quickblox.Sdk.Test
 {
