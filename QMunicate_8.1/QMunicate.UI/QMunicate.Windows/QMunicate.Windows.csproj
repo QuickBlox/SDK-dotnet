@@ -112,14 +112,6 @@
       <Project>{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}</Project>
       <Name>Quickblox.Sdk</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Quickblox_8.1\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj">
-      <Project>{b9ff8451-9750-4b80-bcf6-8d151b10486b}</Project>
-      <Name>Quickblox.Sdk.Cryptographic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Quickblox_8.1\Quickblox.Sdk.Hmacsha\Quickblox.Sdk.Hmacsha.csproj">
-      <Project>{17aa4da9-1669-4248-a18a-a1438b8a791c}</Project>
-      <Name>Quickblox.Sdk.Hmacsha</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\QMunicate.Core\QMunicate.Core.csproj">
       <Project>{b2b5054e-5424-4424-87b7-e6177069f242}</Project>
       <Name>QMunicate.Core</Name>
@@ -173,6 +165,9 @@
     </Compile>
     <Compile Include="Views\SignUpPage.xaml.cs">
       <DependentUpon>SignUpPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserInfoPage.xaml.cs">
+      <DependentUpon>UserInfoPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +237,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SignUpPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserInfoPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

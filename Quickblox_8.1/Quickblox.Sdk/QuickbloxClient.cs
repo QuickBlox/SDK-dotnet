@@ -23,6 +23,12 @@ namespace Quickblox.Sdk
     {
 #region Ctor
 
+        public QuickbloxClient(string apiEndpoint, string chatEndpoint)
+            : this(apiEndpoint, chatEndpoint, new HmacSha1CryptographicProvider())
+        {
+            
+        }
+
         public QuickbloxClient(string apiEndpoint, string chatEndpoint, ICryptographicProvider cryptographicProvider)
         {
             if (apiEndpoint == null) throw new ArgumentNullException("apiEndpoint");

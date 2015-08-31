@@ -8,6 +8,8 @@
     xmlns:selectors="using:QMunicate.Selectors"
     xmlns:behaviors="using:QMunicate.Behaviors"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:tapListener="using:QMunicate.Core.TapListener"
+    xmlns:controls="using:QMunicate.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
@@ -73,8 +75,9 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" tapListener:TapListener.TapCommand="{Binding ShowUserInfoCommand}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
@@ -108,14 +111,15 @@
                 <behaviors:ListBoxAutoscrollBehavior />
             </i:Interaction.Behaviors>
         </ListBox>
+        <controls:TypingIndicator Grid.Row="3" IsUserTyping="{Binding IsOtherUserTyping}" Margin="{StaticResource DefaultMargin}" />
         
-        <Border Grid.Row="3" Height="1" Background="Gray"/>
-        <Grid Grid.Row="4">
+        <Border Grid.Row="4" Height="1" Background="Gray"/>
+        <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding NewMessageText, Mode=TwoWay}" Height="120" TextWrapping="Wrap" PlaceholderText="Message"
+            <TextBox Text="{Binding NewMessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="120" TextWrapping="Wrap" PlaceholderText="Message"
                       Background="White" BorderBrush="White" Margin="{StaticResource DefaultMargin}" IsEnabled="{Binding IsMessageSendingAllowed}"/>
             <Button Grid.Column="1" VerticalAlignment="Top" Command="{Binding SendCommand}" BorderThickness="0"  Style="{StaticResource ContentButtonStyle}">
                 <Button.Content>

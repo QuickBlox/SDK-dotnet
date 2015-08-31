@@ -80,6 +80,11 @@ namespace QMunicate.ViewModels
             get { return new SettingsEditViewModel(); }
         }
 
+        public UserInfoViewModel UserInfoViewModel
+        {
+            get { return new UserInfoViewModel(); }
+        }
+
         #endregion
 
         #region Public methods

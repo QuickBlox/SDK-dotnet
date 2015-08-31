@@ -94,6 +94,7 @@ namespace QMunicate.ViewModels
                 var user = await cachingQbClient.GetUserById(userVm.UserId);
                 if (user != null && user.BlobId.HasValue)
                 {
+                    userVm.ImageUploadId = user.BlobId;
                     userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100, 100);
                 }
             }
@@ -114,12 +115,15 @@ namespace QMunicate.ViewModels
                 NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = userDialog });
             else
             {
-                //TODO: review this
-                var response = await QuickbloxClient.ChatClient.CreateDialogAsync(user.FullName, DialogType.Private, string.Format("{0}", user.UserId));
+                var response = await QuickbloxClient.ChatClient.CreateDialogAsync(user.FullName, DialogType.Private, user.UserId.ToString());
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    dialogsManager.Dialogs.Add(DialogVm.FromDialog(response.Result));
-                    NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = DialogVm.FromDialog(response.Result) });
+                    var dialogVm = DialogVm.FromDialog(response.Result);
+                    dialogVm.Image = user.Image;
+                    dialogVm.PrivatePhotoId = user.ImageUploadId;
+                    dialogVm.Name = user.FullName;
+                    dialogsManager.Dialogs.Insert(0, dialogVm);
+                    NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = dialogVm });
                 }
             }
         }

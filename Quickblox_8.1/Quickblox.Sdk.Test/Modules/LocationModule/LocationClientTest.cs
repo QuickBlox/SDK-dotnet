@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Hmacsha;
 using Quickblox.Sdk.Modules.LocationModule.Models;
 using Quickblox.Sdk.Modules.LocationModule.Requests;
 

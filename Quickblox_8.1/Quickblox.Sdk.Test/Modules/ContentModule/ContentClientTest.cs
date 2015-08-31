@@ -6,7 +6,6 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Hmacsha;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.ContentModule.Models;
@@ -23,7 +22,7 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
+            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
             var sessionResponse = await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId,
                     GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345",
                     deviceRequestRequest:

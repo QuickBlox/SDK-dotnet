@@ -43,6 +43,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Cryptographic\HmacSha1CryptographicProvider.cs" />
+    <Compile Include="Cryptographic\ICryptographicProvider.cs" />
     <Compile Include="GeneralDataModel\Models\Device.cs" />
     <Compile Include="GeneralDataModel\Request\FilterAggregator.cs" />
     <Compile Include="GeneralDataModel\Request\ListRequest.cs" />
@@ -227,10 +229,6 @@
     <ProjectReference Include="..\..\Quickblox.Logger\Quickblox.Logger.csproj">
       <Project>{BFA0A45E-35CC-4EBF-A597-51C9BD9B383E}</Project>
       <Name>Quickblox.Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj">
-      <Project>{b9ff8451-9750-4b80-bcf6-8d151b10486b}</Project>
-      <Name>Quickblox.Sdk.Cryptographic</Name>
     </ProjectReference>
     <ProjectReference Include="..\UbietyXmpp\UbietyXmpp.csproj">
       <Project>{3ce40842-e229-4ade-bb9a-a539453addad}</Project>

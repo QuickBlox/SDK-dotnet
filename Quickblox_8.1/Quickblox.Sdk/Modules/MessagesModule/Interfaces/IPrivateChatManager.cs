@@ -9,13 +9,19 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
 {
     public interface IPrivateChatManager
     {
+        event EventHandler OnIsTyping;
+        event EventHandler OnPausedTyping;
         event EventHandler<Message> OnMessageReceived;
 
         bool SendMessage(string message, Attachment attachment = null);
         Task<bool> AddToFriends(string friendName);
         Task<bool> AcceptFriend();
         Task<bool> RejectFriend();
+        bool DeleteFromFriends();
         Task<bool> SendNotificationMessage(string notificationDialogId);
+
+        void NotifyIsTyping();
+        void NotifyPausedTyping();
 
         void SubsribeForPresence();
         void ApproveSubscribtionRequest();

@@ -4,7 +4,6 @@ using QMunicate.Helper;
 using QMunicate.Views;
 using Quickblox.Sdk;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Hmacsha;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +43,7 @@ namespace QMunicate
         /// </summary>
         public App()
         {
-            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, new HmacSha1CryptographicProvider());
+            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint);
             var fileStorage = new FileStorage();
 
             ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
@@ -209,6 +208,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.GroupInfo, typeof(GroupInfoPage));
             dictionary.Add(ViewLocator.GroupEdit, typeof(GroupEditPage));
             dictionary.Add(ViewLocator.SettingsEdit, typeof(SettingsEditPage));
+            dictionary.Add(ViewLocator.UserInfo, typeof(UserInfoPage));
 
             return new PageResolver(dictionary);
         }

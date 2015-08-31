@@ -5,6 +5,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using XMPP.tags.jabber.client;
+using XMPP.tags.jabber.protocol.chatstates;
 using Attachment = Quickblox.Sdk.Modules.MessagesModule.Models.Attachment;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
@@ -23,6 +24,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #endregion
 
+        public event EventHandler OnIsTyping;
+        public event EventHandler OnPausedTyping;
         public event EventHandler<Message> OnMessageReceived;
 
         #region Ctor
@@ -79,6 +82,32 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             xmppClient.Send(msg);
             return true;
+        }
+
+        public void NotifyIsTyping()
+        {
+            var msg = new message
+            {
+                to = otherUserJid,
+                type = XMPP.tags.jabber.client.message.typeEnum.chat
+            };
+            var composing = new composing();
+            msg.Add(composing);
+
+            xmppClient.Send(msg);
+        }
+
+        public void NotifyPausedTyping()
+        {
+            var msg = new message
+            {
+                to = otherUserJid,
+                type = XMPP.tags.jabber.client.message.typeEnum.chat
+            };
+            var paused = new paused();
+            msg.Add(paused);
+
+            xmppClient.Send(msg);
         }
 
         #region Friends
@@ -181,6 +210,41 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
+        public bool DeleteFromFriends()
+        {
+            var msg = new message
+            {
+                to = otherUserJid,
+                type = message.typeEnum.chat
+            };
+            var body = new body { Value = "Contact removed" };
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory { Value = "1" });
+            extraParams.Add(new DialogId { Value = dialogId });
+            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.FriendsRemove).ToString() });
+
+            msg.Add(body, extraParams);
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+
+            quickbloxClient.MessagesClient.DeleteContact(otherUserId);
+            Unsubscribe();
+            SendPresenceInformation(presence.typeEnum.unsubscribed);
+
+            
+            return true;
+        }
+
+        /// <summary>
+        /// Notify a user about a created group dialog.
+        /// </summary>
+        /// <param name="notificationDialogId"></param>
+        /// <returns></returns>
         public async Task<bool> SendNotificationMessage(string notificationDialogId)
         {
             var msg = new message
@@ -274,6 +338,20 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private void MessagesClientOnOnMessageReceived(object sender, Message message1)
         {
+            if (message1.IsTyping)
+            {
+                var handler = OnIsTyping;
+                if (handler != null) handler(this, new EventArgs());
+            }
+
+            if (message1.IsPausedTyping)
+            {
+                var handler = OnPausedTyping;
+                if (handler != null) handler(this, new EventArgs());
+            }
+
+            if (string.IsNullOrEmpty(message1.MessageText)) return;
+
             if (message1.From.Contains(otherUserJid) && message1.NotificationType != NotificationTypes.NotificationMessage)
             {
                 var handler = OnMessageReceived;

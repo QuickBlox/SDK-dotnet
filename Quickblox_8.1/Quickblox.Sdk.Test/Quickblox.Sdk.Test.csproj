@@ -153,14 +153,6 @@
       <Project>{08fdea8c-a156-4f7e-8b8a-31228d88b3bc}</Project>
       <Name>Quickblox.Sdk</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Quickblox.Sdk.Cryptographic\Quickblox.Sdk.Cryptographic.csproj">
-      <Project>{b9ff8451-9750-4b80-bcf6-8d151b10486b}</Project>
-      <Name>Quickblox.Sdk.Cryptographic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Quickblox.Sdk.Hmacsha\Quickblox.Sdk.Hmacsha.csproj">
-      <Project>{17aa4da9-1669-4248-a18a-a1438b8a791c}</Project>
-      <Name>Quickblox.Sdk.Hmacsha</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Quickblox.Sdk.Test_TemporaryKey.pfx" />

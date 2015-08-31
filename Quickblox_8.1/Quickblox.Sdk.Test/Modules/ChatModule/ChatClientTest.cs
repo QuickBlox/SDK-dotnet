@@ -4,7 +4,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.GeneralDataModel.Request;
-using Quickblox.Sdk.Hmacsha;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ChatModule.Responses;
@@ -19,7 +18,7 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
+            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
             var sessionResponse = await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345");
             client.Token = sessionResponse.Result.Session.Token;
         }
