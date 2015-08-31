@@ -107,10 +107,10 @@ namespace Quickblox.Sdk.Modules.LocationModule
         /// Filters require an exact match property values ​​with an instance of the corresponding parameter value.
         /// </param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<GeoDatumWithUserResponse>> FindGeoDataAsync(FindGeoDataRequest findGeoDataRequest)
+        public async Task<HttpResponse<PagedResponse<GeoDatumWithUserResponse>>> FindGeoDataAsync(FindGeoDataRequest findGeoDataRequest)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var getGeoDataResponse = await HttpService.GetAsync<GeoDatumWithUserResponse, FindGeoDataRequest>(this.quickbloxClient.ApiEndPoint,
+            var getGeoDataResponse = await HttpService.GetAsync<PagedResponse<GeoDatumWithUserResponse>, FindGeoDataRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.FindGeoDataMethod,
                                                                                                         findGeoDataRequest,
                                                                                                         headers);
