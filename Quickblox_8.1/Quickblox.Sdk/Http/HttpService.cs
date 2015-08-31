@@ -78,12 +78,18 @@ namespace Quickblox.Sdk.Http
             if (response.IsSuccessStatusCode)
             {
                 httpResponse.Result = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+#if DEBUG || TEST_RELEASE
                 await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("CONTENT: ", "Byte[] content. Length:", httpResponse.Result.Length));
+#endif
+
             }
             else
             {
                 var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+#if DEBUG || TEST_RELEASE
                 await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("CONTENT: ", stringContent));
+#endif
+
 
                 try
                 {
@@ -248,7 +254,10 @@ namespace Quickblox.Sdk.Http
         private static async Task<HttpResponse<TResult>> ParseResult<TResult>(ISerializer serializer, HttpResponseMessage response)
         {
             var stringContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+#if DEBUG || TEST_RELEASE
             await FileLogger.Instance.Log(LogLevel.Debug, String.Concat("CONTENT: ", stringContent));
+#endif
+
             HttpResponse<TResult> httpResponse = new HttpResponse<TResult>();
 
             serializer = serializer ?? (response.Content.Headers.ContentType != null ? FactorySerializer.CreateSerializer(response.Content.Headers.ContentType.MediaType) : FactorySerializer.CreateSerializer());

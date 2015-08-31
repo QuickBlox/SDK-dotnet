@@ -43,6 +43,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AsyncLock\AsyncLock.cs" />
     <Compile Include="Cryptographic\HmacSha1CryptographicProvider.cs" />
     <Compile Include="Cryptographic\ICryptographicProvider.cs" />
     <Compile Include="GeneralDataModel\Models\Device.cs" />
@@ -51,6 +52,8 @@
     <Compile Include="GeneralDataModel\Request\SortOperator.cs" />
     <Compile Include="Http\BytesContent.cs" />
     <Compile Include="IQuickbloxClient.cs" />
+    <Compile Include="Logger\FileLogger.cs" />
+    <Compile Include="Logger\ILogger.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSearchOperator.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSortFilter.cs" />
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs" />
@@ -225,10 +228,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Quickblox.Logger\Quickblox.Logger.csproj">
-      <Project>{BFA0A45E-35CC-4EBF-A597-51C9BD9B383E}</Project>
-      <Name>Quickblox.Logger</Name>
-    </ProjectReference>
     <ProjectReference Include="..\UbietyXmpp\UbietyXmpp.csproj">
       <Project>{3ce40842-e229-4ade-bb9a-a539453addad}</Project>
       <Name>UbietyXmpp</Name>
