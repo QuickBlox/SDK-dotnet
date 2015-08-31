@@ -40,8 +40,6 @@ namespace Quickblox.Sdk
 
         string Token { get; set; }
 
-        int CurrentUserId { get; set; }
-
         Task GetAccountSettingsAsync(string accountKey);
     }
 }

@@ -22,6 +22,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Quickblox.Sdk;
 
 namespace QMunicate.ViewModels
 {
@@ -175,6 +176,7 @@ namespace QMunicate.ViewModels
             if (existingDialog != null)
             {
                 var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+                int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
                 foreach (int occupantId in existingDialog.OccupantIds)
                 {
                     var correspondingContact = allContacts.FirstOrDefault(c => c.Item.UserId == occupantId);
@@ -182,7 +184,7 @@ namespace QMunicate.ViewModels
                     {
                         correspondingContact.IsSelected = true;
                     }
-                    else if (occupantId != QuickbloxClient.CurrentUserId)
+                    else if (occupantId != currentUserId)
                     {
                         var notInContactsUser = await cachingQbClient.GetUserById(occupantId);
                         if (notInContactsUser != null)
@@ -261,10 +263,11 @@ namespace QMunicate.ViewModels
         private async Task UpdateGroup()
         {
             var selectedContacts = allContacts.Where(c => c.IsSelected).ToList();
+            int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
 
             var updateDialogRequest = new UpdateDialogRequest {DialogId = editedDialog.Id};
             var addedUsers = selectedContacts.Where(c => !editedDialog.OccupantIds.Contains(c.Item.UserId)).Select(u => u.Item.UserId).ToArray();
-            var removedUsers = editedDialog.OccupantIds.Where(c => selectedContacts.All(sc => sc.Item.UserId != c) && c != QuickbloxClient.CurrentUserId).ToArray();
+            var removedUsers = editedDialog.OccupantIds.Where(c => selectedContacts.All(sc => sc.Item.UserId != c) && c != currentUserId).ToArray();
             if (addedUsers.Any())
                 updateDialogRequest.PushAll = new EditedOccupants() {OccupantsIds = addedUsers};
             if (removedUsers.Any())
@@ -310,8 +313,9 @@ namespace QMunicate.ViewModels
 
                 var groupNotificationMessage = await BuildGroupNotificationMessage(selectedContacts);
 
+                int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
                 var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
-                groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
+                groupChatManager.JoinGroup(currentUserId.ToString());
                 var isGroupMessageSent = groupChatManager.SendMessage(groupNotificationMessage);
                 if (isGroupMessageSent)
                     NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
@@ -321,7 +325,7 @@ namespace QMunicate.ViewModels
         private async Task<string> BuildGroupNotificationMessage(List<SelectableListBoxItem<UserVm>> selectedContacts)
         {
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var currentUser = await cachingQbClient.GetUserById(QuickbloxClient.CurrentUserId);
+            var currentUser = await cachingQbClient.GetUserById(SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId));
 
             var addedUsersBuilder = new StringBuilder();
             foreach (var user in selectedContacts)

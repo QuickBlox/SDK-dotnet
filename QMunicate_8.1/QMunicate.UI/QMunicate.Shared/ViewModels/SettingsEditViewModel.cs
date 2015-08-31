@@ -16,6 +16,7 @@ using QMunicate.Core.DependencyInjection;
 using QMunicate.Helper;
 using QMunicate.Models;
 using Quickblox.Logger;
+using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.UsersModule.Models;
@@ -120,7 +121,7 @@ namespace QMunicate.ViewModels
         {
             IsLoading = true;
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            currentUser = await cachingQbClient.GetUserById(QuickbloxClient.CurrentUserId);
+            currentUser = await cachingQbClient.GetUserById(SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId));
             if (currentUser != null)
             {
                 UserName = currentUser.FullName;

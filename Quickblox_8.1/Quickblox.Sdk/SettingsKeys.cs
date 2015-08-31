@@ -17,5 +17,7 @@ namespace Quickblox.Sdk
 
         #endregion
 
+        public static string CurrentUserId = "CurrentUserId";
+
     }
 }

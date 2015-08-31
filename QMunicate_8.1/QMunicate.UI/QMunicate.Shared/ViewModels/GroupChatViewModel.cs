@@ -14,6 +14,7 @@ using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Quickblox.Sdk;
 
 namespace QMunicate.ViewModels
 {
@@ -27,6 +28,7 @@ namespace QMunicate.ViewModels
         private DialogVm dialog;
         private IGroupChatManager groupChatManager;
         private int numberOfMembers;
+        private int currentUserId;
 
         #endregion
 
@@ -115,6 +117,8 @@ namespace QMunicate.ViewModels
         {
             IsLoading = true;
 
+            currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
+
             if (chatParameter.Dialog != null)
             {
                 dialog = chatParameter.Dialog;
@@ -122,11 +126,11 @@ namespace QMunicate.ViewModels
                 ChatImage = chatParameter.Dialog.Image;
                 NumberOfMembers = chatParameter.Dialog.OccupantIds.Count;
 
-                await FileLogger.Instance.Log(LogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", QuickbloxClient.CurrentUserId, dialog.XmppRoomJid));
+                await FileLogger.Instance.Log(LogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", currentUserId, dialog.XmppRoomJid));
 
                 groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(dialog.XmppRoomJid, chatParameter.Dialog.Id);
                 groupChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
-                groupChatManager.JoinGroup(QuickbloxClient.CurrentUserId.ToString());
+                groupChatManager.JoinGroup(currentUserId.ToString());
 
                 if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))
                     await LoadMessages(chatParameter.Dialog.Id);
@@ -143,7 +147,7 @@ namespace QMunicate.ViewModels
                 Messages.Clear();
                 foreach (Quickblox.Sdk.Modules.ChatModule.Models.Message message in response.Result.Items)
                 {
-                    var msg = MessageVm.FromMessage(message, QuickbloxClient.CurrentUserId);
+                    var msg = MessageVm.FromMessage(message, currentUserId);
                     Messages.Add(msg);
                 }
             }
@@ -178,7 +182,7 @@ namespace QMunicate.ViewModels
             };
 
             var senderId = GetSenderIdFromJid(message.From);
-            if (senderId == QuickbloxClient.CurrentUserId)
+            if (senderId == currentUserId)
             {
                 messageVm.MessageType = MessageType.Outgoing;
             }
