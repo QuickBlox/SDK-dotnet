@@ -20,7 +20,7 @@ namespace Quickblox.Sdk.Test.Modules.LocationModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
-            var sessionResponse = await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345");
+            var sessionResponse = await this.client.CoreClient.CreateSessionBaseAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret);
             client.Token = sessionResponse.Result.Session.Token;
         }
 
@@ -127,8 +127,20 @@ namespace Quickblox.Sdk.Test.Modules.LocationModule
         [TestMethod]
         public async Task FindGeoDataSuccessTest()
         {
+            var accessTokenFB = "CAAFYnUVKERcBAPPgCYPqm4UZB19SZBZAlkTMQMhZByMipETIJfeZAbjVYp6xf9usgAbxRsLEmvsuPHzgASr4HW62Bj71HKGgDBTdq4PamjQWpQgBbm9OVHoDoJPMluxLOZA73KVfMS5OeL529WCYJbdRTgAgNcZAlrQxRZBTcFknwJZC5bZCNiGhbbjTDE6DcZAbWcZD";
+            var sessionResponse = await client.CoreClient.CreateSessionWithSocialNetworkKey(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "facebook",
+                                                                "public_profile",
+                                                                accessTokenFB,
+                                                                null,
+                                                                null);
+            this.client.Token = sessionResponse.Result.Session.Token;
+
             var findFilterRequest = new FindGeoDataRequest();
-            findFilterRequest.UserId = 2701456;
+            //findFilterRequest.UserId = 2701456;
+
+            // https://api.quickblox.com/geodata/find.json?current_position=25.34336612%3B-5.34546612&radius=1000&page=1&per_page=10
+            findFilterRequest.CurrentPosition = String.Format("{0}%3B{1}", 25.34336612,-5.34546612);
+            findFilterRequest.Radius = 100;
             var getResponse = await this.client.LocationClient.FindGeoDataAsync(findFilterRequest);
             Assert.AreEqual(getResponse.StatusCode, HttpStatusCode.OK);
             Assert.IsNotNull(getResponse.Result);

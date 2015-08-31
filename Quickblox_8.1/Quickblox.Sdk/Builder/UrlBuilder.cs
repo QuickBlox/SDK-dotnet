@@ -46,6 +46,7 @@ namespace Quickblox.Sdk.Builder
             if (settings == null) throw new ArgumentNullException("settings");
             var properties = settings.GetType().GetRuntimeProperties();
             var navBody = new StringBuilder();
+            var flag = false;
             foreach (
                 var property in properties.Where(pr => pr.GetCustomAttribute<JsonPropertyAttribute>() != null).OrderBy(pr => pr.GetCustomAttribute<JsonPropertyAttribute>().PropertyName))
             {
@@ -57,12 +58,21 @@ namespace Quickblox.Sdk.Builder
 
                     if (value == null) continue;
 
-                    navBody.Append(String.Format("{0}={1}", attribute.PropertyName, value));
+                    if (flag)
+                    {
+                        navBody.Append(String.Format("&{0}={1}", attribute.PropertyName, value));
+                        continue;
+                    }
+                    navBody.Append(String.Format("&{0}={1}", attribute.PropertyName, value));
+                    flag = true;
                 }
             }
 
             if (settings.Filter != null)
+            {
+                navBody.Append("&");
                 navBody.Append(settings.Filter.BuildFilter());
+            }
 
             return navBody.ToString();
         }
