@@ -10,6 +10,7 @@ using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Helper;
 using QMunicate.Models;
+using Quickblox.Sdk;
 
 namespace QMunicate.ViewModels 
 {
@@ -74,7 +75,8 @@ namespace QMunicate.ViewModels
                 dialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialogId);
                 if (dialog != null)
                 {
-                    int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
+                    var currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
+                    int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != currentUserId);
                     var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
                     var user = await cachingQbClient.GetUserById(otherUserId);
                     if (user != null)
@@ -122,7 +124,8 @@ namespace QMunicate.ViewModels
         private async  void RemoveContactCommandExecute()
         {
             IsLoading = true;
-            int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
+            var currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
+            int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != currentUserId);
             var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, dialog.Id);
             bool isDeleted = privateChatManager.DeleteFromFriends();
 

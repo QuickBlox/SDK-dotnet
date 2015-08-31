@@ -17,6 +17,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Quickblox.Sdk;
 using Message = Quickblox.Sdk.Modules.ChatModule.Models.Message;
 
 namespace QMunicate.ViewModels
@@ -32,6 +33,7 @@ namespace QMunicate.ViewModels
         private bool isWaitingForContactResponse;
         private bool isRequestRejected;
         private DialogVm dialog;
+        private int currentUserId;
         private IPrivateChatManager privateChatManager;
         private bool isMeTyping;
         private bool isOtherUserTyping;
@@ -173,14 +175,16 @@ namespace QMunicate.ViewModels
         {
             IsLoading = true;
 
+            currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
+
             if (chatParameter.Dialog != null)
             {
                 dialog = chatParameter.Dialog;
                 ChatName = chatParameter.Dialog.Name;
                 ChatImage = chatParameter.Dialog.Image;
 
-                int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != QuickbloxClient.CurrentUserId);
-                await FileLogger.Instance.Log(LogLevel.Debug, string.Format("Initializing Chat page. CurrentUserId: {0}. OtherUserId: {1}.", QuickbloxClient.CurrentUserId, otherUserId));
+                int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != currentUserId);
+                await FileLogger.Instance.Log(LogLevel.Debug, string.Format("Initializing Chat page. CurrentUserId: {0}. OtherUserId: {1}.", currentUserId, otherUserId));
 
                 if (otherUserId != 0)
                 {
@@ -280,7 +284,7 @@ namespace QMunicate.ViewModels
                 Messages.Clear();
                 foreach (Message message in response.Result.Items)
                 {
-                    var msg = MessageVm.FromMessage(message, QuickbloxClient.CurrentUserId);
+                    var msg = MessageVm.FromMessage(message, currentUserId);
                     Messages.Add(msg);
                 }
             }

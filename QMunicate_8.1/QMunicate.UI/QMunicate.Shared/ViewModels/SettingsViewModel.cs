@@ -126,7 +126,7 @@ namespace QMunicate.ViewModels
         {
             IsLoading = true;
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var user = await cachingQbClient.GetUserById(QuickbloxClient.CurrentUserId);
+            var user = await cachingQbClient.GetUserById(SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId));
             if (user != null)
             {
                 UserName = user.FullName;
@@ -183,7 +183,7 @@ namespace QMunicate.ViewModels
             QuickbloxClient.MessagesClient.Disconnect();
             await QuickbloxClient.CoreClient.DeleteSessionAsync(QuickbloxClient.Token);
             QuickbloxClient.Token = null;
-            QuickbloxClient.CurrentUserId = -1;
+            SettingsManager.Instance.DeleteFromSettings(SettingsKeys.CurrentUserId);
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             dialogsManager.Dialogs.Clear();

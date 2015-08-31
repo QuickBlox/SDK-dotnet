@@ -181,7 +181,7 @@ namespace QMunicate
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     quickbloxClient.Token = response.Result.Session.Token;
-                    quickbloxClient.CurrentUserId = response.Result.Session.UserId;
+                    SettingsManager.Instance.WriteToSettings(SettingsKeys.CurrentUserId, response.Result.Session.UserId);
                     navigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter { CurrentUserId = response.Result.Session.UserId, Password = password });
                     return;
                 }

@@ -9,6 +9,7 @@ using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
+using Quickblox.Sdk;
 using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace QMunicate.ViewModels
@@ -108,7 +109,7 @@ namespace QMunicate.ViewModels
             if (response.StatusCode == HttpStatusCode.Created)
             {
                 QuickbloxClient.Token = response.Result.Session.Token;
-                QuickbloxClient.CurrentUserId = response.Result.Session.UserId;
+                SettingsManager.Instance.WriteToSettings(SettingsKeys.CurrentUserId, response.Result.Session.UserId);
                 NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
             }
             else await Helpers.ShowErrors(response.Errors, messageService);

@@ -91,8 +91,6 @@ namespace Quickblox.Sdk
 
         public string Token { get; set; }
 
-        public int CurrentUserId { get; set; }
-
 #endregion
 
 #region Public Members

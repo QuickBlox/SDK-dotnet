@@ -55,12 +55,13 @@ namespace QMunicate.Helper
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     Dialogs.Clear();
+                    var currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
                     foreach (var dialog in response.Result.Items)
                     {
                         if (dialog.Type == DialogType.Private)
                         {
                             var dialogVm = DialogVm.FromDialog(dialog);
-                            int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != quickbloxClient.CurrentUserId);
+                            int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != currentUserId);
                             dialogVm.Name = GetUserName(otherUserId);
 
                             Dialogs.Add(dialogVm);
@@ -84,7 +85,7 @@ namespace QMunicate.Helper
                     {
                         if (dialogVm.DialogType == DialogType.Private)
                         {
-                            int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != quickbloxClient.CurrentUserId);
+                            int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != currentUserId);
                             var user = await cachingQbClient.GetUserById(otherUserId);
                             if (user != null)
                             {

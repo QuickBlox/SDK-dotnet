@@ -102,10 +102,11 @@ namespace QMunicate.ViewModels
             var response = await QuickbloxClient.UsersClient.GetUserByFullNameAsync(searchQuery, null, null);
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
                 using (await globalResultsLock.LockAsync())
                 {
                     GlobalResults.Clear();
-                    foreach (UserResponse item in response.Result.Items.Where(i => i.User.Id != QuickbloxClient.CurrentUserId))
+                    foreach (UserResponse item in response.Result.Items.Where(i => i.User.Id != currentUserId))
                     {
                         GlobalResults.Add(UserVm.FromUser(item.User));
                     }
