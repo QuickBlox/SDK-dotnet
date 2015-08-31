@@ -15,7 +15,7 @@ using Quickblox.Sdk.Serializer;
 
 namespace Quickblox.Sdk.Http
 {
-    public class HttpService : HttpBase
+    internal class HttpService : HttpBase
     {
         static HttpService()
         {

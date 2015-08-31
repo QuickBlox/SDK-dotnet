@@ -13,6 +13,7 @@ using Quickblox.Sdk.Modules.UsersModule;
 using System;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Modules.LocationModule;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 
 namespace Quickblox.Sdk
 {
@@ -37,9 +38,8 @@ namespace Quickblox.Sdk
 
             ApiEndPoint = apiEndpoint;
             ChatEndpoint = chatEndpoint;
-            CryptographicProvider = cryptographicProvider;
 
-            this.CoreClient = new AuthorizationClient(this);
+            this.CoreClient = new AuthorizationClient(this, cryptographicProvider);
             this.ChatClient = new ChatClient(this);
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
@@ -51,44 +51,70 @@ namespace Quickblox.Sdk
 
 #endregion
 
-#region Events
-
-        public event EventHandler<Boolean> ClientStatusChanged;
-
-#endregion
-
 #region Properties
 
-        public ICryptographicProvider CryptographicProvider { get; private set; }
-
+        /// <summary>
+        /// The content module allows to manage app contents and settings.
+        /// </summary>
         public ContentClient ContentClient { get; private set; }
         
+        /// <summary>
+        /// The authorization module allows to manage users' sessions.
+        /// </summary>
         public AuthorizationClient CoreClient { get; private set; }
 
+        /// <summary>
+        /// The chat module allows to manage users' dialogs.
+        /// </summary>
         public ChatClient ChatClient { get; private set; }
 
+        /// <summary>
+        /// The user module manages all things related to user accounts handling, authentication, account data, password reminding etc.
+        /// </summary>
         public UsersClient UsersClient { get; private set; }
 
+        /// <summary>
+        /// The notification module allows to manage push and email notifications to users.
+        /// </summary>
         public NotificationClient NotificationClient { get; private set; }
 
+        /// <summary>
+        /// The location module allows to work with users' locations.
+        /// </summary>
         public LocationClient LocationClient { get; private set; }
 
-        public MessagesClient MessagesClient { get; private set; }
+        /// <summary>
+        /// The messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
+        /// </summary>
+        public IMessagesClient MessagesClient { get; private set; }
 
+        /// <summary>
+        /// Custom Objects module provides flexibility to define any data structure(schema) you need.
+        /// Schema is defined in QuickBlox Administration Panel. The schema is called Class and contains field names and their type.
+        /// </summary>
         public CustomObjectsClient CustomObjectsClient { get; private set; }
 
         /// <summary>
-        /// Возварщает время последнего запроса в UTC.
+        /// UTC DateTime of the last request to the server.
         /// </summary>
         public DateTime LastRequest
         {
             get { return HttpBase.LastRequest; }
         }
 
+        /// <summary>
+        /// API endpoint
+        /// </summary>
         public string ApiEndPoint { get; private set; }
 
+        /// <summary>
+        /// Chat endpoint
+        /// </summary>
         public string ChatEndpoint { get; private set; }
 
+        /// <summary>
+        /// Quickblox token. Must be set before calling any methods that require authentication.
+        /// </summary>
         public string Token { get; set; }
 
 #endregion

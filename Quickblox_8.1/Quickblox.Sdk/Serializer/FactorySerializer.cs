@@ -2,7 +2,7 @@
 
 namespace Quickblox.Sdk.Serializer
 {
-    public class FactorySerializer : IFactorySerializer
+    internal class FactorySerializer : IFactorySerializer
     {
         private const string JsonContentType = "application/json";
         private const string XmlContentType = "application/xml";

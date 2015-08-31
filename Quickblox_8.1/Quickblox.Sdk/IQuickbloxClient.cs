@@ -7,6 +7,7 @@ using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.CustomObjectModule;
 using Quickblox.Sdk.Modules.LocationModule;
 using Quickblox.Sdk.Modules.MessagesModule;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 
@@ -14,8 +15,6 @@ namespace Quickblox.Sdk
 {
     public interface IQuickbloxClient
     {
-        ICryptographicProvider CryptographicProvider { get; }
-
         ContentClient ContentClient { get; }
 
         AuthorizationClient CoreClient { get; }
@@ -28,7 +27,7 @@ namespace Quickblox.Sdk
 
         NotificationClient NotificationClient { get; }
 
-        MessagesClient MessagesClient { get; }
+        IMessagesClient MessagesClient { get; }
 
         CustomObjectsClient CustomObjectsClient { get; }
 

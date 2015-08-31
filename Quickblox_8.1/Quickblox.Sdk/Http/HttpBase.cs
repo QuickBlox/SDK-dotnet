@@ -12,7 +12,7 @@ using Quickblox.Sdk.GeneralDataModel.Response;
 
 namespace Quickblox.Sdk.Http
 {
-    public class HttpBase
+    internal class HttpBase
     {
         #region Fields
 

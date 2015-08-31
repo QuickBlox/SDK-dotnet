@@ -29,7 +29,7 @@ namespace Quickblox.Sdk.Modules.LocationModule
         /// Initializes a new instance of the <see cref="LocationClient"/> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        public LocationClient(IQuickbloxClient client)
+        internal LocationClient(IQuickbloxClient client)
         {
             this.quickbloxClient = client;
         }

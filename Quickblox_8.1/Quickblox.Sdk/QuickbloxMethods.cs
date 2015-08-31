@@ -2,7 +2,7 @@
 
 namespace Quickblox.Sdk.Core
 {
-    public static class QuickbloxMethods
+    internal static class QuickbloxMethods
     {
         public const string AccountMethod = "/account_settings.json";
 

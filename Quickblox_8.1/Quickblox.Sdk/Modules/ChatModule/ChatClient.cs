@@ -22,7 +22,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
         #region Ctor
 
-        public ChatClient(IQuickbloxClient quickbloxClient)
+        internal ChatClient(IQuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
         }

@@ -10,6 +10,7 @@ using Quickblox.Sdk.Modules.AuthModule.Models;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
+using Quickblox.Sdk.Cryptographic;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Serializer;
@@ -19,10 +20,12 @@ namespace Quickblox.Sdk.Modules.AuthModule
     public class AuthorizationClient
     {
         private readonly IQuickbloxClient quickbloxClient;
+        private readonly ICryptographicProvider cryptographicProvider;
 
-        public AuthorizationClient(IQuickbloxClient client)
+        internal AuthorizationClient(IQuickbloxClient client, ICryptographicProvider cryptographicProvider)
         {
             this.quickbloxClient = client;
+            this.cryptographicProvider = cryptographicProvider;
         }
         
         public async Task<HttpResponse<SessionResponse>> CreateSessionBaseAsync(UInt32 applicationId, String authKey, String authSecret, DeviceRequest deviceRequestRequest = null)
@@ -211,7 +214,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
                 }
             }
 
-            return quickbloxClient.CryptographicProvider.Encrypt(navBody.ToString(), authSecret);
+            return cryptographicProvider.Encrypt(navBody.ToString(), authSecret);
         }
     }
 }

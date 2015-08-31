@@ -24,7 +24,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// Initializes a new instance of the <see cref="ContentClient"/> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        public ContentClient(IQuickbloxClient client)
+        internal ContentClient(IQuickbloxClient client)
         {
             this.quickbloxClient = client;
         }

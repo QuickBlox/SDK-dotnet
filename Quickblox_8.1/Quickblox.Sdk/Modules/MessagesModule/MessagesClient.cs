@@ -27,8 +27,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private IQuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
-        private string chatEndpoint;
-        private int appId;
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
         private bool isReady;
         private bool isUserDisconnected;
@@ -46,7 +44,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        public MessagesClient(IQuickbloxClient quickbloxClient)
+        internal MessagesClient(IQuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
             Contacts = new List<Contact>();
@@ -62,6 +60,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         public List<Presence> Presences { get; private set; }
 
         public bool IsConnected { get { return xmppClient != null && xmppClient.Connected && isReady; } }
+
+        public string ChatEndpoint { get; private set; }
+
+        public int ApplicationId { get; private set; }
+
 
 #if DEBUG || TEST_RELEASE
         public string DebugClientName { get; set; }
@@ -157,8 +160,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             Contacts = new List<Contact>();
             Presences = new List<Presence>();
 
-            chatEndpoint = chatEndpointUrl;
-            appId = applicationId;
+            ChatEndpoint = chatEndpointUrl;
+            ApplicationId = applicationId;
             isUserDisconnected = false;
 
             client.Settings.Hostname = chatEndpointUrl;
@@ -314,9 +317,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             }
         }
 
-        internal string BuildJid(int userId)
+        private string BuildJid(int userId)
         {
-            return string.Format("{0}-{1}@{2}", userId, appId, chatEndpoint);
+            return string.Format("{0}-{1}@{2}", userId, ApplicationId, ChatEndpoint);
         }
 
         internal int GetUserIdFromJid(string jid)

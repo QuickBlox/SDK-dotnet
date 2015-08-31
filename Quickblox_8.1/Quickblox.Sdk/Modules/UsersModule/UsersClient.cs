@@ -28,7 +28,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// Initializes a new instance of the <see cref="UsersClient"/> class.
         /// </summary>
         /// <param name="quickbloxClient">The quickblox client.</param>
-        public UsersClient(IQuickbloxClient quickbloxClient)
+        internal UsersClient(IQuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
         }

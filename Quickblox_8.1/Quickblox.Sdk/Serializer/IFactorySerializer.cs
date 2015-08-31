@@ -2,7 +2,7 @@
 
 namespace Quickblox.Sdk.Serializer
 {
-    public interface IFactorySerializer
+    internal interface IFactorySerializer
     {
         ISerializer CreateSerializer(String contentType);
 

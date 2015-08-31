@@ -2,7 +2,7 @@
 
 namespace Quickblox.Sdk.Serializer
 {
-    public interface ISerializer
+    internal interface ISerializer
     {
         String ContentType { get; }
 

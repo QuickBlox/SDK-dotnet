@@ -33,7 +33,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         internal PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId = null)
         {
             this.otherUserId = otherUserId;
-            this.otherUserJid = quickbloxClient.MessagesClient.BuildJid(otherUserId);
+            this.otherUserJid = string.Format("{0}-{1}@{2}", otherUserId, quickbloxClient.MessagesClient.ApplicationId, quickbloxClient.MessagesClient.ChatEndpoint);
             this.dialogId = dialogId;
             this.quickbloxClient = quickbloxClient;
             this.xmppClient = xmppClient;

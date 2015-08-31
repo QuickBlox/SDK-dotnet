@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Quickblox.Sdk.Builder
 {
-    public static class RequestHeadersBuilder
+    internal static class RequestHeadersBuilder
     {
         public static IDictionary<String, IEnumerable<String>> GetDefaultHeaders()
         {

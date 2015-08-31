@@ -5,7 +5,7 @@ using Windows.Storage.Streams;
 
 namespace Quickblox.Sdk.Cryptographic
 {
-    public class HmacSha1CryptographicProvider : ICryptographicProvider
+    internal class HmacSha1CryptographicProvider : ICryptographicProvider
     {
         public string Encrypt(string baseString, string keyString)
         {

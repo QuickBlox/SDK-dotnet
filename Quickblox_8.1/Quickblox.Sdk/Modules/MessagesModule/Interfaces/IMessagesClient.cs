@@ -11,13 +11,15 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         event EventHandler<Presence> OnPresenceReceived;
         event EventHandler OnContactsChanged;
 
+        int ApplicationId { get; }
+        string ChatEndpoint { get; }
         List<Contact> Contacts { get; }
         List<Presence> Presences { get; }
         bool IsConnected { get; }
 
         Task Connect(string chatEndpoint, int userId, int applicationId, string password);
         void Disconnect();
-        IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId);
+        IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId = null);
         IGroupChatManager GetGroupChatManager(string groupJid, string dialogId);
         void ReloadContacts();
         void AddContact(Contact contact);

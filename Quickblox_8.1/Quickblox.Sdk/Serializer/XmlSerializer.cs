@@ -9,7 +9,7 @@ using Quickblox.Sdk.Core;
 
 namespace Quickblox.Sdk.Serializer
 {
-    public class XmlSerializer : ISerializer
+    internal class XmlSerializer : ISerializer
     {
         public string ContentType
         {

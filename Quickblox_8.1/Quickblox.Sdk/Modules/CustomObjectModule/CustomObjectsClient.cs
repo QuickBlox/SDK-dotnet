@@ -28,7 +28,7 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         /// Initializes a new instance of the <see cref="CustomObjectsClient"/> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        public CustomObjectsClient(IQuickbloxClient client)
+        internal CustomObjectsClient(IQuickbloxClient client)
         {
             this.quickbloxClient = client;
         }

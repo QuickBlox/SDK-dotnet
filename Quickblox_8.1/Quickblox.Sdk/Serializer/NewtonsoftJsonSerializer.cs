@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Quickblox.Sdk.Serializer
 {
-    public class NewtonsoftJsonSerializer : ISerializer
+    internal class NewtonsoftJsonSerializer : ISerializer
     {
         public string ContentType
         {
