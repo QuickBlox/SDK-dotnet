@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.Modules.LocationModule.Models;
 using Quickblox.Sdk.Modules.LocationModule.Requests;
+using Quickblox.Sdk.Cryptographic;
 
 namespace Quickblox.Sdk.Test.Modules.LocationModule
 {
