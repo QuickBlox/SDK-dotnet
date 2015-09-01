@@ -5,7 +5,7 @@ namespace Quickblox.Sdk.Builder
     /// <summary>
     /// DateTimeBuilder class.
     /// </summary>
-    public static class DateTimeBuilder
+    internal static class DateTimeBuilder
     {
         #region Fields
 
