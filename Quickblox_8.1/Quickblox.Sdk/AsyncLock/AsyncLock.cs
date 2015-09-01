@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Quickblox.Sdk.AsyncLock
 {
-    public class AsyncSemaphore
+    internal class AsyncSemaphore
     {
         private readonly static Task s_completed = Task.FromResult(true);
         private readonly Queue<TaskCompletionSource<bool>> m_waiters = new Queue<TaskCompletionSource<bool>>();
@@ -53,7 +53,7 @@ namespace Quickblox.Sdk.AsyncLock
     }
 
     // http://blogs.msdn.com/b/pfxteam/archive/2012/02/12/10266988.aspx
-    public class AsyncLock
+    internal class AsyncLock
     {
         private readonly AsyncSemaphore m_semaphore;
         private readonly Task<Releaser> m_releaser;
