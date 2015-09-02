@@ -4,7 +4,7 @@ using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Quickblox.Logger;
+using QMunicate.Core.Logger;
 
 namespace QMunicate.Core.Navigation
 {
@@ -36,7 +36,7 @@ namespace QMunicate.Core.Navigation
 
         private async void OnNavigationStopped(object sender, NavigationEventArgs e)
         {
-            await FileLogger.Instance.Log(LogLevel.Debug, "OnNavigationStopped. SourcePageType=" + e.SourcePageType + " Mode=" + e.NavigationMode);
+            await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, "OnNavigationStopped. SourcePageType=" + e.SourcePageType + " Mode=" + e.NavigationMode);
             var handler = NavigationStopped;
             if (handler != null)
             {
@@ -46,7 +46,7 @@ namespace QMunicate.Core.Navigation
 
         private async void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
-            await FileLogger.Instance.Log(LogLevel.Debug, "OnNavigationFailed. SourcePageType=" + e.SourcePageType + "\n Exception=" + e.Exception);
+            await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, "OnNavigationFailed. SourcePageType=" + e.SourcePageType + "\n Exception=" + e.Exception);
             var handler = NavigationFailed;
             if (handler != null)
             {
@@ -56,7 +56,7 @@ namespace QMunicate.Core.Navigation
 
         private async void OnNavigating(object sender, NavigatingCancelEventArgs e)
         {
-            await FileLogger.Instance.Log(LogLevel.Debug, "OnNavigating. SourcePageType=" + e.SourcePageType + " Mode=" + e.NavigationMode);
+            await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, "OnNavigating. SourcePageType=" + e.SourcePageType + " Mode=" + e.NavigationMode);
             var handler = Navigating;
             if (handler != null)
             {
@@ -83,7 +83,7 @@ namespace QMunicate.Core.Navigation
 
         private async void OnNavigated(object sender, NavigationEventArgs e)
         {
-            await FileLogger.Instance.Log(LogLevel.Debug, "OnNavigated. SourcePageType=" + e.SourcePageType + " Mode=" + e.NavigationMode);
+            await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, "OnNavigated. SourcePageType=" + e.SourcePageType + " Mode=" + e.NavigationMode);
             var handler = Navigated;
             if (handler != null)
             {

@@ -12,7 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
-using Nito.AsyncEx;
+using QMunicate.Core.AsyncLock;
 
 namespace QMunicate.ViewModels
 {

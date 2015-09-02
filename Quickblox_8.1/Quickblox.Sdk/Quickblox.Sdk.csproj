@@ -53,8 +53,8 @@
     <Compile Include="GeneralDataModel\Request\SortOperator.cs" />
     <Compile Include="Http\BytesContent.cs" />
     <Compile Include="IQuickbloxClient.cs" />
-    <Compile Include="Logger\FileLogger.cs" />
     <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\LoggerHolder.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSearchOperator.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogSortFilter.cs" />
     <Compile Include="Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs" />

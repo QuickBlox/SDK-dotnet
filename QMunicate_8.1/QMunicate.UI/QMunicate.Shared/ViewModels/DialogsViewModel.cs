@@ -2,7 +2,6 @@
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Helper;
 using QMunicate.Models;
-using Quickblox.Logger;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using System;
@@ -10,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Networking.PushNotifications;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.Logger;
+using Quickblox.Sdk.Logger;
 
 namespace QMunicate.ViewModels
 {
@@ -117,7 +118,7 @@ namespace QMunicate.ViewModels
 
         private async void PushChannelOnPushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
         {
-            await FileLogger.Instance.Log(LogLevel.Debug, "Push notification was received.");
+            await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, "Push notification was received.");
         }
 
         #endregion

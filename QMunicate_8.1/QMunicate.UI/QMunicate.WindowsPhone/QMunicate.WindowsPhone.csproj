@@ -84,10 +84,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\..\Quickblox.Logger\Quickblox.Logger.csproj">
-      <Project>{BFA0A45E-35CC-4EBF-A597-51C9BD9B383E}</Project>
-      <Name>Quickblox.Logger</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Quickblox_8.1\Quickblox.Sdk\Quickblox.Sdk.csproj">
       <Project>{08fdea8c-a156-4f7e-8b8a-31228d88b3bc}</Project>
       <Name>Quickblox.Sdk</Name>
@@ -232,16 +228,6 @@
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Nito.AsyncEx, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\wpa81\Nito.AsyncEx.dll</HintPath>
-    </Reference>
-    <Reference Include="Nito.AsyncEx.Concurrent">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\wpa81\Nito.AsyncEx.Concurrent.dll</HintPath>
-    </Reference>
-    <Reference Include="Nito.AsyncEx.Enlightenment">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\wpa81\Nito.AsyncEx.Enlightenment.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

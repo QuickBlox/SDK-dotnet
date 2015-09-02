@@ -3,7 +3,6 @@ using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
-using Quickblox.Logger;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using System;
 using System.Collections.ObjectModel;
@@ -14,7 +13,9 @@ using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.Logger;
 using Quickblox.Sdk;
+using Quickblox.Sdk.Logger;
 
 namespace QMunicate.ViewModels
 {
@@ -126,7 +127,7 @@ namespace QMunicate.ViewModels
                 ChatImage = chatParameter.Dialog.Image;
                 NumberOfMembers = chatParameter.Dialog.OccupantIds.Count;
 
-                await FileLogger.Instance.Log(LogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", currentUserId, dialog.XmppRoomJid));
+                await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", currentUserId, dialog.XmppRoomJid));
 
                 groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(dialog.XmppRoomJid, chatParameter.Dialog.Id);
                 groupChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;

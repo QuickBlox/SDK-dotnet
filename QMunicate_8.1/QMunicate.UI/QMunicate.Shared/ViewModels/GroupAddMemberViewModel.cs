@@ -1,10 +1,8 @@
-﻿using Nito.AsyncEx;
-using QMunicate.Core.Command;
+﻿using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
-using Quickblox.Logger;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ContentModule;
@@ -22,6 +20,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.AsyncLock;
 using Quickblox.Sdk;
 
 namespace QMunicate.ViewModels

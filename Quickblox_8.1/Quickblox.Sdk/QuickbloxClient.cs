@@ -12,6 +12,7 @@ using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 using System;
 using System.Threading.Tasks;
+using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Modules.LocationModule;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 
@@ -24,17 +25,35 @@ namespace Quickblox.Sdk
     {
 #region Ctor
 
-        public QuickbloxClient(string apiEndpoint, string chatEndpoint)
-            : this(apiEndpoint, chatEndpoint, new HmacSha1CryptographicProvider())
+        /// <summary>
+        /// QuickbloxClient ctor.
+        /// </summary>
+        /// <param name="apiEndpoint">API endpoint</param>
+        /// <param name="chatEndpoint">XMPP chat endpoint</param>
+        /// <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
+        public QuickbloxClient(string apiEndpoint, string chatEndpoint, ILogger logger = null)
+            : this(apiEndpoint, chatEndpoint, new HmacSha1CryptographicProvider(), logger)
         {
             
         }
 
-        public QuickbloxClient(string apiEndpoint, string chatEndpoint, ICryptographicProvider cryptographicProvider)
+        /// <summary>
+        /// QuickbloxClient ctor.
+        /// </summary>
+        /// <param name="apiEndpoint">API endpoint</param>
+        /// <param name="chatEndpoint">XMPP chat endpoint</param>
+        /// <param name="cryptographicProvider">HMAC SHA1 Cryptographic Provider</param>
+        /// <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
+        public QuickbloxClient(string apiEndpoint, string chatEndpoint, ICryptographicProvider cryptographicProvider, ILogger logger = null)
         {
             if (apiEndpoint == null) throw new ArgumentNullException("apiEndpoint");
             if (chatEndpoint == null) throw new ArgumentNullException("chatEndpoint");
             if (cryptographicProvider == null) throw new ArgumentNullException("cryptographicProvider");
+
+            if (logger != null)
+            {
+                LoggerHolder.LoggerInstance = logger;
+            }
 
             ApiEndPoint = apiEndpoint;
             ChatEndpoint = chatEndpoint;

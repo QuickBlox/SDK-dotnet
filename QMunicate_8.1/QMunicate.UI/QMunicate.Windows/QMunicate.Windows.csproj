@@ -104,10 +104,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\..\Quickblox.Logger\Quickblox.Logger.csproj">
-      <Project>{BFA0A45E-35CC-4EBF-A597-51C9BD9B383E}</Project>
-      <Name>Quickblox.Logger</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Quickblox_8.1\Quickblox.Sdk\Quickblox.Sdk.csproj">
       <Project>{08FDEA8C-A156-4F7E-8B8A-31228D88B3BC}</Project>
       <Name>Quickblox.Sdk</Name>
@@ -249,15 +245,6 @@
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Newtonsoft.Json.6.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Nito.AsyncEx">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\netcore45\Nito.AsyncEx.dll</HintPath>
-    </Reference>
-    <Reference Include="Nito.AsyncEx.Concurrent">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\netcore45\Nito.AsyncEx.Concurrent.dll</HintPath>
-    </Reference>
-    <Reference Include="Nito.AsyncEx.Enlightenment">
-      <HintPath>..\..\..\packages\Nito.AsyncEx.3.0.0\lib\netcore45\Nito.AsyncEx.Enlightenment.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

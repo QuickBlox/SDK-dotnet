@@ -20,9 +20,10 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
+using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
+using QMunicate.Logger;
 using QMunicate.Models;
-using Quickblox.Logger;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -43,7 +44,9 @@ namespace QMunicate
         /// </summary>
         public App()
         {
-            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint);
+            var fileLogger = new FileLogger();
+            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, fileLogger);
+            QmunicateLoggerHolder.LoggerInstance = fileLogger;
             var fileStorage = new FileStorage();
 
             ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
@@ -65,7 +68,7 @@ namespace QMunicate
         {
             unhandledExceptionEventArgs.Handled = true;
 
-            await FileLogger.Instance.Log(LogLevel.Error, unhandledExceptionEventArgs.Exception.ToString());
+            await QmunicateLoggerHolder.Log(QmunicateLogLevel.Error, unhandledExceptionEventArgs.Exception.ToString());
         }
 
         /// <summary>
@@ -83,7 +86,7 @@ namespace QMunicate
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
-            FileLogger.Instance.Log(LogLevel.Debug, "===================== QMunicate. OnLaunched");
+            QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, "===================== QMunicate. OnLaunched");
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -248,7 +251,7 @@ namespace QMunicate
         {
             var deferral = e.SuspendingOperation.GetDeferral();
 
-            await FileLogger.Instance.Log(LogLevel.Debug, "===================== QMunicate. OnSuspending");
+            await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, "===================== QMunicate. OnSuspending");
 
             // TODO: Save application state and stop any background activity
             deferral.Complete();

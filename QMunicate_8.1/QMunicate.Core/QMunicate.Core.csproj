@@ -35,7 +35,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TestRelease|AnyCPU'">
     <OutputPath>bin\TestRelease\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST_RELEASE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,6 +47,7 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncLock\AsyncLock.cs" />
     <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="DependencyInjection\InstanceBinding.cs" />
     <Compile Include="DependencyInjection\ServiceLocator.cs" />
@@ -55,6 +56,9 @@
     <Compile Include="DependencyInjection\TypeBinding.cs" />
     <Compile Include="DependencyInjection\TypeBindingBase.cs" />
     <Compile Include="Extensions\AsyncExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Logger\IQmunicateLogger.cs" />
+    <Compile Include="Logger\QmunicateLoggerHolder.cs" />
     <Compile Include="MessageService\DialogCommand.cs" />
     <Compile Include="MessageService\IMessageService.cs" />
     <Compile Include="MessageService\MessageService.cs" />
@@ -68,12 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Quickblox.Logger\Quickblox.Logger.csproj">
-      <Project>{BFA0A45E-35CC-4EBF-A597-51C9BD9B383E}</Project>
-      <Name>Quickblox.Logger</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

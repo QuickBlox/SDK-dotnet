@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using Nito.AsyncEx;
+using QMunicate.Core.AsyncLock;
 using Quickblox.Sdk;
 
 namespace QMunicate.Helper

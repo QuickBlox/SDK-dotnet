@@ -3,7 +3,6 @@ using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
-using Quickblox.Logger;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
@@ -17,7 +16,9 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.Logger;
 using Quickblox.Sdk;
+using Quickblox.Sdk.Logger;
 using Message = Quickblox.Sdk.Modules.ChatModule.Models.Message;
 
 namespace QMunicate.ViewModels
@@ -184,7 +185,7 @@ namespace QMunicate.ViewModels
                 ChatImage = chatParameter.Dialog.Image;
 
                 int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != currentUserId);
-                await FileLogger.Instance.Log(LogLevel.Debug, string.Format("Initializing Chat page. CurrentUserId: {0}. OtherUserId: {1}.", currentUserId, otherUserId));
+                await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, string.Format("Initializing Chat page. CurrentUserId: {0}. OtherUserId: {1}.", currentUserId, otherUserId));
 
                 if (otherUserId != 0)
                 {

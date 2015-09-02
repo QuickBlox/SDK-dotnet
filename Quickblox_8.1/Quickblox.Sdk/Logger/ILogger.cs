@@ -1,18 +1,16 @@
 ﻿using System.Threading.Tasks;
 
-namespace Quickblox.Logger
+namespace Quickblox.Sdk.Logger
 {
-#if TEST_RELEASE || DEBUG
-    internal interface ILogger
+    public interface ILogger
     {
         Task Log(LogLevel logLevel, string message);
     }
 
-    internal enum LogLevel
+    public enum LogLevel
     {
         Error,
         Warn,
         Debug
     }
-#endif
 }

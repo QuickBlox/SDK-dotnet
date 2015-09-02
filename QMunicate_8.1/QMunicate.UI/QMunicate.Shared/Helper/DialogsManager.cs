@@ -1,6 +1,5 @@
 ﻿using QMunicate.Core.DependencyInjection;
 using QMunicate.Models;
-using Quickblox.Logger;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
@@ -11,6 +10,8 @@ using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using QMunicate.Core.Logger;
+using Quickblox.Sdk.Logger;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
 namespace QMunicate.Helper
@@ -114,7 +115,7 @@ namespace QMunicate.Helper
             }
             else
             {
-                await FileLogger.Instance.Log(LogLevel.Warn, "The dialog wasn't found in DialogsManager. Reloading dialogs.");
+                await QmunicateLoggerHolder.Log(QmunicateLogLevel.Warn, "The dialog wasn't found in DialogsManager. Reloading dialogs.");
                 await ReloadDialogs();
             }
         }

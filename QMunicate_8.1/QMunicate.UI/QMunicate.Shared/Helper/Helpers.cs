@@ -9,8 +9,9 @@ using Windows.Storage.Streams;
 using Windows.System.Profile;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
-using Quickblox.Logger;
+using Quickblox.Sdk.Logger;
 
 namespace QMunicate.Helper
 {
@@ -81,7 +82,7 @@ namespace QMunicate.Helper
             }
             catch (Exception ex)
             {
-                FileLogger.Instance.Log(LogLevel.Warn, "Helpers class. Failed to create BitmapImage. " + ex);
+                QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, "Helpers class. Failed to create BitmapImage. " + ex);
                 return null;
             }
         }

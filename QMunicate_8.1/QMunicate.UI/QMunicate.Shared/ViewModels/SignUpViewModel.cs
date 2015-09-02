@@ -15,7 +15,8 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using Quickblox.Logger;
+using QMunicate.Core.Logger;
+using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.UsersModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Requests;
@@ -200,7 +201,7 @@ namespace QMunicate.ViewModels
             var uploadId = await contentHelper.UploadPrivateImage(imageBytes);
             if (uploadId == null)
             {
-                await FileLogger.Instance.Log(LogLevel.Warn, "SignUpViewModel. Failed to upload user image");
+                await QmunicateLoggerHolder.Log(QmunicateLogLevel.Warn, "SignUpViewModel. Failed to upload user image");
                 return;
             }
 

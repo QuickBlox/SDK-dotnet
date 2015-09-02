@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helper\ImagesService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\IPushNotificationsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\PushNotificationsManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logger\FileLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ChatNavigationParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DialogsNavigationParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DialogVm.cs" />

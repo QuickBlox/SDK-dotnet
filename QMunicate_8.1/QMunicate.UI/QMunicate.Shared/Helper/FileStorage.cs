@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Nito.AsyncEx;
+using QMunicate.Core.AsyncLock;
 
 namespace QMunicate.Helper
 {

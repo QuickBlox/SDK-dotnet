@@ -1,43 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Quickblox.Sdk.AsyncLock;
+using QMunicate.Core.Logger;
+using Quickblox.Sdk.Logger;
 
-namespace Quickblox.Logger
+namespace QMunicate.Logger
 {
-#if DEBUG || TEST_RELEASE
-    internal class FileLogger : ILogger
+    public class FileLogger : ILogger, IQmunicateLogger
     {
-        #region Singleton
-
-        private static readonly FileLogger instance = new FileLogger();
-
-        private FileLogger()
-        {
-        }
-
-        public static FileLogger Instance
-        {
-            get { return instance; }
-        }
-
-        #endregion
-
         #region Fields
 
         private const string LogFileName = "Logs.txt";
-        private readonly AsyncLock mutex = new AsyncLock();
+        private readonly Core.AsyncLock.AsyncLock mutex = new Core.AsyncLock.AsyncLock();
 
         #endregion
 
-        #region ILogger methods
+        #region ILogger Members
 
         public async Task Log(LogLevel logLevel, string message)
+        {
+#if DEBUG || TEST_RELEASE
+            await Log(logLevel.ToString(), message);
+#endif
+        }
+
+        #endregion
+
+        #region IQmunicateLogger Members
+
+        public async Task Log(QmunicateLogLevel logLevel, string message)
+        {
+#if DEBUG || TEST_RELEASE
+            await Log(logLevel.ToString(), message);
+#endif
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private async Task Log(string logLevel, string  message)
         {
             try
             {
@@ -46,10 +51,6 @@ namespace Quickblox.Logger
             }
             catch (Exception) { }
         }
-
-        #endregion
-
-        #region Private methods
 
         private async Task AppendToFile(string filename, string content)
         {
@@ -82,8 +83,5 @@ namespace Quickblox.Logger
         }
 
         #endregion
-
     }
-
-#endif
 }

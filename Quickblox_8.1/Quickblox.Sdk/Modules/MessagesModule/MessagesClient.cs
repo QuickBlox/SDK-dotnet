@@ -7,8 +7,8 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Quickblox.Logger;
 using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Serializer;
 using XMPP;
 using XMPP.common;
@@ -191,10 +191,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                     handler(this, new EventArgs());
             };
 
+
+            string debugClientName = "";
 #if DEBUG || TEST_RELEASE
-            client.OnLogMessage +=
-                async (sender, args) => await FileLogger.Instance.Log(LogLevel.Debug, string.Format("XMPP {0} LOG: {1} {2}", DebugClientName, args.type, args.message));
+           debugClientName = DebugClientName;
 #endif
+            client.OnLogMessage += async (sender, args) => await LoggerHolder.Log(LogLevel.Debug, string.Format("XMPP {0} LOG: {1} {2}", debugClientName, args.type, args.message));
 
             xmppClient = client;
             isReady = false;
