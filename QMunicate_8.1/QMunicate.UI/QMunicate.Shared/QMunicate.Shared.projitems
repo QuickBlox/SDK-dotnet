@@ -46,6 +46,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DialogsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ChatViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\FirstViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupAddMemberViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupChatViewModel.cs" />

@@ -190,7 +190,7 @@ namespace QMunicate
                 }
             }
 
-            navigationService.Navigate(ViewLocator.SignUp);
+            navigationService.Navigate(ViewLocator.First);
         }
 
 
@@ -212,6 +212,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.GroupEdit, typeof(GroupEditPage));
             dictionary.Add(ViewLocator.SettingsEdit, typeof(SettingsEditPage));
             dictionary.Add(ViewLocator.UserInfo, typeof(UserInfoPage));
+            dictionary.Add(ViewLocator.First, typeof(FirstPage));
 
             return new PageResolver(dictionary);
         }
