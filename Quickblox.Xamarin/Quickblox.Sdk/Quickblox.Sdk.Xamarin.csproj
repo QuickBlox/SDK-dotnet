@@ -483,9 +483,6 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Serializer\XmlSerializer.cs">
       <Link>Serializer\XmlSerializer.cs</Link>
     </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\SettingsKeys.cs">
-      <Link>SettingsKeys.cs</Link>
-    </Compile>
     <Compile Include="Help\Timer.cs" />
     <Compile Include="HmacSha1CryptographicProvider.cs" />
     <Compile Include="ICryptographicProvider.cs" />

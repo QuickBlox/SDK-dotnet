@@ -14,7 +14,9 @@ using System;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Modules.LocationModule;
+#if !Xamarin
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+#endif
 
 namespace Quickblox.Sdk
 {
@@ -105,8 +107,11 @@ namespace Quickblox.Sdk
         /// <summary>
         /// The messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
         /// </summary>
-        public IMessagesClient MessagesClient { get; private set; }
-
+#if !Xamarin
+        public IMessagesClient MessagesClient { get; }
+#else
+        public MessagesClient MessagesClient { get; }
+#endif
         /// <summary>
         /// Custom Objects module provides flexibility to define any data structure(schema) you need.
         /// Schema is defined in QuickBlox Administration Panel. The schema is called Class and contains field names and their type.
@@ -135,10 +140,10 @@ namespace Quickblox.Sdk
         /// Quickblox token. Must be set before calling any methods that require authentication.
         /// </summary>
         public string Token { get; set; }
+        
+        #endregion
 
-#endregion
-
-#region Public Members
+        #region Public Members
 
         public async Task GetAccountSettingsAsync(string accountKey)
         {

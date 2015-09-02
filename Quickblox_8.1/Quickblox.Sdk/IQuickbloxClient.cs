@@ -7,7 +7,9 @@ using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.CustomObjectModule;
 using Quickblox.Sdk.Modules.LocationModule;
 using Quickblox.Sdk.Modules.MessagesModule;
+#if !Xamarin
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+#endif
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 
@@ -26,8 +28,11 @@ namespace Quickblox.Sdk
         LocationClient LocationClient { get; }
 
         NotificationClient NotificationClient { get; }
-
+#if !Xamarin
         IMessagesClient MessagesClient { get; }
+#else
+        MessagesClient MessagesClient { get; }
+#endif
 
         CustomObjectsClient CustomObjectsClient { get; }
 
