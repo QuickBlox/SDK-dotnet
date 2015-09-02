@@ -10,7 +10,14 @@
     RequestedTheme="Light"
     DataContext="{Binding FirstViewModel, Source={StaticResource Locator}}">
 
-    <Grid>
-
-    </Grid>
+    <StackPanel>
+        <Image Source="../Assets/app_logo.png" Margin="125 55 125 20" HorizontalAlignment="Center"/>
+        <Image Source="../Assets/title.png" Margin="60 10 60 50" HorizontalAlignment="Center"/>
+        <Button Content="connect with Facebook" Command="{Binding FacebookSignUpCommand}" Margin="{StaticResource DefaultHorizontalMargin}"
+                Foreground="RoyalBlue" BorderBrush="RoyalBlue" Width="250"  HorizontalAlignment="Center"/>
+        <Button Content="sign up with email" Command="{Binding EmailSignUpCommand}" Margin="{StaticResource DefaultHorizontalMargin}"
+                Width="250"  HorizontalAlignment="Center"/>
+        <HyperlinkButton Content="Already have an account?" Command="{Binding LoginCommand}" Foreground="Gray" FontWeight="SemiBold"
+                             FontSize="{StaticResource NormalFontSize}" Margin="0 55 0 0" HorizontalAlignment="Center" />
+    </StackPanel>
 </Page>

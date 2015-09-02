@@ -29,8 +29,6 @@
                 <TextBlock Text="to Q-municate" FontSize="{StaticResource SmallFontSize}" VerticalAlignment="Center"/>
                 <HyperlinkButton Content="User Agreement" NavigateUri="http://q-municate.com/agreement/" FontSize="{StaticResource SmallFontSize}" Foreground="Blue" Margin="6 0 0 0"/>
             </StackPanel>
-            <HyperlinkButton Content="Already have an account?" Command="{Binding LoginCommand}"
-                             FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}" />
         </StackPanel>
     </Grid>
 

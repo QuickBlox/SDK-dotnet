@@ -44,7 +44,6 @@ namespace QMunicate.ViewModels
 
             ChoosePhotoCommand = new RelayCommand(ChoosePhotoCommandExecute, () => !IsLoading);
             SignUpCommand = new RelayCommand(SignUpCommandExecute, () => !IsLoading);
-            LoginCommand = new RelayCommand(LoginCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -79,8 +78,6 @@ namespace QMunicate.ViewModels
 
         public RelayCommand SignUpCommand { get; set; }
 
-        public RelayCommand LoginCommand { get; set; }
-
         #endregion
 
         #region Base members
@@ -89,7 +86,6 @@ namespace QMunicate.ViewModels
         {
             ChoosePhotoCommand.RaiseCanExecuteChanged();
             SignUpCommand.RaiseCanExecuteChanged();
-            LoginCommand.RaiseCanExecuteChanged();
         }
 
         #endregion
@@ -207,11 +203,6 @@ namespace QMunicate.ViewModels
 
             UpdateUserRequest updateUserRequest = new UpdateUserRequest { User = new UserRequest { BlobId = uploadId } };
             await QuickbloxClient.UsersClient.UpdateUserAsync(user.Id, updateUserRequest);
-        }
-
-        private void LoginCommandExecute()
-        {
-            NavigationService.Navigate(ViewLocator.Login);
         }
 
         #endregion
