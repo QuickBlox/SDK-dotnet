@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Assets\AvatarPlaceholder.png" />
+    <Content Include="$(MSBuildThisFileDirectory)FacebookConfig.xml" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Themes\TypingIndicator.xaml">

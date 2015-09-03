@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
+using Facebook.Client;
 using QMunicate.Core.Command;
+using QMunicate.Models;
+using Quickblox.Sdk;
 
 namespace QMunicate.ViewModels
 {
@@ -11,9 +15,9 @@ namespace QMunicate.ViewModels
 
         public FirstViewModel()
         {
-            FacebookSignUpCommand = new RelayCommand(FacebookSignUpCommandExecute);
-            EmailSignUpCommand = new RelayCommand(EmailSingUpCommandExecute);
-            LoginCommand = new RelayCommand(LoginCommandExecute);
+            FacebookSignUpCommand = new RelayCommand(FacebookSignUpCommandExecute, () => !IsLoading);
+            EmailSignUpCommand = new RelayCommand(EmailSingUpCommandExecute, () => !IsLoading);
+            LoginCommand = new RelayCommand(LoginCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -26,11 +30,43 @@ namespace QMunicate.ViewModels
 
         #endregion
 
+        #region Base members
+
+        protected override void OnIsLoadingChanged()
+        {
+            FacebookSignUpCommand.RaiseCanExecuteChanged();
+            EmailSignUpCommand.RaiseCanExecuteChanged();
+            LoginCommand.RaiseCanExecuteChanged();
+        }
+
+        #endregion
+
         #region Private methods
 
         private void FacebookSignUpCommandExecute()
         {
+            Session.OnFacebookAuthenticationFinished += OnFacebookAuthenticationFinished;
+            Session.ActiveSession.LoginWithBehavior("public_profile", FacebookLoginBehavior.LoginBehaviorMobileInternetExplorerOnly);
+        }
 
+        private async void OnFacebookAuthenticationFinished(AccessTokenData fbSession)
+        {
+            IsLoading = true;
+            var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionWithSocialNetworkKey(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, "facebook",
+                                                                "public_profile", fbSession.AccessToken, null, null);
+            if (sessionResponse.StatusCode == HttpStatusCode.Created)
+            {
+                QuickbloxClient.Token = sessionResponse.Result.Session.Token;
+                SettingsManager.Instance.WriteToSettings(SettingsKeys.CurrentUserId, sessionResponse.Result.Session.UserId);
+                NavigationService.Navigate(ViewLocator.Dialogs,
+                                                    new DialogsNavigationParameter
+                                                    {
+                                                        CurrentUserId = sessionResponse.Result.Session.UserId,
+                                                        Password = sessionResponse.Result.Session.Token
+                                                    });
+            }
+
+            IsLoading = false;
         }
 
         private void EmailSingUpCommandExecute()

@@ -21,6 +21,11 @@
         </m3:DefaultTile>
         <m3:SplashScreen Image="Assets\SplashScreen.png" />
       </m3:VisualElements>
+      <Extensions>
+        <Extension Category="windows.protocol">
+          <Protocol Name="fb474590536055367" />
+        </Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>
