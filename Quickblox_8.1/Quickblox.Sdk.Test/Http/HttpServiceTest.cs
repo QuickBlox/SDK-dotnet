@@ -16,13 +16,13 @@ namespace Quickblox.Sdk.Test.Http
         [TestMethod]
         public async Task GetTest()
         {
-            var response = await HttpBase.GetAsync("http://google.com", null);
+            //var response = await HttpBase.GetAsync("http://google.com", null);
         }
 
         [TestMethod]
         public async Task PostTest()
         {
-            var response = await HttpBase.PostAsync("http://google.com", null, new List<KeyValuePair<string,string>>());
+            //var response = await HttpBase.PostAsync("http://google.com", null, new List<KeyValuePair<string,string>>());
         }
 
     }

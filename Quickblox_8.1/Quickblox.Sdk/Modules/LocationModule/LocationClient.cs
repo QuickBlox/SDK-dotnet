@@ -72,11 +72,11 @@ namespace Quickblox.Sdk.Modules.LocationModule
         /// <param name="geoDataId">The geo data identifier.</param>
         /// <param name="updateGeoDataRequest">The update geo data with push request.</param>
         /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<GeoDataResponse>> UpdateGeoDataAsync(Int32 geoDataId, UpdateGeoDataRequest updateGeoDataRequest)
+        public async Task<HttpResponse<GeoDatumResponse>> UpdateGeoDataAsync(Int32 geoDataId, UpdateGeoDataRequest updateGeoDataRequest)
         {
             var uri = String.Format(QuickbloxMethods.UpdateByIdGeoDataMethod, geoDataId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var updateGeoDataResponse = await HttpService.PutAsync<GeoDataResponse, UpdateGeoDataRequest>(this.quickbloxClient.ApiEndPoint,
+            var updateGeoDataResponse = await HttpService.PutAsync<GeoDatumResponse, UpdateGeoDataRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         uri,
                                                                                                         updateGeoDataRequest,
                                                                                                         headers);
