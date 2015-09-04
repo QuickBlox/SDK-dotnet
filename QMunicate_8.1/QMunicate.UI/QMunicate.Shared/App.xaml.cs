@@ -19,11 +19,13 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Facebook.Client;
 using QMunicate.Core.Command;
 using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
 using QMunicate.Logger;
 using QMunicate.Models;
+using Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -141,6 +143,10 @@ namespace QMunicate
 
         protected override void OnActivated(IActivatedEventArgs args)
         {
+            base.OnActivated(args);
+            var protocolArgs = args as ProtocolActivatedEventArgs;
+            LifecycleHelper.FacebookAuthenticationReceived(protocolArgs);
+
             //var quickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
             //var token = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.QbToken);
             //quickbloxClient.Resume(token);
@@ -148,7 +154,7 @@ namespace QMunicate
 #if WINDOWS_PHONE_APP
 
             var continuationActivatedEventArgs = args as IContinuationActivatedEventArgs;
-            if (args != null)
+            if (continuationActivatedEventArgs != null)
             {
                 ContinuationManager.Continue(continuationActivatedEventArgs);
             }
@@ -190,7 +196,7 @@ namespace QMunicate
                 }
             }
 
-            navigationService.Navigate(ViewLocator.SignUp);
+            navigationService.Navigate(ViewLocator.First);
         }
 
 
@@ -212,6 +218,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.GroupEdit, typeof(GroupEditPage));
             dictionary.Add(ViewLocator.SettingsEdit, typeof(SettingsEditPage));
             dictionary.Add(ViewLocator.UserInfo, typeof(UserInfoPage));
+            dictionary.Add(ViewLocator.First, typeof(FirstPage));
 
             return new PageResolver(dictionary);
         }

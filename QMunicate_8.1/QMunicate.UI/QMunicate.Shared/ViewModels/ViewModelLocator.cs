@@ -85,6 +85,11 @@ namespace QMunicate.ViewModels
             get { return new UserInfoViewModel(); }
         }
 
+        public FirstViewModel FirstViewModel
+        {
+            get { return new FirstViewModel(); }
+        }
+
         #endregion
 
         #region Public methods

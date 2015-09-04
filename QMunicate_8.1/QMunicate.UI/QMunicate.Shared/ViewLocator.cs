@@ -21,5 +21,6 @@ namespace QMunicate
         public const string GroupEdit = "GroupEdit";
         public const string SettingsEdit = "SettingsEdit";
         public const string UserInfo = "UserInfo";
+        public const string First = "First";
     }
 }

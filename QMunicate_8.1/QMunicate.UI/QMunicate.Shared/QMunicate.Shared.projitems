@@ -46,6 +46,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ViewLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DialogsViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ChatViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\FirstViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupAddMemberViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\GroupChatViewModel.cs" />
@@ -64,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Assets\AvatarPlaceholder.png" />
+    <Content Include="$(MSBuildThisFileDirectory)FacebookConfig.xml" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Themes\TypingIndicator.xaml">
