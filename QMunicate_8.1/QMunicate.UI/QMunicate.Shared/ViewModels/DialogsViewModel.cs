@@ -98,6 +98,7 @@ namespace QMunicate.ViewModels
         {
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             if(!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
+            dialogsManager.JoinAllGroupDialogs();
             await dialogsManager.LoadDialogImages(100);
         }
 

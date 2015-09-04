@@ -1,4 +1,5 @@
 ﻿using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.Logger;
 using QMunicate.Models;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Models;
@@ -10,8 +11,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
-using QMunicate.Core.Logger;
-using Quickblox.Sdk.Logger;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
 namespace QMunicate.Helper
@@ -21,6 +20,7 @@ namespace QMunicate.Helper
         #region Fields
 
         private bool isReloadingDialogs;
+        private bool areAllGroupDialogsJoined;
         private readonly IQuickbloxClient quickbloxClient;
 
         #endregion
@@ -101,6 +101,24 @@ namespace QMunicate.Helper
             {
                 isReloadingDialogs = false;
             }
+        }
+
+        public void JoinAllGroupDialogs()
+        {
+            if (areAllGroupDialogsJoined) return;
+
+            int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
+
+            foreach (DialogVm dialogVm in Dialogs)
+            {
+                if (dialogVm.DialogType == DialogType.Group)
+                {
+                    var groupChatManager = quickbloxClient.MessagesClient.GetGroupChatManager(dialogVm.XmppRoomJid, dialogVm.Id);
+                    groupChatManager.JoinGroup(currentUserId.ToString());
+                }
+            }
+
+            areAllGroupDialogsJoined = true;
         }
 
         public async Task UpdateDialog(string dialogId, string lastActivity, DateTime lastMessageSent)
