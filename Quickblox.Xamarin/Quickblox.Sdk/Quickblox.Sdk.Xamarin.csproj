@@ -483,9 +483,11 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Serializer\XmlSerializer.cs">
       <Link>Serializer\XmlSerializer.cs</Link>
     </Compile>
+    <Compile Include="FileLogger.cs" />
     <Compile Include="Help\Timer.cs" />
     <Compile Include="HmacSha1CryptographicProvider.cs" />
     <Compile Include="ICryptographicProvider.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="Modules\MessagesModule\MessageClient.cs" />
     <Compile Include="Modules\MessagesModule\Models\ActivityChangedEventHandler.cs" />
     <Compile Include="Modules\MessagesModule\Models\GeneralActivity.cs" />
@@ -512,12 +514,6 @@
     <Reference Include="Sharp.Xmpp">
       <HintPath>..\Sharp.Xmpp-master\bin\Debug\Sharp.Xmpp.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Xamarin.Logger\Xamarin.Logger.csproj">
-      <Project>{e675f410-7b0a-4890-8297-18a03a44ec39}</Project>
-      <Name>Xamarin.Logger</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
