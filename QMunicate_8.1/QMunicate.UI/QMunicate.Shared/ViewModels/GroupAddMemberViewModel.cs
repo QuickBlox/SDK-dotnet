@@ -42,9 +42,12 @@ namespace QMunicate.ViewModels
 
         public GroupAddMemberViewModel()
         {
-            Contacts = new ObservableCollection<SelectableListBoxItem<UserVm>>();
-            CreateGroupCommand = new RelayCommand(CreateGroupCommandExecute, () => !IsLoading);
+            UsersToAdd = new ObservableCollection<SelectableListBoxItem<UserVm>>();
+            
+            CreateGroupCommand = new RelayCommand(CreateGroupCommandExecute, () => !IsLoading && UsersToAdd.Count > 0);
             ChangeImageCommand = new RelayCommand(ChangeImageCommandExecute, () => !IsLoading);
+
+            UsersToAdd.CollectionChanged += (sender, args) => { CreateGroupCommand.RaiseCanExecuteChanged(); };
         }
 
         #endregion
@@ -73,7 +76,7 @@ namespace QMunicate.ViewModels
             set { Set(ref membersText, value); }
         }
 
-        public ObservableCollection<SelectableListBoxItem<UserVm>> Contacts { get; set; }
+        public ObservableCollection<SelectableListBoxItem<UserVm>> UsersToAdd { get; set; }
 
         public bool IsEditMode
         {
@@ -112,7 +115,7 @@ namespace QMunicate.ViewModels
 
         public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
         {
-            foreach (var contact in Contacts)
+            foreach (var contact in UsersToAdd)
             {
                 contact.Item.Image = null;
             }
@@ -197,19 +200,19 @@ namespace QMunicate.ViewModels
         {
             using (await contactsLock.LockAsync())
             {
-                Contacts.Clear();
+                UsersToAdd.Clear();
                 if (string.IsNullOrEmpty(searchQuery))
                 {
                     foreach (var userVm in allContacts)
                     {
-                        Contacts.Add(userVm);
+                        UsersToAdd.Add(userVm);
                     }
                 }
                 else
                 {
                     foreach (var userVm in allContacts.Where(c => !string.IsNullOrEmpty(c.Item.FullName) && c.Item.FullName.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
                     {
-                        Contacts.Add(userVm);
+                        UsersToAdd.Add(userVm);
                     }
                 }
             }
