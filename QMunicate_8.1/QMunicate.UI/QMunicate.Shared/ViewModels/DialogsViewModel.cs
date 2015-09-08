@@ -62,12 +62,6 @@ namespace QMunicate.ViewModels
             IsLoading = false;
         }
 
-        public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
-        {
-            if(DialogsManager != null)
-                DialogsManager.UnloadDialogImages();
-        }
-
         #endregion
 
         #region Base members
@@ -99,7 +93,6 @@ namespace QMunicate.ViewModels
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             if(!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
             dialogsManager.JoinAllGroupDialogs();
-            await dialogsManager.LoadDialogImages(100);
         }
 
         #region Push notifications

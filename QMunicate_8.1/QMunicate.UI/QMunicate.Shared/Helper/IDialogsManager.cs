@@ -14,7 +14,5 @@ namespace QMunicate.Helper
         Task ReloadDialogs();
         void JoinAllGroupDialogs();
         Task UpdateDialog(string dialogId, string lastActivity, DateTime lastMessageSent);
-        Task LoadDialogImages(int? decodePixelWidth = null, int? decodePixelHeight = null);
-        void UnloadDialogImages();
     }
 }

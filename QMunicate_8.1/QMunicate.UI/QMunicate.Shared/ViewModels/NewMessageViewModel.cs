@@ -109,7 +109,6 @@ namespace QMunicate.ViewModels
         private async Task OpenContactCommandExecute(UserVm user)
         {
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-            if (!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
             var userDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.DialogType == DialogType.Private && d.OccupantIds.Contains(user.UserId));
             if (userDialog != null)
                 NavigationService.Navigate(ViewLocator.Chat, new ChatNavigationParameter { Dialog = userDialog });
