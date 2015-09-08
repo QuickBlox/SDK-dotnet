@@ -116,7 +116,7 @@ namespace QMunicate.ViewModels
                         if (userVm.ImageUploadId.HasValue)
                         {
                             var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100, 100);
+                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100);
                         }
                     }
                 }
@@ -153,7 +153,7 @@ namespace QMunicate.ViewModels
                     if (user != null && user.BlobId.HasValue)
                     {
                         userVm.ImageUploadId = user.BlobId;
-                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100, 100);
+                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100);
                     }
                 }
             }

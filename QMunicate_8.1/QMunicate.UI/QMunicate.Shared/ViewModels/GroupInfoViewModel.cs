@@ -108,7 +108,7 @@ namespace QMunicate.ViewModels
             {
                 if (userVm.ImageUploadId.HasValue)
                 {
-                    userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100, 100);
+                    userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100);
                 }
             }
 

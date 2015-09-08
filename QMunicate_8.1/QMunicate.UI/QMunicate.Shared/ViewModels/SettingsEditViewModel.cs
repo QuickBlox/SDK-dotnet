@@ -127,7 +127,7 @@ namespace QMunicate.ViewModels
                 if (currentUser.BlobId.HasValue)
                 {
                     var imageService = ServiceLocator.Locator.Get<IImageService>();
-                    UserImage = await imageService.GetPrivateImage(currentUser.BlobId.Value, 100, 100);
+                    UserImage = await imageService.GetPrivateImage(currentUser.BlobId.Value, 100);
                 }
             }
             IsLoading = false;
