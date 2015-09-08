@@ -82,15 +82,12 @@ namespace QMunicate.ViewModels
 
         public async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var chatParameter = e.Parameter as ChatNavigationParameter;
-            if (chatParameter == null) return;
-
             while (NavigationService.BackStack.Count > 1)
             {
                 NavigationService.BackStack.RemoveAt(NavigationService.BackStack.Count - 1);
             }
 
-            await Initialize(chatParameter);
+            await Initialize(e.Parameter as string);
         }
 
         public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
@@ -114,28 +111,28 @@ namespace QMunicate.ViewModels
 
         #region Private methods
 
-        private async Task Initialize(ChatNavigationParameter chatParameter)
+        private async Task Initialize(string dialogId)
         {
             IsLoading = true;
 
+            var dialogManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            dialog = dialogManager.Dialogs.FirstOrDefault(d => d.Id == dialogId);
+
+            if (dialog == null) return;
+
             currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
 
-            if (chatParameter.Dialog != null)
-            {
-                dialog = chatParameter.Dialog;
-                ChatName = chatParameter.Dialog.Name;
-                ChatImage = chatParameter.Dialog.Image;
-                NumberOfMembers = chatParameter.Dialog.OccupantIds.Count;
+            ChatName = dialog.Name;
+            ChatImage = dialog.Image;
+            NumberOfMembers = dialog.OccupantIds.Count;
 
-                await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", currentUserId, dialog.XmppRoomJid));
+            await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", currentUserId, dialog.XmppRoomJid));
 
-                groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(dialog.XmppRoomJid, chatParameter.Dialog.Id);
-                groupChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
-                groupChatManager.JoinGroup(currentUserId.ToString());
+            groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(dialog.XmppRoomJid, dialog.Id);
+            groupChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
+            groupChatManager.JoinGroup(currentUserId.ToString());
 
-                if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))
-                    await LoadMessages(chatParameter.Dialog.Id);
-            }
+            await LoadMessages(dialogId);
 
             IsLoading = false;
         }

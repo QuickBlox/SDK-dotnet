@@ -128,7 +128,7 @@ namespace QMunicate.ViewModels
             }
             else if (dialogVm.DialogType == DialogType.Group)
             {
-                NavigationService.Navigate(ViewLocator.GroupChat, new ChatNavigationParameter { Dialog = dialogVm });
+                NavigationService.Navigate(ViewLocator.GroupChat, dialogVm.Id);
             }
 
 
