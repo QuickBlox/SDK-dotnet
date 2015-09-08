@@ -190,7 +190,7 @@ namespace QMunicate.ViewModels
             DeleteStoredCredentials();
             
             IsLoading = false;
-            NavigationService.Navigate(ViewLocator.SignUp);
+            NavigationService.Navigate(ViewLocator.First);
             NavigationService.BackStack.Clear();
         }
 
