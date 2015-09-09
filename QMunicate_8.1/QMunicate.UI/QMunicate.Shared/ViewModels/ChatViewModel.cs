@@ -73,7 +73,7 @@ namespace QMunicate.ViewModels
             set
             {
                 Set(ref newMessageText, value);
-                NotifyIsTyping();
+                if(!string.IsNullOrEmpty(value)) NotifyIsTyping();
             }
         }
 
@@ -238,6 +238,11 @@ namespace QMunicate.ViewModels
 
         private void PausedTypingTimerOnTick(object sender, object o)
         {
+            NotifyPausedTyping();
+        }
+
+        private void NotifyPausedTyping()
+        {
             pausedTypingTimer.Stop();
             if (privateChatManager == null) return;
 
@@ -295,13 +300,7 @@ namespace QMunicate.ViewModels
         {
             if (string.IsNullOrWhiteSpace(NewMessageText)) return;
 
-            //TODO: check is not needed. Navigate to proper page when opening dialog or do not show public dialogs
-            if (dialog.DialogType != DialogType.Private)
-            {
-                var messageService = ServiceLocator.Locator.Get<IMessageService>();
-                await messageService.ShowAsync("Message", "This is a public group dialog. You cannot send messages to public groups yet.");
-                return;
-            }
+            NotifyPausedTyping();
 
             bool isMessageSent = privateChatManager.SendMessage(NewMessageText);
 
