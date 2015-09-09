@@ -125,6 +125,8 @@ namespace QMunicate.Helper
 
         public async Task UpdateDialog(string dialogId, string lastActivity, DateTime lastMessageSent)
         {
+            if (string.IsNullOrEmpty(dialogId)) return;
+
             var dialog = Dialogs.FirstOrDefault(d => d.Id == dialogId);
             if (dialog != null)
             {
