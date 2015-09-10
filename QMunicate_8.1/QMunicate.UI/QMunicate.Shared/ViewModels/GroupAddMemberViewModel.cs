@@ -113,13 +113,13 @@ namespace QMunicate.ViewModels
             IsLoading = false;
         }
 
-        public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
-        {
-            foreach (var contact in UsersToAdd)
-            {
-                contact.Item.Image = null;
-            }
-        }
+        //public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
+        //{
+        //    foreach (var contact in UsersToAdd)
+        //    {
+        //        contact.Item.Image = null;
+        //    }
+        //}
 
         #endregion
 
@@ -297,7 +297,7 @@ namespace QMunicate.ViewModels
                 groupChatManager.JoinGroup(currentUserId.ToString());
                 var isGroupMessageSent = groupChatManager.SendMessage(groupNotificationMessage);
                 if (isGroupMessageSent)
-                    NavigationService.Navigate(ViewLocator.GroupChat, editedDialog.Id);
+                    NavigationService.Navigate(ViewLocator.GroupChat, createDialogResponse.Result.Id);
             }
         }
 
