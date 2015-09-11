@@ -145,8 +145,11 @@ namespace QMunicate
         {
             base.OnActivated(args);
             var protocolArgs = args as ProtocolActivatedEventArgs;
-            LifecycleHelper.FacebookAuthenticationReceived(protocolArgs);
-
+            if (protocolArgs != null)
+            {
+                LifecycleHelper.FacebookAuthenticationReceived(protocolArgs);
+            }
+            
             //var quickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
             //var token = SettingsManager.Instance.ReadFromSettings<string>(SettingsKeys.QbToken);
             //quickbloxClient.Resume(token);

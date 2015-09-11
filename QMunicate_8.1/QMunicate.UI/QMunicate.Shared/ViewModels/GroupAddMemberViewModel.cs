@@ -42,9 +42,12 @@ namespace QMunicate.ViewModels
 
         public GroupAddMemberViewModel()
         {
-            Contacts = new ObservableCollection<SelectableListBoxItem<UserVm>>();
-            CreateGroupCommand = new RelayCommand(CreateGroupCommandExecute, () => !IsLoading);
+            UsersToAdd = new ObservableCollection<SelectableListBoxItem<UserVm>>();
+            
+            CreateGroupCommand = new RelayCommand(CreateGroupCommandExecute, () => !IsLoading && UsersToAdd.Count > 0);
             ChangeImageCommand = new RelayCommand(ChangeImageCommandExecute, () => !IsLoading);
+
+            UsersToAdd.CollectionChanged += (sender, args) => { CreateGroupCommand.RaiseCanExecuteChanged(); };
         }
 
         #endregion
@@ -73,7 +76,7 @@ namespace QMunicate.ViewModels
             set { Set(ref membersText, value); }
         }
 
-        public ObservableCollection<SelectableListBoxItem<UserVm>> Contacts { get; set; }
+        public ObservableCollection<SelectableListBoxItem<UserVm>> UsersToAdd { get; set; }
 
         public bool IsEditMode
         {
@@ -112,7 +115,7 @@ namespace QMunicate.ViewModels
 
         public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
         {
-            foreach (var contact in Contacts)
+            foreach (var contact in UsersToAdd)
             {
                 contact.Item.Image = null;
             }
@@ -167,34 +170,14 @@ namespace QMunicate.ViewModels
         private async Task InitializeAllContacts(DialogVm existingDialog)
         {
             allContacts = new List<SelectableListBoxItem<UserVm>>();
+
             foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
             {
+                if(existingDialog != null && existingDialog.OccupantIds.Contains(contact.UserId)) continue;
+
                 var userVm = UserVm.FromContact(contact);
                 allContacts.Add(new SelectableListBoxItem<UserVm>(userVm));
             }
-            if (existingDialog != null)
-            {
-                var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-                int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
-                foreach (int occupantId in existingDialog.OccupantIds)
-                {
-                    var correspondingContact = allContacts.FirstOrDefault(c => c.Item.UserId == occupantId);
-                    if (correspondingContact != null)
-                    {
-                        correspondingContact.IsSelected = true;
-                    }
-                    else if (occupantId != currentUserId)
-                    {
-                        var notInContactsUser = await cachingQbClient.GetUserById(occupantId);
-                        if (notInContactsUser != null)
-                        {
-                            var selectableUser = new SelectableListBoxItem<UserVm>(UserVm.FromUser(notInContactsUser)) {IsSelected = true};
-                            allContacts.Add(selectableUser);
-                        }
-                    }
-                }
-            }
-
 
             await LoadAllContactsImages();
         }
@@ -208,7 +191,7 @@ namespace QMunicate.ViewModels
                 var user = await cachingQbClient.GetUserById(userVm.Item.UserId);
                 if (user != null && user.BlobId.HasValue)
                 {
-                    userVm.Item.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100, 100);
+                    userVm.Item.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100);
                 }
             }
         }
@@ -217,19 +200,19 @@ namespace QMunicate.ViewModels
         {
             using (await contactsLock.LockAsync())
             {
-                Contacts.Clear();
+                UsersToAdd.Clear();
                 if (string.IsNullOrEmpty(searchQuery))
                 {
                     foreach (var userVm in allContacts)
                     {
-                        Contacts.Add(userVm);
+                        UsersToAdd.Add(userVm);
                     }
                 }
                 else
                 {
                     foreach (var userVm in allContacts.Where(c => !string.IsNullOrEmpty(c.Item.FullName) && c.Item.FullName.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
                     {
-                        Contacts.Add(userVm);
+                        UsersToAdd.Add(userVm);
                     }
                 }
             }
@@ -262,22 +245,21 @@ namespace QMunicate.ViewModels
         private async Task UpdateGroup()
         {
             var selectedContacts = allContacts.Where(c => c.IsSelected).ToList();
-            int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
 
             var updateDialogRequest = new UpdateDialogRequest {DialogId = editedDialog.Id};
             var addedUsers = selectedContacts.Where(c => !editedDialog.OccupantIds.Contains(c.Item.UserId)).Select(u => u.Item.UserId).ToArray();
-            var removedUsers = editedDialog.OccupantIds.Where(c => selectedContacts.All(sc => sc.Item.UserId != c) && c != currentUserId).ToArray();
             if (addedUsers.Any())
                 updateDialogRequest.PushAll = new EditedOccupants() {OccupantsIds = addedUsers};
-            if (removedUsers.Any())
-                updateDialogRequest.PullAll = new EditedOccupants() {OccupantsIds = removedUsers};
 
             var updateDialogResponse = await QuickbloxClient.ChatClient.UpdateDialogAsync(updateDialogRequest);
 
             if (updateDialogResponse.StatusCode == HttpStatusCode.OK)
             {
-                ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter {Dialog = DialogVm.FromDialog(updateDialogResponse.Result)};
-                NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
+                var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+                var dialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == editedDialog.Id);
+                dialog.OccupantIds = updateDialogResponse.Result.OccupantsIds;
+
+                NavigationService.Navigate(ViewLocator.GroupChat, editedDialog.Id);
             }
         }
 
@@ -302,8 +284,6 @@ namespace QMunicate.ViewModels
                 var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
                 dialogsManager.Dialogs.Insert(0, dialogVm);
 
-                ChatNavigationParameter chatNavigationParameter = new ChatNavigationParameter {Dialog = dialogVm};
-
                 foreach (var contact in selectedContacts)
                 {
                     var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId);
@@ -317,7 +297,7 @@ namespace QMunicate.ViewModels
                 groupChatManager.JoinGroup(currentUserId.ToString());
                 var isGroupMessageSent = groupChatManager.SendMessage(groupNotificationMessage);
                 if (isGroupMessageSent)
-                    NavigationService.Navigate(ViewLocator.GroupChat, chatNavigationParameter);
+                    NavigationService.Navigate(ViewLocator.GroupChat, editedDialog.Id);
             }
         }
 

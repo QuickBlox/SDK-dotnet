@@ -9,6 +9,7 @@
     xmlns:tapListener="using:QMunicate.Core.TapListener"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:behaviors="using:QMunicate.Behaviors"
+    xmlns:converters="using:QMunicate.Converters"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
@@ -16,6 +17,9 @@
     x:Name="Page">
 
     <Page.Resources>
+        <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
+        <converters:IntToVisibilityConverter Invert="True" x:Key="InverseIntToVisibilityConverter"/>
+
         <Style x:Key="CheckBoxStyle1" TargetType="CheckBox">
             <Setter Property="Background" Value="{ThemeResource CheckBoxBackgroundThemeBrush}"/>
             <Setter Property="BorderBrush" Value="{ThemeResource CheckBoxBorderThemeBrush}"/>
@@ -166,15 +170,17 @@
             <TextBox Grid.Column="1" VerticalAlignment="Bottom" Text="{Binding GroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  PlaceholderText="Group name" Margin="6 12 12 0"/>
         </Grid>
         <TextBox Grid.Row="2" x:Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  PlaceholderText="Search" Margin="{StaticResource DefaultMargin}"/>
-        <ListBox Grid.Row="3" ItemsSource="{Binding Contacts}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
-                         ItemTemplate="{StaticResource LocalUserTemplate}" Margin="{StaticResource DefaultMargin}" />
+        <ListBox Grid.Row="3" ItemsSource="{Binding UsersToAdd}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
+                         ItemTemplate="{StaticResource LocalUserTemplate}" Margin="{StaticResource DefaultMargin}" Visibility="{Binding UsersToAdd.Count, Converter={StaticResource IntToVisibilityConverter}}" />
+        <TextBlock Grid.Row="3" Text="No users to add" FontSize="{StaticResource NormalFontSize}" Margin="{StaticResource DefaultMargin}"
+                   Visibility="{Binding UsersToAdd.Count, Converter={StaticResource InverseIntToVisibilityConverter}}"/>
     </Grid>
     <interactivity:Interaction.Behaviors>
         <behaviors:StatusBarBehavior IsLoading="{Binding IsLoading}"/>
     </interactivity:Interaction.Behaviors>
     <Page.BottomAppBar>
         <CommandBar Background="{StaticResource AppBarBrush}">
-            <AppBarButton Label="create" Command="{Binding CreateGroupCommand}">
+            <AppBarButton Label="done" Command="{Binding CreateGroupCommand}">
                 <AppBarButton.Icon>
                     <SymbolIcon Symbol="Accept" Foreground="White"/>
                 </AppBarButton.Icon>

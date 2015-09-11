@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QMunicate_8.1", "QMunicate_8.1", "{93024201-E145-42C3-9F07-E05DBC9500A1}"
 EndProject
@@ -40,6 +40,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharp.Xmpp", "Quickblox.Xamarin\Sharp.Xmpp-master\Sharp.Xmpp.csproj", "{9EA99E39-8C5C-4F69-9F3F-8E3074C518FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UbietyXmpp", "Quickblox_8.1\UbietyXmpp\UbietyXmpp.csproj", "{3CE40842-E229-4ADE-BB9A-A539453ADDAD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2CCBD758-560A-4DEE-94F3-CA5391D973DC}"
+	ProjectSection(SolutionItems) = preProject
+		Performance2.psess = Performance2.psess
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -470,5 +475,8 @@ Global
 		{BEE8FC5D-BA30-4DCC-A62A-8128264D0DA5} = {136B0548-2308-4DB4-B557-931032A61C4C}
 		{9EA99E39-8C5C-4F69-9F3F-8E3074C518FA} = {136B0548-2308-4DB4-B557-931032A61C4C}
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD} = {F245F1B4-27BF-42C9-8323-82817732E496}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

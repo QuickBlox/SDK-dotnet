@@ -116,7 +116,7 @@ namespace QMunicate.ViewModels
                         if (userVm.ImageUploadId.HasValue)
                         {
                             var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100, 100);
+                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100);
                         }
                     }
                 }
@@ -153,7 +153,7 @@ namespace QMunicate.ViewModels
                     if (user != null && user.BlobId.HasValue)
                     {
                         userVm.ImageUploadId = user.BlobId;
-                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100, 100);
+                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100);
                     }
                 }
             }
@@ -162,7 +162,6 @@ namespace QMunicate.ViewModels
         private async Task OpenLocalCommandExecute(UserVm user)
         {
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-            if (!dialogsManager.Dialogs.Any()) await dialogsManager.ReloadDialogs();
             var userDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.DialogType == DialogType.Private && d.OccupantIds.Contains(user.UserId));
             if (userDialog != null)
             {
