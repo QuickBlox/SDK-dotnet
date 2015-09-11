@@ -122,6 +122,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
             return new Jid(Domain, Node);
         }
 
+        public int GetUserId()
+        {
+            int id;
+            var stringJid = ToString();
+            int.TryParse(stringJid.Split('-')[0], out id);
+            return id;
+        }
+
         /// <summary>
         /// Returns a textual representation of the JID.
         /// </summary>

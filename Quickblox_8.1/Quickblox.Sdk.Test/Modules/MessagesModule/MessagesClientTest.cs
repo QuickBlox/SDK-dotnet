@@ -28,7 +28,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
 #if DEBUG
-            client1.MessagesClient.DebugClientName = "1";
+            //client1.MessagesClient.DebugClientName = "1";
 #endif
             await client1.MessagesClient.Connect(chatEndpoint, id1, (int)GlobalConstant.ApplicationId, password1);
         }
