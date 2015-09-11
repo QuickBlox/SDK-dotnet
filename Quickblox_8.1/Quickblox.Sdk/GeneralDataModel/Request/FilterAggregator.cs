@@ -18,8 +18,8 @@ namespace Quickblox.Sdk.GeneralDataModel.Request
 
             foreach (var filter in this.Filters)
             {
-                stringBuilder.Append("&");
                 stringBuilder.Append(filter.BuildFilter());
+                stringBuilder.Append("&");
             }
 
             return stringBuilder.ToString();

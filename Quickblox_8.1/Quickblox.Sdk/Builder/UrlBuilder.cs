@@ -70,7 +70,6 @@ namespace Quickblox.Sdk.Builder
 
             if (settings.Filter != null)
             {
-                navBody.Append("&");
                 navBody.Append(settings.Filter.BuildFilter());
             }
 
