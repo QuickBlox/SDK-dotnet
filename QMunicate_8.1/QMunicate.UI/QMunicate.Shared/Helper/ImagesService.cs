@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Quickblox.Sdk;
+using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using QMunicate.Core.AsyncLock;
-using Quickblox.Sdk;
 
 namespace QMunicate.Helper
 {
@@ -16,6 +13,7 @@ namespace QMunicate.Helper
         Task<byte[]> GetPrivateImageBytes(int imageUploadId);
         Task<ImageSource> GetPrivateImage(int imageUploadId, int? decodePixelWidth = null, int? decodePixelHeight = null);
         Task<ImageSource> GetPublicImage(string imageUrl);
+        void ClearImagesCache();
     }
 
     public class ImagesService : IImageService
@@ -27,7 +25,7 @@ namespace QMunicate.Helper
         private readonly IQuickbloxClient quickbloxClient;
         private readonly IFileStorage fileStorage;
         private static readonly List<int> thisSessionImages = new List<int>(); // image links that were loaded during this session of application
-        private readonly AsyncLock listLock = new AsyncLock();
+        private readonly object thisLock = new object();
 
         #endregion
 
@@ -45,10 +43,13 @@ namespace QMunicate.Helper
 
         public async Task<byte[]> GetPrivateImageBytes(int imageUploadId)
         {
-            if (thisSessionImages.Contains(imageUploadId))
-                return await GetImageBytesFromStorage(imageUploadId);
+            bool isInThisSession;
+            lock (this)
+            {
+                isInThisSession = thisSessionImages.Contains(imageUploadId);
+            }
 
-            return await GetImageBytesFromServer(imageUploadId);
+            return isInThisSession ? await GetImageBytesFromStorage(imageUploadId) : await GetImageBytesFromServer(imageUploadId);
         }
 
         public async Task<ImageSource> GetPrivateImage(int imageUploadId, int? decodePixelWidth = null, int? decodePixelHeight = null)
@@ -72,6 +73,14 @@ namespace QMunicate.Helper
             
         }
 
+        public void ClearImagesCache()
+        {
+            lock (thisLock)
+            {
+                thisSessionImages.Clear();
+            }
+        }
+
         #endregion
 
         #region Private methods
@@ -82,7 +91,7 @@ namespace QMunicate.Helper
             if (downloadResponse.StatusCode == HttpStatusCode.OK)
             {
                 await fileStorage.WriteToFile(imagesFolder, string.Format(fileNameFormat, imageUploadId), downloadResponse.Result);
-                using (await listLock.LockAsync())
+                lock (thisLock)
                 {
                     thisSessionImages.Add(imageUploadId);
                 }
