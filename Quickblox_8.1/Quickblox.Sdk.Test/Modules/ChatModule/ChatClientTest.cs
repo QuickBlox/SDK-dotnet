@@ -7,6 +7,7 @@ using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ChatModule.Responses;
+using QMunicate.Logger;
 
 namespace Quickblox.Sdk.Test.Modules.ChatModule
 {
@@ -18,8 +19,8 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
-            var sessionResponse = await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345");
+            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new FileLogger());
+            var sessionResponse = await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "edwardtest", "edwardtest");
             client.Token = sessionResponse.Result.Session.Token;
         }
 
@@ -62,8 +63,8 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
             var retriveDialogsRequest = new RetrieveDialogsRequest();
 
             var aggregator = new FilterAggregator();
-            aggregator.Filters.Add(new DialogSortFilter<int>(SortOperator.Asc, () => new DialogResponse().Type));
-            aggregator.Filters.Add(new RetrieveDialogsFilter<String>(() => new DialogResponse().Id, "551d50bd535c123fc50260db"));
+            //aggregator.Filters.Add(new DialogSortFilter<int>(SortOperator.Asc, () => new DialogResponse().Type));
+            aggregator.Filters.Add(new RetrieveDialogsFilter<int[]>(() => new DialogResponse().OccupantsIds, new int[] { 11879, 12779 }));
 
             retriveDialogsRequest.Filter = aggregator;
             var response = await this.client.ChatClient.GetDialogsAsync(retriveDialogsRequest);

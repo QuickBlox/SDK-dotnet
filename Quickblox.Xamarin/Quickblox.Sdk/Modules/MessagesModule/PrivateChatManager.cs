@@ -62,7 +62,7 @@ namespace Quickblox.Sdk
             }
 
            quickbloxClient.MessagesClient.AddContact(item);
-           SendMessage("Contact request", thread: dialogId, messageType: MessageType.Headline, notificationType: NotificationType.FriendsRequest);
+           SendMessage("Contact request", thread: dialogId, messageType: MessageType.Normal, notificationType: NotificationType.FriendsRequest);
             
            return true;
         }
@@ -74,14 +74,14 @@ namespace Quickblox.Sdk
 
             quickbloxClient.MessagesClient.AddContact(item);
 
-            SendMessage("Request accepted", thread: dialogId, messageType: MessageType.Headline, notificationType: NotificationType.FriendsAccept);
+            SendMessage("Request accepted", thread: dialogId, messageType: MessageType.Normal, notificationType: NotificationType.FriendsAccept);
             return true;
         }
 
         public bool RejectFriend(RosterItem item)
         {
             quickbloxClient.MessagesClient.RemoveContact(item);
-            SendMessage("Request rejected", thread: dialogId, messageType: MessageType.Headline, notificationType: NotificationType.FriendsReject);
+            SendMessage("Request rejected", thread: dialogId, messageType: MessageType.Normal, notificationType: NotificationType.FriendsReject);
             
             return true;
         }

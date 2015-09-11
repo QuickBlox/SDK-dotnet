@@ -59,7 +59,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public event EventHandler OnStatusChanged;
 
-        public event EventHandler OnRosterUpdated;
+        public event RosterUpdatedEventHandler OnRosterUpdated;
 
         public event EventHandler OnChatStateChanged;
 
@@ -185,7 +185,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             var handler = OnRosterUpdated;
             if (handler != null)
             {
-                handler.Invoke(this, null);
+                var subscriptionWrappedState = (SubscriptionState)Enum.Parse(typeof(SubscriptionState), e.Item.SubscriptionState.ToString());
+                RosterItem wrapper = new RosterItem(e.Item.Jid.Node, e.Item.Name, subscriptionWrappedState, e.Item.Pending, e.Item.Groups);
+                handler.Invoke(this, new RosterUpdatedEventArgs(wrapper, e.Removed));
             }
         }
 
@@ -230,6 +232,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             receivedMessage.From = messageEventArgs.Message.From.ToString();
             receivedMessage.To = messageEventArgs.Message.To.ToString();
             receivedMessage.Body = messageEventArgs.Message.Body;
+            receivedMessage.Subject = messageEventArgs.Message.Subject;
+            receivedMessage.Thread = messageEventArgs.Message.Thread;
+
 
             var wappedMessageTyp = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
             receivedMessage.MessageType = wappedMessageTyp;

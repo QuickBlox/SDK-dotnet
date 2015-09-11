@@ -3,6 +3,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json;
 using Quickblox.Sdk.GeneralDataModel.Request;
+using System.Diagnostics;
+using System.Text;
+using System.Collections.Generic;
 
 namespace Quickblox.Sdk.Modules.ChatModule.Models
 {
@@ -33,9 +36,22 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
         {
             var memberExpression = (MemberExpression)this.selectFieldExpression.Body;
             var propertyInfo = (PropertyInfo)memberExpression.Member;
-
-            var jsonPropertyAttribute = propertyInfo.GetCustomAttribute<JsonPropertyAttribute>();
-            return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, this.findValue);
+            if (findValue.GetType().IsArray)
+            {
+                var list = new List<object>();
+                foreach (var item in (Array)findValue)
+                {
+                    list.Add(item);
+                }
+                var stringValue = String.Join(",", list);             
+                var jsonPropertyAttribute = propertyInfo.GetCustomAttribute<JsonPropertyAttribute>();
+                return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, stringValue);
+            }
+            else
+            {                
+                var jsonPropertyAttribute = propertyInfo.GetCustomAttribute<JsonPropertyAttribute>();
+                return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, this.findValue);
+            }
         }
     }
 }

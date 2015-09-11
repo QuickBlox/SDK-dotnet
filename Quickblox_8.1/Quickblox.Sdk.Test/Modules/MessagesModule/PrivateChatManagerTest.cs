@@ -45,7 +45,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
 #if DEBUG
-            client1.MessagesClient.DebugClientName = "1";
+            //client1.MessagesClient.DebugClientName = "1";
 #endif
             await client1.MessagesClient.Connect(ChatEndpoint, id1, ApplicationId, password1);
             chatManager1 = client1.MessagesClient.GetPrivateChatManager(id2, dialogId);
@@ -55,7 +55,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             //await client2.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client2.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
 #if DEBUG
-            client2.MessagesClient.DebugClientName = "2";
+            //client2.MessagesClient.DebugClientName = "2";
 #endif
             await client2.MessagesClient.Connect(ChatEndpoint, id2, ApplicationId, password2);
             chatManager2 = client2.MessagesClient.GetPrivateChatManager(id1, dialogId);

@@ -9,7 +9,7 @@ namespace Quickblox.Sdk.Serializer
     /// <summary>
     /// Serializer class.
     /// </summary>
-    internal class JsonSerializer : ISerializer
+    public class JsonSerializer : ISerializer
     {
         private List<Type> knownTypes = new List<Type>();
 

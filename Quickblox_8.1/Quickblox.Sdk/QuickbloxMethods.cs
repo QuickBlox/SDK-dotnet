@@ -92,11 +92,11 @@ namespace Quickblox.Sdk.Core
 
         public const string GetTaggedFilesMethod = "/blobs/tagged.json";
 
-        public const string UploadMethod = "{0}";
+        public const string UploadMethod = "{0}.json";
 
-        public const string CompleteUploadByFileIdMethod = "/blobs/{0}/complete";
+        public const string CompleteUploadByFileIdMethod = "/blobs/{0}/complete.json";
 
-        public const string GetFileByIdMethod = "/blobs/{0}";
+        public const string GetFileByIdMethod = "/blobs/{0}.json";
 
         public const string DownloadFileByUIdMethod = "/blobs/{0}";
 

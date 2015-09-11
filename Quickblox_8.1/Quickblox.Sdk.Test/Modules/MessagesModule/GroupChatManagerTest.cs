@@ -36,7 +36,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             var sessionResponse = await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
             client1.Token = sessionResponse.Result.Session.Token;
 #if DEBUG
-            client1.MessagesClient.DebugClientName = "1";
+            //MessagesClient.DebugClientName = "1";
 #endif
             await client1.MessagesClient.Connect(chatEndpoint, id1, (int)GlobalConstant.ApplicationId, password1);
 
@@ -44,7 +44,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             var sessionResponse1 = await client2.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
             client2.Token = sessionResponse1.Result.Session.Token;
 #if DEBUG
-            client2.MessagesClient.DebugClientName = "2";
+            //client2.MessagesClient.DebugClientName = "2";
 #endif
             await client2.MessagesClient.Connect(chatEndpoint, id2, (int)GlobalConstant.ApplicationId, password2);
         }

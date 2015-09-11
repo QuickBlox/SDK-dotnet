@@ -483,11 +483,9 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Serializer\XmlSerializer.cs">
       <Link>Serializer\XmlSerializer.cs</Link>
     </Compile>
-    <Compile Include="FileLogger.cs" />
     <Compile Include="Help\Timer.cs" />
     <Compile Include="HmacSha1CryptographicProvider.cs" />
     <Compile Include="ICryptographicProvider.cs" />
-    <Compile Include="ILogger.cs" />
     <Compile Include="Modules\MessagesModule\MessageClient.cs" />
     <Compile Include="Modules\MessagesModule\Models\ActivityChangedEventHandler.cs" />
     <Compile Include="Modules\MessagesModule\Models\GeneralActivity.cs" />
@@ -495,6 +493,7 @@
     <Compile Include="Modules\MessagesModule\Models\MessageType.cs" />
     <Compile Include="Modules\MessagesModule\Models\NotificationType.cs" />
     <Compile Include="Modules\MessagesModule\Models\RosterItem.cs" />
+    <Compile Include="Modules\MessagesModule\Models\RosterUpdatedEventHandler.cs" />
     <Compile Include="Modules\MessagesModule\Models\SubscriptionsEventHandler.cs" />
     <Compile Include="Modules\MessagesModule\Models\SubscriptionState.cs" />
     <Compile Include="Modules\MessagesModule\PrivateChatManager.cs" />
