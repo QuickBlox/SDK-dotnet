@@ -488,6 +488,7 @@
     <Compile Include="ICryptographicProvider.cs" />
     <Compile Include="Modules\MessagesModule\MessageClient.cs" />
     <Compile Include="Modules\MessagesModule\Models\ActivityChangedEventHandler.cs" />
+    <Compile Include="Modules\MessagesModule\Models\ErrorsEventHandler.cs" />
     <Compile Include="Modules\MessagesModule\Models\GeneralActivity.cs" />
     <Compile Include="Modules\MessagesModule\Models\Jid.cs" />
     <Compile Include="Modules\MessagesModule\Models\MessageType.cs" />
