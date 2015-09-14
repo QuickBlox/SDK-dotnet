@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
@@ -135,7 +136,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// <param name="page">Page number of the book of the results that you want to get. By default: 1</param>
         /// <param name="perPage">The maximum number of results per page. Min: 1. Max: 100. By default: 10</param>
         /// <returns></returns>
-        public async Task<HttpResponse<PagedResponse<UserResponse>>> GetUserByFullNameAsync(String fullName, UInt32? page, UInt32? perPage)
+        public async Task<HttpResponse<PagedResponse<UserResponse>>> GetUserByFullNameAsync(String fullName, UInt32? page, UInt32? perPage, CancellationToken token = default(CancellationToken))
         {
             var byFullname = new UserRequest()
             {
@@ -144,7 +145,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
                 PerPage = perPage
             };
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFullMethod, byFullname, headers);
+            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByFullMethod, byFullname, headers, token: token);
         }
 
         /// <summary>

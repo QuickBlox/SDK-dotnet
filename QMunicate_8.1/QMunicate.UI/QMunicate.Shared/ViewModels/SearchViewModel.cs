@@ -10,6 +10,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.AsyncLock;
@@ -24,6 +25,7 @@ namespace QMunicate.ViewModels
         private bool isInGlobalSeachMode;
         private readonly AsyncLock localResultsLock = new AsyncLock();
         private readonly AsyncLock globalResultsLock = new AsyncLock();
+        private CancellationTokenSource cts;
 
         #endregion
 
@@ -92,15 +94,25 @@ namespace QMunicate.ViewModels
 
         private async Task GlobalSearch(string searchQuery)
         {
-            using (await globalResultsLock.LockAsync())
+            if (string.IsNullOrWhiteSpace(searchQuery))
             {
-                GlobalResults.Clear();
+                await ClearGlobalResults();
+                return;
             }
-            if (string.IsNullOrWhiteSpace(searchQuery)) return;
 
             IsLoading = true;
-            var response = await QuickbloxClient.UsersClient.GetUserByFullNameAsync(searchQuery, null, null);
-            if (response.StatusCode == HttpStatusCode.OK)
+
+            if (cts != null)
+            {
+                cts.Cancel();
+                cts.Dispose();
+            }
+
+            cts = new CancellationTokenSource();
+            var token = cts.Token;
+
+            var response = await QuickbloxClient.UsersClient.GetUserByFullNameAsync(searchQuery, null, null, token);
+            if (response.StatusCode == HttpStatusCode.OK && !token.IsCancellationRequested)
             {
                 int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
                 using (await globalResultsLock.LockAsync())
@@ -110,19 +122,38 @@ namespace QMunicate.ViewModels
                     {
                         GlobalResults.Add(UserVm.FromUser(item.User));
                     }
+                    
+                }
+            }
+            else
+            {
+                await ClearGlobalResults();
+            }
 
-                    foreach (UserVm userVm in GlobalResults)
+            if (string.IsNullOrEmpty(SearchText))
+                await ClearGlobalResults();
+
+            using (await globalResultsLock.LockAsync())
+            {
+                foreach (UserVm userVm in GlobalResults)
+                {
+                    if (userVm.ImageUploadId.HasValue)
                     {
-                        if (userVm.ImageUploadId.HasValue)
-                        {
-                            var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                            userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100);
-                        }
+                        var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                        userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100);
                     }
                 }
             }
 
             IsLoading = false;
+        }
+
+        private async Task ClearGlobalResults()
+        {
+            using (await globalResultsLock.LockAsync())
+            {
+                GlobalResults.Clear();
+            }
         }
 
         private async Task LocalSearch(string searchQuery)
