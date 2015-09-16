@@ -352,11 +352,15 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             if (string.IsNullOrEmpty(message1.MessageText)) return;
 
-            if (message1.From.Contains(otherUserJid) && message1.NotificationType != NotificationTypes.NotificationMessage)
+            if (message1.From.Contains(otherUserJid))
             {
-                var handler = OnMessageReceived;
-                if (handler != null)
-                    handler(this, message1);
+                var nofifMessage = message1 as NotificationMessage;
+                if (nofifMessage == null || nofifMessage.NotificationType != NotificationTypes.NotificationMessage)
+                {
+                    var handler = OnMessageReceived;
+                    if (handler != null)
+                        handler(this, message1);
+                }
             }
         }
 

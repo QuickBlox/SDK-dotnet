@@ -45,6 +45,25 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
         }
     }
 
+    public class RoomPhoto : XElement
+    {
+        public static XName XName = XName.Get("room_photo", "jabber:client");
+
+        public RoomPhoto() : base(XName)
+        {
+        }
+    }
+
+    public class RoomName : XElement
+    {
+        public static XName XName = XName.Get("room_name", "jabber:client");
+
+        public RoomName()
+            : base(XName)
+        {
+        }
+    }
+
     public class NotificationType : XElement
     {
         public static XName XName = XName.Get("notification_type", "jabber:client");
@@ -57,6 +76,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
     public enum NotificationTypes
     {
         NotificationMessage = 1,
+        GroupUpdate = 2,
         FriendsRequest = 4,
         FriendsAccept = 5,
         FriendsReject = 6,
