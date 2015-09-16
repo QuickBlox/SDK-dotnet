@@ -9,11 +9,16 @@
     xmlns:viewModels="using:QMunicate.ViewModels"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     xmlns:behaviors="using:QMunicate.Behaviors"
+    xmlns:converters="using:QMunicate.Converters"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
     DataContext="{Binding DialogsViewModel, Source={StaticResource Locator}}"
     x:Name="Page">
+    
+    <Page.Resources>
+        <converters:HandyDateConverter x:Key="HandyDateConverter" /> 
+    </Page.Resources>
 
     <Grid Margin="{StaticResource DefaultMargin}">
         <Grid.RowDefinitions>
@@ -42,7 +47,7 @@
                             <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55" Grid.RowSpan="2" Margin="0 0 12 0"/>
                             <TextBlock Text="{Binding Name}" Grid.Column="1" Grid.Row="0" FontSize="{StaticResource NormalFontSize}"/>
                             <TextBlock Text="{Binding LastActivity}" Grid.Column="1" Grid.Row="1" FontSize="{StaticResource SmallFontSize}" Foreground="Gray"/>
-                            <TextBlock Text="{Binding LastMessageSent, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:dd MMM yyyy}'}"
+                            <TextBlock Text="{Binding LastMessageSent, Converter={StaticResource HandyDateConverter}}"
                                        FontSize="{StaticResource SmallFontSize}" Foreground="Gray" Grid.Column="2" Grid.Row="0"/>
                         </Grid>
                     </DataTemplate>
