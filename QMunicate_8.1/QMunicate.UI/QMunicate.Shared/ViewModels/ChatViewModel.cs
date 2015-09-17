@@ -374,6 +374,12 @@ namespace QMunicate.ViewModels
                 DateTime = DateTime.Now
             };
 
+            var notificationMessage = message as NotificationMessage;
+            if (notificationMessage != null)
+            {
+                incomingMessage.NotificationType = notificationMessage.NotificationType;
+            }
+
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 Messages.Add(incomingMessage);
