@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
 using Quickblox.Sdk;
@@ -116,12 +117,32 @@ namespace QMunicate.ViewModels
         private async void DeleteHistoryCommandExecute()
         {
             IsLoading = true;
-            if(await DeleteDialog())
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
+            var deleteCommand = new DialogCommand("delete", new RelayCommand(async () => await DeleteHistory()));
+            var cancelCommand = new DialogCommand("cancel", new RelayCommand(() => { }), false, true);
+            await messageService.ShowAsync("Delete", "Do you really want to delete chat history?", new[] { deleteCommand, cancelCommand });
+            IsLoading = false;
+        }
+
+        private async Task DeleteHistory()
+        {
+            IsLoading = true;
+            if (await DeleteDialog())
                 GoToDialogsPage();
             IsLoading = false;
         }
 
         private async  void RemoveContactCommandExecute()
+        {
+            IsLoading = true;
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
+            var deleteCommand = new DialogCommand("remove", new RelayCommand(async () => await RemoveContactAndDeleteHistory()));
+            var cancelCommand = new DialogCommand("cancel", new RelayCommand(() => { }), false, true);
+            await messageService.ShowAsync("Remove", "Do you really want to remove contact and chat?", new[] { deleteCommand, cancelCommand });
+            IsLoading = false;
+        }
+
+        private async Task RemoveContactAndDeleteHistory()
         {
             IsLoading = true;
             var currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
@@ -131,11 +152,7 @@ namespace QMunicate.ViewModels
 
             if (isDeleted)
             {
-                bool isDialogDeleted = await DeleteDialog();
-                if (isDialogDeleted)
-                {
-                    GoToDialogsPage();
-                }
+                await DeleteHistory();
             }
             IsLoading = false;
         }
