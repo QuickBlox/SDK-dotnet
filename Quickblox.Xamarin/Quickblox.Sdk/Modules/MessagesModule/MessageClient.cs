@@ -69,6 +69,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public event ActivityChangedEventHandler OnActivityChanged;
 
+        public event ErrorsEventHandler OnErrorReceived;
+
         private void UnSubcribeEvents(XmppClient xmppClient)
         {
             xmppClient.Error -= OnClientErrorCallback;
@@ -222,6 +224,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             Debug.WriteLine("XMPP: ====>  OnClientError:");
             throw new QuickbloxSdkException(string.Format("XMPP connection exception. Message: {0}. Exception: {1}",
                        args.Reason, args.Exception));
+
+            var handler = OnErrorReceived;
+            if (handler != null)
+            {
+                handler.Invoke(sender, new ErrorEventArgs(args.Exception));
+            }
         }
 
         private void OnMessageReceivedCallback(object sender, Sharp.Xmpp.Im.MessageEventArgs messageEventArgs)
