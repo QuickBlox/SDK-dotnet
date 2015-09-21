@@ -187,6 +187,12 @@ namespace QMunicate.ViewModels
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             dialogsManager.Dialogs.Clear();
 
+            var imagesService = ServiceLocator.Locator.Get<IImageService>();
+            imagesService.ClearImagesCache();
+
+            var cachingClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            cachingClient.ClearUsersCache();
+
             DeleteStoredCredentials();
             
             IsLoading = false;

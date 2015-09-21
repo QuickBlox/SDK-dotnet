@@ -229,26 +229,70 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private void OnMessage(message msg)
         {
-            var receivedMessage = new Message {From = msg.from, To = msg.to, MessageText = msg.body};
-            receivedMessage.IsTyping =  msg.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.composing) != null;
-            receivedMessage.IsPausedTyping = msg.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.paused) != null;
+            var receivedMessage = new Message();
 
             var extraParams = msg.Element(ExtraParams.XName);
             if (extraParams != null)
             {
-                var dialogId = extraParams.Element(DialogId.XName);
-                if (dialogId != null) receivedMessage.DialogId = dialogId.Value;
+                var notificationType = extraParams.Element(NotificationType.XName);
+                if (notificationType != null)
+                {
+                    receivedMessage = new NotificationMessage();
+                    FillNotificationMessage(msg, (NotificationMessage)receivedMessage);
+                }
+            }
 
+            FillMessage(msg, receivedMessage);
+
+            var handler = OnMessageReceived;
+            if (handler != null)
+                handler(this, receivedMessage);
+        }
+
+        private void FillNotificationMessage(message source, NotificationMessage result)
+        {
+            var extraParams = source.Element(ExtraParams.XName);
+            if (extraParams != null)
+            {
                 var notificationType = extraParams.Element(NotificationType.XName);
                 if (notificationType != null)
                 {
                     int intValue;
                     if (int.TryParse(notificationType.Value, out intValue))
                     {
-                        if (Enum.IsDefined(typeof (NotificationTypes), intValue))
-                            receivedMessage.NotificationType = (NotificationTypes) intValue;
+                        if (Enum.IsDefined(typeof(NotificationTypes), intValue))
+                            result.NotificationType = (NotificationTypes)intValue;
                     }
                 }
+
+                var roomPhoto = extraParams.Element(RoomPhoto.XName);
+                if (roomPhoto != null)
+                {
+                    result.RoomPhoto = roomPhoto.Value;
+                }
+
+                var roomName = extraParams.Element(RoomName.XName);
+                if (roomName != null)
+                {
+                    result.RoomName = roomName.Value;
+                }
+            }
+        }
+
+        private void FillMessage(message source, Message result)
+        {
+            result.From = source.from;
+            result.To = source.to;
+            result.MessageText = source.body;
+
+            result.IsTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.composing) != null;
+            result.IsPausedTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.paused) != null;
+
+            var extraParams = source.Element(ExtraParams.XName);
+            if (extraParams != null)
+            {
+                var dialogId = extraParams.Element(DialogId.XName);
+                if (dialogId != null) result.DialogId = dialogId.Value;
 
                 var dateSent = extraParams.Element(DateSent.XName);
                 if (dateSent != null)
@@ -256,15 +300,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                     long longValue;
                     if (long.TryParse(dateSent.Value, out longValue))
                     {
-                        receivedMessage.DateTimeSent = longValue.ToDateTime();
+                        result.DateTimeSent = longValue.ToDateTime();
                     }
                 }
             }
-            
-
-            var handler = OnMessageReceived;
-            if (handler != null)
-                handler(this, receivedMessage);
         }
 
         private void OnPresence(presence presence)

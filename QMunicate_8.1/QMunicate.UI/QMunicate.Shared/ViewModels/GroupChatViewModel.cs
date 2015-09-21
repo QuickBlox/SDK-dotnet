@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Logger;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Logger;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 
 namespace QMunicate.ViewModels
 {
@@ -186,7 +187,29 @@ namespace QMunicate.ViewModels
             }
 
 
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => Messages.Add(messageVm));
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                Messages.Add(messageVm);
+                var notificationMessage = message as NotificationMessage;
+                if (notificationMessage != null) HandleNotificationMessage(notificationMessage);
+            });
+        }
+
+        private async Task HandleNotificationMessage(NotificationMessage notificationMessage)
+        {
+            if (notificationMessage.NotificationType == NotificationTypes.GroupUpdate)
+            {
+                if (!string.IsNullOrEmpty(notificationMessage.RoomPhoto))
+                {
+                    var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                    ChatImage = await imagesService.GetPublicImage(notificationMessage.RoomPhoto);
+                }
+
+                if (!string.IsNullOrEmpty(notificationMessage.RoomName))
+                {
+                    ChatName = notificationMessage.RoomName;
+                }
+            }
         }
 
         private int GetSenderIdFromJid(string jid)

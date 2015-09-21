@@ -44,6 +44,7 @@ namespace QMunicate.ViewModels
 
             ChoosePhotoCommand = new RelayCommand(ChoosePhotoCommandExecute, () => !IsLoading);
             SignUpCommand = new RelayCommand(SignUpCommandExecute, () => !IsLoading);
+            DeleteUserImageCommand = new RelayCommand(DeleteUserImageCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -77,6 +78,8 @@ namespace QMunicate.ViewModels
         public RelayCommand ChoosePhotoCommand { get; set; }
 
         public RelayCommand SignUpCommand { get; set; }
+
+        public RelayCommand DeleteUserImageCommand { get; set; }
 
         #endregion
 
@@ -203,6 +206,12 @@ namespace QMunicate.ViewModels
 
             UpdateUserRequest updateUserRequest = new UpdateUserRequest { User = new UserRequest { BlobId = uploadId } };
             await QuickbloxClient.UsersClient.UpdateUserAsync(user.Id, updateUserRequest);
+        }
+
+        private void DeleteUserImageCommandExecute()
+        {
+            userImageBytes = null;
+            UserImage = null;
         }
 
         #endregion

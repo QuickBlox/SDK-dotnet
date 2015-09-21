@@ -11,6 +11,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
 namespace QMunicate.Helper
@@ -151,7 +152,36 @@ namespace QMunicate.Helper
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 await UpdateDialog(message.DialogId, message.MessageText, message.DateTimeSent);
+
+                var notificationMessage = message as NotificationMessage;
+                if (notificationMessage != null)
+                {
+                    await HandleNotificationMessage(notificationMessage);
+                }
             });
+        }
+
+        private async Task HandleNotificationMessage(NotificationMessage notificationMessage)
+        {
+            if (notificationMessage.NotificationType == NotificationTypes.GroupUpdate)
+            {
+                var updatedDialog = Dialogs.FirstOrDefault(d => d.Id == notificationMessage.DialogId);
+                if (updatedDialog != null)
+                {
+                    if (!string.IsNullOrEmpty(notificationMessage.RoomPhoto))
+                    {
+                        updatedDialog.Photo = notificationMessage.RoomPhoto;
+                        var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                        updatedDialog.Image = await imagesService.GetPublicImage(notificationMessage.RoomPhoto);
+                    }
+
+                    if (!string.IsNullOrEmpty(notificationMessage.RoomName))
+                    {
+                        updatedDialog.Name = notificationMessage.RoomName;
+                    }
+
+                }
+            }
         }
 
         private string GetUserNameFromContacts(int userId)

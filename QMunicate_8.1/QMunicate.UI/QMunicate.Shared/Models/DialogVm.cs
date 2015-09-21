@@ -43,7 +43,15 @@ namespace QMunicate.Models
 
         public string Id { get; set; }
         public string XmppRoomJid { get; set; }
+
+        /// <summary>
+        /// Photo url (for group dialogs)
+        /// </summary>
         public string Photo { get; set; }
+
+        /// <summary>
+        /// BlobId (for private dialogs)
+        /// </summary>
         public int? PrivatePhotoId { get; set; }
         public int? UnreadMessageCount { get; set; }
         public IList<int> OccupantIds { get; set; }

@@ -23,9 +23,9 @@
             <Image Source="{Binding UserImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Height="90" Width="90" HorizontalAlignment="Left" Margin="{StaticResource DefaultMargin}"/>
             <TextBlock Text="mobile" FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}" Visibility="{Binding MobilePhone, Converter={StaticResource NullToVisibilityConverter}}"/>
             <TextBlock Text="{Binding MobilePhone}" Foreground="DodgerBlue" Margin="12 0 12 12" FontSize="{StaticResource NormalFontSize}" Visibility="{Binding MobilePhone, Converter={StaticResource NullToVisibilityConverter}}"/>
-            <HyperlinkButton Content="send message" Command="{Binding SendMessageCommand}" FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}" />
-            <HyperlinkButton Content="delete chat history" Command="{Binding DeleteHistoryCommand}" Foreground="Red" FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}" />
-            <HyperlinkButton Content="remove contact and chat" Command="{Binding RemoveContactCommand}" Foreground="Red" FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}" />
+            <HyperlinkButton Content="send message" Command="{Binding SendMessageCommand}" FontSize="{StaticResource BigFontSize}" Margin="{StaticResource DefaultMargin}" />
+            <HyperlinkButton Content="delete chat history" Command="{Binding DeleteHistoryCommand}" Foreground="Red" FontSize="{StaticResource BigFontSize}" Margin="{StaticResource DefaultMargin}" />
+            <HyperlinkButton Content="remove contact and chat" Command="{Binding RemoveContactCommand}" Foreground="Red" FontSize="{StaticResource BigFontSize}" Margin="{StaticResource DefaultMargin}" />
         </StackPanel>
     </Grid>
 

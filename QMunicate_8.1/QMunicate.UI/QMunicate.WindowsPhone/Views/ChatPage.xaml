@@ -119,9 +119,11 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding NewMessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="120" TextWrapping="Wrap" PlaceholderText="Message"
-                      Background="White" BorderBrush="White" Margin="{StaticResource DefaultMargin}" IsEnabled="{Binding IsMessageSendingAllowed}"/>
-            <Button Grid.Column="1" VerticalAlignment="Top" Command="{Binding SendCommand}" BorderThickness="0"  Style="{StaticResource ContentButtonStyle}">
+            <TextBox Text="{Binding NewMessageText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     KeyDown="TextBox_OnKeyDown" Height="120" TextWrapping="Wrap" PlaceholderText="Message"
+                     Background="White" BorderBrush="White" Margin="{StaticResource DefaultMargin}" IsEnabled="{Binding IsMessageSendingAllowed}"/>
+            <Button x:Name="SendButton" Grid.Column="1" VerticalAlignment="Top"
+                    Command="{Binding SendCommand}" BorderThickness="0"  Style="{StaticResource ContentButtonStyle}">
                 <Button.Content>
                     <Image Source="../Assets/send_ic.png" Width="50" Height="50"/>
                 </Button.Content>

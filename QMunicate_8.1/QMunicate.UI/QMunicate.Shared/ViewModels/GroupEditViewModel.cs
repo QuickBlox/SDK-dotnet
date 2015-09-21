@@ -156,13 +156,20 @@ namespace QMunicate.ViewModels
                 {
                     var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
                     var dialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == currentDialog.Id);
+
+                    var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(currentDialog.XmppRoomJid, currentDialog.Id);
+
                     if (!string.IsNullOrEmpty(updateDialogRequest.Name))
+                    {
                         dialog.Name = updateDialogRequest.Name;
+                        groupChatManager.NotifyGroupNameChanged(updateDialogRequest.Name);
+                    }
 
                     if (!string.IsNullOrEmpty(updateDialogRequest.PhotoLink))
                     {
                         dialog.Photo = updateDialogRequest.PhotoLink;
                         dialog.Image = ChatImage;
+                        groupChatManager.NotifyGroupImageChanged(updateDialogRequest.PhotoLink);
                     }
                     
                     IsLoading = false;

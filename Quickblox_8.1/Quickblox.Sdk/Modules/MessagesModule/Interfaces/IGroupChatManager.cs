@@ -13,5 +13,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
 
         void JoinGroup(string nickName);
         bool SendMessage(string message);
+
+        bool NotifyGroupImageChanged(string groupImageUrl);
+        bool NotifyGroupNameChanged(string groupName);
     }
 }

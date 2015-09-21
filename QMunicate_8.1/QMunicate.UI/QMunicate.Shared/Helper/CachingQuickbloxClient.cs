@@ -14,6 +14,7 @@ namespace QMunicate.Helper
     {
         Task<User> GetUserById(int userId);
         void DeleteUserFromCacheById(int userId);
+        void ClearUsersCache();
     }
 
     public class CachingQuickbloxClient : ICachingQuickbloxClient
@@ -22,6 +23,7 @@ namespace QMunicate.Helper
 
         private readonly IQuickbloxClient quickbloxClient;
         private readonly List<User> users = new List<User>();
+        private readonly object usersLock = new object();
 
         #endregion
 
@@ -38,13 +40,21 @@ namespace QMunicate.Helper
 
         public async Task<User> GetUserById(int userId)
         {
-            var cachedUser = users.FirstOrDefault(u => u.Id == userId);
+            User cachedUser;
+            lock (usersLock)
+            {
+                cachedUser = users.FirstOrDefault(u => u.Id == userId);
+            }
+            
             if (cachedUser != null) return cachedUser;
 
             var response = await quickbloxClient.UsersClient.GetUserByIdAsync(userId);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                users.Add(response.Result.User);
+                lock (usersLock)
+                {
+                    users.Add(response.Result.User);
+                }
                 return response.Result.User;
             }
 
@@ -53,7 +63,18 @@ namespace QMunicate.Helper
 
         public void DeleteUserFromCacheById(int userId)
         {
-            users.RemoveAll(u => u.Id == userId);
+            lock (usersLock)
+            {
+                users.RemoveAll(u => u.Id == userId);
+            }
+        }
+
+        public void ClearUsersCache()
+        {
+            lock (usersLock)
+            {
+                users.Clear();
+            }
         }
 
         #endregion

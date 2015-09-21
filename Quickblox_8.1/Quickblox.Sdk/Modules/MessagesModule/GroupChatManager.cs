@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using XMPP.tags.jabber.client;
@@ -64,6 +65,62 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
+        public bool NotifyGroupImageChanged(string groupImageUrl)
+        {
+            var msg = new message
+            {
+                to = groupJid,
+                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
+            };
+
+            var body = new body { Value = "Group image was changed" };
+
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory { Value = "1" });
+            extraParams.Add(new DialogId { Value = dialogId });
+            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupUpdate).ToString() });
+            extraParams.Add(new RoomPhoto { Value = groupImageUrl });
+
+            msg.Add(body, extraParams);
+
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
+
+        public bool NotifyGroupNameChanged(string groupName)
+        {
+            var msg = new message
+            {
+                to = groupJid,
+                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
+            };
+
+            var body = new body { Value = "Group name was changed" };
+
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory { Value = "1" });
+            extraParams.Add(new DialogId { Value = dialogId });
+            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupUpdate).ToString() });
+            extraParams.Add(new RoomName { Value = groupName });
+
+            msg.Add(body, extraParams);
+
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
+
         public void JoinGroup(string nickName)
         {
             string fullJid = string.Format("{0}/{1}", groupJid, nickName);
@@ -75,35 +132,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             xmppClient.Send(presense);
         }
-
-        //public void RequestVoice()
-        //{
-        //    var msg = new message
-        //    {
-        //        to = groupJid
-        //    };
-
-        //    x x = new x { type = x.typeEnum.submit };
-
-        //    var formTypeField = new field
-        //    {
-        //        var = "FORM_TYPE"
-        //    };
-        //    formTypeField.Add(new value { Value = "http://jabber.org/protocol/muc#request" });
-
-        //    var mucRoleField = new field
-        //    {
-        //        type = field.typeEnum.text_single,
-        //        label = "Requested role",
-        //        var = "muc#role"
-        //    };
-        //    mucRoleField.Add(new value { Value = "participant" });
-
-        //    x.Add(formTypeField, mucRoleField);
-        //    msg.Add(x);
-
-        //    xmppClient.Send(msg);
-        //}
 
         #endregion
 

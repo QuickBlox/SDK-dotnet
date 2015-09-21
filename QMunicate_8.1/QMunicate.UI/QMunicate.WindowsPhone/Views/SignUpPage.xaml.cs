@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.ViewModels;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
@@ -34,6 +35,15 @@ namespace QMunicate.Views
         /// This parameter is typically used to configure the page.</param>
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+        }
+
+        private void UIElement_OnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        {
+            var viewModel = this.DataContext as SignUpViewModel;
+            if (viewModel != null && viewModel.DeleteUserImageCommand.CanExecute(null))
+            {
+                viewModel.DeleteUserImageCommand.Execute(null);
+            }
         }
     }
 }
