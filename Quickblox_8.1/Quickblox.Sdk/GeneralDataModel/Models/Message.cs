@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Quickblox.Sdk.Modules.ChatModule.Models
+namespace Quickblox.Sdk.GeneralDataModel.Models
 {
     public class Message
     {

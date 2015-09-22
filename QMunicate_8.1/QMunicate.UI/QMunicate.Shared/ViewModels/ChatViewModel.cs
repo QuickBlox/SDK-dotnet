@@ -1,9 +1,10 @@
 ﻿using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
-using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
@@ -16,10 +17,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using QMunicate.Core.Logger;
-using Quickblox.Sdk;
-using Quickblox.Sdk.Logger;
-using Message = Quickblox.Sdk.Modules.ChatModule.Models.Message;
+using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
 
 namespace QMunicate.ViewModels
 {

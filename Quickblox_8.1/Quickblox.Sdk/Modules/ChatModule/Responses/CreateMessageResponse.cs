@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace Quickblox.Sdk.Modules.ChatModule.Responses
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Message = Quickblox.Sdk.Modules.ChatModule.Models.Message;
+using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
 
 namespace QMunicate.Models
 {

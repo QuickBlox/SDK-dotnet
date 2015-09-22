@@ -143,12 +143,12 @@
     <Compile Include="Modules\ChatModule\Requests\CreateMessageRequest.cs" />
     <Compile Include="Modules\ChatModule\Requests\UpdateDialogRequest.cs" />
     <Compile Include="Modules\ChatModule\Requests\UpdateMessageRequest.cs" />
-    <Compile Include="Modules\ChatModule\Models\Attachment.cs" />
+    <Compile Include="GeneralDataModel\Models\Attachment.cs" />
     <Compile Include="Modules\ChatModule\Responses\DialogResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\CreateMessageResponse.cs" />
     <Compile Include="Modules\ChatModule\Models\Dialog.cs" />
     <Compile Include="GeneralDataModel\Response\ListResponse.cs" />
-    <Compile Include="Modules\ChatModule\Models\Message.cs" />
+    <Compile Include="GeneralDataModel\Models\Message.cs" />
     <Compile Include="Modules\ChatModule\Responses\RetrieveDialogsResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\RetrieveMessagesResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\UpdateDialogResponse.cs" />
