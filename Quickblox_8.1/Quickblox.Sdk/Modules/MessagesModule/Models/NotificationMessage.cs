@@ -13,5 +13,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
         public string RoomPhoto { get; set; }
 
         public string RoomName { get; set; }
+
+        public List<int> OccupantsIds { get; set; }
     }
 }

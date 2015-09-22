@@ -18,7 +18,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         Task<bool> AcceptFriend();
         Task<bool> RejectFriend();
         bool DeleteFromFriends();
-        Task<bool> SendNotificationMessage(string notificationDialogId);
+        Task<bool> NotifyAboutGroupCreation(string createdDialogId);
 
         void NotifyIsTyping();
         void NotifyPausedTyping();

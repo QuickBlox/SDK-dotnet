@@ -30,5 +30,8 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
 
         [JsonProperty("notification_type")]
         public int? NotificationType { get; set; }
+
+        [JsonProperty("occupants_ids")]
+        public string OccupantsIds { get; set; }
     }
 }

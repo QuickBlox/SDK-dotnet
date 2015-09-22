@@ -243,9 +243,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         /// <summary>
         /// Notify a user about a created group dialog.
         /// </summary>
-        /// <param name="notificationDialogId"></param>
+        /// <param name="createdDialogId"></param>
         /// <returns></returns>
-        public async Task<bool> SendNotificationMessage(string notificationDialogId)
+        public async Task<bool> NotifyAboutGroupCreation(string createdDialogId)
         {
             var msg = new message
             {
@@ -254,8 +254,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             };
             var body = new body { Value = "Notification message" };
             var extraParams = new ExtraParams();
-            extraParams.Add(new DialogId { Value = notificationDialogId });
-            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.NotificationMessage).ToString() });
+            extraParams.Add(new DialogId { Value = createdDialogId });
+            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupCreate).ToString() });
 
             msg.Add(body, extraParams);
             if (!xmppClient.Connected)
@@ -355,7 +355,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             if (message1.From.Contains(otherUserJid))
             {
                 var nofifMessage = message1 as NotificationMessage;
-                if (nofifMessage == null || nofifMessage.NotificationType != NotificationTypes.NotificationMessage)
+                if (nofifMessage == null || nofifMessage.NotificationType != NotificationTypes.GroupCreate)
                 {
                     var handler = OnMessageReceived;
                     if (handler != null)

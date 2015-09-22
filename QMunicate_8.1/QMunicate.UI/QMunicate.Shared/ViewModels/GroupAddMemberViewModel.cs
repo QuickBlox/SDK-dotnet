@@ -287,7 +287,7 @@ namespace QMunicate.ViewModels
                 foreach (var contact in selectedContacts)
                 {
                     var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId);
-                    await privateChatManager.SendNotificationMessage(createDialogResponse.Result.Id);
+                    await privateChatManager.NotifyAboutGroupCreation(createDialogResponse.Result.Id);
                 }
 
                 var groupNotificationMessage = await BuildGroupNotificationMessage(selectedContacts);

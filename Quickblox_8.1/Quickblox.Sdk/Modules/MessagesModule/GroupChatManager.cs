@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
@@ -52,6 +54,36 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             var extraParams = new ExtraParams();
             extraParams.Add(new SaveToHistory { Value = "1" });
             extraParams.Add(new DialogId { Value = dialogId });
+
+            msg.Add(body, extraParams);
+
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
+
+        public bool NotifyAboutGroupCreation(IList<int> occupantsIds)
+        {
+            var msg = new message
+            {
+                to = groupJid,
+                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
+            };
+
+            var body = new body { Value = "Notification message." };
+
+            string occupantsIdsString = occupantsIds.Aggregate("", (current, occupantsId) => current + occupantsId.ToString());
+
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory { Value = "1" });
+            extraParams.Add(new DialogId { Value = dialogId });
+            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupCreate).ToString() });
+            extraParams.Add(new OccupantsIds{ Value = occupantsIdsString});
 
             msg.Add(body, extraParams);
 
