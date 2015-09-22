@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
 {

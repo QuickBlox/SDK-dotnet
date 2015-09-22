@@ -318,7 +318,7 @@ namespace QMunicate.ViewModels
 
             Messages.Add(msg);
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-            await dialogsManager.UpdateDialog(dialog.Id, NewMessageText, DateTime.Now);
+            await dialogsManager.UpdateDialogLastMessage(dialog.Id, NewMessageText, DateTime.Now);
 
             NewMessageText = "";
         }
@@ -363,7 +363,7 @@ namespace QMunicate.ViewModels
             NavigationService.Navigate(ViewLocator.UserInfo, dialog == null ? null : dialog.Id);
         }
 
-        private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)
+        private void ChatManagerOnOnMessageReceived(object sender, Message message)
         {
             var incomingMessage = new MessageVm
             {
@@ -372,11 +372,7 @@ namespace QMunicate.ViewModels
                 DateTime = DateTime.Now
             };
 
-            var notificationMessage = message as NotificationMessage;
-            if (notificationMessage != null)
-            {
-                incomingMessage.NotificationType = notificationMessage.NotificationType;
-            }
+            incomingMessage.NotificationType = message.NotificationType;
 
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {

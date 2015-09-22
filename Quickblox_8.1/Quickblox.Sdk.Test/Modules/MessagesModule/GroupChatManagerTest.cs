@@ -5,9 +5,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
-using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule
 {

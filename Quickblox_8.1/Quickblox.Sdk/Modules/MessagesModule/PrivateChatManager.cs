@@ -4,10 +4,10 @@ using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using XMPP.tags.jabber.client;
 using XMPP.tags.jabber.protocol.chatstates;
-using Attachment = Quickblox.Sdk.Modules.MessagesModule.Models.Attachment;
-using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
+using Attachment = Quickblox.Sdk.GeneralDataModel.Models.Attachment;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -352,15 +352,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             if (string.IsNullOrEmpty(message1.MessageText)) return;
 
-            if (message1.From.Contains(otherUserJid))
+            if (message1.From.Contains(otherUserJid) && message1.NotificationType != NotificationTypes.GroupCreate)
             {
-                var nofifMessage = message1 as NotificationMessage;
-                if (nofifMessage == null || nofifMessage.NotificationType != NotificationTypes.GroupCreate)
-                {
-                    var handler = OnMessageReceived;
-                    if (handler != null)
-                        handler(this, message1);
-                }
+                var handler = OnMessageReceived;
+                if (handler != null)
+                    handler(this, message1);
             }
         }
 

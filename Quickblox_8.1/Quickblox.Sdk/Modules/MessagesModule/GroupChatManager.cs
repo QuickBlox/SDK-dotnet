@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using XMPP.tags.jabber.client;

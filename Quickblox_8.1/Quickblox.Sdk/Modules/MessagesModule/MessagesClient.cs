@@ -1,5 +1,4 @@
 ﻿using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Logger;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Serializer;
 using XMPP;
 using XMPP.common;
@@ -231,29 +232,42 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         {
             var receivedMessage = new Message();
 
-            var extraParams = msg.Element(ExtraParams.XName);
-            if (extraParams != null)
-            {
-                var notificationType = extraParams.Element(NotificationType.XName);
-                if (notificationType != null)
-                {
-                    receivedMessage = new NotificationMessage();
-                    FillNotificationMessage(msg, (NotificationMessage)receivedMessage);
-                }
-            }
-
-            FillMessage(msg, receivedMessage);
+            FillFields(msg, receivedMessage);
+            FillExtraParamsFields(msg, receivedMessage);
 
             var handler = OnMessageReceived;
             if (handler != null)
                 handler(this, receivedMessage);
         }
 
-        private void FillNotificationMessage(message source, NotificationMessage result)
+        private void FillFields(message source, Message result)
+        {
+            result.From = source.from;
+            result.To = source.to;
+            result.MessageText = source.body;
+
+            result.IsTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.composing) != null;
+            result.IsPausedTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.paused) != null;
+        }
+
+        private void FillExtraParamsFields(message source, Message result)
         {
             var extraParams = source.Element(ExtraParams.XName);
             if (extraParams != null)
             {
+                var dialogId = extraParams.Element(DialogId.XName);
+                if (dialogId != null) result.ChatDialogId = dialogId.Value;
+
+                var dateSent = extraParams.Element(DateSent.XName);
+                if (dateSent != null)
+                {
+                    long longValue;
+                    if (long.TryParse(dateSent.Value, out longValue))
+                    {
+                        result.DateSent = longValue;
+                    }
+                }
+
                 var notificationType = extraParams.Element(NotificationType.XName);
                 if (notificationType != null)
                 {
@@ -276,32 +290,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                 {
                     result.RoomName = roomName.Value;
                 }
-            }
-        }
 
-        private void FillMessage(message source, Message result)
-        {
-            result.From = source.from;
-            result.To = source.to;
-            result.MessageText = source.body;
-
-            result.IsTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.composing) != null;
-            result.IsPausedTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.paused) != null;
-
-            var extraParams = source.Element(ExtraParams.XName);
-            if (extraParams != null)
-            {
-                var dialogId = extraParams.Element(DialogId.XName);
-                if (dialogId != null) result.DialogId = dialogId.Value;
-
-                var dateSent = extraParams.Element(DateSent.XName);
-                if (dateSent != null)
+                var occupantsIds = extraParams.Element(OccupantsIds.XName);
+                if (occupantsIds != null)
                 {
-                    long longValue;
-                    if (long.TryParse(dateSent.Value, out longValue))
-                    {
-                        result.DateTimeSent = longValue.ToDateTime();
-                    }
+                    result.OccupantsIds = occupantsIds.Value;
                 }
             }
         }

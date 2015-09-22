@@ -27,8 +27,8 @@ namespace QMunicate.Models
             if (curentUserId != default(int))
                 MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
 
-            if (message.NotificationType.HasValue && Enum.IsDefined(typeof (NotificationTypes), message.NotificationType))
-                NotificationType = (NotificationTypes) message.NotificationType;
+            //if (message.NotificationType.HasValue && Enum.IsDefined(typeof (NotificationTypes), message.NotificationType))
+            NotificationType = message.NotificationType;
         }
 
         #endregion

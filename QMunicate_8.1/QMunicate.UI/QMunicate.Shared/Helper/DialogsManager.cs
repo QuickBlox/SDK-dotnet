@@ -11,8 +11,9 @@ using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Message = Quickblox.Sdk.Modules.MessagesModule.Models.Message;
 
 namespace QMunicate.Helper
 {
@@ -124,7 +125,7 @@ namespace QMunicate.Helper
             areAllGroupDialogsJoined = true;
         }
 
-        public async Task UpdateDialog(string dialogId, string lastActivity, DateTime lastMessageSent)
+        public async Task UpdateDialogLastMessage(string dialogId, string lastActivity, DateTime lastMessageSent)
         {
             if (string.IsNullOrEmpty(dialogId)) return;
 
@@ -151,35 +152,28 @@ namespace QMunicate.Helper
         {
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                await UpdateDialog(message.DialogId, message.MessageText, message.DateTimeSent);
+                await UpdateDialogLastMessage(message.ChatDialogId, message.MessageText, message.DateSent.ToDateTime());
 
-                var notificationMessage = message as NotificationMessage;
-                if (notificationMessage != null)
-                {
-                    await HandleNotificationMessage(notificationMessage);
-                }
+                if (message.NotificationType == NotificationTypes.GroupUpdate)
+                    await UpdateGroupDialog(message);
             });
         }
 
-        private async Task HandleNotificationMessage(NotificationMessage notificationMessage)
+        private async Task UpdateGroupDialog(Message message)
         {
-            if (notificationMessage.NotificationType == NotificationTypes.GroupUpdate)
+            var updatedDialog = Dialogs.FirstOrDefault(d => d.Id == message.ChatDialogId);
+            if (updatedDialog != null)
             {
-                var updatedDialog = Dialogs.FirstOrDefault(d => d.Id == notificationMessage.DialogId);
-                if (updatedDialog != null)
+                if (!string.IsNullOrEmpty(message.RoomPhoto))
                 {
-                    if (!string.IsNullOrEmpty(notificationMessage.RoomPhoto))
-                    {
-                        updatedDialog.Photo = notificationMessage.RoomPhoto;
-                        var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                        updatedDialog.Image = await imagesService.GetPublicImage(notificationMessage.RoomPhoto);
-                    }
+                    updatedDialog.Photo = message.RoomPhoto;
+                    var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                    updatedDialog.Image = await imagesService.GetPublicImage(message.RoomPhoto);
+                }
 
-                    if (!string.IsNullOrEmpty(notificationMessage.RoomName))
-                    {
-                        updatedDialog.Name = notificationMessage.RoomName;
-                    }
-
+                if (!string.IsNullOrEmpty(message.RoomName))
+                {
+                    updatedDialog.Name = message.RoomName;
                 }
             }
         }

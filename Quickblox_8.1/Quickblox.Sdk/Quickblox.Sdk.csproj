@@ -106,7 +106,6 @@
     <Compile Include="Modules\MessagesModule\Interfaces\IMessagesClient.cs" />
     <Compile Include="Modules\MessagesModule\Interfaces\IGroupChatManager.cs" />
     <Compile Include="Modules\MessagesModule\Interfaces\IPrivateChatManager.cs" />
-    <Compile Include="Modules\MessagesModule\Models\Attachment.cs" />
     <Compile Include="Modules\MessagesModule\Models\Contact.cs" />
     <Compile Include="Modules\MessagesModule\Models\ExtraParams.cs" />
     <Compile Include="Modules\MessagesModule\Models\NotificationMessage.cs" />
@@ -123,7 +122,6 @@
     <Compile Include="Modules\NotificationModule\Models\TagsAny.cs" />
     <Compile Include="Modules\NotificationModule\Models\UserWithTags.cs" />
     <Compile Include="Modules\NotificationModule\Requests\EditEventRequest.cs" />
-    <Compile Include="Modules\MessagesModule\Models\Message.cs" />
     <Compile Include="Modules\NotificationModule\Responses\CreateSubscriptionResponseItem.cs" />
     <Compile Include="Modules\UsersModule\Models\UserSortFilter.cs" />
     <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />

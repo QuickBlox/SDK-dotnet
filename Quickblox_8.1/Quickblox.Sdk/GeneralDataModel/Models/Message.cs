@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 
 namespace Quickblox.Sdk.GeneralDataModel.Models
 {
@@ -28,10 +30,32 @@ namespace Quickblox.Sdk.GeneralDataModel.Models
         [JsonProperty("read")]
         public int Read { get; set; }
 
+        #region Notification properties
+
         [JsonProperty("notification_type")]
-        public int? NotificationType { get; set; }
+        public NotificationTypes NotificationType { get; set; }
+
+        [JsonProperty("room_photo")]
+        public string RoomPhoto { get; set; }
+
+        [JsonProperty("room_name")]
+        public string RoomName { get; set; }
 
         [JsonProperty("occupants_ids")]
         public string OccupantsIds { get; set; }
+
+        #endregion
+
+        #region XXMP chat properties
+
+        public string From { get; set; }
+
+        public string To { get; set; }
+
+        public bool IsTyping { get; set; }
+
+        public bool IsPausedTyping { get; set; }
+
+        #endregion
     }
 }

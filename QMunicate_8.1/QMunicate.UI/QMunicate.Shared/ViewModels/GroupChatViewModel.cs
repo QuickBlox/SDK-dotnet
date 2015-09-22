@@ -166,12 +166,12 @@ namespace QMunicate.ViewModels
             }
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
-            await dialogsManager.UpdateDialog(dialog.Id, NewMessageText, DateTime.Now);
+            await dialogsManager.UpdateDialogLastMessage(dialog.Id, NewMessageText, DateTime.Now);
 
             NewMessageText = "";
         }
 
-        private void ChatManagerOnOnMessageReceived(object sender, Quickblox.Sdk.Modules.MessagesModule.Models.Message message)
+        private void ChatManagerOnOnMessageReceived(object sender, Message message)
         {
             var messageVm = new MessageVm
             {
@@ -187,28 +187,25 @@ namespace QMunicate.ViewModels
             }
 
 
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 Messages.Add(messageVm);
-                var notificationMessage = message as NotificationMessage;
-                if (notificationMessage != null) HandleNotificationMessage(notificationMessage);
+                if (message.NotificationType == NotificationTypes.GroupUpdate)
+                    await UpdateGroupInfo(message);
             });
         }
 
-        private async Task HandleNotificationMessage(NotificationMessage notificationMessage)
+        private async Task UpdateGroupInfo(Message notificationMessage)
         {
-            if (notificationMessage.NotificationType == NotificationTypes.GroupUpdate)
+            if (!string.IsNullOrEmpty(notificationMessage.RoomPhoto))
             {
-                if (!string.IsNullOrEmpty(notificationMessage.RoomPhoto))
-                {
-                    var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                    ChatImage = await imagesService.GetPublicImage(notificationMessage.RoomPhoto);
-                }
+                var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                ChatImage = await imagesService.GetPublicImage(notificationMessage.RoomPhoto);
+            }
 
-                if (!string.IsNullOrEmpty(notificationMessage.RoomName))
-                {
-                    ChatName = notificationMessage.RoomName;
-                }
+            if (!string.IsNullOrEmpty(notificationMessage.RoomName))
+            {
+                ChatName = notificationMessage.RoomName;
             }
         }
 

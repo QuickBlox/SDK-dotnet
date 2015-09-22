@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
+
 
 namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
 {
