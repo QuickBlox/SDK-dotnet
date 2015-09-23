@@ -44,23 +44,8 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region IPrivateChatManager members
 
-        public bool SendMessage(string message, Attachment attachment = null)
+        public bool SendMessage(string message)
         {
-            if (attachment != null)
-            {
-                throw new NotImplementedException("Attachments are not supported yet");
-
-                //var msg = new AgsMessage(otherUserJid, agsXMPP.protocol.client.MessageType.chat, message);
-                //if (attachment != null)
-                //{
-                //    XmlSerializer xmlSerializer = new XmlSerializer();
-                //    string attachemntXml = xmlSerializer.Serialize(attachment);
-                //    msg.AddTag("extraParams", attachemntXml);
-                //}
-
-                //xmpp.Send(msg);
-            }
-
             var msg = new message
             {
                 to = otherUserJid,

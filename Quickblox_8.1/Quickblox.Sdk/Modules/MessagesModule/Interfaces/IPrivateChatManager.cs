@@ -13,7 +13,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         event EventHandler OnPausedTyping;
         event EventHandler<Message> OnMessageReceived;
 
-        bool SendMessage(string message, Attachment attachment = null);
+        bool SendMessage(string message);
         Task<bool> AddToFriends(string friendName);
         Task<bool> AcceptFriend();
         Task<bool> RejectFriend();
