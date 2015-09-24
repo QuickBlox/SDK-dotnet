@@ -6,7 +6,6 @@ using QMunicate.Helper;
 using QMunicate.Models;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,6 +16,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
 
 namespace QMunicate.ViewModels

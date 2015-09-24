@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Quickblox.Sdk.Builder;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+﻿using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.GeneralDataModel.Models;
+using System;
 using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
 
 namespace QMunicate.Models
