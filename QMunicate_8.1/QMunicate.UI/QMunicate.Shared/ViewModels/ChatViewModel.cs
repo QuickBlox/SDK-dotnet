@@ -149,7 +149,7 @@ namespace QMunicate.ViewModels
             await Initialize(chatParameter);
         }
 
-        public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
+        public override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
 

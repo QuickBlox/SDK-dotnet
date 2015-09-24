@@ -53,7 +53,7 @@ namespace QMunicate.ViewModels
         {
         }
 
-        public virtual void OnNavigatedFrom(NavigatingCancelEventArgs e)
+        public virtual void OnNavigatedFrom(NavigationEventArgs e)
         {
         }
     }

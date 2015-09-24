@@ -91,7 +91,7 @@ namespace QMunicate.ViewModels
             await Initialize(e.Parameter as string);
         }
 
-        public override void OnNavigatedFrom(NavigatingCancelEventArgs e)
+        public override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
 
