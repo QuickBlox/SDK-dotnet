@@ -57,8 +57,17 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Builder\UrlBuilder.cs">
       <Link>Builder\UrlBuilder.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Models\Attachment.cs">
+      <Link>GeneralDataModel\Models\Attachment.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Models\Device.cs">
       <Link>GeneralDataModel\Models\Device.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Models\Message.cs">
+      <Link>GeneralDataModel\Models\Message.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Models\NotificationTypes.cs">
+      <Link>GeneralDataModel\Models\NotificationTypes.cs</Link>
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Request\BaseRequestSettings.cs">
       <Link>GeneralDataModel\Request\BaseRequestSettings.cs</Link>
@@ -150,9 +159,6 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\ChatClient.cs">
       <Link>Modules\ChatModule\ChatClient.cs</Link>
     </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\Attachment.cs">
-      <Link>Modules\ChatModule\Models\Attachment.cs</Link>
-    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\Dialog.cs">
       <Link>Modules\ChatModule\Models\Dialog.cs</Link>
     </Compile>
@@ -164,9 +170,6 @@
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\DialogType.cs">
       <Link>Modules\ChatModule\Models\DialogType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\Message.cs">
-      <Link>Modules\ChatModule\Models\Message.cs</Link>
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\RetrieveDialogsFilter.cs">
       <Link>Modules\ChatModule\Models\RetrieveDialogsFilter.cs</Link>

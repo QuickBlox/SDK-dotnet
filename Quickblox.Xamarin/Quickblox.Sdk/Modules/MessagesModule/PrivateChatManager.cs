@@ -32,7 +32,7 @@ namespace Quickblox.Sdk
             this.xmppClient = xmppClient;
         }
 
-        public void SendMessage(string body, string subject = null, string thread = null, MessageType messageType = MessageType.Normal, NotificationType notificationType = NotificationType.None)
+        public void SendMessage(string body, string subject = null, string thread = null, MessageType messageType = MessageType.Chat, NotificationType notificationType = NotificationType.None)
         {
             var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
             var jid = new Sharp.Xmpp.Jid(otherUserJid.ToString());
@@ -62,7 +62,7 @@ namespace Quickblox.Sdk
             }
 
            quickbloxClient.MessagesClient.AddContact(item);
-           SendMessage("Contact request", thread: dialogId, messageType: MessageType.Normal, notificationType: NotificationType.FriendsRequest);
+           SendMessage("Contact request", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsRequest);
             
            return true;
         }
@@ -74,14 +74,14 @@ namespace Quickblox.Sdk
 
             quickbloxClient.MessagesClient.AddContact(item);
 
-            SendMessage("Request accepted", thread: dialogId, messageType: MessageType.Normal, notificationType: NotificationType.FriendsAccept);
+            SendMessage("Request accepted", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsAccept);
             return true;
         }
 
         public bool RejectFriend(RosterItem item)
         {
             quickbloxClient.MessagesClient.RemoveContact(item);
-            SendMessage("Request rejected", thread: dialogId, messageType: MessageType.Normal, notificationType: NotificationType.FriendsReject);
+            SendMessage("Request rejected", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsReject);
             
             return true;
         }
