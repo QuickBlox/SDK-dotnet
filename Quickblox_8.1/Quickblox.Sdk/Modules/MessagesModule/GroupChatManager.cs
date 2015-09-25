@@ -70,32 +70,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public bool NotifyAboutGroupCreation(IList<int> occupantsIds)
         {
-            var msg = new message
-            {
-                to = groupJid,
-                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
-            };
+            return NotifyAbountGroupOccupants(occupantsIds, true);
+        }
 
-            var body = new body { Value = "Notification message." };
-
-            string occupantsIdsString = occupantsIds.Aggregate("", (current, occupantsId) => current + occupantsId.ToString());
-
-            var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
-            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupCreate).ToString() });
-            extraParams.Add(new OccupantsIds{ Value = occupantsIdsString});
-
-            msg.Add(body, extraParams);
-
-            if (!xmppClient.Connected)
-            {
-                xmppClient.Connect();
-                return false;
-            }
-
-            xmppClient.Send(msg);
-            return true;
+        public bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds)
+        {
+            return NotifyAbountGroupOccupants(addedOccupantsIds, false);
         }
 
         public bool NotifyGroupImageChanged(string groupImageUrl)
@@ -106,7 +86,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                 type = XMPP.tags.jabber.client.message.typeEnum.groupchat
             };
 
-            var body = new body { Value = "Group image was changed" };
+            var body = new body { Value = "Notification message" };
 
             var extraParams = new ExtraParams();
             extraParams.Add(new SaveToHistory { Value = "1" });
@@ -134,7 +114,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                 type = XMPP.tags.jabber.client.message.typeEnum.groupchat
             };
 
-            var body = new body { Value = "Group name was changed" };
+            var body = new body { Value = "Notification message" };
 
             var extraParams = new ExtraParams();
             extraParams.Add(new SaveToHistory { Value = "1" });
@@ -167,6 +147,37 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         }
 
         #endregion
+
+        private bool NotifyAbountGroupOccupants(IList<int> occupantsIds, bool isGroupCreation)
+        {
+            var msg = new message
+            {
+                to = groupJid,
+                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
+            };
+
+            var body = new body { Value = "Notification message." };
+
+            string occupantsIdsString = occupantsIds.Aggregate("", (current, occupantsId) => current + occupantsId.ToString() + ",");
+            occupantsIdsString = occupantsIdsString.Trim(',');
+
+            var extraParams = new ExtraParams();
+            extraParams.Add(new SaveToHistory { Value = "1" });
+            extraParams.Add(new DialogId { Value = dialogId });
+            extraParams.Add(new NotificationType { Value = ((int)(isGroupCreation ? NotificationTypes.GroupCreate : NotificationTypes.GroupUpdate)).ToString() });
+            extraParams.Add(new OccupantsIds { Value = occupantsIdsString });
+
+            msg.Add(body, extraParams);
+
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
 
         private void MessagesClientOnOnMessageReceived(object sender, Message message1)
         {
