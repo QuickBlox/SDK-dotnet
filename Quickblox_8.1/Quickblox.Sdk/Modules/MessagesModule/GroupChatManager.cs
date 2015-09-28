@@ -44,11 +44,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public bool SendMessage(string message)
         {
-            var msg = new message
-            {
-                to = groupJid,
-                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
-            };
+            var msg = CreateNewMessage();
 
             var body = new body { Value = message };
 
@@ -80,11 +76,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public bool NotifyGroupImageChanged(string groupImageUrl)
         {
-            var msg = new message
-            {
-                to = groupJid,
-                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
-            };
+            var msg = CreateNewMessage();
 
             var body = new body { Value = "Notification message" };
 
@@ -108,11 +100,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public bool NotifyGroupNameChanged(string groupName)
         {
-            var msg = new message
-            {
-                to = groupJid,
-                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
-            };
+            var msg = CreateNewMessage();
 
             var body = new body { Value = "Notification message" };
 
@@ -148,24 +136,32 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #endregion
 
-        private bool NotifyAbountGroupOccupants(IList<int> occupantsIds, bool isGroupCreation)
+        #region Private methods
+
+        private message CreateNewMessage()
         {
-            var msg = new message
+            return new message
             {
                 to = groupJid,
-                type = XMPP.tags.jabber.client.message.typeEnum.groupchat
+                type = message.typeEnum.groupchat,
+                id = MongoObjectIdGenerator.GetNewObjectIdString()
             };
+        }
 
-            var body = new body { Value = "Notification message." };
+        private bool NotifyAbountGroupOccupants(IList<int> occupantsIds, bool isGroupCreation)
+        {
+            var msg = CreateNewMessage();
+
+            var body = new body {Value = "Notification message."};
 
             string occupantsIdsString = occupantsIds.Aggregate("", (current, occupantsId) => current + occupantsId.ToString() + ",");
             occupantsIdsString = occupantsIdsString.Trim(',');
 
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
-            extraParams.Add(new NotificationType { Value = ((int)(isGroupCreation ? NotificationTypes.GroupCreate : NotificationTypes.GroupUpdate)).ToString() });
-            extraParams.Add(new OccupantsIds { Value = occupantsIdsString });
+            extraParams.Add(new SaveToHistory {Value = "1"});
+            extraParams.Add(new DialogId {Value = dialogId});
+            extraParams.Add(new NotificationType {Value = ((int) (isGroupCreation ? NotificationTypes.GroupCreate : NotificationTypes.GroupUpdate)).ToString()});
+            extraParams.Add(new OccupantsIds {Value = occupantsIdsString});
 
             msg.Add(body, extraParams);
 
@@ -188,6 +184,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
                     handler(this, message1);
             }
         }
+
+        #endregion
+
 
     }
 }

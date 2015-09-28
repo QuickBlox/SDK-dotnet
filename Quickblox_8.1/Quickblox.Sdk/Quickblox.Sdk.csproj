@@ -113,6 +113,7 @@
     <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />
     <Compile Include="Modules\MessagesModule\Models\Tag.cs" />
     <Compile Include="Modules\MessagesModule\Models\X.cs" />
+    <Compile Include="Modules\MessagesModule\MongoObjectIdGenerator.cs" />
     <Compile Include="Modules\NotificationModule\Models\EditEvent.cs" />
     <Compile Include="Modules\NotificationModule\Models\IMessage.cs" />
     <Compile Include="Modules\NotificationModule\Models\PushMessage.cs" />

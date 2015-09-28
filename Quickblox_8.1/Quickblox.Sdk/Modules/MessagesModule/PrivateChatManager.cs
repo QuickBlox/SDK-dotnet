@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using XMPP.tags.jabber.client;
 using XMPP.tags.jabber.protocol.chatstates;
-using Attachment = Quickblox.Sdk.GeneralDataModel.Models.Attachment;
 
 namespace Quickblox.Sdk.Modules.MessagesModule
 {
@@ -46,11 +45,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public bool SendMessage(string message)
         {
-            var msg = new message
-            {
-                to = otherUserJid,
-                type = XMPP.tags.jabber.client.message.typeEnum.chat
-            };
+            var msg = CreateNewMessage();
 
             var body = new body {Value = message};
             
@@ -71,11 +66,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void NotifyIsTyping()
         {
-            var msg = new message
-            {
-                to = otherUserJid,
-                type = XMPP.tags.jabber.client.message.typeEnum.chat
-            };
+            var msg = CreateNewMessage();
             var composing = new composing();
             msg.Add(composing);
 
@@ -84,11 +75,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void NotifyPausedTyping()
         {
-            var msg = new message
-            {
-                to = otherUserJid,
-                type = XMPP.tags.jabber.client.message.typeEnum.chat
-            };
+            var msg = CreateNewMessage();
             var paused = new paused();
             msg.Add(paused);
 
@@ -113,11 +100,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             quickbloxClient.MessagesClient.AddContact(new Contact() {Name = friendName, UserId = otherUserId});
             SubsribeForPresence();
 
-            var msg = new message
-            {
-                to = otherUserJid,
-                type = message.typeEnum.chat
-            };
+            var msg = CreateNewMessage();
             var body = new body {Value = "Contact request"};
             var extraParams = new ExtraParams();
             extraParams.Add(new SaveToHistory {Value = "1"});
@@ -147,11 +130,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             });
             ApproveSubscribtionRequest();
 
-            var msg = new message
-            {
-                to = otherUserJid,
-                type = message.typeEnum.chat
-            };
+            var msg = CreateNewMessage();
             var body = new body {Value = "Request accepted"};
             var extraParams = new ExtraParams();
             extraParams.Add(new SaveToHistory {Value = "1"});
@@ -173,11 +152,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         {
             RejectSubscribtionRequest();
 
-            var msg = new message
-            {
-                to = otherUserJid,
-                type = message.typeEnum.chat
-            };
+            var msg = CreateNewMessage();
             var body = new body {Value = "Request rejected"};
             var extraParams = new ExtraParams();
             extraParams.Add(new SaveToHistory {Value = "1"});
@@ -197,11 +172,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public bool DeleteFromFriends()
         {
-            var msg = new message
-            {
-                to = otherUserJid,
-                type = message.typeEnum.chat
-            };
+            var msg = CreateNewMessage();
             var body = new body { Value = "Contact removed" };
             var extraParams = new ExtraParams();
             extraParams.Add(new SaveToHistory { Value = "1" });
@@ -232,11 +203,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         /// <returns></returns>
         public async Task<bool> NotifyAboutGroupCreation(string createdDialogId)
         {
-            var msg = new message
-            {
-                to = otherUserJid,
-                type = message.typeEnum.chat
-            };
+            var msg = CreateNewMessage();
             var body = new body { Value = "Notification message" };
             var extraParams = new ExtraParams();
             extraParams.Add(new DialogId { Value = createdDialogId });
@@ -320,6 +287,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         #endregion
 
         #region Private methods
+
+        private message CreateNewMessage()
+        {
+            return new message
+            {
+                to = otherUserJid,
+                type = message.typeEnum.chat,
+                id = MongoObjectIdGenerator.GetNewObjectIdString()
+            };
+        }
 
         private void MessagesClientOnOnMessageReceived(object sender, Message message1)
         {
