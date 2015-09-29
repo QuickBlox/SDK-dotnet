@@ -66,59 +66,65 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<T>> CreateCustomObjectsAsync<T>(String className,
             CreateCustomObjectRequest<T> customObject) where T : BaseCustomObject
         {
-            
-
             if (className == null) throw new ArgumentNullException("className");
             if (customObject == null) throw new ArgumentNullException("customObject");
 
             var requestUri = String.Format(QuickbloxMethods.CreateCustomObjectMethod, className);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
 
-            var nameValueCollection = new List<KeyValuePair<String, String>>();
-            var properties = customObject.CreateCustomObject.GetType().GetRuntimeProperties();
-            foreach (var property in properties.Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null))
-            {
-                var jsonProperty = property.GetCustomAttribute<JsonPropertyAttribute>();
+            //var nameValueCollection = new List<KeyValuePair<String, String>>();
+            //var properties = customObject.CreateCustomObject.GetType().GetRuntimeProperties();
+            //foreach (var property in properties.Where(p => p.GetCustomAttribute<JsonPropertyAttribute>() != null))
+            //{
+            //    var jsonProperty = property.GetCustomAttribute<JsonPropertyAttribute>();
 
-                var propertyValue = property.GetValue(customObject.CreateCustomObject);
-                if (propertyValue != null)
-                {
-                    if (property.PropertyType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IList)))
-                    {
-                        var items = propertyValue as IEnumerable;
-                        var enumerator = items.GetEnumerator();
+            //    var propertyValue = property.GetValue(customObject.CreateCustomObject);
+            //    if (propertyValue != null)
+            //    {
+            //        if (property.PropertyType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IList)))
+            //        {
+            //            var items = propertyValue as IEnumerable;
+            //            var enumerator = items.GetEnumerator();
 
-                        StringBuilder stringBuilder = new StringBuilder();
-                        while (enumerator.MoveNext())
-                        {
-                            stringBuilder.Append(enumerator.Current + ",");
-                        }
+            //            StringBuilder stringBuilder = new StringBuilder();
+            //            while (enumerator.MoveNext())
+            //            {
+            //                stringBuilder.Append(enumerator.Current + ",");
+            //            }
                         
-                        var pair = new KeyValuePair<string, string>(jsonProperty.PropertyName, stringBuilder.ToString());
-                        nameValueCollection.Add(pair);
-                    }
-                    else
-                    {
-                        var pair = new KeyValuePair<string, string>(jsonProperty.PropertyName, propertyValue.ToString());
-                        nameValueCollection.Add(pair);
-                    }
-                }
+            //            var pair = new KeyValuePair<string, string>(jsonProperty.PropertyName, stringBuilder.ToString());
+            //            nameValueCollection.Add(pair);
+            //        }
+            //        else
+            //        {
+            //            var pair = new KeyValuePair<string, string>(jsonProperty.PropertyName, propertyValue.ToString());
+            //            nameValueCollection.Add(pair);
+            //        }
+            //    }
 
+            //}
+
+            if (customObject.Filter != null)
+            {
+                requestUri += "?" + UrlBuilder.BuildFilter((FilterAggregator)customObject.Filter);
             }
 
+            //var updateCustomObject = await HttpService.PutAsync<T, T>(this.quickbloxClient.ApiEndPoint,
+            //   requestUri,
+            //   customObject.CreateCustomObject,
+            //   headers);
+
             var createFileResponse =
-                await HttpService.PostAsync<T>(this.quickbloxClient.ApiEndPoint,
+                await HttpService.PostAsync<T, T>(quickbloxClient.ApiEndPoint,
                     requestUri,
-                    nameValueCollection,
+                    customObject.CreateCustomObject,
                     headers);
             return createFileResponse;
         }
 
         public async Task<HttpResponse<RetriveCustomObjectsResponce<T>>> CreateMultiCustomObjectsAsync<T>(
             String className, List<T> items) where T : BaseCustomObject
-        {
-            
-
+        {     
             if (className == null) throw new ArgumentNullException("className");
             if (items == null) throw new ArgumentNullException("items");
 
@@ -170,8 +176,6 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         public async Task<HttpResponse<T>> UpdateCustomObjectsByIdAsync<T>(String className,
             UpdateCustomObjectRequest<T> updateCustomObjectRequest) where T : BaseCustomObject
         {
-            
-
             if (className == null) throw new ArgumentNullException("className");
             if (updateCustomObjectRequest == null) throw new ArgumentNullException("updateCustomObjectRequest");
 

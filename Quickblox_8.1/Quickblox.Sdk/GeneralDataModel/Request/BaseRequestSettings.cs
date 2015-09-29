@@ -16,7 +16,7 @@ namespace Quickblox.Sdk.GeneralDataModel.Request
 
         [JsonIgnore]
         [IgnoreDataMember]
-        public Filter Filter { get; set; }
+        public FilterAggregator Filter { get; set; }
     }
 }
 

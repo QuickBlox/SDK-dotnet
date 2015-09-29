@@ -75,7 +75,18 @@ namespace Quickblox.Sdk.Builder
 
             return navBody.ToString();
         }
-    
+
+        public static String BuildFilter(FilterAggregator aggregators)
+        {
+            var navBody = new StringBuilder();
+            foreach (var aggregator in aggregators.Filters)
+            {
+                navBody.Append(aggregator.BuildFilter());
+            }
+           
+
+            return navBody.ToString();
+        }
 
         #endregion
     }

@@ -23,6 +23,9 @@
         //2.Will return records with name sam or lastname johnson
         Or,
         //String username[ctn]= son   Will return all records where username field contains son substring
-        Ctn
+        Ctn,
+        // Use only for location
+        // Search records in a specific radius with current position in meters. Format: field_name[near]=longitude,latitude;radius
+        Near
     }
 }

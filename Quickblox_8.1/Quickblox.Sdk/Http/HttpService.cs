@@ -127,7 +127,7 @@ namespace Quickblox.Sdk.Http
             String requestUri, TSettings settings, 
             IDictionary<String, IEnumerable<String>> headers = null,
             ISerializer serializer = null,
-            CancellationToken token = default(CancellationToken)) where TSettings : BaseRequestSettings
+            CancellationToken token = default(CancellationToken))
         {
             HttpResponseMessage response;
             var postSerializer = serializer ?? FactorySerializer.CreateSerializer();
@@ -191,9 +191,27 @@ namespace Quickblox.Sdk.Http
             return await ParseResult<TResult>(serializer, response);
         }
 
+        public static async Task<HttpResponse<TResult>> PostAsync<TResult, TSettings>(String baseAddress,
+           String requestUri, TSettings settings,
+           IEnumerable<KeyValuePair<String, IEnumerable<String>>> headers = null,
+           ISerializer serializer = null,
+           CancellationToken token = default(CancellationToken))
+        {
+            HttpResponseMessage response;
+            var putSerializer = serializer ?? FactorySerializer.CreateSerializer();
+            var body = putSerializer.Serialize(settings);
+            using (var httpContent = new StringContent(body, Encoding.UTF8, putSerializer.ContentType))
+            {
+                response =
+                    await PostBaseAsync(baseAddress, requestUri, httpContent, headers, token).ConfigureAwait(false);
+            }
+
+            return await ParseResult<TResult>(serializer, response);
+        }
+
         #endregion
 
-        #region Delete
+            #region Delete
 
         public static async Task<HttpResponse<TResult>> DeleteAsync<TResult>(String baseAddress, String requestUri,
             IDictionary<String, IEnumerable<String>> headers = null,
