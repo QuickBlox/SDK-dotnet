@@ -66,7 +66,7 @@ namespace QMunicate.ViewModels
                 await Initialize(currentDialog);
         }
 
-        public async override void OnNavigatedFrom(NavigatingCancelEventArgs e)
+        public async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             foreach (UserVm userVm in Participants)
             {

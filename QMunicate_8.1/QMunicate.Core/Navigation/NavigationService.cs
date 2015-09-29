@@ -17,6 +17,7 @@ namespace QMunicate.Core.Navigation
 
         private Frame frame;
         private PageResolver pageResolver;
+        private INavigationAware previousPage;
 
         public void Initialize(Frame frame, PageResolver pageResolver)
         {
@@ -63,22 +64,22 @@ namespace QMunicate.Core.Navigation
                 handler.Invoke(sender, e);
             }
 
-            if (!e.Cancel)
-            {
-                switch (e.NavigationMode)
-                {
-                    case NavigationMode.Back:
-                        NavigatedFrom(e);
-                        break;
-                    case NavigationMode.Forward:
-                        break;
-                    case NavigationMode.New:
-                        NavigatedFrom(e);
-                        break;
-                    case NavigationMode.Refresh:
-                        break;
-                }
-            }
+            //if (!e.Cancel)
+            //{
+            //    switch (e.NavigationMode)
+            //    {
+            //        case NavigationMode.Back:
+            //            NavigatedFrom(e);
+            //            break;
+            //        case NavigationMode.Forward:
+            //            break;
+            //        case NavigationMode.New:
+            //            NavigatedFrom(e);
+            //            break;
+            //        case NavigationMode.Refresh:
+            //            break;
+            //    }
+            //}
         }
 
         private async void OnNavigated(object sender, NavigationEventArgs e)
@@ -146,9 +147,9 @@ namespace QMunicate.Core.Navigation
         /// <param name="args">Provides data for navigation methods and event handlers that cannot cancel the navigation request.</param>
         private void NavigatedFrom(NavigatingCancelEventArgs args)
         {
-            var navigationAware = GetNavigationAware(frame.Content);
-            if (navigationAware == null) return;
-            navigationAware.OnNavigatedFrom(args);
+            //var navigationAware = GetNavigationAware(frame.Content);
+            //if (navigationAware == null) return;
+            //navigationAware.OnNavigatedFrom(args);
         }
 
         /// <summary>
@@ -157,9 +158,12 @@ namespace QMunicate.Core.Navigation
         /// <param name="args">Provides data for navigation methods and event handlers that cannot cancel the navigation request.</param>
         private void NavigatedTo(NavigationEventArgs args)
         {
-            var navigationAware = GetNavigationAware(args.Content);
-            if (navigationAware == null) return;
-            navigationAware.OnNavigatedTo(args);
+            if(previousPage != null)
+                previousPage.OnNavigatedFrom(args);
+
+            previousPage = GetNavigationAware(args.Content);
+            if (previousPage == null) return;
+            previousPage.OnNavigatedTo(args);
         }
 
         private static INavigationAware GetNavigationAware(Object content)

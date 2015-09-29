@@ -6,6 +6,6 @@ namespace QMunicate.Core.Navigation
     {
         void OnNavigatedTo(NavigationEventArgs e);
 
-        void OnNavigatedFrom(NavigatingCancelEventArgs e);
+        void OnNavigatedFrom(NavigationEventArgs e);
     }
 }

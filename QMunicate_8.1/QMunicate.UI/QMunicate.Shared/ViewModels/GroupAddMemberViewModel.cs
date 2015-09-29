@@ -259,6 +259,9 @@ namespace QMunicate.ViewModels
                 var dialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == editedDialog.Id);
                 dialog.OccupantIds = updateDialogResponse.Result.OccupantsIds;
 
+                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(editedDialog.XmppRoomJid, editedDialog.Id);
+                groupChatManager.NotifyAboutGroupUpdate(addedUsers);
+
                 NavigationService.Navigate(ViewLocator.GroupChat, editedDialog.Id);
             }
         }
@@ -290,31 +293,13 @@ namespace QMunicate.ViewModels
                     await privateChatManager.NotifyAboutGroupCreation(createDialogResponse.Result.Id);
                 }
 
-                var groupNotificationMessage = await BuildGroupNotificationMessage(selectedContacts);
-
                 int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
                 var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
                 groupChatManager.JoinGroup(currentUserId.ToString());
-                var isGroupMessageSent = groupChatManager.SendMessage(groupNotificationMessage);
-                if (isGroupMessageSent)
-                    NavigationService.Navigate(ViewLocator.GroupChat, createDialogResponse.Result.Id);
+                groupChatManager.NotifyAboutGroupCreation(createDialogResponse.Result.OccupantsIds);
+
+                NavigationService.Navigate(ViewLocator.GroupChat, createDialogResponse.Result.Id);
             }
-        }
-
-        private async Task<string> BuildGroupNotificationMessage(List<SelectableListBoxItem<UserVm>> selectedContacts)
-        {
-            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var currentUser = await cachingQbClient.GetUserById(SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId));
-
-            var addedUsersBuilder = new StringBuilder();
-            foreach (var user in selectedContacts)
-            {
-                addedUsersBuilder.Append(user.Item.FullName + ", ");
-            }
-            if (addedUsersBuilder.Length > 1)
-                addedUsersBuilder.Remove(addedUsersBuilder.Length - 2, 2);
-
-            return string.Format("{0} has added {1} to the group chat", currentUser.FullName, addedUsersBuilder);
         }
 
         private async Task<bool> Validate()
