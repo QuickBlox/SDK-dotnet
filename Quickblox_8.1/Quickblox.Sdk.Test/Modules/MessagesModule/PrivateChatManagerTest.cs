@@ -4,6 +4,7 @@ using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule
 {
@@ -149,7 +150,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         {
             lastMessageClient2 = null;
             string attachemntId = "543534";
-            chatManager1.SendMessage("Test message", new Attachment() { Id = attachemntId, Type = "photo" });
+            chatManager1.SendMessage("Test message");
 
             await Task.Delay(5000);
 

@@ -19,6 +19,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         List<Presence> Presences { get; }
         bool IsConnected { get; }
 
+#if DEBUG || TEST_RELEASE
+        string DebugClientName { get; set; }
+#endif
+
         Task Connect(string chatEndpoint, int userId, int applicationId, string password);
         void Disconnect();
         IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId = null);
