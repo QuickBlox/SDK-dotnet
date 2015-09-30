@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule
@@ -14,39 +16,61 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
     [TestClass]
     public class GroupChatManagerTest
     {
-        private static string groupJid = "21183_5582c4f76390d8b9e901e6e2@muc.chat.quickblox.com";
+        private static string apiEndpoint = "https://api.quickblox.com";
         private static string chatEndpoint = "chat.quickblox.com";
+        private static uint appId = 13318;
+        private static string authKey = "WzrAY7vrGmbgFfP";
+        private static string authSecret = "xS2uerEveGHmEun";
 
-        private static string email1 = "to1@test.com";
+        private static string groupJid = "13318_560befeca28f9a20170005f4@muc.chat.quickblox.com";
+        private static string groupDialogId = "560befeca28f9a20170005f4";
+
+        private static string email1 = "user1@test.com";
         private static string password1 = "12345678";
-        private static int id1 = 3323859;
-        private static string jid1 = "3323859-21183@chat.quickblox.com";
+        private static int id1 = 5719149;
+        private static string jid1 = "5719149-13318@chat.quickblox.com";
         private static QuickbloxClient client1;
 
-        private static string email2 = "to2@test.com";
+        private static string email2 = "user2@test.com";
         private static string password2 = "12345678";
-        private static int id2 = 3323883;
-        private static string jid2 = "3323883-21183@chat.quickblox.com";
+        private static int id2 = 5513419;
+        private static string jid2 = "5513419-13318@chat.quickblox.com";
         private static QuickbloxClient client2;
+
+        private static string email3 = "user3@test.com";
+        private static string password3 = "12345678";
+        private static int id3 = 5513474;
+        private static string jid3 = "5513474-13318@chat.quickblox.com";
+        private static QuickbloxClient client3;
 
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
-            client1 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
-            var sessionResponse = await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
+            var logger = new Logger.DebugLogger();
+
+            client1 = new QuickbloxClient(apiEndpoint, chatEndpoint, logger);
+            var sessionResponse = await client1.CoreClient.CreateSessionWithEmailAsync(appId, authKey, authSecret, email1, password1);
             client1.Token = sessionResponse.Result.Session.Token;
 #if DEBUG
-            //MessagesClient.DebugClientName = "1";
+            client1.MessagesClient.DebugClientName = "1";
 #endif
-            await client1.MessagesClient.Connect(chatEndpoint, id1, (int)GlobalConstant.ApplicationId, password1);
+            await client1.MessagesClient.Connect(chatEndpoint, id1, (int)appId, password1);
 
-            client2 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
-            var sessionResponse1 = await client2.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
-            client2.Token = sessionResponse1.Result.Session.Token;
+            client2 = new QuickbloxClient(apiEndpoint, chatEndpoint, logger);
+            var sessionResponse2 = await client2.CoreClient.CreateSessionWithEmailAsync(appId, authKey, authSecret, email2, password2);
+            client2.Token = sessionResponse2.Result.Session.Token;
 #if DEBUG
-            //client2.MessagesClient.DebugClientName = "2";
+            client2.MessagesClient.DebugClientName = "2";
 #endif
-            await client2.MessagesClient.Connect(chatEndpoint, id2, (int)GlobalConstant.ApplicationId, password2);
+            await client2.MessagesClient.Connect(chatEndpoint, id2, (int)appId, password2);
+
+            client3 = new QuickbloxClient(apiEndpoint, chatEndpoint, logger);
+            var sessionResponse3 = await client2.CoreClient.CreateSessionWithEmailAsync(appId, authKey, authSecret, email2, password2);
+            client3.Token = sessionResponse3.Result.Session.Token;
+#if DEBUG
+            client3.MessagesClient.DebugClientName = "3";
+#endif
+            await client3.MessagesClient.Connect(chatEndpoint, id3, (int)appId, password3);
         }
 
         [TestMethod]
@@ -70,6 +94,46 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             chatManager2.SendMessage(messageText);
 
             await Task.Delay(5000);
+        }
+
+        [TestMethod]
+        public async Task GroupChatTest()
+        {
+            IGroupChatManager chatManager1 = client1.MessagesClient.GetGroupChatManager(groupJid, groupDialogId);
+            chatManager1.JoinGroup(id1.ToString());
+            IGroupChatManager chatManager2 = client2.MessagesClient.GetGroupChatManager(groupJid, groupDialogId);
+            chatManager2.JoinGroup(id2.ToString());
+            IGroupChatManager chatManager3 = client3.MessagesClient.GetGroupChatManager(groupJid, groupDialogId);
+            chatManager3.JoinGroup(id3.ToString());
+            await Task.Delay(2000);
+
+            chatManager1.SendMessage("One reports to the group.");
+            await Task.Delay(1000);
+            chatManager2.SendMessage("Three reports to the group");
+            await Task.Delay(1000);
+            chatManager3.SendMessage("Three reports to the group");
+            await Task.Delay(1000);
+
+            Debug.WriteLine("############ Updating name");
+            string newName = "Name1";
+            var updateDialogRequest = new UpdateDialogRequest { DialogId = groupDialogId };
+            updateDialogRequest.Name = newName;
+            var updateDialogResponse = await client2.ChatClient.UpdateDialogAsync(updateDialogRequest);
+            Assert.AreEqual(updateDialogResponse.StatusCode, HttpStatusCode.OK);
+
+            chatManager2.NotifyGroupNameChanged(newName);
+            await Task.Delay(1000);
+
+            Debug.WriteLine("############ Checking messaging again");
+
+            chatManager1.SendMessage("One reports to the group.");
+            await Task.Delay(1000);
+            chatManager2.SendMessage("Three reports to the group");
+            await Task.Delay(1000);
+            chatManager3.SendMessage("Three reports to the group");
+            await Task.Delay(1000);
+
+            await Task.Delay(3000);
         }
 
 
