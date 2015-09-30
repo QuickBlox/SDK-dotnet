@@ -112,6 +112,7 @@
     <Compile Include="FileLogger.cs" />
     <Compile Include="Helper\Helpers.cs" />
     <Compile Include="Http\HttpServiceTest.cs" />
+    <Compile Include="Logger\DebugLogger.cs" />
     <Compile Include="Modules\AuthModule\AuthorizationClientTest.cs" />
     <Compile Include="Modules\ChatModule\ChatClientTest.cs" />
     <Compile Include="GlobalConstant.cs" />
