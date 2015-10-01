@@ -287,15 +287,16 @@ namespace QMunicate.ViewModels
                 var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
                 dialogsManager.Dialogs.Insert(0, dialogVm);
 
+                int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
+                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
+                groupChatManager.JoinGroup(currentUserId.ToString());
+
                 foreach (var contact in selectedContacts)
                 {
                     var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId);
                     await privateChatManager.NotifyAboutGroupCreation(createDialogResponse.Result.Id);
                 }
 
-                int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
-                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
-                groupChatManager.JoinGroup(currentUserId.ToString());
                 groupChatManager.NotifyAboutGroupCreation(createDialogResponse.Result.OccupantsIds);
 
                 NavigationService.Navigate(ViewLocator.GroupChat, createDialogResponse.Result.Id);

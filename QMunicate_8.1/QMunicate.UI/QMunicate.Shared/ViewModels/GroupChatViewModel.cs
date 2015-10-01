@@ -131,11 +131,11 @@ namespace QMunicate.ViewModels
 
             await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", currentUserId, dialog.XmppRoomJid));
 
+            await LoadMessages(dialogId);
+
             groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(dialog.XmppRoomJid, dialog.Id);
             groupChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
             groupChatManager.JoinGroup(currentUserId.ToString());
-
-            await LoadMessages(dialogId);
 
             IsLoading = false;
         }

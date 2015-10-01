@@ -185,6 +185,9 @@ namespace QMunicate.ViewModels
                 int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != currentUserId);
                 await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, string.Format("Initializing Chat page. CurrentUserId: {0}. OtherUserId: {1}.", currentUserId, otherUserId));
 
+                if (!string.IsNullOrEmpty(chatParameter.Dialog.Id))
+                    await LoadMessages(chatParameter.Dialog.Id);
+
                 if (otherUserId != 0)
                 {
                     privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);
@@ -192,8 +195,7 @@ namespace QMunicate.ViewModels
                     privateChatManager.OnIsTyping += PrivateChatManagerOnOnIsTyping;
                     privateChatManager.OnPausedTyping += PrivateChatManagerOnOnPausedTyping;
                 }
-                if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))
-                    await LoadMessages(chatParameter.Dialog.Id);
+                
 
                 CheckIsMessageSendingAllowed();
             }
