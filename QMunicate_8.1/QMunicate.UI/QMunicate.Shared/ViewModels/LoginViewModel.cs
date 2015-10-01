@@ -91,6 +91,12 @@ namespace QMunicate.ViewModels
                 return;
             }
 
+            if (!Helpers.IsInternetConnected())
+            {
+                await messageService.ShowAsync("Connection failed", "Please check your internet connection.");
+                return;
+            }
+
             IsLoading = true;
 
             if (RememberMe)

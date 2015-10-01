@@ -4,6 +4,9 @@ using System.Net;
 using System.Text;
 using Facebook.Client;
 using QMunicate.Core.Command;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.MessageService;
+using QMunicate.Helper;
 using QMunicate.Models;
 using Quickblox.Sdk;
 
@@ -43,8 +46,15 @@ namespace QMunicate.ViewModels
 
         #region Private methods
 
-        private void FacebookSignUpCommandExecute()
+        private async void FacebookSignUpCommandExecute()
         {
+            var messageService = ServiceLocator.Locator.Get<IMessageService>();
+            if (!Helpers.IsInternetConnected())
+            {
+                await messageService.ShowAsync("Connection failed", "Please check your internet connection.");
+                return;
+            }
+
             Session.OnFacebookAuthenticationFinished += OnFacebookAuthenticationFinished;
             Session.ActiveSession.LoginWithBehavior("public_profile", FacebookLoginBehavior.LoginBehaviorMobileInternetExplorerOnly);
         }
