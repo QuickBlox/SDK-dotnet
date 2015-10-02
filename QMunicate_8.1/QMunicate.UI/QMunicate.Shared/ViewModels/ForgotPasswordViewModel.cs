@@ -56,6 +56,12 @@ namespace QMunicate.ViewModels
         {
             var messageService = ServiceLocator.Locator.Get<IMessageService>();
 
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                await messageService.ShowAsync("Message", "Please fill all empty input fields");
+                return;
+            }
+
             if (!Helpers.IsInternetConnected())
             {
                 await messageService.ShowAsync("Connection failed", "Please check your internet connection.");
