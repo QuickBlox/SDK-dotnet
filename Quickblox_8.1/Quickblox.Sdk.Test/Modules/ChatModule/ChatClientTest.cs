@@ -8,6 +8,7 @@ using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ChatModule.Responses;
 using QMunicate.Logger;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace Quickblox.Sdk.Test.Modules.ChatModule
 {
@@ -20,7 +21,7 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new FileLogger());
-            var sessionResponse = await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "edwardtest", "edwardtest");
+            var sessionResponse = await this.client.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "to1@test.com", "12345678");
             client.Token = sessionResponse.Result.Session.Token;
         }
 
@@ -92,6 +93,22 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
             Assert.AreEqual(responseDialogs.StatusCode, HttpStatusCode.OK);
 
             var responseMessages = await this.client.ChatClient.GetMessagesAsync(responseDialogs.Result.Items.First().Id);
+            Assert.AreEqual(responseMessages.StatusCode, HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task GetMessagesWithFiltersTest()
+        {
+            var responseDialogs = await this.client.ChatClient.GetDialogsAsync();
+            Assert.AreEqual(responseDialogs.StatusCode, HttpStatusCode.OK);
+            var testDialog = responseDialogs.Result.Items.First();
+
+            var retrieveMessagesRequest = new RetrieveMessagesRequest();
+            var aggregator = new FilterAggregator();
+            aggregator.Filters.Add(new RetrieveDialogsFilter<string>(() => new Message().ChatDialogId, testDialog.Id));
+            retrieveMessagesRequest.Filter = aggregator;
+
+            var responseMessages = await this.client.ChatClient.GetMessagesAsync((RetrieveMessagesRequest)null);
             Assert.AreEqual(responseMessages.StatusCode, HttpStatusCode.OK);
         }
 

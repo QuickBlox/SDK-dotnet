@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
+using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.ChatModule.Models;
@@ -19,7 +21,6 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
         #endregion
 
-
         #region Ctor
 
         internal ChatClient(IQuickbloxClient quickbloxClient)
@@ -30,20 +31,22 @@ namespace Quickblox.Sdk.Modules.ChatModule
         #endregion
 
         #region Public methods
-        
+
+        #region Dialogs
+
         public async Task<HttpResponse<Dialog>> CreateDialogAsync(string dialogName, DialogType dialogType, string occupantsIds = null, string photoId = null)
         {
             var createDialogRequest = new CreateDialogRequest {Type = (int) dialogType, Name = dialogName, OccupantsIds = occupantsIds, Photo = photoId};
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.PostAsync<Dialog, CreateDialogRequest>(this.quickbloxClient.ApiEndPoint,
-                        QuickbloxMethods.CreateDialogMethod, createDialogRequest, headers);
+                QuickbloxMethods.CreateDialogMethod, createDialogRequest, headers);
         }
 
         public async Task<HttpResponse<RetrieveDialogsResponse>> GetDialogsAsync(RetrieveDialogsRequest retrieveDialogsRequest = null)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.GetAsync<RetrieveDialogsResponse, RetrieveDialogsRequest>(this.quickbloxClient.ApiEndPoint,
-                        QuickbloxMethods.GetDialogsMethod, retrieveDialogsRequest, headers);
+                QuickbloxMethods.GetDialogsMethod, retrieveDialogsRequest, headers);
         }
 
         public async Task<HttpResponse<Dialog>> UpdateDialogAsync(UpdateDialogRequest updateDialogRequest)
@@ -64,9 +67,13 @@ namespace Quickblox.Sdk.Modules.ChatModule
             var uriethod = String.Format(QuickbloxMethods.DeleteDialogMethod, dialogId);
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint,
-                        uriethod, headers);
+                uriethod, headers);
         }
-        
+
+        #endregion
+
+        #region Messages
+
         public async Task<HttpResponse<CreateMessageResponse>> CreateMessageAsync(CreateMessageRequest createMessageRequest)
         {
             if (createMessageRequest == null)
@@ -74,20 +81,30 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.PostAsync<CreateMessageResponse, CreateMessageRequest>(this.quickbloxClient.ApiEndPoint,
-                        QuickbloxMethods.CreateMessageMethod, createMessageRequest, headers);
+                QuickbloxMethods.CreateMessageMethod, createMessageRequest, headers);
         }
 
-        
-
-        public async Task<HttpResponse<RetrieveMessagesResponse>> GetMessagesAsync(String dialogId)
+        public async Task<HttpResponse<RetrieveMessagesResponse>> GetMessagesAsync(string dialogId)
         {
             if (dialogId == null)
                 throw new ArgumentNullException("dialogId");
 
-            var uriMethod = String.Format(QuickbloxMethods.GetMessagesMethod, dialogId);
+            var retrieveMessagesRequest = new RetrieveMessagesRequest();
+            var aggregator = new FilterAggregator();
+            aggregator.Filters.Add(new RetrieveDialogsFilter<string>(() => new Message().ChatDialogId, dialogId));
+            retrieveMessagesRequest.Filter = aggregator;
+
+            return await GetMessagesAsync(retrieveMessagesRequest);
+        }
+
+        public async Task<HttpResponse<RetrieveMessagesResponse>> GetMessagesAsync(RetrieveMessagesRequest retrieveMessagesRequest)
+        {
+            if (retrieveMessagesRequest == null)
+                throw new ArgumentNullException("retrieveMessagesRequest");
+
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<RetrieveMessagesResponse>(this.quickbloxClient.ApiEndPoint,
-                         uriMethod, headers);
+            return await HttpService.GetAsync<RetrieveMessagesResponse, RetrieveMessagesRequest>(this.quickbloxClient.ApiEndPoint,
+                QuickbloxMethods.GetMessagesMethod, retrieveMessagesRequest, headers);
         }
 
         public async Task<HttpResponse<RetrieveMessagesResponse>> UpdateMessageAsync(UpdateMessageRequest updateMessageRequest)
@@ -112,6 +129,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
         #endregion
 
+        #endregion
 
     }
 }
