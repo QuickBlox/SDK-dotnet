@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
+using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.GeneralDataModel.Response;
@@ -91,7 +92,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
             var retrieveMessagesRequest = new RetrieveMessagesRequest();
             var aggregator = new FilterAggregator();
-            aggregator.Filters.Add(new RetrieveDialogsFilter<string>(() => new Message().ChatDialogId, dialogId));
+            aggregator.Filters.Add(new FieldFilter<string>(() => new Message().ChatDialogId, dialogId));
             retrieveMessagesRequest.Filter = aggregator;
 
             return await GetMessagesAsync(retrieveMessagesRequest);

@@ -4,9 +4,9 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Quickblox.Sdk.GeneralDataModel.Request;
 
-namespace Quickblox.Sdk.Modules.ChatModule.Models
+namespace Quickblox.Sdk.GeneralDataModel.Filters
 {
-    public class DialogSortFilter<T> : Filter
+    public class SortFilter<T> : Filter
     {
         private readonly SortOperator sortOperator;
         private readonly Expression<Func<T>> selectFieldExpression;
@@ -27,7 +27,7 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
             }
         }
 
-        public DialogSortFilter(SortOperator sortOperator, Expression<Func<T>> selectFieldExpression)
+        public SortFilter(SortOperator sortOperator, Expression<Func<T>> selectFieldExpression)
         {
             this.sortOperator = sortOperator;
             this.selectFieldExpression = selectFieldExpression;

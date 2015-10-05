@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Quickblox.Sdk.GeneralDataModel.Filters;
 
 namespace Quickblox.Sdk.GeneralDataModel.Request
 {

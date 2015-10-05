@@ -1,16 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json;
-using Quickblox.Sdk.GeneralDataModel.Request;
-using System.Diagnostics;
-using System.Text;
-using System.Collections.Generic;
 
-namespace Quickblox.Sdk.Modules.ChatModule.Models
+namespace Quickblox.Sdk.GeneralDataModel.Filters
 {
-    public class RetrieveDialogsFilter<T> : Filter
+    public class FieldFilterWithOperator<T> : Filter
     {
+        private readonly SearchOperators _searchOperators;
         private readonly Expression<Func<T>> selectFieldExpression;
         private readonly object findValue;
 
@@ -18,12 +16,13 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
         {
             get
             {
-                return "{0}={1}";
+                return "{0}[{1}]={2}";
             }
         }
 
-        public RetrieveDialogsFilter(Expression<Func<T>> selectFieldExpression, object findValue)
+        public FieldFilterWithOperator(SearchOperators _searchOperators, Expression<Func<T>> selectFieldExpression, object findValue)
         {
+            this._searchOperators = _searchOperators;
             this.selectFieldExpression = selectFieldExpression;
             this.findValue = findValue;
         }
@@ -43,15 +42,16 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
                 {
                     list.Add(item);
                 }
-                var stringValue = String.Join(",", list);             
+                var stringValue = String.Join(",", list);
                 var jsonPropertyAttribute = propertyInfo.GetCustomAttribute<JsonPropertyAttribute>();
-                return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, stringValue);
+                return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, this._searchOperators.ToString().ToLower(), stringValue);
             }
             else
-            {                
+            {
                 var jsonPropertyAttribute = propertyInfo.GetCustomAttribute<JsonPropertyAttribute>();
-                return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, this.findValue);
+                return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, this._searchOperators.ToString().ToLower(), this.findValue);
             }
+         
         }
     }
 }

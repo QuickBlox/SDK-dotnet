@@ -1,4 +1,4 @@
-﻿namespace Quickblox.Sdk.GeneralDataModel.Request
+﻿namespace Quickblox.Sdk.GeneralDataModel.Filters
 {
     public enum SortOperator
     {
