@@ -17,7 +17,9 @@ using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
 
 namespace QMunicate.ViewModels
@@ -142,17 +144,20 @@ namespace QMunicate.ViewModels
 
         private async Task LoadMessages(string dialogId)
         {
-            var response = await QuickbloxClient.ChatClient.GetMessagesAsync(dialogId);
+            var retrieveMessagesRequest = new RetrieveMessagesRequest();
+            var aggregator = new FilterAggregator();
+            aggregator.Filters.Add(new FieldFilter<string>(() => new Message().ChatDialogId, dialogId));
+            aggregator.Filters.Add(new SortFilter<long>(SortOperator.Desc, () => new Message().DateSent));
+            retrieveMessagesRequest.Filter = aggregator;
+
+            var response = await QuickbloxClient.ChatClient.GetMessagesAsync(retrieveMessagesRequest);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 Messages.Clear();
-                foreach (Message message in response.Result.Items)
+                for (int i = response.Result.Items.Length - 1; i >= 0; i--)
                 {
-                    var messageVm = MessageVm.FromMessage(message, currentUserId);
-
-                    await GenerateProperNotificationMessages(message, messageVm);
-
-                    Messages.Add(messageVm);
+                    var msg = MessageVm.FromMessage(response.Result.Items[i], currentUserId);
+                    Messages.Add(msg);
                 }
             }
         }
