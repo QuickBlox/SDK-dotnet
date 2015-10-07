@@ -22,11 +22,11 @@ namespace QMunicate.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class ChatPage : Page
+    public sealed partial class PrivateChatPage : Page
     {
         private readonly PrivateChatViewModel viewModel;
 
-        public ChatPage()
+        public PrivateChatPage()
         {
             this.InitializeComponent();
             SendButton.IsTabStop = false;
