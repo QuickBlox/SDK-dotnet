@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QMunicate_8.1", "QMunicate_8.1", "{93024201-E145-42C3-9F07-E05DBC9500A1}"
 EndProject
@@ -447,13 +447,13 @@ Global
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.Release|x86.ActiveCfg = Release|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|Any CPU.ActiveCfg = TestRelease|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|Any CPU.Build.0 = TestRelease|Any CPU
-		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|ARM.ActiveCfg = TestRelease|Any CPU
-		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|ARM.Build.0 = TestRelease|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|ARM.ActiveCfg = Debug|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|ARM.Build.0 = Debug|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|Mixed Platforms.ActiveCfg = TestRelease|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|Mixed Platforms.Build.0 = TestRelease|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|x64.ActiveCfg = TestRelease|Any CPU
-		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|x86.ActiveCfg = TestRelease|Any CPU
-		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|x86.Build.0 = TestRelease|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|x86.ActiveCfg = Debug|Any CPU
+		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|x86.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
