@@ -23,7 +23,7 @@ using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
 
 namespace QMunicate.ViewModels
 {
-    public class ChatViewModel : ViewModel
+    public class PrivateChatViewModel : ViewModel
     {
         #region Fields
 
@@ -48,7 +48,7 @@ namespace QMunicate.ViewModels
 
         #region Ctor
 
-        public ChatViewModel()
+        public PrivateChatViewModel()
         {
             Messages = new ObservableCollection<MessageVm>();
             SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading && IsMessageSendingAllowed);

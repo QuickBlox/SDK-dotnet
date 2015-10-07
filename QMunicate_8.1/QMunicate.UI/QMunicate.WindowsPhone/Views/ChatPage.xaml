@@ -13,7 +13,7 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
-    DataContext="{Binding ChatViewModel, Source={StaticResource Locator}}">
+    DataContext="{Binding PrivateChatViewModel, Source={StaticResource Locator}}">
 
     <Page.Resources>
         

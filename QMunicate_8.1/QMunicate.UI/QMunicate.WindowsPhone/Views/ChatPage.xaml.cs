@@ -24,13 +24,13 @@ namespace QMunicate.Views
     /// </summary>
     public sealed partial class ChatPage : Page
     {
-        private readonly ChatViewModel viewModel;
+        private readonly PrivateChatViewModel viewModel;
 
         public ChatPage()
         {
             this.InitializeComponent();
             SendButton.IsTabStop = false;
-            viewModel = this.DataContext as ChatViewModel;
+            viewModel = this.DataContext as PrivateChatViewModel;
         }
 
         /// <summary>
