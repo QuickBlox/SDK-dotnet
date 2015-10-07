@@ -299,8 +299,27 @@ namespace QMunicate.ViewModels
                 for (int i = response.Result.Items.Length - 1; i >= 0; i--)
                 {
                     var msg = MessageVm.FromMessage(response.Result.Items[i], currentUserId);
+                    await GenerateProperNotificationMessages(response.Result.Items[i], msg);
                     Messages.Add(msg);
                 }
+            }
+        }
+
+        private async Task GenerateProperNotificationMessages(Message message, MessageVm messageVm)
+        {
+            if (message.NotificationType == NotificationTypes.FriendsRequest)
+            {
+                messageVm.MessageText = "Contact request";
+            }
+
+            if (message.NotificationType == NotificationTypes.FriendsAccept)
+            {
+                messageVm.MessageText = "Request accepted";
+            }
+
+            if (message.NotificationType == NotificationTypes.FriendsReject)
+            {
+                messageVm.MessageText = "Request rejected";
             }
         }
 
@@ -373,7 +392,7 @@ namespace QMunicate.ViewModels
             NavigationService.Navigate(ViewLocator.UserInfo, dialog == null ? null : dialog.Id);
         }
 
-        private void ChatManagerOnOnMessageReceived(object sender, Message message)
+        private async void ChatManagerOnOnMessageReceived(object sender, Message message)
         {
             var incomingMessage = new MessageVm
             {
@@ -383,6 +402,7 @@ namespace QMunicate.ViewModels
             };
 
             incomingMessage.NotificationType = message.NotificationType;
+            await GenerateProperNotificationMessages(message, incomingMessage);
 
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
