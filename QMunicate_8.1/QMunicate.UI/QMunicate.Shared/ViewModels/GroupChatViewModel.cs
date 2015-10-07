@@ -157,6 +157,7 @@ namespace QMunicate.ViewModels
                 for (int i = response.Result.Items.Length - 1; i >= 0; i--)
                 {
                     var msg = MessageVm.FromMessage(response.Result.Items[i], currentUserId);
+                    await GenerateProperNotificationMessages(response.Result.Items[i], msg);
                     Messages.Add(msg);
                 }
             }
