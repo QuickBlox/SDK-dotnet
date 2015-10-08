@@ -89,7 +89,7 @@
             <Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55"  HorizontalAlignment="Right" Margin="0 0 12 0"/>
         </Grid>
         
-        <ListBox Grid.Row="1" ItemsSource="{Binding Messages}"
+        <ListBox Grid.Row="1" ItemsSource="{Binding MessageCollectionViewModel.Messages}"
                  ItemTemplateSelector="{StaticResource MessageTemplateSelector}"
                  Background="Transparent">
             <ListBox.ItemContainerStyle>

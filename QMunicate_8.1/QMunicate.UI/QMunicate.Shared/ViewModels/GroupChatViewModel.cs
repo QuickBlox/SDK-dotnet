@@ -3,25 +3,17 @@ using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
-using QMunicate.Models;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using QMunicate.ViewModels.PartialViewModels;
-using Quickblox.Sdk.GeneralDataModel.Filters;
-using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.ChatModule.Requests;
-using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
 
 namespace QMunicate.ViewModels
 {
@@ -43,7 +35,7 @@ namespace QMunicate.ViewModels
 
         public GroupChatViewModel()
         {
-            Messages = new ObservableCollection<MessageViewModel>();
+            MessageCollectionViewModel = new MessageCollectionViewModel();
             SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading);
             ShowGroupInfoCommand = new RelayCommand(ShowGroupInfoCommandExecute, () => !IsLoading);
         }
@@ -52,7 +44,7 @@ namespace QMunicate.ViewModels
 
         #region Properties
 
-        public ObservableCollection<MessageViewModel> Messages { get; set; }
+        public MessageCollectionViewModel MessageCollectionViewModel { get; set; }
 
         public string NewMessageText
         {
@@ -134,34 +126,13 @@ namespace QMunicate.ViewModels
 
             await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, string.Format("Initializing GroupChat page. CurrentUserId: {0}. Group JID: {1}.", currentUserId, dialog.XmppRoomJid));
 
-            await LoadMessages(dialogId);
+            await MessageCollectionViewModel.LoadMessages(dialogId);
 
             groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(dialog.XmppRoomJid, dialog.Id);
             groupChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
             groupChatManager.JoinGroup(currentUserId.ToString());
 
             IsLoading = false;
-        }
-
-        private async Task LoadMessages(string dialogId)
-        {
-            var retrieveMessagesRequest = new RetrieveMessagesRequest();
-            var aggregator = new FilterAggregator();
-            aggregator.Filters.Add(new FieldFilter<string>(() => new Message().ChatDialogId, dialogId));
-            aggregator.Filters.Add(new SortFilter<long>(SortOperator.Desc, () => new Message().DateSent));
-            retrieveMessagesRequest.Filter = aggregator;
-
-            var response = await QuickbloxClient.ChatClient.GetMessagesAsync(retrieveMessagesRequest);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                Messages.Clear();
-                for (int i = response.Result.Items.Length - 1; i >= 0; i--)
-                {
-                    var msg = MessageViewModel.FromMessage(response.Result.Items[i], currentUserId);
-                    await GenerateProperNotificationMessages(response.Result.Items[i], msg);
-                    Messages.Add(msg);
-                }
-            }
         }
 
         private async void SendCommandExecute()
@@ -192,9 +163,7 @@ namespace QMunicate.ViewModels
                 DateTime = DateTime.Now
             };
 
-            await GenerateProperNotificationMessages(message, messageVm);
-
-            var senderId = GetSenderIdFromJid(message.From);
+            var senderId = Helpers.GetUserIdFromJid(message.From);
             if (senderId == currentUserId)
             {
                 messageVm.MessageType = MessageType.Outgoing;
@@ -202,99 +171,10 @@ namespace QMunicate.ViewModels
 
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                Messages.Add(messageVm);
+                await MessageCollectionViewModel.AddNewMessageAndCorrectText(messageVm, message);
                 if (message.NotificationType == NotificationTypes.GroupUpdate)
                     await UpdateGroupInfo(message);
             });
-        }
-
-        private async Task GenerateProperNotificationMessages(Message message, MessageViewModel messageViewModel)
-        {
-            if (message.NotificationType == NotificationTypes.GroupCreate)
-            {
-                messageViewModel.MessageText = await BuildGroupCreateMessage(message);
-            }
-
-            if (message.NotificationType == NotificationTypes.GroupUpdate)
-            {
-                messageViewModel.MessageText = await BuildGroupUpdateMessage(message);
-            }
-        }
-
-        private async Task<string> BuildGroupCreateMessage(Message message)
-        {
-            int senderId = GetSenderId(message);
-            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var senderUser = await cachingQbClient.GetUserById(senderId);
-
-            var addedUsersBuilder = new StringBuilder();
-            List<int> occupantsIds = ConvertStringToIntArray(message.OccupantsIds);
-            foreach (var userId in occupantsIds.Where(o => o != senderId))
-            {
-                var user = await cachingQbClient.GetUserById(userId);
-                if(user != null)
-                    addedUsersBuilder.Append(user.FullName + ", ");
-            }
-            if (addedUsersBuilder.Length > 1)
-                addedUsersBuilder.Remove(addedUsersBuilder.Length - 2, 2);
-
-            return string.Format("{0} has added {1} to the group chat", senderUser == null ? "" : senderUser.FullName, addedUsersBuilder);
-        }
-
-        private async Task<string> BuildGroupUpdateMessage(Message message)
-        {
-            int senderId = GetSenderId(message);
-            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var senderUser = await cachingQbClient.GetUserById(senderId);
-
-            string messageText = null;
-            if (!string.IsNullOrEmpty(message.RoomName))
-                messageText = string.Format("{0} has changed the chat name to {1}", senderUser == null ? "" : senderUser.FullName, message.RoomName);
-
-            if(!string.IsNullOrEmpty(message.RoomPhoto))
-                messageText = string.Format("{0} has changed the chat picture", senderUser == null ? "" : senderUser.FullName);
-
-            if (!string.IsNullOrEmpty(message.OccupantsIds))
-            {
-                var addedUsersBuilder = new StringBuilder();
-                List<int> occupantsIds = ConvertStringToIntArray(message.OccupantsIds);
-                foreach (var userId in occupantsIds.Where(o => o != senderId))
-                {
-                    var user = await cachingQbClient.GetUserById(userId);
-                    if (user != null)
-                        addedUsersBuilder.Append(user.FullName + ", ");
-                }
-                if (addedUsersBuilder.Length > 1)
-                    addedUsersBuilder.Remove(addedUsersBuilder.Length - 2, 2);
-
-                messageText = string.Format("{0} has added {1} to the group chat", senderUser == null ? "" : senderUser.FullName, addedUsersBuilder);
-            }
-
-            return messageText;
-        }
-
-
-        private int GetSenderId(Message message)
-        {
-            if (message.SenderId != 0) return message.SenderId;
-
-            return GetSenderIdFromJid(message.From);
-        }
-
-        private List<int> ConvertStringToIntArray(string occupantsIdsString)
-        {
-            var occupantsIds = new List<int>();
-            if (string.IsNullOrEmpty(occupantsIdsString)) return occupantsIds;
-
-            var idsStrings = occupantsIdsString.Split(',');
-            foreach (string idsString in idsStrings)
-            {
-                int id;
-                if(int.TryParse(idsString, out id))
-                    occupantsIds.Add(id);
-            }
-
-            return occupantsIds;
         }
 
         private async Task UpdateGroupInfo(Message notificationMessage)
@@ -309,16 +189,6 @@ namespace QMunicate.ViewModels
             {
                 ChatName = notificationMessage.RoomName;
             }
-        }
-
-        private int GetSenderIdFromJid(string jid)
-        {
-            int senderId;
-            var jidParts = jid.Split('/');
-            if(int.TryParse(jidParts.Last(), out senderId))
-                return senderId;
-
-            return 0;
         }
 
         private void ShowGroupInfoCommandExecute()

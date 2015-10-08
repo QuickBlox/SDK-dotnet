@@ -1,5 +1,8 @@
-﻿using System;
+﻿using QMunicate.Core.Logger;
+using QMunicate.Core.MessageService;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -10,9 +13,6 @@ using Windows.Storage.Streams;
 using Windows.System.Profile;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using QMunicate.Core.Logger;
-using QMunicate.Core.MessageService;
-using Quickblox.Sdk.Logger;
 
 namespace QMunicate.Helper
 {
@@ -61,6 +61,16 @@ namespace QMunicate.Helper
             ConnectionProfile connections = NetworkInformation.GetInternetConnectionProfile();
             bool internet = connections != null && connections.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
             return internet;
+        }
+
+        public static int GetUserIdFromJid(string jid)
+        {
+            int senderId;
+            var jidParts = jid.Split('/');
+            if (int.TryParse(jidParts.Last(), out senderId))
+                return senderId;
+
+            return 0;
         }
 
         public static async Task<ImageSource> CreateBitmapImage(byte[] imageBytes, int? decodePixelWidth = null, int? decodePixelHeight = null)
