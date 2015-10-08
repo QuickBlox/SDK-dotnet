@@ -16,6 +16,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
@@ -33,7 +34,7 @@ namespace QMunicate.ViewModels
         private bool isActiveContactRequest;
         private bool isWaitingForContactResponse;
         private bool isRequestRejected;
-        private DialogVm dialog;
+        private DialogViewModel dialog;
         private int currentUserId;
         private IPrivateChatManager privateChatManager;
         private bool isMeTyping;
@@ -50,7 +51,7 @@ namespace QMunicate.ViewModels
 
         public PrivateChatViewModel()
         {
-            Messages = new ObservableCollection<MessageVm>();
+            Messages = new ObservableCollection<MessageViewModel>();
             SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading && IsMessageSendingAllowed);
             AcceptRequestCommand = new RelayCommand(AcceptRequestCommandExecute, () => !IsLoading);
             RejectRequestCommand = new RelayCommand(RejectCRequestCommandExecute, () => !IsLoading);
@@ -65,7 +66,7 @@ namespace QMunicate.ViewModels
 
         #region Properties
 
-        public ObservableCollection<MessageVm> Messages { get; set; }
+        public ObservableCollection<MessageViewModel> Messages { get; set; }
 
         public string NewMessageText
         {
@@ -298,28 +299,28 @@ namespace QMunicate.ViewModels
                 Messages.Clear();
                 for (int i = response.Result.Items.Length - 1; i >= 0; i--)
                 {
-                    var msg = MessageVm.FromMessage(response.Result.Items[i], currentUserId);
+                    var msg = MessageViewModel.FromMessage(response.Result.Items[i], currentUserId);
                     await GenerateProperNotificationMessages(response.Result.Items[i], msg);
                     Messages.Add(msg);
                 }
             }
         }
 
-        private async Task GenerateProperNotificationMessages(Message message, MessageVm messageVm)
+        private async Task GenerateProperNotificationMessages(Message message, MessageViewModel messageViewModel)
         {
             if (message.NotificationType == NotificationTypes.FriendsRequest)
             {
-                messageVm.MessageText = "Contact request";
+                messageViewModel.MessageText = "Contact request";
             }
 
             if (message.NotificationType == NotificationTypes.FriendsAccept)
             {
-                messageVm.MessageText = "Request accepted";
+                messageViewModel.MessageText = "Request accepted";
             }
 
             if (message.NotificationType == NotificationTypes.FriendsReject)
             {
-                messageVm.MessageText = "Request rejected";
+                messageViewModel.MessageText = "Request rejected";
             }
         }
 
@@ -338,7 +339,7 @@ namespace QMunicate.ViewModels
                 return;
             }
 
-            var msg = new MessageVm()
+            var msg = new MessageViewModel()
             {
                 MessageText = NewMessageText,
                 MessageType = MessageType.Outgoing,
@@ -394,7 +395,7 @@ namespace QMunicate.ViewModels
 
         private async void ChatManagerOnOnMessageReceived(object sender, Message message)
         {
-            var incomingMessage = new MessageVm
+            var incomingMessage = new MessageViewModel
             {
                 MessageText = message.MessageText,
                 MessageType = MessageType.Incoming,

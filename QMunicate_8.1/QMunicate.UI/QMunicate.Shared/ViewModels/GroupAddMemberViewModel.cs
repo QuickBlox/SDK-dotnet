@@ -21,6 +21,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.AsyncLock;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk;
 
 namespace QMunicate.ViewModels
@@ -31,9 +32,9 @@ namespace QMunicate.ViewModels
         private string searchText;
         private string membersText;
         private readonly AsyncLock contactsLock = new AsyncLock();
-        private List<SelectableListBoxItem<UserVm>> allContacts;
+        private List<SelectableListBoxItem<UserViewModel>> allContacts;
         private bool isEditMode;
-        private DialogVm editedDialog;
+        private DialogViewModel editedDialog;
 
         private ImageSource chatImage;
         private byte[] chatImageBytes;
@@ -42,7 +43,7 @@ namespace QMunicate.ViewModels
 
         public GroupAddMemberViewModel()
         {
-            UsersToAdd = new ObservableCollection<SelectableListBoxItem<UserVm>>();
+            UsersToAdd = new ObservableCollection<SelectableListBoxItem<UserViewModel>>();
             
             CreateGroupCommand = new RelayCommand(CreateGroupCommandExecute, () => !IsLoading && UsersToAdd.Count > 0);
             ChangeImageCommand = new RelayCommand(ChangeImageCommandExecute, () => !IsLoading);
@@ -76,7 +77,7 @@ namespace QMunicate.ViewModels
             set { Set(ref membersText, value); }
         }
 
-        public ObservableCollection<SelectableListBoxItem<UserVm>> UsersToAdd { get; set; }
+        public ObservableCollection<SelectableListBoxItem<UserViewModel>> UsersToAdd { get; set; }
 
         public bool IsEditMode
         {
@@ -100,7 +101,7 @@ namespace QMunicate.ViewModels
 
         public override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var dialog = e.Parameter as DialogVm;
+            var dialog = e.Parameter as DialogViewModel;
             if (dialog != null)
             {
                 IsEditMode = true;
@@ -167,16 +168,16 @@ namespace QMunicate.ViewModels
 #endif
         }
 
-        private async Task InitializeAllContacts(DialogVm existingDialog)
+        private async Task InitializeAllContacts(DialogViewModel existingDialog)
         {
-            allContacts = new List<SelectableListBoxItem<UserVm>>();
+            allContacts = new List<SelectableListBoxItem<UserViewModel>>();
 
             foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
             {
                 if(existingDialog != null && existingDialog.OccupantIds.Contains(contact.UserId)) continue;
 
-                var userVm = UserVm.FromContact(contact);
-                allContacts.Add(new SelectableListBoxItem<UserVm>(userVm));
+                var userVm = UserViewModel.FromContact(contact);
+                allContacts.Add(new SelectableListBoxItem<UserViewModel>(userVm));
             }
 
             await LoadAllContactsImages();
@@ -281,7 +282,7 @@ namespace QMunicate.ViewModels
             var createDialogResponse = await QuickbloxClient.ChatClient.CreateDialogAsync(GroupName, DialogType.Group, selectedUsersString, imageLink);
             if (createDialogResponse.StatusCode == HttpStatusCode.Created)
             {
-                var dialogVm = DialogVm.FromDialog(createDialogResponse.Result);
+                var dialogVm = DialogViewModel.FromDialog(createDialogResponse.Result);
                 dialogVm.Image = ChatImage;
 
                 var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();

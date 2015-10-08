@@ -4,6 +4,7 @@ using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using QMunicate.Models;
+using QMunicate.ViewModels.PartialViewModels;
 
 namespace QMunicate.Selectors
 {
@@ -22,7 +23,7 @@ namespace QMunicate.Selectors
         /// <returns>Returns a DataTemplate object or null.</returns>
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            var message = item as MessageVm;
+            var message = item as MessageViewModel;
             if (message != null)
             {
                 return message.MessageType == MessageType.Incoming ? IncomingMessageTemplate : OutgoingMessageTemplate;

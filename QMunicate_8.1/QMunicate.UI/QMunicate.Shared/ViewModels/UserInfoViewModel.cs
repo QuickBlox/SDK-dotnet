@@ -11,6 +11,7 @@ using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk;
 
 namespace QMunicate.ViewModels 
@@ -22,7 +23,7 @@ namespace QMunicate.ViewModels
         private string userName;
         private ImageSource userImage;
         private string mobilePhone;
-        private DialogVm dialog;
+        private DialogViewModel dialog;
 
         #endregion
 

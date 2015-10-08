@@ -11,6 +11,7 @@ using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 
@@ -68,7 +69,7 @@ namespace QMunicate.ViewModels
 
         public override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var user = e.Parameter as UserVm;
+            var user = e.Parameter as UserViewModel;
             if (user == null) return;
 
             IsAdded = QuickbloxClient.MessagesClient.Contacts.Any(c => c.UserId == user.UserId);

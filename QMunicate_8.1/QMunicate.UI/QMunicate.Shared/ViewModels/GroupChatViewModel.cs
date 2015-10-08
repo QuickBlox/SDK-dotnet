@@ -17,6 +17,7 @@ using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
@@ -31,7 +32,7 @@ namespace QMunicate.ViewModels
         private string newMessageText;
         private string chatName;
         private ImageSource chatImage;
-        private DialogVm dialog;
+        private DialogViewModel dialog;
         private IGroupChatManager groupChatManager;
         private int numberOfMembers;
         private int currentUserId;
@@ -42,7 +43,7 @@ namespace QMunicate.ViewModels
 
         public GroupChatViewModel()
         {
-            Messages = new ObservableCollection<MessageVm>();
+            Messages = new ObservableCollection<MessageViewModel>();
             SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading);
             ShowGroupInfoCommand = new RelayCommand(ShowGroupInfoCommandExecute, () => !IsLoading);
         }
@@ -51,7 +52,7 @@ namespace QMunicate.ViewModels
 
         #region Properties
 
-        public ObservableCollection<MessageVm> Messages { get; set; }
+        public ObservableCollection<MessageViewModel> Messages { get; set; }
 
         public string NewMessageText
         {
@@ -156,7 +157,7 @@ namespace QMunicate.ViewModels
                 Messages.Clear();
                 for (int i = response.Result.Items.Length - 1; i >= 0; i--)
                 {
-                    var msg = MessageVm.FromMessage(response.Result.Items[i], currentUserId);
+                    var msg = MessageViewModel.FromMessage(response.Result.Items[i], currentUserId);
                     await GenerateProperNotificationMessages(response.Result.Items[i], msg);
                     Messages.Add(msg);
                 }
@@ -184,7 +185,7 @@ namespace QMunicate.ViewModels
 
         private async void ChatManagerOnOnMessageReceived(object sender, Message message)
         {
-            var messageVm = new MessageVm
+            var messageVm = new MessageViewModel
             {
                 MessageText = message.MessageText,
                 MessageType = MessageType.Incoming,
@@ -207,16 +208,16 @@ namespace QMunicate.ViewModels
             });
         }
 
-        private async Task GenerateProperNotificationMessages(Message message, MessageVm messageVm)
+        private async Task GenerateProperNotificationMessages(Message message, MessageViewModel messageViewModel)
         {
             if (message.NotificationType == NotificationTypes.GroupCreate)
             {
-                messageVm.MessageText = await BuildGroupCreateMessage(message);
+                messageViewModel.MessageText = await BuildGroupCreateMessage(message);
             }
 
             if (message.NotificationType == NotificationTypes.GroupUpdate)
             {
-                messageVm.MessageText = await BuildGroupUpdateMessage(message);
+                messageViewModel.MessageText = await BuildGroupUpdateMessage(message);
             }
         }
 

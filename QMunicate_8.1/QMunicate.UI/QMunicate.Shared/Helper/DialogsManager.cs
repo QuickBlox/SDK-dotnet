@@ -11,6 +11,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
@@ -33,14 +34,14 @@ namespace QMunicate.Helper
         {
             this.quickbloxClient = quickbloxClient;
             quickbloxClient.MessagesClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
-            Dialogs = new ObservableCollection<DialogVm>();
+            Dialogs = new ObservableCollection<DialogViewModel>();
         }
 
         #endregion
 
         #region Properties
 
-        public ObservableCollection<DialogVm> Dialogs { get; private set; }
+        public ObservableCollection<DialogViewModel> Dialogs { get; private set; }
 
         #endregion
 
@@ -63,7 +64,7 @@ namespace QMunicate.Helper
                     {
                         if (dialog.Type == DialogType.Private)
                         {
-                            var dialogVm = DialogVm.FromDialog(dialog);
+                            var dialogVm = DialogViewModel.FromDialog(dialog);
                             int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != currentUserId);
                             dialogVm.Name = GetUserNameFromContacts(otherUserId);
 
@@ -71,7 +72,7 @@ namespace QMunicate.Helper
                         }
                         else if(dialog.Type == DialogType.Group)
                         {
-                            var dialogVm = DialogVm.FromDialog(dialog);
+                            var dialogVm = DialogViewModel.FromDialog(dialog);
 
                             if (!string.IsNullOrEmpty(dialogVm.Photo))
                             {
@@ -84,7 +85,7 @@ namespace QMunicate.Helper
                     }
 
                     var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-                    foreach (DialogVm dialogVm in Dialogs)
+                    foreach (DialogViewModel dialogVm in Dialogs)
                     {
                         if (dialogVm.DialogType == DialogType.Private)
                         {
@@ -113,7 +114,7 @@ namespace QMunicate.Helper
 
             int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
 
-            foreach (DialogVm dialogVm in Dialogs)
+            foreach (DialogViewModel dialogVm in Dialogs)
             {
                 if (dialogVm.DialogType == DialogType.Group)
                 {

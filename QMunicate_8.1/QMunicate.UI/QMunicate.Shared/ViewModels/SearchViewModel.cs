@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.AsyncLock;
+using QMunicate.ViewModels.PartialViewModels;
 
 namespace QMunicate.ViewModels
 {
@@ -33,10 +34,10 @@ namespace QMunicate.ViewModels
 
         public SearchViewModel()
         {
-            GlobalResults = new ObservableCollection<UserVm>();
-            LocalResults = new ObservableCollection<UserVm>();
-            OpenLocalCommand = new RelayCommand<UserVm>(u => OpenLocalCommandExecute(u));
-            OpenGlobalCommand = new RelayCommand<UserVm>(OpenGlobalCommandExecute);
+            GlobalResults = new ObservableCollection<UserViewModel>();
+            LocalResults = new ObservableCollection<UserViewModel>();
+            OpenLocalCommand = new RelayCommand<UserViewModel>(u => OpenLocalCommandExecute(u));
+            OpenGlobalCommand = new RelayCommand<UserViewModel>(OpenGlobalCommandExecute);
         }
 
         #endregion
@@ -63,13 +64,13 @@ namespace QMunicate.ViewModels
             }
         }
 
-        public ObservableCollection<UserVm> GlobalResults { get; set; }
+        public ObservableCollection<UserViewModel> GlobalResults { get; set; }
 
-        public ObservableCollection<UserVm> LocalResults { get; set; }
+        public ObservableCollection<UserViewModel> LocalResults { get; set; }
 
-        public RelayCommand<UserVm> OpenLocalCommand { get; set; }
+        public RelayCommand<UserViewModel> OpenLocalCommand { get; set; }
 
-        public RelayCommand<UserVm> OpenGlobalCommand { get; set; }
+        public RelayCommand<UserViewModel> OpenGlobalCommand { get; set; }
 
         #endregion
 
@@ -120,7 +121,7 @@ namespace QMunicate.ViewModels
                     GlobalResults.Clear();
                     foreach (UserResponse item in response.Result.Items.Where(i => i.User.Id != currentUserId))
                     {
-                        GlobalResults.Add(UserVm.FromUser(item.User));
+                        GlobalResults.Add(UserViewModel.FromUser(item.User));
                     }
                     
                 }
@@ -135,7 +136,7 @@ namespace QMunicate.ViewModels
 
             using (await globalResultsLock.LockAsync())
             {
-                foreach (UserVm userVm in GlobalResults)
+                foreach (UserViewModel userVm in GlobalResults)
                 {
                     if (userVm.ImageUploadId.HasValue)
                     {
@@ -165,20 +166,20 @@ namespace QMunicate.ViewModels
                 {
                     foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
                     {
-                        LocalResults.Add(UserVm.FromContact(contact));
+                        LocalResults.Add(UserViewModel.FromContact(contact));
                     }
                 }
                 else
                 {
                     foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
                     {
-                        LocalResults.Add(UserVm.FromContact(contact));
+                        LocalResults.Add(UserViewModel.FromContact(contact));
                     }
                 }
 
                 var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
                 var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                foreach (UserVm userVm in LocalResults)
+                foreach (UserViewModel userVm in LocalResults)
                 {
                     var user = await cachingQbClient.GetUserById(userVm.UserId);
                     if (user != null && user.BlobId.HasValue)
@@ -190,7 +191,7 @@ namespace QMunicate.ViewModels
             }
         }
 
-        private async Task OpenLocalCommandExecute(UserVm user)
+        private async Task OpenLocalCommandExecute(UserViewModel user)
         {
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             var userDialog = dialogsManager.Dialogs.FirstOrDefault(d => d.DialogType == DialogType.Private && d.OccupantIds.Contains(user.UserId));
@@ -203,7 +204,7 @@ namespace QMunicate.ViewModels
                 var response = await QuickbloxClient.ChatClient.CreateDialogAsync(user.FullName, DialogType.Private, user.UserId.ToString());
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    var dialogVm = DialogVm.FromDialog(response.Result);
+                    var dialogVm = DialogViewModel.FromDialog(response.Result);
                     dialogVm.Image = user.Image;
                     dialogVm.PrivatePhotoId = user.ImageUploadId;
                     dialogVm.Name = user.FullName;
@@ -213,7 +214,7 @@ namespace QMunicate.ViewModels
             }
         }
 
-        private void OpenGlobalCommandExecute(UserVm user)
+        private void OpenGlobalCommandExecute(UserViewModel user)
         {
             NavigationService.Navigate(ViewLocator.SendRequest, user);
         }

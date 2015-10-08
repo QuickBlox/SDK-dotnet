@@ -1,9 +1,9 @@
-﻿using Quickblox.Sdk.Builder;
+﻿using System;
+using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using System;
 using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
 
-namespace QMunicate.Models
+namespace QMunicate.ViewModels.PartialViewModels
 {
     public enum MessageType
     {
@@ -12,20 +12,19 @@ namespace QMunicate.Models
         Outgoing
     }
 
-    public class MessageVm
+    public class MessageViewModel
     {
         #region Ctor
 
-        public MessageVm() { }
+        public MessageViewModel() { }
 
-        protected MessageVm(Message message, int curentUserId = default(int))
+        protected MessageViewModel(Message message, int curentUserId = default(int))
         {
             MessageText = message.MessageText;
             DateTime = message.DateSent.ToDateTime();
             if (curentUserId != default(int))
                 MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
 
-            //if (message.NotificationType.HasValue && Enum.IsDefined(typeof (NotificationTypes), message.NotificationType))
             NotificationType = message.NotificationType;
         }
 
@@ -42,9 +41,9 @@ namespace QMunicate.Models
 
         #region Public methods
 
-        public static MessageVm FromMessage(Message message, int curentUserId = default(int))
+        public static MessageViewModel FromMessage(Message message, int curentUserId = default(int))
         {
-            return new MessageVm(message, curentUserId);
+            return new MessageViewModel(message, curentUserId);
         }
 
         #endregion
