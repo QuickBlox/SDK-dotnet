@@ -255,29 +255,32 @@ namespace QMunicate.ViewModels
         {
             for (int i = MessageCollectionViewModel.Messages.Count - 1; i >= 0; i--)
             {
-                var currentMessage = MessageCollectionViewModel.Messages[i];
-
-                if (currentMessage.NotificationType == NotificationTypes.FriendsAccept)
+                var currentMessageGroup = MessageCollectionViewModel.Messages[i];
+                for (int j = currentMessageGroup.Count - 1; j >= 0; j--)
                 {
-                    break;
-                }
+                    var currentMessage = currentMessageGroup[j];
+                    if (currentMessage.NotificationType == NotificationTypes.FriendsAccept)
+                    {
+                        break;
+                    }
 
-                if (currentMessage.NotificationType == NotificationTypes.FriendsReject)
-                {
-                    IsRequestRejected = true;
-                    break;
-                }
+                    if (currentMessage.NotificationType == NotificationTypes.FriendsReject)
+                    {
+                        IsRequestRejected = true;
+                        break;
+                    }
 
-                if (currentMessage.MessageType == MessageType.Outgoing && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
-                {
-                    IsWaitingForContactResponse = true;
-                    break;
-                }
+                    if (currentMessage.MessageType == MessageType.Outgoing && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
+                    {
+                        IsWaitingForContactResponse = true;
+                        break;
+                    }
 
-                if (currentMessage.MessageType == MessageType.Incoming && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
-                {
-                    IsActiveContactRequest = true;
-                    break;
+                    if (currentMessage.MessageType == MessageType.Incoming && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
+                    {
+                        IsActiveContactRequest = true;
+                        break;
+                    }
                 }
             }
         }

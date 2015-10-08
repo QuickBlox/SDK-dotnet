@@ -12,59 +12,11 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     RequestedTheme="Light"
-    DataContext="{Binding GroupChatViewModel, Source={StaticResource Locator}}">
+    DataContext="{Binding GroupChatViewModel, Source={StaticResource Locator}}"
+    x:Name="Page">
 
     <Page.Resources>
-
-        <SolidColorBrush x:Key="IncomingMessageBrush" Color="LightGray"/>
-        <SolidColorBrush x:Key="OutogoingMessageBrush" Color="{StaticResource AppBarColor}"/>
-
-        <selectors:MessageTemplateSelector x:Key="MessageTemplateSelector">
-            <selectors:MessageTemplateSelector.IncomingMessageTemplate>
-                <DataTemplate>
-                    <Grid Margin="{StaticResource DefaultVerticalMargin}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="8*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-                        <Polygon Points="12,0 12,12 0,12 12,0" Fill="{StaticResource IncomingMessageBrush}" VerticalAlignment="Bottom"
-                                 Margin="0,24,0,0" />
-                        <Grid Grid.Column="1" Background="{StaticResource IncomingMessageBrush}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding MessageText}" TextWrapping="Wrap" Foreground="Black" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
-                            <TextBlock Grid.Row="1" Text="{Binding DateTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:HH:mm}'}"
-                                       FontSize="{StaticResource NormalFontSize}" Foreground="Gray" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Right"/>
-                        </Grid>
-                    </Grid>
-                </DataTemplate>
-            </selectors:MessageTemplateSelector.IncomingMessageTemplate>
-            <selectors:MessageTemplateSelector.OutgoingMessageTemplate>
-                <DataTemplate>
-                    <Grid Margin="{StaticResource DefaultVerticalMargin}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="8*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="1" Background="{StaticResource OutogoingMessageBrush}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding MessageText}" TextWrapping="Wrap" Foreground="White" Margin="{StaticResource DefaultMargin}" FontSize="{StaticResource NormalFontSize}"/>
-                            <TextBlock Grid.Row="1" Text="{Binding DateTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:HH:mm}'}"
-                                       FontSize="{StaticResource NormalFontSize}" Foreground="Gainsboro" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Right"/>
-                        </Grid>
-                        <Polygon Points="0,0 0,12 12,12 0,0" Fill="{StaticResource OutogoingMessageBrush}"
-                                 VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="2"/>
-                    </Grid>
-                </DataTemplate>
-            </selectors:MessageTemplateSelector.OutgoingMessageTemplate>
-        </selectors:MessageTemplateSelector>
+        <CollectionViewSource x:Key="groupedMessagesSource" Source="{Binding DataContext.MessageCollectionViewModel.Messages, ElementName=Page}" IsSourceGrouped="True" />
     </Page.Resources>
 
     <Grid>
@@ -88,16 +40,14 @@
                        FontSize="{StaticResource NormalFontSize}" Margin="12 0 12 12" Foreground="Gray"/>
             <Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55"  HorizontalAlignment="Right" Margin="0 0 12 0"/>
         </Grid>
-        
-        <ListBox Grid.Row="1" ItemsSource="{Binding MessageCollectionViewModel.Messages}"
+
+        <ListBox Grid.Row="1" ItemsSource="{Binding Source={StaticResource groupedMessagesSource}}"
                  ItemTemplateSelector="{StaticResource MessageTemplateSelector}"
+                 ItemContainerStyle="{StaticResource ListBoxItemStrechedStyle}"
                  Background="Transparent">
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="IsEnabled" Value="False"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
+            <ListBox.GroupStyle>
+                <GroupStyle HeaderTemplate="{StaticResource MessagesGroupDateHeader}" />
+            </ListBox.GroupStyle>
             <interactivity:Interaction.Behaviors>
                 <behaviors:ListBoxAutoscrollBehavior />
             </interactivity:Interaction.Behaviors>

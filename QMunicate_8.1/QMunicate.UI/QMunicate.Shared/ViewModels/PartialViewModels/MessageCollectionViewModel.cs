@@ -25,14 +25,14 @@ namespace QMunicate.ViewModels.PartialViewModels
 
         public MessageCollectionViewModel()
         {
-            Messages = new ObservableCollection<MessageViewModel>();
+            Messages = new ObservableCollection<DayOfMessages>();
         }
 
         #endregion
 
         #region Properties
 
-        public ObservableCollection<MessageViewModel> Messages { get; set; }
+        public ObservableCollection<DayOfMessages> Messages { get; set; }
 
         #endregion
 
@@ -55,9 +55,8 @@ namespace QMunicate.ViewModels.PartialViewModels
                 Messages.Clear();
                 for (int i = response.Result.Items.Length - 1; i >= 0; i--)
                 {
-                    var msg = MessageViewModel.FromMessage(response.Result.Items[i], currentUserId);
-                    await GenerateProperNotificationMessages(msg, response.Result.Items[i]);
-                    Messages.Add(msg);
+                    var messageViewModel = MessageViewModel.FromMessage(response.Result.Items[i], currentUserId);
+                    await AddNewMessageAndCorrectText(messageViewModel, response.Result.Items[i]);
                 }
             }
         }
@@ -83,34 +82,38 @@ namespace QMunicate.ViewModels.PartialViewModels
                 await GenerateProperNotificationMessages(messageViewModel, originalMessage);
             }
 
-            Messages.Add(messageViewModel);
+            var messageGroup = Messages.FirstOrDefault(msgGroup => msgGroup.Date.Date == messageViewModel.DateTime.Date);
+            if (messageGroup == null)
+            {
+                messageGroup = new DayOfMessages { Date = messageViewModel.DateTime.Date };
+                Messages.Add(messageGroup);
+            }
+            messageGroup.Add(messageViewModel);
         }
 
         private async Task GenerateProperNotificationMessages(MessageViewModel messageViewModel, Message originalMessage)
         {
-            if (originalMessage.NotificationType == NotificationTypes.FriendsRequest)
+            switch (originalMessage.NotificationType)
             {
-                messageViewModel.MessageText = "Contact request";
-            }
+                case NotificationTypes.FriendsRequest:
+                    messageViewModel.MessageText = "Contact request";
+                    break;
 
-            if (originalMessage.NotificationType == NotificationTypes.FriendsAccept)
-            {
-                messageViewModel.MessageText = "Request accepted";
-            }
+                case NotificationTypes.FriendsAccept:
+                    messageViewModel.MessageText = "Request accepted";
+                    break;
 
-            if (originalMessage.NotificationType == NotificationTypes.FriendsReject)
-            {
-                messageViewModel.MessageText = "Request rejected";
-            }
+                case NotificationTypes.FriendsReject:
+                    messageViewModel.MessageText = "Request rejected";
+                    break;
 
-            if (originalMessage.NotificationType == NotificationTypes.GroupCreate)
-            {
-                messageViewModel.MessageText = await BuildGroupCreateMessage(originalMessage);
-            }
+                case NotificationTypes.GroupCreate:
+                    messageViewModel.MessageText = await BuildGroupCreateMessage(originalMessage);
+                    break;
 
-            if (originalMessage.NotificationType == NotificationTypes.GroupUpdate)
-            {
-                messageViewModel.MessageText = await BuildGroupUpdateMessage(originalMessage);
+                case NotificationTypes.GroupUpdate:
+                    messageViewModel.MessageText = await BuildGroupUpdateMessage(originalMessage);
+                    break;
             }
         }
 
