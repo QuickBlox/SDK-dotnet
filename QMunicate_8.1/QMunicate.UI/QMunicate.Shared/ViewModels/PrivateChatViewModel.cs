@@ -4,23 +4,18 @@ using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using QMunicate.ViewModels.PartialViewModels;
-using Quickblox.Sdk.GeneralDataModel.Filters;
-using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.ChatModule.Requests;
-using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
 
 namespace QMunicate.ViewModels
 {
@@ -51,7 +46,7 @@ namespace QMunicate.ViewModels
 
         public PrivateChatViewModel()
         {
-            Messages = new ObservableCollection<MessageViewModel>();
+            MessageCollectionViewModel = new MessageCollectionViewModel();
             SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading && IsMessageSendingAllowed);
             AcceptRequestCommand = new RelayCommand(AcceptRequestCommandExecute, () => !IsLoading);
             RejectRequestCommand = new RelayCommand(RejectCRequestCommandExecute, () => !IsLoading);
@@ -66,7 +61,7 @@ namespace QMunicate.ViewModels
 
         #region Properties
 
-        public ObservableCollection<MessageViewModel> Messages { get; set; }
+        public MessageCollectionViewModel MessageCollectionViewModel { get; set; }
 
         public string NewMessageText
         {
@@ -189,7 +184,7 @@ namespace QMunicate.ViewModels
                 await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, string.Format("Initializing Chat page. CurrentUserId: {0}. OtherUserId: {1}.", currentUserId, otherUserId));
 
                 if (!string.IsNullOrEmpty(chatParameter.Dialog.Id))
-                    await LoadMessages(chatParameter.Dialog.Id);
+                    await MessageCollectionViewModel.LoadMessages(chatParameter.Dialog.Id);
 
                 if (otherUserId != 0)
                 {
@@ -258,69 +253,32 @@ namespace QMunicate.ViewModels
 
         private void CheckIsMessageSendingAllowed()
         {
-            for (int i = Messages.Count - 1; i >= 0; i--)
+            for (int i = MessageCollectionViewModel.Messages.Count - 1; i >= 0; i--)
             {
-                if (Messages[i].NotificationType == NotificationTypes.FriendsAccept)
+                var currentMessage = MessageCollectionViewModel.Messages[i];
+
+                if (currentMessage.NotificationType == NotificationTypes.FriendsAccept)
                 {
                     break;
                 }
 
-                if (Messages[i].NotificationType == NotificationTypes.FriendsReject)
+                if (currentMessage.NotificationType == NotificationTypes.FriendsReject)
                 {
                     IsRequestRejected = true;
                     break;
                 }
 
-                if (Messages[i].MessageType == MessageType.Outgoing && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
+                if (currentMessage.MessageType == MessageType.Outgoing && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
                 {
                     IsWaitingForContactResponse = true;
                     break;
                 }
 
-                if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
+                if (currentMessage.MessageType == MessageType.Incoming && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
                 {
                     IsActiveContactRequest = true;
                     break;
                 }
-            }
-        }
-
-        private async Task LoadMessages(string dialogId)
-        {
-            var retrieveMessagesRequest = new RetrieveMessagesRequest();
-            var aggregator = new FilterAggregator();
-            aggregator.Filters.Add(new FieldFilter<string>(() => new Message().ChatDialogId, dialogId));
-            aggregator.Filters.Add(new SortFilter<long>(SortOperator.Desc, () => new Message().DateSent));
-            retrieveMessagesRequest.Filter = aggregator;
-
-            var response = await QuickbloxClient.ChatClient.GetMessagesAsync(retrieveMessagesRequest);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                Messages.Clear();
-                for (int i = response.Result.Items.Length - 1; i >= 0; i--)
-                {
-                    var msg = MessageViewModel.FromMessage(response.Result.Items[i], currentUserId);
-                    await GenerateProperNotificationMessages(response.Result.Items[i], msg);
-                    Messages.Add(msg);
-                }
-            }
-        }
-
-        private async Task GenerateProperNotificationMessages(Message message, MessageViewModel messageViewModel)
-        {
-            if (message.NotificationType == NotificationTypes.FriendsRequest)
-            {
-                messageViewModel.MessageText = "Contact request";
-            }
-
-            if (message.NotificationType == NotificationTypes.FriendsAccept)
-            {
-                messageViewModel.MessageText = "Request accepted";
-            }
-
-            if (message.NotificationType == NotificationTypes.FriendsReject)
-            {
-                messageViewModel.MessageText = "Request rejected";
             }
         }
 
@@ -339,14 +297,14 @@ namespace QMunicate.ViewModels
                 return;
             }
 
-            var msg = new MessageViewModel()
+            var messageViewModel = new MessageViewModel()
             {
                 MessageText = NewMessageText,
                 MessageType = MessageType.Outgoing,
                 DateTime = DateTime.Now
             };
 
-            Messages.Add(msg);
+            await MessageCollectionViewModel.AddNewMessage(messageViewModel);
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             await dialogsManager.UpdateDialogLastMessage(dialog.Id, NewMessageText, DateTime.Now);
 
@@ -362,7 +320,7 @@ namespace QMunicate.ViewModels
             if (accepted)
             {
                 IsActiveContactRequest = false;
-                await LoadMessages(dialog.Id);
+                await MessageCollectionViewModel.LoadMessages(dialog.Id);
                 CheckIsMessageSendingAllowed();
             }
             
@@ -380,7 +338,7 @@ namespace QMunicate.ViewModels
             if (rejected)
             {
                 IsActiveContactRequest = false;
-                await LoadMessages(dialog.Id);
+                await MessageCollectionViewModel.LoadMessages(dialog.Id);
                 CheckIsMessageSendingAllowed();
             }
 
@@ -395,19 +353,18 @@ namespace QMunicate.ViewModels
 
         private async void ChatManagerOnOnMessageReceived(object sender, Message message)
         {
-            var incomingMessage = new MessageViewModel
+            var messageViewModel = new MessageViewModel
             {
                 MessageText = message.MessageText,
                 MessageType = MessageType.Incoming,
-                DateTime = DateTime.Now
+                DateTime = DateTime.Now,
+                NotificationType = message.NotificationType
             };
 
-            incomingMessage.NotificationType = message.NotificationType;
-            await GenerateProperNotificationMessages(message, incomingMessage);
 
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                Messages.Add(incomingMessage);
+                await MessageCollectionViewModel.AddNewMessageAndCorrectText(messageViewModel, message);
                 CheckIsMessageSendingAllowed();
             });
         }

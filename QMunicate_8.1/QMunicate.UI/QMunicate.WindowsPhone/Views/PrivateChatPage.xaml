@@ -98,7 +98,7 @@
             <Button Command="{Binding AcceptRequestCommand}" Grid.Row="1" Grid.Column="0" Content="Accept" Margin="{StaticResource DefaultMargin}"/>
             <Button Command="{Binding RejectRequestCommand}" Grid.Row="1" Grid.Column="1" Content="Reject" Margin="{StaticResource DefaultMargin}"/>
         </Grid>
-        <ListBox Grid.Row="2" ItemsSource="{Binding Messages}"
+        <ListBox Grid.Row="2" ItemsSource="{Binding MessageCollectionViewModel.Messages}"
                  ItemTemplateSelector="{StaticResource MessageTemplateSelector}"
                  Background="Transparent">
             <ListBox.ItemContainerStyle>

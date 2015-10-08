@@ -160,7 +160,8 @@ namespace QMunicate.ViewModels
             {
                 MessageText = message.MessageText,
                 MessageType = MessageType.Incoming,
-                DateTime = DateTime.Now
+                DateTime = DateTime.Now,
+                NotificationType = message.NotificationType
             };
 
             var senderId = Helpers.GetUserIdFromJid(message.From);
