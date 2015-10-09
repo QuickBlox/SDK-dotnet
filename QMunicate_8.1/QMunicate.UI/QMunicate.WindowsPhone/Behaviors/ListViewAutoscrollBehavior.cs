@@ -11,11 +11,11 @@ using Microsoft.Xaml.Interactivity;
 
 namespace QMunicate.Behaviors
 {
-    public class ListBoxAutoscrollBehavior : DependencyObject, IBehavior
+    public class ListViewAutoscrollBehavior : DependencyObject, IBehavior
     {
         #region Fields
 
-        private ListBox listBox;
+        private ListView listBox;
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace QMunicate.Behaviors
 
         public void Attach(DependencyObject associatedObject)
         {
-            listBox = associatedObject as ListBox;
+            listBox = associatedObject as ListView;
             if (listBox != null && listBox.Items != null)
                 listBox.Items.VectorChanged += ItemsOnVectorChanged;
         }

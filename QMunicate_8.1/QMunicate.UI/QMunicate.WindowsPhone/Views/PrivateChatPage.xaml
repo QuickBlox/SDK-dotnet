@@ -58,7 +58,7 @@
                 <GroupStyle HeaderTemplate="{StaticResource MessagesGroupDateHeader}" />
             </ListView.GroupStyle>
             <i:Interaction.Behaviors>
-                <behaviors:ListBoxAutoscrollBehavior />
+                <behaviors:ListViewAutoscrollBehavior />
             </i:Interaction.Behaviors>
         </ListView>
         <controls:TypingIndicator Grid.Row="3" IsUserTyping="{Binding IsOtherUserTyping}" Margin="{StaticResource DefaultMargin}" />

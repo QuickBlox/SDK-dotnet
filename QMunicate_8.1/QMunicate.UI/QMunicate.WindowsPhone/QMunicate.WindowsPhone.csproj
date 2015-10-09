@@ -98,7 +98,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behaviors\ListBoxAutoscrollBehavior.cs" />
+    <Compile Include="Behaviors\ListViewAutoscrollBehavior.cs" />
     <Compile Include="Behaviors\StatusBarBehavior.cs" />
     <Compile Include="Views\PrivateChatPage.xaml.cs">
       <DependentUpon>PrivateChatPage.xaml</DependentUpon>

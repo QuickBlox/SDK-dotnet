@@ -49,7 +49,7 @@
                 <GroupStyle HeaderTemplate="{StaticResource MessagesGroupDateHeader}" />
             </ListView.GroupStyle>
             <interactivity:Interaction.Behaviors>
-                <behaviors:ListBoxAutoscrollBehavior />
+                <behaviors:ListViewAutoscrollBehavior />
             </interactivity:Interaction.Behaviors>
         </ListView>
 
