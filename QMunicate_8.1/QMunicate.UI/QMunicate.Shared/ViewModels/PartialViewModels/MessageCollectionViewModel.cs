@@ -9,6 +9,7 @@ using QMunicate.Core.Observable;
 using QMunicate.Helper;
 using QMunicate.Services;
 using Quickblox.Sdk;
+using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
@@ -59,7 +60,6 @@ namespace QMunicate.ViewModels.PartialViewModels
             retrieveMessagesRequest.Filter = aggregator;
 
             var quickbloxClient = ServiceLocator.Locator.Get<IQuickbloxClient>();
-            int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
 
             var response = await quickbloxClient.ChatClient.GetMessagesAsync(retrieveMessagesRequest);
             if (response.StatusCode == HttpStatusCode.OK)
@@ -68,7 +68,7 @@ namespace QMunicate.ViewModels.PartialViewModels
                 var messageList = new List<MessageViewModel>();
                 for (int i = response.Result.Items.Length - 1; i >= 0; i--) // doing it in reverse order because we requested them from server in descending order
                 {
-                    var messageViewModel = MessageViewModel.FromMessage(response.Result.Items[i], currentUserId);
+                    var messageViewModel = await CreateMessageViewModelFromMessage(response.Result.Items[i]);
                     await GenerateProperNotificationMessages(messageViewModel, response.Result.Items[i]);
                     messageList.Add(messageViewModel);
                 }
@@ -124,6 +124,8 @@ namespace QMunicate.ViewModels.PartialViewModels
             }
             messageGroup.Add(messageViewModel);
         }
+
+        #region Notification messages generation
 
         private async Task GenerateProperNotificationMessages(MessageViewModel messageViewModel, Message originalMessage)
         {
@@ -221,6 +223,28 @@ namespace QMunicate.ViewModels.PartialViewModels
             }
 
             return messageText;
+        }
+
+        #endregion
+
+        private async Task<MessageViewModel> CreateMessageViewModelFromMessage(Message message)
+        {
+            var messageViewModel = new MessageViewModel
+            {
+                MessageText = message.MessageText,
+                DateTime = message.DateSent.ToDateTime(),
+                NotificationType = message.NotificationType,
+                SenderId = GetSenderId(message)
+            };
+
+            int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
+            messageViewModel.MessageType = messageViewModel.SenderId == currentUserId ? MessageType.Outgoing : MessageType.Incoming;
+
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            var senderUser = await cachingQbClient.GetUserById(GetSenderId(message));
+            if (senderUser != null) messageViewModel.SenderName = senderUser.FullName;
+
+            return messageViewModel;
         }
 
         private List<int> ConvertStringToIntArray(string occupantsIdsString)
