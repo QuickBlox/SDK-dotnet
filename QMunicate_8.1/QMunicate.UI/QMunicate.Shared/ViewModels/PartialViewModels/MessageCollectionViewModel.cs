@@ -21,6 +21,12 @@ namespace QMunicate.ViewModels.PartialViewModels
     /// </summary>
     public class MessageCollectionViewModel : ObservableObject
     {
+        #region Fields
+
+        private ObservableCollection<DayOfMessages> messages;
+
+        #endregion
+
         #region Ctor
 
         public MessageCollectionViewModel()
@@ -32,7 +38,12 @@ namespace QMunicate.ViewModels.PartialViewModels
 
         #region Properties
 
-        public ObservableCollection<DayOfMessages> Messages { get; set; }
+        public ObservableCollection<DayOfMessages> Messages
+        {
+            get { return messages; }
+            set { Set(ref messages, value); }
+        }
+
 
         #endregion
 
@@ -53,11 +64,14 @@ namespace QMunicate.ViewModels.PartialViewModels
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 Messages.Clear();
-                for (int i = response.Result.Items.Length - 1; i >= 0; i--)
+                var messageList = new List<MessageViewModel>();
+                for (int i = response.Result.Items.Length - 1; i >= 0; i--) // doing it in reverse order because we requested them from server in descending order
                 {
                     var messageViewModel = MessageViewModel.FromMessage(response.Result.Items[i], currentUserId);
-                    await AddNewMessageAndCorrectText(messageViewModel, response.Result.Items[i]);
+                    await GenerateProperNotificationMessages(messageViewModel, response.Result.Items[i]);
+                    messageList.Add(messageViewModel);
                 }
+                InitializeMessagesFromList(messageList);
             }
         }
 
@@ -74,6 +88,19 @@ namespace QMunicate.ViewModels.PartialViewModels
         #endregion
 
         #region Private methods
+
+        private void InitializeMessagesFromList(IEnumerable<MessageViewModel> messageList)
+        {
+            IEnumerable<DayOfMessages> groups =
+            from msg in messageList
+            group msg by msg.DateTime.Date into messageGroup
+            select new DayOfMessages(messageGroup)
+            {
+                Date = messageGroup.Key
+            };
+
+            Messages = new ObservableCollection<DayOfMessages>(groups);
+        }
 
         private async Task AddMessage(MessageViewModel messageViewModel, Message originalMessage = null)
         {

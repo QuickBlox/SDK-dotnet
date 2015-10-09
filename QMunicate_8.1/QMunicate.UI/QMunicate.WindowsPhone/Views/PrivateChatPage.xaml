@@ -50,17 +50,17 @@
             <Button Command="{Binding AcceptRequestCommand}" Grid.Row="1" Grid.Column="0" Content="Accept" Margin="{StaticResource DefaultMargin}"/>
             <Button Command="{Binding RejectRequestCommand}" Grid.Row="1" Grid.Column="1" Content="Reject" Margin="{StaticResource DefaultMargin}"/>
         </Grid>
-        <ListBox Grid.Row="2" ItemsSource="{Binding Source={StaticResource groupedMessagesSource}}"
+        <ListView Grid.Row="2" ItemsSource="{Binding Source={StaticResource groupedMessagesSource}}"
                  ItemTemplateSelector="{StaticResource MessageTemplateSelector}"
-                 ItemContainerStyle="{StaticResource ListBoxItemStrechedStyle}"
-                 Background="Transparent">
-            <ListBox.GroupStyle>
+                 ItemContainerStyle="{StaticResource ListViewItemStrechedStyle}"
+                 Background="Transparent" SelectionMode="None">
+            <ListView.GroupStyle>
                 <GroupStyle HeaderTemplate="{StaticResource MessagesGroupDateHeader}" />
-            </ListBox.GroupStyle>
+            </ListView.GroupStyle>
             <i:Interaction.Behaviors>
                 <behaviors:ListBoxAutoscrollBehavior />
             </i:Interaction.Behaviors>
-        </ListBox>
+        </ListView>
         <controls:TypingIndicator Grid.Row="3" IsUserTyping="{Binding IsOtherUserTyping}" Margin="{StaticResource DefaultMargin}" />
         
         <Border Grid.Row="4" Height="1" Background="Gray"/>

@@ -13,9 +13,8 @@
         </Grid>
     </DataTemplate>
 
-    <Style TargetType="ListBoxItem" x:Key="ListBoxItemStrechedStyle">
+    <Style TargetType="ListViewItem" x:Key="ListViewItemStrechedStyle">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="IsEnabled" Value="False"/>
     </Style>
 
     <DataTemplate x:Key="IncomingMessageTemlate">

@@ -41,17 +41,17 @@
             <Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Source="{Binding ChatImage, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55"  HorizontalAlignment="Right" Margin="0 0 12 0"/>
         </Grid>
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding Source={StaticResource groupedMessagesSource}}"
+        <ListView Grid.Row="1" ItemsSource="{Binding Source={StaticResource groupedMessagesSource}}"
                  ItemTemplateSelector="{StaticResource MessageTemplateSelector}"
-                 ItemContainerStyle="{StaticResource ListBoxItemStrechedStyle}"
-                 Background="Transparent">
-            <ListBox.GroupStyle>
+                 ItemContainerStyle="{StaticResource ListViewItemStrechedStyle}"
+                 Background="Transparent" SelectionMode="None">
+            <ListView.GroupStyle>
                 <GroupStyle HeaderTemplate="{StaticResource MessagesGroupDateHeader}" />
-            </ListBox.GroupStyle>
+            </ListView.GroupStyle>
             <interactivity:Interaction.Behaviors>
                 <behaviors:ListBoxAutoscrollBehavior />
             </interactivity:Interaction.Behaviors>
-        </ListBox>
+        </ListView>
 
         <Border Grid.Row="2" Height="1" Background="Gray"/>
         <Grid Grid.Row="3">
