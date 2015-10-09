@@ -31,9 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helper\DialogsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\FileStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\Helpers.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helper\IDialogsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\ImagesService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helper\IPushNotificationsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\PushNotificationsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logger\FileLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ChatNavigationParameter.cs" />

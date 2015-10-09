@@ -13,6 +13,14 @@ using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 
 namespace QMunicate.Helper
 {
+    public interface IPushNotificationsManager
+    {
+        Task UpdatePushTokenIfNeeded(PushNotificationChannel pushChannel);
+        Task DeletePushToken();
+        Task<bool> CreateSubscriptionIfNeeded();
+        Task DeleteSubscription();
+    }
+
     public class PushNotificationsManager : IPushNotificationsManager
     {
         #region Fields

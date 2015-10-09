@@ -18,6 +18,14 @@ using Quickblox.Sdk.Modules.MessagesModule.Models;
 
 namespace QMunicate.Helper
 {
+    public interface IDialogsManager
+    {
+        ObservableCollection<DialogViewModel> Dialogs { get; }
+        Task ReloadDialogs();
+        void JoinAllGroupDialogs();
+        Task UpdateDialogLastMessage(string dialogId, string lastActivity, DateTime lastMessageSent);
+    }
+
     public class DialogsManager : IDialogsManager
     {
         #region Fields
