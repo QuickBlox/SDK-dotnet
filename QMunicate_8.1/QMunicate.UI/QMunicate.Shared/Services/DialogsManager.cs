@@ -204,8 +204,8 @@ namespace QMunicate.Services
                 if (dialogVm.PrivatePhotoId.HasValue)
                 {
                     var imageBytes = await imagesService.GetPrivateImageBytes(dialogVm.PrivatePhotoId.Value);
-                    CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => 
-                        dialogVm.Image = await Helpers.CreateBitmapImage(imageBytes, decodePixelWidth, decodePixelHeight));
+                    CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                        dialogVm.Image = await ImageHelper.CreateBitmapImage(imageBytes, decodePixelWidth, decodePixelHeight));
                 }
             });
         }

@@ -150,7 +150,7 @@ namespace QMunicate.ViewModels
                         dataReader.ReadBytes(chatImageBytes);
                     }
 
-                    ChatImage = Helpers.CreateBitmapImage(streamForImage, 100);
+                    ChatImage = ImageHelper.CreateBitmapImage(streamForImage, 100);
                 }
             }
         }

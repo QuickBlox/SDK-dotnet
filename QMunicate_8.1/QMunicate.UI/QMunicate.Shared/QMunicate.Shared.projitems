@@ -28,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converters\NullToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\StringFormatConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helper\Helpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Helper\ImageHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logger\FileLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\ChatNavigationParameter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\DialogsNavigationParameter.cs" />

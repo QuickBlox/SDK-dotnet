@@ -58,7 +58,7 @@ namespace QMunicate.Services
             var imageBytes = await GetPrivateImageBytes(imageUploadId);
             if (imageBytes == null) return null;
 
-            return await Helpers.CreateBitmapImage(imageBytes, decodePixelWidth, decodePixelHeight);
+            return await ImageHelper.CreateBitmapImage(imageBytes, decodePixelWidth, decodePixelHeight);
         }
 
         public async Task<ImageSource> GetPublicImage(string imageUrl)

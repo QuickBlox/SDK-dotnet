@@ -109,7 +109,7 @@ namespace QMunicate.ViewModels
                         dataReader.ReadBytes(newImageBytes);
                     }
 
-                    ChatImage = Helpers.CreateBitmapImage(streamForImage, 100);
+                    ChatImage = ImageHelper.CreateBitmapImage(streamForImage, 100);
                 }
             }
         }
