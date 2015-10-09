@@ -14,28 +14,13 @@ namespace QMunicate.ViewModels.PartialViewModels
 
     public class MessageViewModel
     {
-        #region Ctor
-
-        public MessageViewModel() { }
-
-        protected MessageViewModel(Message message, int curentUserId = default(int))
-        {
-            MessageText = message.MessageText;
-            DateTime = message.DateSent.ToDateTime();
-            if (curentUserId != default(int))
-                MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
-
-            NotificationType = message.NotificationType;
-        }
-
-        #endregion
-
         #region Properties
 
         public string MessageText { get; set; }
         public MessageType MessageType { get; set; }
         public DateTime DateTime { get; set; }
         public NotificationTypes NotificationType { get; set; }
+        public int SenderId { get; set; }
 
         #endregion
 
@@ -43,7 +28,17 @@ namespace QMunicate.ViewModels.PartialViewModels
 
         public static MessageViewModel FromMessage(Message message, int curentUserId = default(int))
         {
-            return new MessageViewModel(message, curentUserId);
+            var messageViewModel = new MessageViewModel
+            {
+                MessageText = message.MessageText,
+                DateTime = message.DateSent.ToDateTime(),
+                NotificationType = message.NotificationType,
+                SenderId = message.SenderId
+            };
+            if (curentUserId != default(int))
+                messageViewModel.MessageType = message.SenderId == curentUserId ? MessageType.Outgoing : MessageType.Incoming;
+
+            return messageViewModel;
         }
 
         #endregion

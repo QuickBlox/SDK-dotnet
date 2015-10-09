@@ -80,6 +80,12 @@ namespace QMunicate.ViewModels.PartialViewModels
             await AddMessage(messageViewModel);
         }
 
+        /// <summary>
+        /// Adds a new message to Messages collection and generates proper message texts for Notification messages.
+        /// </summary>
+        /// <param name="messageViewModel"></param>
+        /// <param name="originalMessage"></param>
+        /// <returns></returns>
         public async Task AddNewMessageAndCorrectText(MessageViewModel messageViewModel, Message originalMessage = null)
         {
             await AddMessage(messageViewModel, originalMessage);
@@ -123,15 +129,15 @@ namespace QMunicate.ViewModels.PartialViewModels
             switch (originalMessage.NotificationType)
             {
                 case NotificationTypes.FriendsRequest:
-                    messageViewModel.MessageText = "Contact request";
+                    messageViewModel.MessageText = await BuildFriendsRequestMessage(originalMessage, messageViewModel.MessageType);
                     break;
 
                 case NotificationTypes.FriendsAccept:
-                    messageViewModel.MessageText = "Request accepted";
+                    messageViewModel.MessageText = BuildFriendsAcceptMessage(messageViewModel.MessageType);
                     break;
 
                 case NotificationTypes.FriendsReject:
-                    messageViewModel.MessageText = "Request rejected";
+                    messageViewModel.MessageText = BuildFriendsRejectMessage(messageViewModel.MessageType);
                     break;
 
                 case NotificationTypes.GroupCreate:
@@ -142,6 +148,26 @@ namespace QMunicate.ViewModels.PartialViewModels
                     messageViewModel.MessageText = await BuildGroupUpdateMessage(originalMessage);
                     break;
             }
+        }
+
+        private async Task<string> BuildFriendsRequestMessage(Message message, MessageType messageType)
+        {
+            if (messageType == MessageType.Outgoing) return "Your request has been sent";
+
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            var senderUser = await cachingQbClient.GetUserById(GetSenderId(message));
+
+            return string.Format("{0} has sent a request to you", senderUser == null ? null : senderUser.FullName);
+        }
+
+        private string BuildFriendsAcceptMessage(MessageType messageType)
+        {
+            return messageType == MessageType.Outgoing ? "You have accepted a request" : "Your request has been accepted";
+        }
+
+        private string BuildFriendsRejectMessage(MessageType messageType)
+        {
+            return messageType == MessageType.Outgoing ? "You have rejected a request" : "Your request has been rejected";
         }
 
         private async Task<string> BuildGroupCreateMessage(Message message)
@@ -214,9 +240,9 @@ namespace QMunicate.ViewModels.PartialViewModels
 
         private int GetSenderId(Message message)
         {
-            if (message.SenderId != 0) return message.SenderId;
+            if (message.SenderId != 0) return message.SenderId; // a message from REST API
 
-            return Helpers.GetUserIdFromJid(message.From);
+            return Helpers.GetUserIdFromJid(message.From); // a message from XMPP
         }
 
         #endregion

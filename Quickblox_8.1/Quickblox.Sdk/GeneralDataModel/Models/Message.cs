@@ -4,6 +4,9 @@ using Quickblox.Sdk.Modules.MessagesModule.Models;
 
 namespace Quickblox.Sdk.GeneralDataModel.Models
 {
+    /// <summary>
+    /// Message class representing message from REST API and message from XMPP.
+    /// </summary>
     public class Message
     {
         [JsonProperty("_id")]
