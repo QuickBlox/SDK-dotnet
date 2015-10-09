@@ -1,12 +1,13 @@
-﻿using Quickblox.Sdk;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using QMunicate.Helper;
+using Quickblox.Sdk;
 
-namespace QMunicate.Helper
+namespace QMunicate.Services
 {
     public interface IImageService
     {

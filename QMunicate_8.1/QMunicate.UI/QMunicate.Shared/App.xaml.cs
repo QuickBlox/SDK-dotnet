@@ -25,6 +25,7 @@ using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
 using QMunicate.Logger;
 using QMunicate.Models;
+using QMunicate.Services;
 using Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227

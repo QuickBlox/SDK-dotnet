@@ -21,6 +21,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.AsyncLock;
+using QMunicate.Services;
 using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk;
 

@@ -1,17 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Networking.PushNotifications;
+using QMunicate.Helper;
 using Quickblox.Sdk;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.NotificationModule.Models;
 using Quickblox.Sdk.Modules.NotificationModule.Requests;
 using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 
-namespace QMunicate.Helper
+namespace QMunicate.Services
 {
     public interface IPushNotificationsManager
     {

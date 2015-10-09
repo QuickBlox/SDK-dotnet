@@ -1,22 +1,21 @@
-﻿using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.Logger;
-using QMunicate.Models;
-using Quickblox.Sdk;
-using Quickblox.Sdk.Modules.ChatModule.Models;
-using Quickblox.Sdk.Modules.ChatModule.Requests;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.Logger;
+using QMunicate.Helper;
 using QMunicate.ViewModels.PartialViewModels;
+using Quickblox.Sdk;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk.Modules.ChatModule.Requests;
 
-namespace QMunicate.Helper
+namespace QMunicate.Services
 {
     public interface IDialogsManager
     {

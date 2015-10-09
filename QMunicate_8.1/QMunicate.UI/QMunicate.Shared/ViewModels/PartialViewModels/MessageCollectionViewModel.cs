@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.Observable;
 using QMunicate.Helper;
+using QMunicate.Services;
 using Quickblox.Sdk;
 using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Models;

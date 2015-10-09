@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Services;
 using QMunicate.ViewModels.PartialViewModels;
 
 namespace QMunicate.ViewModels

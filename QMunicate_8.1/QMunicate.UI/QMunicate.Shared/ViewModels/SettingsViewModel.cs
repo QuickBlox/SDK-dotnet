@@ -15,6 +15,7 @@ using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
+using QMunicate.Services;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.Models;
 using Quickblox.Sdk.Modules.NotificationModule.Models;

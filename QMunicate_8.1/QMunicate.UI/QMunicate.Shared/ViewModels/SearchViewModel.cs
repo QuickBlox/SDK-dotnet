@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.AsyncLock;
+using QMunicate.Services;
 using QMunicate.ViewModels.PartialViewModels;
 
 namespace QMunicate.ViewModels

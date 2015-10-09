@@ -16,6 +16,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Services;
 
 namespace QMunicate.ViewModels
 {
