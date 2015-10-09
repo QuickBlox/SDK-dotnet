@@ -17,6 +17,19 @@
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     </Style>
 
+    <DataTemplate x:Key="NotificationMessageTemplate">
+        <Grid Margin="{StaticResource DefaultVerticalMargin}">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="{Binding DateTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:HH:mm}'}" 
+                       Foreground="Black" Margin="{StaticResource DefaultHorizontalMargin}" FontSize="{StaticResource NormalFontSize}" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Row="1" Text="{Binding MessageText}" FontSize="{StaticResource NormalFontSize}" TextWrapping="Wrap" TextAlignment="Center"
+                       Foreground="DimGray" Margin="12 12 12 0" HorizontalAlignment="Center"/>
+        </Grid>
+    </DataTemplate>
+    
     <DataTemplate x:Key="IncomingMessageTemlate">
         <Grid Margin="{StaticResource DefaultVerticalMargin}">
             <Grid.ColumnDefinitions>
@@ -60,6 +73,7 @@
     </DataTemplate>
 
     <selectors:MessageTemplateSelector x:Key="MessageTemplateSelector"
+                                       NotificationMessageTemplate="{StaticResource NotificationMessageTemplate}"
                                        IncomingMessageTemplate="{StaticResource IncomingMessageTemlate}"
                                        OutgoingMessageTemplate="{StaticResource OutgoingMessageTemplate}"/>
 
