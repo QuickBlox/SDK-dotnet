@@ -63,13 +63,14 @@ namespace Quickblox.Sdk.Builder
                         navBody.Append(String.Format("&{0}={1}", attribute.PropertyName, value));
                         continue;
                     }
-                    navBody.Append(String.Format("&{0}={1}", attribute.PropertyName, value));
+                    navBody.Append(String.Format("{0}={1}", attribute.PropertyName, value));
                     flag = true;
                 }
             }
 
             if (settings.Filter != null)
             {
+                navBody.Append("&");
                 navBody.Append(settings.Filter.BuildFilter());
             }
 
@@ -81,6 +82,7 @@ namespace Quickblox.Sdk.Builder
             var navBody = new StringBuilder();
             foreach (var aggregator in aggregators.Filters)
             {
+                navBody.Append("&");
                 navBody.Append(aggregator.BuildFilter());
             }
            

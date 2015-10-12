@@ -104,10 +104,10 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
 
             //}
 
-            if (customObject.Filter != null)
-            {
-                requestUri += "?" + UrlBuilder.BuildFilter((FilterAggregator)customObject.Filter);
-            }
+            //if (customObject.Filter != null)
+            //{
+            //    requestUri += "?" + UrlBuilder.BuildFilter((FilterAggregator)customObject.Filter);
+            //}
 
             //var updateCustomObject = await HttpService.PutAsync<T, T>(this.quickbloxClient.ApiEndPoint,
             //   requestUri,
