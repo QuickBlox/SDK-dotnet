@@ -357,18 +357,10 @@ namespace QMunicate.ViewModels
 
         private async void ChatManagerOnOnMessageReceived(object sender, Message message)
         {
-            var messageViewModel = new MessageViewModel
-            {
-                MessageText = message.MessageText,
-                MessageType = MessageType.Incoming,
-                DateTime = DateTime.Now,
-                NotificationType = message.NotificationType
-            };
-
+            await MessageCollectionViewModel.AddNewMessage(message);
 
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                await MessageCollectionViewModel.AddNewMessageAndCorrectText(messageViewModel, message);
                 CheckIsMessageSendingAllowed();
             });
         }

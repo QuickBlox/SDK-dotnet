@@ -157,26 +157,15 @@ namespace QMunicate.ViewModels
 
         private async void ChatManagerOnOnMessageReceived(object sender, Message message)
         {
-            var messageVm = new MessageViewModel
-            {
-                MessageText = message.MessageText,
-                MessageType = MessageType.Incoming,
-                DateTime = DateTime.Now,
-                NotificationType = message.NotificationType
-            };
+            await MessageCollectionViewModel.AddNewMessage(message);
 
-            var senderId = Helpers.GetUserIdFromJid(message.From);
-            if (senderId == currentUserId)
+            if (message.NotificationType == NotificationTypes.GroupUpdate)
             {
-                messageVm.MessageType = MessageType.Outgoing;
-            }
-
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-            {
-                await MessageCollectionViewModel.AddNewMessageAndCorrectText(messageVm, message);
-                if (message.NotificationType == NotificationTypes.GroupUpdate)
+                CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
                     await UpdateGroupInfo(message);
-            });
+                });
+            }
         }
 
         private async Task UpdateGroupInfo(Message notificationMessage)

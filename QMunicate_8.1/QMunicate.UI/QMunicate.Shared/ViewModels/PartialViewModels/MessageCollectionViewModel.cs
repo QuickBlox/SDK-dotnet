@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
+using Windows.UI.Core;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.Observable;
 using QMunicate.Helper;
@@ -81,15 +83,11 @@ namespace QMunicate.ViewModels.PartialViewModels
             await AddMessage(messageViewModel);
         }
 
-        /// <summary>
-        /// Adds a new message to Messages collection and generates proper message texts for Notification messages.
-        /// </summary>
-        /// <param name="messageViewModel"></param>
-        /// <param name="originalMessage"></param>
-        /// <returns></returns>
-        public async Task AddNewMessageAndCorrectText(MessageViewModel messageViewModel, Message originalMessage = null)
+        public async Task AddNewMessage(Message message)
         {
-            await AddMessage(messageViewModel, originalMessage);
+            var messageViewModel = await CreateMessageViewModelFromMessage(message);
+            await GenerateProperNotificationMessages(messageViewModel, message);
+            await AddMessage(messageViewModel);
         }
 
         #endregion
@@ -109,13 +107,23 @@ namespace QMunicate.ViewModels.PartialViewModels
             Messages = new ObservableCollection<DayOfMessages>(groups);
         }
 
-        private async Task AddMessage(MessageViewModel messageViewModel, Message originalMessage = null)
+        private async Task AddMessage(MessageViewModel messageViewModel)
         {
-            if (originalMessage != null)
+            if (CoreApplication.MainView.CoreWindow.Dispatcher.HasThreadAccess)
             {
-                await GenerateProperNotificationMessages(messageViewModel, originalMessage);
+                await AddMessageWithoutThreadAccessCheck(messageViewModel);
             }
+            else
+            {
+                CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                {
+                    await AddMessageWithoutThreadAccessCheck(messageViewModel);
+                });
+            }
+        }
 
+        private async Task AddMessageWithoutThreadAccessCheck(MessageViewModel messageViewModel)
+        {
             var messageGroup = Messages.FirstOrDefault(msgGroup => msgGroup.Date.Date == messageViewModel.DateTime.Date);
             if (messageGroup == null)
             {
