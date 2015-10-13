@@ -63,6 +63,8 @@ namespace QMunicate.Services
 
         public async Task<ImageSource> GetPublicImage(string imageUrl)
         {
+            if (string.IsNullOrWhiteSpace(imageUrl)) return null;
+
             try
             {
                 return new BitmapImage(new System.Uri(imageUrl));
