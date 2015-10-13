@@ -51,7 +51,7 @@
                  ItemContainerStyle="{StaticResource ListViewItemStrechedStyle}"
                  Background="Transparent" SelectionMode="None">
             <ListView.GroupStyle>
-                <GroupStyle HeaderTemplate="{StaticResource MessagesGroupDateHeader}" />
+                <GroupStyle HeaderTemplate="{StaticResource MessagesGroupDateHeader}" HeaderContainerStyle="{StaticResource ListViewHeaderItemStrechedStyle}" />
             </ListView.GroupStyle>
             <interactivity:Interaction.Behaviors>
                 <behaviors:ListViewAutoscrollBehavior />

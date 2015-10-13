@@ -8,13 +8,17 @@
     <SolidColorBrush x:Key="OutogoingMessageBrush" Color="{StaticResource AppBarColor}"/>
 
     <DataTemplate x:Key="MessagesGroupDateHeader">
-        <Border BorderThickness="1" BorderBrush="Gray"  Margin="{StaticResource DefaultMessageMargin}">
+        <Border BorderThickness="1" BorderBrush="Gray"  Margin="{StaticResource DefaultMessageMargin}" HorizontalAlignment="Center">
             <TextBlock Text="{Binding Date, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:MMMM d}'}"
                         FontSize="{StaticResource NormalFontSize}" HorizontalAlignment="Center" Foreground="Gray" Margin="{StaticResource DefaultMessageMargin}" />
         </Border>
     </DataTemplate>
 
     <Style TargetType="ListViewItem" x:Key="ListViewItemStrechedStyle">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    </Style>
+
+    <Style TargetType="ListViewHeaderItem" x:Key="ListViewHeaderItemStrechedStyle">
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     </Style>
 

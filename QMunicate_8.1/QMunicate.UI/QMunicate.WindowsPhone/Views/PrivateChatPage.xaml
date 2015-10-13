@@ -60,7 +60,7 @@
                  ItemContainerStyle="{StaticResource ListViewItemStrechedStyle}"
                  Background="Transparent" SelectionMode="None">
             <ListView.GroupStyle>
-                <GroupStyle HeaderTemplate="{StaticResource MessagesGroupDateHeader}" />
+                <GroupStyle HeaderTemplate="{StaticResource MessagesGroupDateHeader}" HeaderContainerStyle="{StaticResource ListViewHeaderItemStrechedStyle}" />
             </ListView.GroupStyle>
             <i:Interaction.Behaviors>
                 <behaviors:ListViewAutoscrollBehavior />
