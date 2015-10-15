@@ -1,8 +1,11 @@
-﻿using QMunicate.Core.Command;
+﻿using QMunicate.Core.AsyncLock;
+using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
-using QMunicate.Models;
+using QMunicate.Services;
+using QMunicate.ViewModels.PartialViewModels;
+using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ContentModule;
@@ -18,12 +21,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using QMunicate.Core.AsyncLock;
-using QMunicate.Services;
-using QMunicate.ViewModels.PartialViewModels;
-using Quickblox.Sdk;
 
 namespace QMunicate.ViewModels
 {
@@ -181,19 +179,22 @@ namespace QMunicate.ViewModels
                 allContacts.Add(new SelectableListBoxItem<UserViewModel>(userVm));
             }
 
-            await LoadAllContactsImages();
+            await LoadContactsNamesAndImages();
         }
 
-        private async Task LoadAllContactsImages()
+        private async Task LoadContactsNamesAndImages()
         {
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
             var imagesService = ServiceLocator.Locator.Get<IImageService>();
             foreach (var userVm in allContacts)
             {
                 var user = await cachingQbClient.GetUserById(userVm.Item.UserId);
-                if (user != null && user.BlobId.HasValue)
+                if (user != null)
                 {
-                    userVm.Item.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100);
+                    userVm.Item.FullName = user.FullName;
+
+                    if(user.BlobId.HasValue)
+                        userVm.Item.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100);
                 }
             }
         }

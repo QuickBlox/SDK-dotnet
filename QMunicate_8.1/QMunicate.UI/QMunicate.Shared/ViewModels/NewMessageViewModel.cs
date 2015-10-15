@@ -89,15 +89,25 @@ namespace QMunicate.ViewModels
                 }
             }
 
+            await LoadUserNamesAndImages();
+        }
+
+        private async Task LoadUserNamesAndImages()
+        {
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
             var imagesService = ServiceLocator.Locator.Get<IImageService>();
             foreach (UserViewModel userVm in Contacts)
             {
                 var user = await cachingQbClient.GetUserById(userVm.UserId);
-                if (user != null && user.BlobId.HasValue)
+                if (user != null)
                 {
-                    userVm.ImageUploadId = user.BlobId;
-                    userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100);
+                    userVm.FullName = user.FullName;
+
+                    if (user.BlobId.HasValue)
+                    {
+                        userVm.ImageUploadId = user.BlobId;
+                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100);
+                    }
                 }
             }
         }
