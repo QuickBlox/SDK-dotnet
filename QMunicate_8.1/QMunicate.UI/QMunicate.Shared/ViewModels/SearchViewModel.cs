@@ -124,7 +124,6 @@ namespace QMunicate.ViewModels
                     {
                         GlobalResults.Add(UserViewModel.FromUser(item.User));
                     }
-                    
                 }
             }
             else
@@ -135,17 +134,7 @@ namespace QMunicate.ViewModels
             if (string.IsNullOrEmpty(SearchText))
                 await ClearGlobalResults();
 
-            using (await globalResultsLock.LockAsync())
-            {
-                foreach (UserViewModel userVm in GlobalResults)
-                {
-                    if (userVm.ImageUploadId.HasValue)
-                    {
-                        var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                        userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100);
-                    }
-                }
-            }
+            await LoadGlobalResultsImages();
 
             IsLoading = false;
         }
@@ -178,16 +167,50 @@ namespace QMunicate.ViewModels
                     }
                 }
 
-                var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-                var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                foreach (UserViewModel userVm in LocalResults)
+                await FixLocalResultsNames();
+                await LoadLocalResultsImages();
+            }
+        }
+
+        private async Task LoadGlobalResultsImages()
+        {
+            using (await globalResultsLock.LockAsync())
+            {
+                foreach (UserViewModel userVm in GlobalResults)
                 {
-                    var user = await cachingQbClient.GetUserById(userVm.UserId);
-                    if (user != null && user.BlobId.HasValue)
+                    if (userVm.ImageUploadId.HasValue)
                     {
-                        userVm.ImageUploadId = user.BlobId;
-                        userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100);
+                        var imagesService = ServiceLocator.Locator.Get<IImageService>();
+                        userVm.Image = await imagesService.GetPrivateImage(userVm.ImageUploadId.Value, 100);
                     }
+                }
+            }
+        }
+
+        private async Task FixLocalResultsNames()
+        {
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            foreach (UserViewModel userVm in LocalResults)
+            {
+                var user = await cachingQbClient.GetUserById(userVm.UserId);
+                if (user != null && !string.IsNullOrEmpty(user.FullName))
+                {
+                    userVm.FullName = user.FullName;
+                }
+            }
+        }
+
+        private async Task LoadLocalResultsImages()
+        {
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            var imagesService = ServiceLocator.Locator.Get<IImageService>();
+            foreach (UserViewModel userVm in LocalResults)
+            {
+                var user = await cachingQbClient.GetUserById(userVm.UserId);
+                if (user != null && user.BlobId.HasValue)
+                {
+                    userVm.ImageUploadId = user.BlobId;
+                    userVm.Image = await imagesService.GetPrivateImage(user.BlobId.Value, 100);
                 }
             }
         }

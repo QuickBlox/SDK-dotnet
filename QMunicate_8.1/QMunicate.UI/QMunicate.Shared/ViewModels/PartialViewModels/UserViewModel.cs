@@ -7,7 +7,12 @@ namespace QMunicate.ViewModels.PartialViewModels
 {
     public class UserViewModel : ObservableObject
     {
+        #region Fields
+
         private ImageSource image;
+        private string fullName;
+
+        #endregion
 
         #region Ctor
 
@@ -34,9 +39,13 @@ namespace QMunicate.ViewModels.PartialViewModels
 
         public int UserId { get; set; }
 
-        public string FullName { get; set; }
-
         public int? ImageUploadId { get; set; }
+
+        public string FullName
+        {
+            get { return fullName; }
+            set { Set(ref fullName, value); }
+        }
 
         public ImageSource Image
         {
