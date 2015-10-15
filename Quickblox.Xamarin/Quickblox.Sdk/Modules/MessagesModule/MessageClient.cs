@@ -18,9 +18,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private XmppClient xmppClient;
 
         private string chatEndpoint;
-        private int appId;
-
+        
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
+
+        public int AppId { get; private set; }
 
         #endregion
 
@@ -40,6 +41,15 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         #endregion
 
         #region Properties
+
+        internal XmppClient XmppClient
+        {
+            get {
+                if (xmppClient == null)
+                    throw new NullReferenceException("XmppClient wasn't initialized");
+                return xmppClient;
+            }
+        }
 
         public Jid MyJid { get; private set; }
 
@@ -246,6 +256,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             var wappedMessageTyp = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
             receivedMessage.MessageType = wappedMessageTyp;
+            receivedMessage.XmlMessage = messageEventArgs.Message.ToString();
 
             Debug.WriteLine("XMPP: ====> " + 
                             " From: " + messageEventArgs.Message.From  + 
@@ -275,9 +286,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         }
 
         #endregion
-        
+
         #region Public methods
-        
+
+        public void SendMessage(string toJid, string body, string extraParams, string dialogId, MessageType messageType = MessageType.Chat)
+        {
+            var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
+            var jid = new Sharp.Xmpp.Jid(toJid.ToString());
+            xmppClient.SendMessage(jid, body, extraParams, null, dialogId, wrappedMessageType);
+        }
+
         public void ReloadContacts()
         {
             this.Contacts.Clear();
@@ -357,13 +375,13 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
 		public string BuildJid(int userId)
         {
-            var jid = string.Format("{0}-{1}@{2}", userId, appId, chatEndpoint);
+            var jid = string.Format("{0}-{1}@{2}", userId, AppId, chatEndpoint);
             return jid;
         }
 
         public string BuildSmallJid(int userId)
         {
-            var jid = string.Format("{0}-{1}", userId, appId);
+            var jid = string.Format("{0}-{1}", userId, AppId);
             return jid;
         }
 
@@ -395,7 +413,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             Presences = new List<Jid>();
 
             chatEndpoint = chatEndpointUrl;
-            appId = applicationId;
+            AppId = applicationId;
             MyJid = BuildSmallJid(userId);
 
             xmppClient = new XmppClient(chatEndpoint, BuildSmallJid(userId), password);
@@ -416,7 +434,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             Presences.Clear();
 
             chatEndpoint = null;
-            appId = 0;
+            AppId = 0;
             MyJid = null;
 
             xmppClient.Dispose();

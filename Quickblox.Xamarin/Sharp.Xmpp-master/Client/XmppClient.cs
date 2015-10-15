@@ -576,52 +576,13 @@ namespace Sharp.Xmpp.Client {
 		/// <exception cref="ObjectDisposedException">The XmppClient object has been
 		/// disposed.</exception>
 		/// <include file='Examples.xml' path='S22/Xmpp/Client/XmppClient[@name="SendMessage-1"]/*'/>
-		public void SendMessage(Jid to, string body, Dictionary<string, string> extraParamets = null, string subject = null,
+		public void SendMessage(Jid to, string body, string extraParamets = null, string subject = null,
 			string thread = null, MessageType type = MessageType.Normal,
 			CultureInfo language = null) {
 			AssertValid();
 			to.ThrowIfNull("to");
 			body.ThrowIfNullOrEmpty("body");
 			im.SendMessage(to, body, extraParamets, subject, thread, type, language);
-		}
-
-		/// <summary>
-		/// Sends a chat message with the specified content to the specified JID.
-		/// </summary>
-		/// <param name="to">The JID of the intended recipient.</param>
-		/// <param name="bodies">A dictionary of message bodies. The dictionary
-		/// keys denote the languages of the message bodies and must be valid
-		/// ISO 2 letter language codes.</param>
-		/// <param name="subjects">A dictionary of message subjects. The dictionary
-		/// keys denote the languages of the message subjects and must be valid
-		/// ISO 2 letter language codes.</param>
-		/// <param name="thread">The conversation thread the message belongs to.</param>
-		/// <param name="type">The type of the message. Can be one of the values from
-		/// the MessagType enumeration.</param>
-		/// <param name="language">The language of the XML character data of
-		/// the stanza.</param>
-		/// <exception cref="ArgumentNullException">The to parameter or the bodies
-		/// parameter is null.</exception>
-		/// <exception cref="IOException">There was a failure while writing to or reading
-		/// from the network.</exception>
-		/// <exception cref="InvalidOperationException">The XmppClient instance is not
-		/// connected to a remote host, or the XmppClient instance has not authenticated with
-		/// the XMPP server.</exception>
-		/// <exception cref="ObjectDisposedException">The XmppClient object has been
-		/// disposed.</exception>
-		/// <remarks>
-		/// An XMPP chat-message may contain multiple subjects and bodies in different
-		/// languages. Use this method in order to send a message that contains copies of the
-		/// message content in several distinct languages.
-		/// </remarks>
-		/// <include file='Examples.xml' path='S22/Xmpp/Client/XmppClient[@name="SendMessage-2"]/*'/>
-		public void SendMessage(Jid to, IDictionary<string, string> bodies, IDictionary<string, string> extraParametrs,
-            IDictionary<string, string> subjects = null, string thread = null,
-			MessageType type = MessageType.Normal, CultureInfo language = null) {
-			AssertValid();
-			to.ThrowIfNull("to");
-			bodies.ThrowIfNull("bodies");
-			im.SendMessage(to, bodies, extraParametrs, subjects, thread, type, language);
 		}
 
 		/// <summary>

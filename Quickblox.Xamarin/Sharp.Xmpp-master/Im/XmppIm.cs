@@ -374,7 +374,7 @@ namespace Sharp.Xmpp.Im {
 		/// the XMPP server.</exception>
 		/// <exception cref="ObjectDisposedException">The XmppIm object has been
 		/// disposed.</exception>
-		public void SendMessage(Jid to, string body, IDictionary<string, string> extraParams = null, string subject = null,
+		public void SendMessage(Jid to, string body, string extraParams = null, string subject = null,
 			string thread = null, MessageType type = MessageType.Normal,
 			CultureInfo language = null) {
 				AssertValid();
@@ -384,53 +384,30 @@ namespace Sharp.Xmpp.Im {
 				SendMessage(m);
 		}
 
-		/// <summary>
-		/// Sends a chat message with the specified content to the specified JID.
-		/// </summary>
-		/// <param name="to">The JID of the intended recipient.</param>
-		/// <param name="bodies">A dictionary of message bodies. The dictionary
-		/// keys denote the languages of the message bodies and must be valid
-		/// ISO 2 letter language codes.</param>
-		/// <param name="subjects">A dictionary of message subjects. The dictionary
-		/// keys denote the languages of the message subjects and must be valid
-		/// ISO 2 letter language codes.</param>
-		/// <param name="thread">The conversation thread the message belongs to.</param>
-		/// <param name="type">The type of the message. Can be one of the values from
-		/// the MessagType enumeration.</param>
-		/// <param name="language">The language of the XML character data of
-		/// the stanza.</param>
-		/// <exception cref="ArgumentNullException">The to parameter or the bodies
-		/// parameter is null.</exception>
-		/// <exception cref="IOException">There was a failure while writing to or reading
-		/// from the network.</exception>
-		/// <exception cref="InvalidOperationException">The XmppIm instance is not
-		/// connected to a remote host, or the XmppIm instance has not authenticated with
-		/// the XMPP server.</exception>
-		/// <exception cref="ObjectDisposedException">The XmppIm object has been
-		/// disposed.</exception>
-		public void SendMessage(Jid to, IDictionary<string, string> bodies, IDictionary<string, string> extraParams,
-            IDictionary<string, string> subjects = null, string thread = null,
-			MessageType type = MessageType.Normal, CultureInfo language = null) {
-				AssertValid();
-				to.ThrowIfNull("to");
-				bodies.ThrowIfNull("bodies");
-				Message m = new Message(to, bodies, extraParams, subjects, thread, type, language);
-				SendMessage(m);
-		}
+        public void SendMessage(Jid to, string extraParams, string subject = null,
+            string thread = null, MessageType type = MessageType.Normal,
+            CultureInfo language = null)
+        {
+            AssertValid();
+            to.ThrowIfNull("to");
+            extraParams.ThrowIfNullOrEmpty("extraParams");
+            Message m = new Message(to, null, extraParams, subject, thread, type, language);
+            SendMessage(m);
+        }
 
-		/// <summary>
-		/// Sends the specified chat message.
-		/// </summary>
-		/// <param name="message">The chat message to send.</param>
-		/// <exception cref="ArgumentNullException">The message parameter is null.</exception>
-		/// <exception cref="IOException">There was a failure while writing to or reading
-		/// from the network.</exception>
-		/// <exception cref="InvalidOperationException">The XmppIm instance is not
-		/// connected to a remote host, or the XmppIm instance has not authenticated with
-		/// the XMPP server.</exception>
-		/// <exception cref="ObjectDisposedException">The XmppIm object has been
-		/// disposed.</exception>
-		public void SendMessage(Message message) {
+        /// <summary>
+        /// Sends the specified chat message.
+        /// </summary>
+        /// <param name="message">The chat message to send.</param>
+        /// <exception cref="ArgumentNullException">The message parameter is null.</exception>
+        /// <exception cref="IOException">There was a failure while writing to or reading
+        /// from the network.</exception>
+        /// <exception cref="InvalidOperationException">The XmppIm instance is not
+        /// connected to a remote host, or the XmppIm instance has not authenticated with
+        /// the XMPP server.</exception>
+        /// <exception cref="ObjectDisposedException">The XmppIm object has been
+        /// disposed.</exception>
+        public void SendMessage(Message message) {
 			AssertValid();
 			message.ThrowIfNull("message");
 			// "Stamp" the sender's JID onto the message. 

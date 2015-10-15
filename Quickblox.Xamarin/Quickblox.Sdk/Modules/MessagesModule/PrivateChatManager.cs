@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+﻿using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Sharp.Xmpp.Client;
 using System.Threading.Tasks;
 using System.Net;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using System;
+using System.Xml.Linq;
 
 namespace Quickblox.Sdk
 {
@@ -36,18 +36,20 @@ namespace Quickblox.Sdk
         {
             var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
             var jid = new Sharp.Xmpp.Jid(otherUserJid.ToString());
-            var extraParams = new Dictionary<string, string>()
-            {
-                { "save_to_history", "1" },
-                {"dialog_id", thread }
-            };
-
-            if (messageType == MessageType.Headline)
-            {
-                extraParams.Add("notification_type", ((int)notificationType).ToString());
-            }
-
+            var extraParams = SaveToHistory(dialogId);
             xmppClient.SendMessage(jid, body, extraParams, subject, thread, wrappedMessageType);
+        }
+
+        private string SaveToHistory(string dialogId)
+        {
+            XDocument srcTree = new XDocument(
+                 new XElement("extraParams",
+                     new XElement("save_to_history", "1"),
+                     new XElement("dialog_id", dialogId)
+                 )
+             );
+
+            return srcTree.ToString();
         }
 
         public async Task<bool> AddToFriends(RosterItem item)
@@ -69,11 +71,7 @@ namespace Quickblox.Sdk
 
         public bool AcceptFriend(RosterItem item)
         {
-            //var userResponse = await quickbloxClient.UsersClient.GetUserByIdAsync(otherUserId);
-            //if (userResponse.StatusCode != HttpStatusCode.OK) return false;
-
             quickbloxClient.MessagesClient.AddContact(item);
-
             SendMessage("Request accepted", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsAccept);
             return true;
         }
@@ -82,7 +80,6 @@ namespace Quickblox.Sdk
         {
             quickbloxClient.MessagesClient.RemoveContact(item);
             SendMessage("Request rejected", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsReject);
-            
             return true;
         }
 

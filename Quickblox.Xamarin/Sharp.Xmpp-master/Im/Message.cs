@@ -122,37 +122,64 @@ namespace Sharp.Xmpp.Im {
 			}
 		}
 
-        public IDictionary<string, string> ExtraParams
+        public string ExtraParameter
         {
             get
             {
-                var extraParameters = new Dictionary<string, string>();
-                var xnodeList = element.GetElementsByTagName("extraParams");
-                foreach (XmlElement element in xnodeList?.Item(0)?.ChildNodes)
-                {
-                    extraParameters.Add(element.Name, element.InnerText);
-                }
-                  
-                return extraParameters;
+                XmlElement bare = GetBare("extraParams");
+                if (bare != null)
+                    return bare.InnerText;
+                string k = AlternateBodies.Keys.FirstOrDefault();
+                return k != null ? AlternateBodies[k] : null;
             }
             set
             {
-                if (value != null)
+                XmlElement bare = GetBare("extraParams");
+                if (bare != null)
                 {
-                    var doc = new XmlDocument();
-                    var extraParam = doc.CreateElement("extraParams"); 
-                    foreach (var extraParameterKeyValuePair in value)
-                    {
-                        var element = doc.CreateElement(extraParameterKeyValuePair.Key, null);
-                        element.InnerText = extraParameterKeyValuePair.Value;
-                        extraParam.AppendChild(element);
-                    }
-
-                    element.Child(extraParam);
+                    if (value == null)
+                        element.RemoveChild(bare);
+                    else
+                        bare.InnerText = value;
+                }
+                else
+                {
+                    if (value != null)
+                        element.Child(Xml.Element("extraParams").Text(value));
                 }
             }
         }
 
+        //public IDictionary<string, string> ExtraParamsFromDictionary
+        //{
+        //    get
+        //    {
+        //        var extraParameters = new Dictionary<string, string>();
+        //        var xnodeList = element.GetElementsByTagName("extraParams");
+        //        foreach (XmlElement element in xnodeList?.Item(0)?.ChildNodes)
+        //        {
+        //            extraParameters.Add(element.Name, element.InnerText);
+        //        }
+
+        //        return extraParameters;
+        //    }
+        //    set
+        //    {
+        //        if (value != null)
+        //        {
+        //            var doc = new XmlDocument();
+        //            var extraParam = doc.CreateElement("extraParams");
+        //            foreach (var extraParameterKeyValuePair in value)
+        //            {
+        //                var element = doc.CreateElement(extraParameterKeyValuePair.Key, null);
+        //                element.InnerText = extraParameterKeyValuePair.Value;
+        //                extraParam.AppendChild(element);
+        //            }
+
+        //            element.Child(extraParam);
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// A dictionary of alternate forms of the message subjects. The keys of the
@@ -186,54 +213,16 @@ namespace Sharp.Xmpp.Im {
         /// the stanza.</param>
         /// <exception cref="ArgumentNullException">The to parameter is null.</exception>
         /// <exception cref="ArgumentException">The body parameter is the empty string.</exception>
-        public Message(Jid to, string body = null, IDictionary<string, string> extraParams = null, string subject = null, string thread = null,
+        public Message(Jid to, string body = null, string extraParams = null, string subject = null, string thread = null,
 			MessageType type = MessageType.Normal, CultureInfo language = null)
 			: base(to, null, null, null, language) {
 				to.ThrowIfNull("to");
 				AlternateSubjects = new XmlDictionary(element, "subject", "xml:lang");
 				AlternateBodies = new XmlDictionary(element, "body", "xml:lang");
-                ExtraParams = extraParams;
+                ExtraParameter = extraParams;
 				Type = type;
 				Body = body;
-				Subject = subject;
-				Thread = thread;
-            
-            var strings = element.ToXmlString();
-            System.Diagnostics.Debug.WriteLine(strings);
-        }
-
-		/// <summary>
-		/// Initializes a new instance of the Message class.
-		/// </summary>
-		/// <param name="to">The JID of the intended recipient.</param>
-		/// <param name="bodies">A dictionary of message bodies. The dictionary
-		/// keys denote the languages of the message bodies and must be valid
-		/// ISO 2 letter language codes.</param>
-		/// <param name="subjects">A dictionary of message subjects. The dictionary
-		/// keys denote the languages of the message subjects and must be valid
-		/// ISO 2 letter language codes.</param>
-		/// <param name="thread">The conversation thread this message belongs to.</param>
-		/// <param name="type">The type of the message. Can be one of the values from
-		/// the MessagType enumeration.</param>
-		/// <param name="language">The language of the XML character data of
-		/// the stanza.</param>
-		/// <exception cref="ArgumentNullException">The to parametr or the bodies
-		/// parameter is null.</exception>
-		public Message(Jid to, IDictionary<string, string> bodies, IDictionary<string, string> extraParams = null,
-            IDictionary<string, string> subjects = null, string thread = null,
-			MessageType type = MessageType.Normal, CultureInfo language = null)
-			: base(to, null, null, null, language) {
-				to.ThrowIfNull("to");
-				bodies.ThrowIfNull("bodies");
-				AlternateSubjects = new XmlDictionary(element, "subject", "xml:lang");
-				AlternateBodies = new XmlDictionary(element, "body", "xml:lang");
-				Type = type;
-				foreach (var pair in bodies)
-					AlternateBodies.Add(pair.Key, pair.Value);
-				if (subjects != null) {
-					foreach (var pair in subjects)
-						AlternateSubjects.Add(pair.Key, pair.Value);
-				}
+				Subject = subject; 
 				Thread = thread;
             
             var strings = element.ToXmlString();

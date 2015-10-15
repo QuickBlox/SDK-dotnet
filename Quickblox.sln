@@ -46,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Performance2.psess = Performance2.psess
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk.WebRTC", "Quickblox.Xamarin\Quickblox.Sdk.WebRTC\Quickblox.Sdk.WebRTC.csproj", "{83B579B2-E522-4F37-A399-0F79F8F47855}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		QMunicate_8.1\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.projitems*{ba7acff7-a9db-46a4-a6b8-9089128dc102}*SharedItemsImports = 13
@@ -338,6 +340,7 @@ Global
 		{0FC5EB24-64AA-464A-9940-41187CC98FCE}.TestRelease|x86.Build.0 = TestRelease|x86
 		{0FC5EB24-64AA-464A-9940-41187CC98FCE}.TestRelease|x86.Deploy.0 = TestRelease|x86
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5C92500-D225-4473-B169-4C0749FE2A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{F5C92500-D225-4473-B169-4C0749FE2A90}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
@@ -454,6 +457,36 @@ Global
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|x64.ActiveCfg = TestRelease|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|x86.ActiveCfg = TestRelease|Any CPU
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD}.TestRelease|x86.Build.0 = TestRelease|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|ARM.Build.0 = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|x64.Build.0 = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Debug|x86.Build.0 = Debug|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|ARM.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|ARM.Build.0 = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|x64.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|x64.Build.0 = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|x86.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.Release|x86.Build.0 = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|Any CPU.Build.0 = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|ARM.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|ARM.Build.0 = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|Mixed Platforms.Build.0 = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|x64.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|x64.Build.0 = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|x86.ActiveCfg = Release|Any CPU
+		{83B579B2-E522-4F37-A399-0F79F8F47855}.TestRelease|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -475,5 +508,6 @@ Global
 		{BEE8FC5D-BA30-4DCC-A62A-8128264D0DA5} = {136B0548-2308-4DB4-B557-931032A61C4C}
 		{9EA99E39-8C5C-4F69-9F3F-8E3074C518FA} = {136B0548-2308-4DB4-B557-931032A61C4C}
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD} = {F245F1B4-27BF-42C9-8323-82817732E496}
+		{83B579B2-E522-4F37-A399-0F79F8F47855} = {136B0548-2308-4DB4-B557-931032A61C4C}
 	EndGlobalSection
 EndGlobal

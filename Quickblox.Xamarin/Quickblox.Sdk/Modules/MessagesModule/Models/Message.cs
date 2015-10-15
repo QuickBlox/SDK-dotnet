@@ -12,5 +12,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
         public string Thread { get; set; }
         public DateTime Timestamp { get; set; }
         public MessageType MessageType { get; set; }
+
+        public string XmlMessage { get; set; }
     }
 }
