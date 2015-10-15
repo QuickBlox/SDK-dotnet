@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Quickblox.Sdk.Modules.ChatModule.Models
+﻿namespace Quickblox.Sdk.GeneralDataModel.Filters
 {
     /// <summary>
     /// lt (Less Than operator), 
@@ -18,7 +12,7 @@ namespace Quickblox.Sdk.Modules.ChatModule.Models
     /// or (OR operator),
     /// ctn (Contains substring operator)
     /// </summary>
-    public enum DialogSearchOperator
+    public enum SearchOperators
     {
         Lt,
         Lte,

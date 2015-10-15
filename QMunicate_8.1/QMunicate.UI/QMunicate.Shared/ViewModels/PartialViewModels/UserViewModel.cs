@@ -1,31 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Windows.UI.Xaml.Media;
+﻿using Windows.UI.Xaml.Media;
 using QMunicate.Core.Observable;
 using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Models;
 
-namespace QMunicate.Models
+namespace QMunicate.ViewModels.PartialViewModels
 {
-    public class UserVm : ObservableObject
+    public class UserViewModel : ObservableObject
     {
+        #region Fields
+
         private ImageSource image;
+        private string fullName;
+
+        #endregion
 
         #region Ctor
 
-        public UserVm()
+        public UserViewModel()
         {
         }
 
-        protected UserVm(User user)
+        protected UserViewModel(User user)
         {
             UserId = user.Id;
             FullName = user.FullName;
             ImageUploadId = user.BlobId;
         }
 
-        protected UserVm(Contact contact)
+        protected UserViewModel(Contact contact)
         {
             UserId = contact.UserId;
             FullName = contact.Name;
@@ -37,9 +39,13 @@ namespace QMunicate.Models
 
         public int UserId { get; set; }
 
-        public string FullName { get; set; }
-
         public int? ImageUploadId { get; set; }
+
+        public string FullName
+        {
+            get { return fullName; }
+            set { Set(ref fullName, value); }
+        }
 
         public ImageSource Image
         {
@@ -51,14 +57,14 @@ namespace QMunicate.Models
 
         #region Public methods
 
-        public static UserVm FromUser(User user)
+        public static UserViewModel FromUser(User user)
         {
-            return new UserVm(user);
+            return new UserViewModel(user);
         }
 
-        public static UserVm FromContact(Contact contact)
+        public static UserViewModel FromContact(Contact contact)
         {
-            return new UserVm(contact);
+            return new UserViewModel(contact);
         }
 
         #endregion

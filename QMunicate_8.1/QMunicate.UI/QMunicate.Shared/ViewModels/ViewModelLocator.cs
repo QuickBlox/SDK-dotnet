@@ -30,9 +30,9 @@ namespace QMunicate.ViewModels
             get { return dialogsViewModel ?? (dialogsViewModel = new DialogsViewModel()); }
         }
 
-        public ChatViewModel ChatViewModel
+        public PrivateChatViewModel PrivateChatViewModel
         {
-            get { return new ChatViewModel(); }
+            get { return new PrivateChatViewModel(); }
         }
 
         public SettingsViewModel SettingsViewModel

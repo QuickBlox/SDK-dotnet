@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using QMunicate.Core.AsyncLock;
 
-namespace QMunicate.Helper
+namespace QMunicate.Services
 {
     public interface IFileStorage
     {

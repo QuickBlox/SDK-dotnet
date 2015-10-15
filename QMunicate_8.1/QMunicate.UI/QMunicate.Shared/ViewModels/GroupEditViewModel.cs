@@ -14,6 +14,8 @@ using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
 using QMunicate.Helper;
 using QMunicate.Models;
+using QMunicate.Services;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ContentModule;
 
@@ -25,7 +27,7 @@ namespace QMunicate.ViewModels
 
         private string chatName;
         private ImageSource chatImage;
-        private DialogVm currentDialog;
+        private DialogViewModel currentDialog;
         private byte[] newImageBytes;
 
         #endregion
@@ -71,7 +73,7 @@ namespace QMunicate.ViewModels
 
         public async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var dialog = e.Parameter as DialogVm;
+            var dialog = e.Parameter as DialogViewModel;
             if (dialog == null) return;
 
             currentDialog = dialog;
@@ -107,7 +109,7 @@ namespace QMunicate.ViewModels
                         dataReader.ReadBytes(newImageBytes);
                     }
 
-                    ChatImage = Helpers.CreateBitmapImage(streamForImage, 100);
+                    ChatImage = ImageHelper.CreateBitmapImage(streamForImage, 100);
                 }
             }
         }
@@ -116,7 +118,7 @@ namespace QMunicate.ViewModels
 
         #region Private methods
 
-        private async Task Initialize(DialogVm dialog)
+        private async Task Initialize(DialogViewModel dialog)
         {
             ChatName = dialog.Name;
             ChatImage = dialog.Image;

@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Windows.Networking.PushNotifications;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.Logger;
+using QMunicate.Services;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk.Logger;
 
 namespace QMunicate.ViewModels
@@ -119,7 +121,7 @@ namespace QMunicate.ViewModels
 
         private void OpenChatCommandExecute(object dialog)
         {
-            var dialogVm = dialog as DialogVm;
+            var dialogVm = dialog as DialogViewModel;
             if (dialogVm == null) return;
 
             if (dialogVm.DialogType == DialogType.Private)

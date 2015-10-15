@@ -57,6 +57,27 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Builder\UrlBuilder.cs">
       <Link>Builder\UrlBuilder.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Filters\FieldFilter.cs">
+      <Link>GeneralDataModel\Filters\FieldFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Filters\FieldFilterWithOperator.cs">
+      <Link>GeneralDataModel\Filters\FieldFilterWithOperator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Filters\Filter.cs">
+      <Link>GeneralDataModel\Filters\Filter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Filters\FilterAggregator.cs">
+      <Link>GeneralDataModel\Filters\FilterAggregator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Filters\SearchOperators.cs">
+      <Link>GeneralDataModel\Filters\SearchOperators.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Filters\SortFilter.cs">
+      <Link>GeneralDataModel\Filters\SortFilter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Filters\SortOperator.cs">
+      <Link>GeneralDataModel\Filters\SortOperator.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Models\Attachment.cs">
       <Link>GeneralDataModel\Models\Attachment.cs</Link>
     </Compile>
@@ -162,20 +183,8 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\Dialog.cs">
       <Link>Modules\ChatModule\Models\Dialog.cs</Link>
     </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\DialogSearchOperator.cs">
-      <Link>Modules\ChatModule\Models\DialogSearchOperator.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\DialogSortFilter.cs">
-      <Link>Modules\ChatModule\Models\DialogSortFilter.cs</Link>
-    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\DialogType.cs">
       <Link>Modules\ChatModule\Models\DialogType.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\RetrieveDialogsFilter.cs">
-      <Link>Modules\ChatModule\Models\RetrieveDialogsFilter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs">
-      <Link>Modules\ChatModule\Models\RetrieveDialogsFilterWithOperator.cs</Link>
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Requests\CreateDialogRequest.cs">
       <Link>Modules\ChatModule\Requests\CreateDialogRequest.cs</Link>
@@ -185,6 +194,9 @@
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Requests\RetrieveDialogsRequest.cs">
       <Link>Modules\ChatModule\Requests\RetrieveDialogsRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Requests\RetrieveMessagesRequest.cs">
+      <Link>Modules\ChatModule\Requests\RetrieveMessagesRequest.cs</Link>
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Requests\UpdateDialogRequest.cs">
       <Link>Modules\ChatModule\Requests\UpdateDialogRequest.cs</Link>

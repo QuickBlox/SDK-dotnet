@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Themes/ContentButtonStyle.xaml" />
                 <ResourceDictionary Source="Themes/SelectionsTextBlock.xaml" />
                 <ResourceDictionary Source="Themes/TypingIndicator.xaml" />
+                <ResourceDictionary Source="Themes/MessageTemplates.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <x:Double x:Key="SmallFontSize">15</x:Double>

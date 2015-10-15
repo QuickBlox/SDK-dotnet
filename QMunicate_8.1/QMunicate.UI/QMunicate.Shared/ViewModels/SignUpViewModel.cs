@@ -109,7 +109,7 @@ namespace QMunicate.ViewModels
                     dataReader.ReadBytes(userImageBytes);
                 }
 
-                UserImage = Helpers.CreateBitmapImage(streamForImage, 100);
+                UserImage = ImageHelper.CreateBitmapImage(streamForImage, 100);
             }
         }
 
@@ -132,6 +132,12 @@ namespace QMunicate.ViewModels
             if (string.IsNullOrWhiteSpace(FullName) || string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
                 await messageService.ShowAsync("Message", "Please fill all empty input fields");
+                return;
+            }
+
+            if (!Helpers.IsInternetConnected())
+            {
+                await messageService.ShowAsync("Connection failed", "Please check your internet connection.");
                 return;
             }
 

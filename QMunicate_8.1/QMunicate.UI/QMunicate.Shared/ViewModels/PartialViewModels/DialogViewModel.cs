@@ -4,12 +4,11 @@ using Windows.UI.Xaml.Media;
 using QMunicate.Core.Observable;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Modules.ChatModule.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.Models;
 
-namespace QMunicate.Models
+namespace QMunicate.ViewModels.PartialViewModels
 {
-    public class DialogVm : ObservableObject
+    public class DialogViewModel : ObservableObject
     {
         private string lastActivity;
         private DateTime? lastMessageSent;
@@ -18,11 +17,11 @@ namespace QMunicate.Models
 
         #region Ctor
 
-        public DialogVm()
+        public DialogViewModel()
         {
         }
 
-        protected DialogVm(Dialog dialog)
+        protected DialogViewModel(Dialog dialog)
         {
             Id = dialog.Id;
             XmppRoomJid = dialog.XmppRoomJid;
@@ -85,9 +84,9 @@ namespace QMunicate.Models
 
         #region Public methods
 
-        public static DialogVm FromDialog(Dialog dialog)
+        public static DialogViewModel FromDialog(Dialog dialog)
         {
-            return new DialogVm(dialog);
+            return new DialogViewModel(dialog);
         }
 
         #endregion

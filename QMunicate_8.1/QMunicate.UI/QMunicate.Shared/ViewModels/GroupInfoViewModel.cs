@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Services;
+using QMunicate.ViewModels.PartialViewModels;
 
 namespace QMunicate.ViewModels
 {
@@ -16,7 +18,7 @@ namespace QMunicate.ViewModels
 
         private string chatName;
         private ImageSource chatImage;
-        private DialogVm currentDialog;
+        private DialogViewModel currentDialog;
 
         #endregion
 
@@ -24,7 +26,7 @@ namespace QMunicate.ViewModels
 
         public GroupInfoViewModel()
         {
-            Participants = new ObservableCollection<UserVm>();
+            Participants = new ObservableCollection<UserViewModel>();
             AddMembersCommand = new RelayCommand(AddMembersCommandExecute, () => !IsLoading);
             EditCommand = new RelayCommand(EditCommandExecute, () => !IsLoading);
         }
@@ -45,7 +47,7 @@ namespace QMunicate.ViewModels
             set { Set(ref chatImage, value); }
         }
 
-        public ObservableCollection<UserVm> Participants { get; set; }
+        public ObservableCollection<UserViewModel> Participants { get; set; }
 
         public RelayCommand AddMembersCommand { get; set; }
 
@@ -68,7 +70,7 @@ namespace QMunicate.ViewModels
 
         public async override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            foreach (UserVm userVm in Participants)
+            foreach (UserViewModel userVm in Participants)
             {
                 userVm.Image = null;
             }
@@ -88,7 +90,7 @@ namespace QMunicate.ViewModels
 
         #region Private methods
 
-        private async Task Initialize(DialogVm dialog)
+        private async Task Initialize(DialogViewModel dialog)
         {
             IsLoading = true;
             ChatName = dialog.Name;
@@ -101,10 +103,10 @@ namespace QMunicate.ViewModels
             {
                 var user = await cachingQbClient.GetUserById(occupantId);
                 if (user != null)
-                    Participants.Add(UserVm.FromUser(user));
+                    Participants.Add(UserViewModel.FromUser(user));
             }
 
-            foreach (UserVm userVm in Participants)
+            foreach (UserViewModel userVm in Participants)
             {
                 if (userVm.ImageUploadId.HasValue)
                 {

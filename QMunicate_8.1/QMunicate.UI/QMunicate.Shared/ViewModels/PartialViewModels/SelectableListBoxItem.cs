@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using QMunicate.Core.Observable;
 
-namespace QMunicate.Models
+namespace QMunicate.ViewModels.PartialViewModels
 {
     public class SelectableListBoxItem<T> : ObservableObject
     {

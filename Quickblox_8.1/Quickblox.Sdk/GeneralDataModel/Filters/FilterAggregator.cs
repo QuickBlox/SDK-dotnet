@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Quickblox.Sdk.GeneralDataModel.Request
+namespace Quickblox.Sdk.GeneralDataModel.Filters
 {
-    public class FilterAggregator : Filter
+    public class FilterAggregator : Filters.Filter
     {
         public FilterAggregator()
         {
-            this.Filters = new List<Filter>();
+            this.Filters = new List<Filters.Filter>();
         }
 
-        public IList<Filter> Filters { get; private set; }
+        public IList<Filters.Filter> Filters { get; private set; }
 
         internal string BuildFilters()
         {

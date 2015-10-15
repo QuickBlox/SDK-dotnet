@@ -25,6 +25,7 @@ using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
 using QMunicate.Logger;
 using QMunicate.Models;
+using QMunicate.Services;
 using Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
@@ -210,7 +211,7 @@ namespace QMunicate
             dictionary.Add(ViewLocator.Login, typeof(LoginPage));
             dictionary.Add(ViewLocator.ForgotPassword, typeof(ForgotPasswordPage));
             dictionary.Add(ViewLocator.Dialogs, typeof(DialogsPage));
-            dictionary.Add(ViewLocator.Chat, typeof(ChatPage));
+            dictionary.Add(ViewLocator.Chat, typeof(PrivateChatPage));
             dictionary.Add(ViewLocator.Settings, typeof(SettingsPage));
             dictionary.Add(ViewLocator.Search, typeof(SearchPage));
             dictionary.Add(ViewLocator.SendRequest, typeof(SendRequestPage));

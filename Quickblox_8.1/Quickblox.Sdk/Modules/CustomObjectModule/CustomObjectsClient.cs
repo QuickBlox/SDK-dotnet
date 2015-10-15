@@ -13,6 +13,7 @@ using Quickblox.Sdk.Modules.CustomObjectModule.Requests;
 using Quickblox.Sdk.Modules.CustomObjectModule.Responses;
 using System.Collections;
 using System.Text;
+using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Request;
 
 namespace Quickblox.Sdk.Modules.CustomObjectModule

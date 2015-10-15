@@ -4,6 +4,8 @@ using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Test.Logger;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule
 {
@@ -41,7 +43,9 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
-            client1 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint);
+            var logger = new DebugLogger();
+
+            client1 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, logger);
             //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
 #if DEBUG
@@ -51,7 +55,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             chatManager1 = client1.MessagesClient.GetPrivateChatManager(id2, dialogId);
             client1.MessagesClient.OnPresenceReceived += (sender, presence) => { if (lastPresencesClient1 != null) lastPresencesClient1.Add(presence); };
 
-            client2 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint);
+            client2 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, logger);
             //await client2.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
             //await client2.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
 #if DEBUG
@@ -149,7 +153,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         {
             lastMessageClient2 = null;
             string attachemntId = "543534";
-            chatManager1.SendMessage("Test message", new Attachment() { Id = attachemntId, Type = "photo" });
+            chatManager1.SendMessage("Test message");
 
             await Task.Delay(5000);
 

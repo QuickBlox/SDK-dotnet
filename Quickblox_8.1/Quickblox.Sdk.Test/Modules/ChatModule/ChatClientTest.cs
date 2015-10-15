@@ -8,6 +8,8 @@ using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ChatModule.Responses;
 using QMunicate.Logger;
+using Quickblox.Sdk.GeneralDataModel.Filters;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace Quickblox.Sdk.Test.Modules.ChatModule
 {
@@ -20,7 +22,7 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new FileLogger());
-            var sessionResponse = await this.client.CoreClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "edwardtest", "edwardtest");
+            var sessionResponse = await this.client.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "to1@test.com", "12345678");
             client.Token = sessionResponse.Result.Session.Token;
         }
 
@@ -64,7 +66,7 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
 
             var aggregator = new FilterAggregator();
             //aggregator.Filters.Add(new DialogSortFilter<int>(SortOperator.Asc, () => new DialogResponse().Type));
-            aggregator.Filters.Add(new RetrieveDialogsFilter<int[]>(() => new DialogResponse().OccupantsIds, new int[] { 11879, 12779 }));
+            aggregator.Filters.Add(new FieldFilter<int[]>(() => new DialogResponse().OccupantsIds, new int[] { 11879, 12779 }));
 
             retriveDialogsRequest.Filter = aggregator;
             var response = await this.client.ChatClient.GetDialogsAsync(retriveDialogsRequest);
@@ -77,8 +79,8 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
             var retriveDialogsRequest = new RetrieveDialogsRequest();
 
             var aggregator = new FilterAggregator();
-            aggregator.Filters.Add(new DialogSortFilter<int>(SortOperator.Asc, () => new DialogResponse().Type));
-            aggregator.Filters.Add(new RetrieveDialogsFilterWithOperator<String>(DialogSearchOperator.Lte, () => new DialogResponse().Id, "551d50bd535c123fc50260db"));
+            aggregator.Filters.Add(new SortFilter<int>(SortOperator.Asc, () => new DialogResponse().Type));
+            aggregator.Filters.Add(new FieldFilterWithOperator<String>(SearchOperators.Lte, () => new DialogResponse().Id, "551d50bd535c123fc50260db"));
 
             retriveDialogsRequest.Filter = aggregator;
             var response = await this.client.ChatClient.GetDialogsAsync(retriveDialogsRequest);
@@ -92,6 +94,22 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
             Assert.AreEqual(responseDialogs.StatusCode, HttpStatusCode.OK);
 
             var responseMessages = await this.client.ChatClient.GetMessagesAsync(responseDialogs.Result.Items.First().Id);
+            Assert.AreEqual(responseMessages.StatusCode, HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task GetMessagesWithFiltersTest()
+        {
+            var responseDialogs = await this.client.ChatClient.GetDialogsAsync();
+            Assert.AreEqual(responseDialogs.StatusCode, HttpStatusCode.OK);
+            var testDialog = responseDialogs.Result.Items.First();
+
+            var retrieveMessagesRequest = new RetrieveMessagesRequest();
+            var aggregator = new FilterAggregator();
+            aggregator.Filters.Add(new FieldFilter<string>(() => new Message().ChatDialogId, testDialog.Id));
+            retrieveMessagesRequest.Filter = aggregator;
+
+            var responseMessages = await this.client.ChatClient.GetMessagesAsync((RetrieveMessagesRequest)null);
             Assert.AreEqual(responseMessages.StatusCode, HttpStatusCode.OK);
         }
 

@@ -4,24 +4,23 @@ using QMunicate.Core.Logger;
 using QMunicate.Core.MessageService;
 using QMunicate.Helper;
 using QMunicate.Models;
+using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk;
+using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Quickblox.Sdk.GeneralDataModel.Models;
-using Message = Quickblox.Sdk.GeneralDataModel.Models.Message;
+using QMunicate.Services;
 
 namespace QMunicate.ViewModels
 {
-    public class ChatViewModel : ViewModel
+    public class PrivateChatViewModel : ViewModel
     {
         #region Fields
 
@@ -31,7 +30,7 @@ namespace QMunicate.ViewModels
         private bool isActiveContactRequest;
         private bool isWaitingForContactResponse;
         private bool isRequestRejected;
-        private DialogVm dialog;
+        private DialogViewModel dialog;
         private int currentUserId;
         private IPrivateChatManager privateChatManager;
         private bool isMeTyping;
@@ -46,9 +45,9 @@ namespace QMunicate.ViewModels
 
         #region Ctor
 
-        public ChatViewModel()
+        public PrivateChatViewModel()
         {
-            Messages = new ObservableCollection<MessageVm>();
+            MessageCollectionViewModel = new MessageCollectionViewModel();
             SendCommand = new RelayCommand(SendCommandExecute, () => !IsLoading && IsMessageSendingAllowed);
             AcceptRequestCommand = new RelayCommand(AcceptRequestCommandExecute, () => !IsLoading);
             RejectRequestCommand = new RelayCommand(RejectCRequestCommandExecute, () => !IsLoading);
@@ -63,7 +62,7 @@ namespace QMunicate.ViewModels
 
         #region Properties
 
-        public ObservableCollection<MessageVm> Messages { get; set; }
+        public MessageCollectionViewModel MessageCollectionViewModel { get; set; }
 
         public string NewMessageText
         {
@@ -185,6 +184,9 @@ namespace QMunicate.ViewModels
                 int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != currentUserId);
                 await QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, string.Format("Initializing Chat page. CurrentUserId: {0}. OtherUserId: {1}.", currentUserId, otherUserId));
 
+                if (!string.IsNullOrEmpty(chatParameter.Dialog.Id))
+                    await MessageCollectionViewModel.LoadMessages(chatParameter.Dialog.Id);
+
                 if (otherUserId != 0)
                 {
                     privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);
@@ -192,8 +194,7 @@ namespace QMunicate.ViewModels
                     privateChatManager.OnIsTyping += PrivateChatManagerOnOnIsTyping;
                     privateChatManager.OnPausedTyping += PrivateChatManagerOnOnPausedTyping;
                 }
-                if(!string.IsNullOrEmpty(chatParameter.Dialog.Id))
-                    await LoadMessages(chatParameter.Dialog.Id);
+                
 
                 CheckIsMessageSendingAllowed();
             }
@@ -253,43 +254,34 @@ namespace QMunicate.ViewModels
 
         private void CheckIsMessageSendingAllowed()
         {
-            for (int i = Messages.Count - 1; i >= 0; i--)
+            for (int i = MessageCollectionViewModel.Messages.Count - 1; i >= 0; i--)
             {
-                if (Messages[i].NotificationType == NotificationTypes.FriendsAccept)
+                var currentMessageGroup = MessageCollectionViewModel.Messages[i];
+                for (int j = currentMessageGroup.Count - 1; j >= 0; j--)
                 {
-                    break;
-                }
+                    var currentMessage = currentMessageGroup[j];
+                    if (currentMessage.NotificationType == NotificationTypes.FriendsAccept)
+                    {
+                        break;
+                    }
 
-                if (Messages[i].NotificationType == NotificationTypes.FriendsReject)
-                {
-                    IsRequestRejected = true;
-                    break;
-                }
+                    if (currentMessage.NotificationType == NotificationTypes.FriendsReject)
+                    {
+                        IsRequestRejected = true;
+                        break;
+                    }
 
-                if (Messages[i].MessageType == MessageType.Outgoing && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
-                {
-                    IsWaitingForContactResponse = true;
-                    break;
-                }
+                    if (currentMessage.MessageType == MessageType.Outgoing && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
+                    {
+                        IsWaitingForContactResponse = true;
+                        break;
+                    }
 
-                if (Messages[i].MessageType == MessageType.Incoming && Messages[i].NotificationType == NotificationTypes.FriendsRequest)
-                {
-                    IsActiveContactRequest = true;
-                    break;
-                }
-            }
-        }
-
-        private async Task LoadMessages(string dialogId)
-        {
-            var response = await QuickbloxClient.ChatClient.GetMessagesAsync(dialogId);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                Messages.Clear();
-                foreach (Message message in response.Result.Items)
-                {
-                    var msg = MessageVm.FromMessage(message, currentUserId);
-                    Messages.Add(msg);
+                    if (currentMessage.MessageType == MessageType.Incoming && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
+                    {
+                        IsActiveContactRequest = true;
+                        break;
+                    }
                 }
             }
         }
@@ -309,14 +301,14 @@ namespace QMunicate.ViewModels
                 return;
             }
 
-            var msg = new MessageVm()
+            var messageViewModel = new MessageViewModel()
             {
                 MessageText = NewMessageText,
                 MessageType = MessageType.Outgoing,
                 DateTime = DateTime.Now
             };
 
-            Messages.Add(msg);
+            await MessageCollectionViewModel.AddNewMessage(messageViewModel);
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
             await dialogsManager.UpdateDialogLastMessage(dialog.Id, NewMessageText, DateTime.Now);
 
@@ -332,7 +324,7 @@ namespace QMunicate.ViewModels
             if (accepted)
             {
                 IsActiveContactRequest = false;
-                await LoadMessages(dialog.Id);
+                await MessageCollectionViewModel.LoadMessages(dialog.Id);
                 CheckIsMessageSendingAllowed();
             }
             
@@ -350,7 +342,7 @@ namespace QMunicate.ViewModels
             if (rejected)
             {
                 IsActiveContactRequest = false;
-                await LoadMessages(dialog.Id);
+                await MessageCollectionViewModel.LoadMessages(dialog.Id);
                 CheckIsMessageSendingAllowed();
             }
 
@@ -363,20 +355,12 @@ namespace QMunicate.ViewModels
             NavigationService.Navigate(ViewLocator.UserInfo, dialog == null ? null : dialog.Id);
         }
 
-        private void ChatManagerOnOnMessageReceived(object sender, Message message)
+        private async void ChatManagerOnOnMessageReceived(object sender, Message message)
         {
-            var incomingMessage = new MessageVm
-            {
-                MessageText = message.MessageText,
-                MessageType = MessageType.Incoming,
-                DateTime = DateTime.Now
-            };
+            await MessageCollectionViewModel.AddNewMessage(message);
 
-            incomingMessage.NotificationType = message.NotificationType;
-
-            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
-                Messages.Add(incomingMessage);
                 CheckIsMessageSendingAllowed();
             });
         }

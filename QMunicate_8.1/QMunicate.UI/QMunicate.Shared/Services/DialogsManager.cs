@@ -1,22 +1,30 @@
-﻿using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.Logger;
-using QMunicate.Models;
-using Quickblox.Sdk;
-using Quickblox.Sdk.Modules.ChatModule.Models;
-using Quickblox.Sdk.Modules.ChatModule.Requests;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.Logger;
+using QMunicate.Helper;
+using QMunicate.ViewModels.PartialViewModels;
+using Quickblox.Sdk;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatModule.Models;
+using Quickblox.Sdk.Modules.ChatModule.Requests;
 
-namespace QMunicate.Helper
+namespace QMunicate.Services
 {
+    public interface IDialogsManager
+    {
+        ObservableCollection<DialogViewModel> Dialogs { get; }
+        Task ReloadDialogs();
+        void JoinAllGroupDialogs();
+        Task UpdateDialogLastMessage(string dialogId, string lastActivity, DateTime lastMessageSent);
+    }
+
     public class DialogsManager : IDialogsManager
     {
         #region Fields
@@ -33,14 +41,14 @@ namespace QMunicate.Helper
         {
             this.quickbloxClient = quickbloxClient;
             quickbloxClient.MessagesClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
-            Dialogs = new ObservableCollection<DialogVm>();
+            Dialogs = new ObservableCollection<DialogViewModel>();
         }
 
         #endregion
 
         #region Properties
 
-        public ObservableCollection<DialogVm> Dialogs { get; private set; }
+        public ObservableCollection<DialogViewModel> Dialogs { get; private set; }
 
         #endregion
 
@@ -61,44 +69,19 @@ namespace QMunicate.Helper
                     var currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
                     foreach (var dialog in response.Result.Items)
                     {
+                        var dialogVm = DialogViewModel.FromDialog(dialog);
+
                         if (dialog.Type == DialogType.Private)
                         {
-                            var dialogVm = DialogVm.FromDialog(dialog);
                             int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != currentUserId);
                             dialogVm.Name = GetUserNameFromContacts(otherUserId);
-
-                            Dialogs.Add(dialogVm);
                         }
-                        else if(dialog.Type == DialogType.Group)
-                        {
-                            var dialogVm = DialogVm.FromDialog(dialog);
 
-                            if (!string.IsNullOrEmpty(dialogVm.Photo))
-                            {
-                                var imagesService = ServiceLocator.Locator.Get<IImageService>();
-                                dialogVm.Image = await imagesService.GetPublicImage(dialogVm.Photo);
-                            }
-
-                            Dialogs.Add(dialogVm);
-                        }
+                        Dialogs.Add(dialogVm);
                     }
 
-                    var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-                    foreach (DialogVm dialogVm in Dialogs)
-                    {
-                        if (dialogVm.DialogType == DialogType.Private)
-                        {
-                            int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != currentUserId);
-                            var user = await cachingQbClient.GetUserById(otherUserId);
-                            if (user != null)
-                            {
-                                dialogVm.Name = user.FullName;
-                                dialogVm.PrivatePhotoId = user.BlobId;
-                            }
-                        }
-                    }
-
-                    LoadDialogImages(100);
+                    await FixPrivateDialogsNamesAndImages();
+                    await LoadDialogImages(100);
                 }
             }
             finally
@@ -113,7 +96,7 @@ namespace QMunicate.Helper
 
             int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
 
-            foreach (DialogVm dialogVm in Dialogs)
+            foreach (DialogViewModel dialogVm in Dialogs)
             {
                 if (dialogVm.DialogType == DialogType.Group)
                 {
@@ -187,17 +170,38 @@ namespace QMunicate.Helper
             return null;
         }
 
-        private void LoadDialogImages(int? decodePixelWidth = null, int? decodePixelHeight = null)
+        private async Task FixPrivateDialogsNamesAndImages()
+        {
+            var currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            foreach (DialogViewModel dialogVm in Dialogs.Where(dvm => dvm.DialogType == DialogType.Private))
+            {
+                int otherUserId = dialogVm.OccupantIds.FirstOrDefault(o => o != currentUserId);
+                var user = await cachingQbClient.GetUserById(otherUserId);
+                if (user != null)
+                {
+                    dialogVm.Name = user.FullName;
+                    dialogVm.PrivatePhotoId = user.BlobId;
+                }
+            }
+        }
+
+        private async Task LoadDialogImages(int? decodePixelWidth = null, int? decodePixelHeight = null)
         {
             var imagesService = ServiceLocator.Locator.Get<IImageService>();
+
+            foreach (DialogViewModel dialogVm in Dialogs.Where(dvm => dvm.DialogType == DialogType.Group))
+            {
+                dialogVm.Image = await imagesService.GetPublicImage(dialogVm.Photo);
+            }
 
             Parallel.ForEach(Dialogs.Where(d => d.DialogType == DialogType.Private), async (dialogVm, state) =>
             {
                 if (dialogVm.PrivatePhotoId.HasValue)
                 {
                     var imageBytes = await imagesService.GetPrivateImageBytes(dialogVm.PrivatePhotoId.Value);
-                    CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => 
-                        dialogVm.Image = await Helpers.CreateBitmapImage(imageBytes, decodePixelWidth, decodePixelHeight));
+                    CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+                        dialogVm.Image = await ImageHelper.CreateBitmapImage(imageBytes, decodePixelWidth, decodePixelHeight));
                 }
             });
         }

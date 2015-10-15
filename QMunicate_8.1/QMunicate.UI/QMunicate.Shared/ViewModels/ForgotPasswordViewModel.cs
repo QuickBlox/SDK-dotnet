@@ -56,6 +56,18 @@ namespace QMunicate.ViewModels
         {
             var messageService = ServiceLocator.Locator.Get<IMessageService>();
 
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                await messageService.ShowAsync("Message", "Please fill all empty input fields");
+                return;
+            }
+
+            if (!Helpers.IsInternetConnected())
+            {
+                await messageService.ShowAsync("Connection failed", "Please check your internet connection.");
+                return;
+            }
+
             var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
                         ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
                         new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });

@@ -91,6 +91,12 @@ namespace QMunicate.ViewModels
                 return;
             }
 
+            if (!Helpers.IsInternetConnected())
+            {
+                await messageService.ShowAsync("Connection failed", "Please check your internet connection.");
+                return;
+            }
+
             IsLoading = true;
 
             if (RememberMe)
@@ -111,6 +117,10 @@ namespace QMunicate.ViewModels
                 QuickbloxClient.Token = response.Result.Session.Token;
                 SettingsManager.Instance.WriteToSettings(SettingsKeys.CurrentUserId, response.Result.Session.UserId);
                 NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await messageService.ShowAsync("Unauthorized", "Incorrect email or password");
             }
             else await Helpers.ShowErrors(response.Errors, messageService);
 

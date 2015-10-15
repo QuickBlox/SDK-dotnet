@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Quickblox.Sdk.GeneralDataModel.Request
+namespace Quickblox.Sdk.GeneralDataModel.Filters
 {
     public abstract class Filter
     {

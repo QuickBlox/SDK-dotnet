@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json;
 using Quickblox.Sdk.GeneralDataModel.Filter;
+using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Request;
 
 namespace Quickblox.Sdk.Modules.UsersModule.Models

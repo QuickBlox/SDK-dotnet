@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using QMunicate.Core.DependencyInjection;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.UsersModule.Models;
 
-namespace QMunicate.Helper
+namespace QMunicate.Services
 {
     public interface ICachingQuickbloxClient
     {

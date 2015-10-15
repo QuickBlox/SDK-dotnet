@@ -1,21 +1,17 @@
-﻿using System;
+﻿using QMunicate.Core.MessageService;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.Networking.Connectivity;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 using Windows.System.Profile;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using QMunicate.Core.Logger;
-using QMunicate.Core.MessageService;
-using Quickblox.Sdk.Logger;
 
 namespace QMunicate.Helper
 {
-    public class Helpers
+    public static class Helpers
     {
         public static string GetHardwareId()
         {
@@ -55,36 +51,21 @@ namespace QMunicate.Helper
             return string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
         }
 
-        public static async Task<ImageSource> CreateBitmapImage(byte[] imageBytes, int? decodePixelWidth = null, int? decodePixelHeight = null)
+        public static bool IsInternetConnected()
         {
-            if (imageBytes == null) return null;
-
-            using (var stream = new InMemoryRandomAccessStream())
-            {
-                await stream.WriteAsync(imageBytes.AsBuffer());
-                stream.Seek(0);
-
-                return CreateBitmapImage(stream, decodePixelWidth, decodePixelHeight);
-            }
+            ConnectionProfile connections = NetworkInformation.GetInternetConnectionProfile();
+            bool internet = connections != null && connections.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
+            return internet;
         }
 
-        public static ImageSource CreateBitmapImage(IRandomAccessStream imageBytesStream, int? decodePixelWidth = null, int? decodePixelHeight = null)
+        public static int GetUserIdFromJid(string jid)
         {
-            if (imageBytesStream == null) return null;
+            int senderId;
+            var jidParts = jid.Split('/');
+            if (int.TryParse(jidParts.Last(), out senderId))
+                return senderId;
 
-            try
-            {
-                var bitmapImage = new BitmapImage();
-                if (decodePixelWidth.HasValue) bitmapImage.DecodePixelWidth = decodePixelWidth.Value;
-                if (decodePixelHeight.HasValue) bitmapImage.DecodePixelHeight = decodePixelHeight.Value;
-                bitmapImage.SetSource(imageBytesStream);
-                return bitmapImage;
-            }
-            catch (Exception ex)
-            {
-                QmunicateLoggerHolder.Log(QmunicateLogLevel.Debug, "Helpers class. Failed to create BitmapImage. " + ex);
-                return null;
-            }
+            return 0;
         }
     }
 }

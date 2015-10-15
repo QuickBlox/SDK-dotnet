@@ -23,8 +23,8 @@ namespace Quickblox.Sdk.Core
         public const string UpdateDialogMethod = "/chat/Dialog/{0}.json";
 
         public const string DeleteDialogMethod = "/chat/Dialog/{0}.json";
-        
-        public const string GetMessagesMethod = "/chat/Message.json?chat_dialog_id={0}";
+
+        public const string GetMessagesMethod = "/chat/Message.json";
 
         public const string CreateMessageMethod = "/chat/Message.json";
 
