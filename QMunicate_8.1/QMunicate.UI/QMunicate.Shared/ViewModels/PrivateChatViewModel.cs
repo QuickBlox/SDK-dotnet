@@ -265,7 +265,7 @@ namespace QMunicate.ViewModels
                         break;
                     }
 
-                    if (currentMessage.NotificationType == NotificationTypes.FriendsReject)
+                    if (currentMessage.NotificationType == NotificationTypes.FriendsReject || currentMessage.NotificationType == NotificationTypes.FriendsRemove)
                     {
                         IsRequestRejected = true;
                         break;
