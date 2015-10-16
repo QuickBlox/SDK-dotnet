@@ -1,4 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.Observable;
+using QMunicate.Services;
+using Quickblox.Sdk;
+using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.GeneralDataModel.Filters;
+using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.ChatModule.Requests;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
@@ -6,15 +14,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
-using QMunicate.Core.DependencyInjection;
-using QMunicate.Core.Observable;
-using QMunicate.Helper;
-using QMunicate.Services;
-using Quickblox.Sdk;
-using Quickblox.Sdk.Builder;
-using Quickblox.Sdk.GeneralDataModel.Filters;
-using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.ChatModule.Requests;
 
 namespace QMunicate.ViewModels.PartialViewModels
 {
@@ -166,7 +165,7 @@ namespace QMunicate.ViewModels.PartialViewModels
             if (messageType == MessageType.Outgoing) return "Your request has been sent";
 
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var senderUser = await cachingQbClient.GetUserById(GetSenderId(message));
+            var senderUser = await cachingQbClient.GetUserById(message.SenderId);
 
             return string.Format("{0} has sent a request to you", senderUser == null ? null : senderUser.FullName);
         }
@@ -183,13 +182,12 @@ namespace QMunicate.ViewModels.PartialViewModels
 
         private async Task<string> BuildGroupCreateMessage(Message message)
         {
-            int senderId = GetSenderId(message);
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var senderUser = await cachingQbClient.GetUserById(senderId);
+            var senderUser = await cachingQbClient.GetUserById(message.SenderId);
 
             var addedUsersBuilder = new StringBuilder();
             List<int> occupantsIds = ConvertStringToIntArray(message.OccupantsIds);
-            foreach (var userId in occupantsIds.Where(o => o != senderId))
+            foreach (var userId in occupantsIds.Where(o => o != message.SenderId))
             {
                 var user = await cachingQbClient.GetUserById(userId);
                 if (user != null)
@@ -203,9 +201,8 @@ namespace QMunicate.ViewModels.PartialViewModels
 
         private async Task<string> BuildGroupUpdateMessage(Message message)
         {
-            int senderId = GetSenderId(message);
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var senderUser = await cachingQbClient.GetUserById(senderId);
+            var senderUser = await cachingQbClient.GetUserById(message.SenderId);
 
             string messageText = null;
             if (!string.IsNullOrEmpty(message.RoomName))
@@ -218,7 +215,7 @@ namespace QMunicate.ViewModels.PartialViewModels
             {
                 var addedUsersBuilder = new StringBuilder();
                 List<int> occupantsIds = ConvertStringToIntArray(message.OccupantsIds);
-                foreach (var userId in occupantsIds.Where(o => o != senderId))
+                foreach (var userId in occupantsIds.Where(o => o != message.SenderId))
                 {
                     var user = await cachingQbClient.GetUserById(userId);
                     if (user != null)
@@ -242,14 +239,14 @@ namespace QMunicate.ViewModels.PartialViewModels
                 MessageText = message.MessageText,
                 DateTime = message.DateSent.ToDateTime(),
                 NotificationType = message.NotificationType,
-                SenderId = GetSenderId(message)
+                SenderId = message.SenderId
             };
 
             int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
             messageViewModel.MessageType = messageViewModel.SenderId == currentUserId ? MessageType.Outgoing : MessageType.Incoming;
 
             var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
-            var senderUser = await cachingQbClient.GetUserById(GetSenderId(message));
+            var senderUser = await cachingQbClient.GetUserById(message.SenderId);
             if (senderUser != null) messageViewModel.SenderName = senderUser.FullName;
 
             return messageViewModel;
@@ -269,13 +266,6 @@ namespace QMunicate.ViewModels.PartialViewModels
             }
 
             return occupantsIds;
-        }
-
-        private int GetSenderId(Message message)
-        {
-            if (message.SenderId != 0) return message.SenderId; // a message from REST API
-
-            return Helpers.GetUserIdFromJid(message.From); // a message from XMPP
         }
 
         #endregion

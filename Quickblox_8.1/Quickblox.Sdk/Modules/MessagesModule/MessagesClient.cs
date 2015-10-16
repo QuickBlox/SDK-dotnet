@@ -1,16 +1,13 @@
-﻿using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+﻿using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Logger;
+using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Quickblox.Sdk.Builder;
-using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Logger;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
-using Quickblox.Sdk.Serializer;
 using XMPP;
 using XMPP.common;
 using XMPP.tags.jabber.client;
@@ -246,6 +243,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             result.To = source.to;
             result.MessageText = source.body;
 
+            result.SenderId = source.type == message.typeEnum.groupchat ? GetQbUserIdFromGroupJid(source.from) : GetQbUserIdFromJid(source.from);
             result.IsTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.composing) != null;
             result.IsPausedTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.paused) != null;
         }
@@ -330,7 +328,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
                     foreach (var item in query.itemElements)
                     {
-                        int userId = GetUserIdFromJid(item.jid);
+                        int userId = GetQbUserIdFromJid(item.jid);
                         if (userId == 0) continue;
 
                         Contacts.RemoveAll(c => c.UserId == userId);
@@ -351,12 +349,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             }
         }
 
+        #region Working with JIDs
+
         private string BuildJid(int userId)
         {
             return string.Format("{0}-{1}@{2}", userId, ApplicationId, ChatEndpoint);
         }
 
-        internal int GetUserIdFromJid(string jid)
+        private int GetQbUserIdFromJid(string jid)
         {
             var match = qbJidRegex.Match(jid);
 
@@ -365,6 +365,18 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             if (!int.TryParse(match.Groups[1].Value, out userId)) return 0;
             return userId;
         }
+
+        private int GetQbUserIdFromGroupJid(string groupJid)
+        {
+            int senderId;
+            var jidParts = groupJid.Split('/');
+            if (int.TryParse(jidParts.Last(), out senderId))
+                return senderId;
+
+            return 0;
+        }
+
+        #endregion
 
         //TODO: parse attachemnts from extraparams with Ubiety
         //private void XmppConnectionOnOnMessage(object sender, AgsMessage msg)

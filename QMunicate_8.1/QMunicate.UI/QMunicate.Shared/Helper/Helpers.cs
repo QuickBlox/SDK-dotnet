@@ -57,15 +57,5 @@ namespace QMunicate.Helper
             bool internet = connections != null && connections.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
             return internet;
         }
-
-        public static int GetUserIdFromJid(string jid)
-        {
-            int senderId;
-            var jidParts = jid.Split('/');
-            if (int.TryParse(jidParts.Last(), out senderId))
-                return senderId;
-
-            return 0;
-        }
     }
 }
