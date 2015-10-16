@@ -150,6 +150,10 @@ namespace QMunicate.ViewModels.PartialViewModels
                     messageViewModel.MessageText = BuildFriendsRejectMessage(messageViewModel.MessageType);
                     break;
 
+                case NotificationTypes.FriendsRemove:
+                    messageViewModel.MessageText = await BuildFriedsRemoveMessage(originalMessage, messageViewModel.MessageType);
+                    break;
+
                 case NotificationTypes.GroupCreate:
                     messageViewModel.MessageText = await BuildGroupCreateMessage(originalMessage);
                     break;
@@ -178,6 +182,16 @@ namespace QMunicate.ViewModels.PartialViewModels
         private string BuildFriendsRejectMessage(MessageType messageType)
         {
             return messageType == MessageType.Outgoing ? "You have rejected a request" : "Your request has been rejected";
+        }
+
+        private async Task<string> BuildFriedsRemoveMessage(Message message, MessageType messageType)
+        {
+            if (messageType == MessageType.Outgoing) return "You have deleted this contact";
+
+            var cachingQbClient = ServiceLocator.Locator.Get<ICachingQuickbloxClient>();
+            var senderUser = await cachingQbClient.GetUserById(message.SenderId);
+
+            return string.Format("{0} has deleted you from the contact list", senderUser == null ? null : senderUser.FullName);
         }
 
         private async Task<string> BuildGroupCreateMessage(Message message)
