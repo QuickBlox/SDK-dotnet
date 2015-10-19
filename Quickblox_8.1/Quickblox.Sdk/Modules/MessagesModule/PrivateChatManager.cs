@@ -225,30 +225,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #endregion
 
-        #region Presence
-
-        public void SubsribeForPresence()
-        {
-            SendPresenceInformation(presence.typeEnum.subscribe);
-        }
-
-        public void ApproveSubscribtionRequest()
-        {
-            SendPresenceInformation(presence.typeEnum.subscribed);
-        }
-
-        public void RejectSubscribtionRequest()
-        {
-            SendPresenceInformation(presence.typeEnum.unsubscribed);
-        }
-
-        public void Unsubscribe()
-        {
-            SendPresenceInformation(presence.typeEnum.unsubscribe);
-        }
-
-        #endregion
-
         #endregion
 
         #region Private methods
@@ -287,44 +263,35 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             }
         }
 
+        #region Presence
+
+        private void SubsribeForPresence()
+        {
+            SendPresenceInformation(presence.typeEnum.subscribe);
+        }
+
+        private void ApproveSubscribtionRequest()
+        {
+            SendPresenceInformation(presence.typeEnum.subscribed);
+        }
+
+        private void RejectSubscribtionRequest()
+        {
+            SendPresenceInformation(presence.typeEnum.unsubscribed);
+        }
+
+        private void Unsubscribe()
+        {
+            SendPresenceInformation(presence.typeEnum.unsubscribe);
+        }
+
         private void SendPresenceInformation(presence.typeEnum type)
         {
             xmppClient.Send(new presence { type = type, to = otherUserJid });
         }
 
-        //private async Task<List> GetBanListAsync()
-        //{
-        //    TimeSpan timeout = new TimeSpan(0, 0, 5);
-
-        //    TaskCompletionSource<List> tcs = new TaskCompletionSource<List>();
-
-        //    xmpp.OnIq += (sender, iq) =>
-        //    {
-        //        if (iq.Query != null &&  iq.Query.Namespace.Contains("jabber:iq:privacy"))
-        //        {
-        //            Privacy privacy = iq.Query as Privacy;
-        //            if (privacy != null && tcs.Task.Status == TaskStatus.WaitingForActivation)
-        //            {
-        //                tcs.SetResult(privacy.GetList().FirstOrDefault(l => l.Name == banListName));
-        //            }
-
-        //        }
-        //    };
-
-        //    PrivacyManager p = new PrivacyManager(xmpp);
-        //    p.GetList(banListName);
-
-        //    var timer = new Timer(state =>
-        //    {
-        //        if (tcs.Task.Status == TaskStatus.WaitingForActivation)
-        //            tcs.SetResult(null);
-        //    },
-        //        null, timeout, new TimeSpan(0, 0, 0, 0, -1));
-
-        //    return await tcs.Task;
-        //}
-
         #endregion
 
+        #endregion
     }
 }

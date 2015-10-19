@@ -22,10 +22,5 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
 
         void NotifyIsTyping();
         void NotifyPausedTyping();
-
-        void SubsribeForPresence();
-        void ApproveSubscribtionRequest();
-        void RejectSubscribtionRequest();
-        void Unsubscribe();
     }
 }
