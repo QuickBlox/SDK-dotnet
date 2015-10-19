@@ -319,7 +319,7 @@ namespace QMunicate.ViewModels
         {
             if (privateChatManager == null) return;
             IsLoading = true;
-            bool accepted = await privateChatManager.AcceptFriend();
+            bool accepted = privateChatManager.AcceptFriend();
 
             if (accepted)
             {
@@ -337,7 +337,7 @@ namespace QMunicate.ViewModels
             if (privateChatManager == null) return;
 
             IsLoading = true;
-            bool rejected = await privateChatManager.RejectFriend();
+            bool rejected = privateChatManager.RejectFriend();
 
             if (rejected)
             {

@@ -83,12 +83,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Friends
 
-        public async Task<bool> AddToFriends(string friendName)
+        public bool AddToFriends(string friendName = null)
         {
             var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
             if (rosterManager != null)
             {
-                rosterManager.AddContact(new Contact() { Name = friendName, UserId = otherUserId });
+                rosterManager.AddContact(new Contact() { Name = friendName ?? otherUserId.ToString(), UserId = otherUserId });
             }
 
             SubsribeForPresence();
@@ -111,17 +111,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
-        public async Task<bool> AcceptFriend()
+        public bool AcceptFriend(string friendName = null)
         {
-            var userResponse = await quickbloxClient.UsersClient.GetUserByIdAsync(otherUserId);
-            if (userResponse.StatusCode != HttpStatusCode.OK) return false;
-
             var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
             if (rosterManager != null)
             {
                 rosterManager.AddContact(new Contact()
                 {
-                    Name = userResponse.Result.User.FullName,
+                    Name = friendName ?? otherUserId.ToString(),
                     UserId = otherUserId
                 });
             }
@@ -146,7 +143,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
-        public async Task<bool> RejectFriend()
+        public bool RejectFriend()
         {
             RejectSubscribtionRequest();
 
@@ -204,7 +201,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         /// </summary>
         /// <param name="createdDialogId"></param>
         /// <returns></returns>
-        public async Task<bool> NotifyAboutGroupCreation(string createdDialogId)
+        public bool NotifyAboutGroupCreation(string createdDialogId)
         {
             var msg = CreateNewMessage();
             var body = new body { Value = "Notification message" };

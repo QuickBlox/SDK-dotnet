@@ -14,11 +14,11 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         event EventHandler<Message> OnMessageReceived;
 
         bool SendMessage(string message);
-        Task<bool> AddToFriends(string friendName);
-        Task<bool> AcceptFriend();
-        Task<bool> RejectFriend();
+        bool AddToFriends(string friendName = null);
+        bool AcceptFriend(string friendName = null);
+        bool RejectFriend();
         bool DeleteFromFriends();
-        Task<bool> NotifyAboutGroupCreation(string createdDialogId);
+        bool NotifyAboutGroupCreation(string createdDialogId);
 
         void NotifyIsTyping();
         void NotifyPausedTyping();
