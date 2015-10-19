@@ -86,7 +86,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public async Task<bool> AddToFriends(string friendName)
         {
-            quickbloxClient.MessagesClient.AddContact(new Contact() {Name = friendName, UserId = otherUserId});
+            var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
+            if (rosterManager != null)
+            {
+                rosterManager.AddContact(new Contact() { Name = friendName, UserId = otherUserId });
+            }
+
             SubsribeForPresence();
 
             var msg = CreateNewMessage();
@@ -112,11 +117,16 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             var userResponse = await quickbloxClient.UsersClient.GetUserByIdAsync(otherUserId);
             if (userResponse.StatusCode != HttpStatusCode.OK) return false;
 
-            quickbloxClient.MessagesClient.AddContact(new Contact()
+            var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
+            if (rosterManager != null)
             {
-                Name = userResponse.Result.User.FullName,
-                UserId = otherUserId
-            });
+                rosterManager.AddContact(new Contact()
+                {
+                    Name = userResponse.Result.User.FullName,
+                    UserId = otherUserId
+                });
+            }
+
             ApproveSubscribtionRequest();
 
             var msg = CreateNewMessage();
@@ -177,7 +187,12 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             xmppClient.Send(msg);
 
-            quickbloxClient.MessagesClient.DeleteContact(otherUserId);
+            var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
+            if (rosterManager != null)
+            {
+                rosterManager.DeleteContact(otherUserId);
+            }
+
             Unsubscribe();
             SendPresenceInformation(presence.typeEnum.unsubscribed);
 
@@ -210,7 +225,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         }
 
         #endregion
-
 
         #region Presence
 

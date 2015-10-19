@@ -19,7 +19,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
     #if Xamarin
     #endif
 
-    public class MessagesClient : IMessagesClient
+    public class MessagesClient : IMessagesClient, IRosterManager
     {
         #region Fields
 
