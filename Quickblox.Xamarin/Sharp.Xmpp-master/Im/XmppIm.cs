@@ -379,7 +379,6 @@ namespace Sharp.Xmpp.Im {
 			CultureInfo language = null) {
 				AssertValid();
 				to.ThrowIfNull("to");
-				body.ThrowIfNullOrEmpty("body");
 				Message m = new Message(to, body, extraParams, subject, thread, type, language);
 				SendMessage(m);
 		}

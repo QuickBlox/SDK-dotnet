@@ -581,7 +581,6 @@ namespace Sharp.Xmpp.Client {
 			CultureInfo language = null) {
 			AssertValid();
 			to.ThrowIfNull("to");
-			body.ThrowIfNullOrEmpty("body");
 			im.SendMessage(to, body, extraParamets, subject, thread, type, language);
 		}
 

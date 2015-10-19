@@ -140,46 +140,23 @@ namespace Sharp.Xmpp.Im {
                     if (value == null)
                         element.RemoveChild(bare);
                     else
-                        bare.InnerText = value;
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(value);
+                        element.Child(doc.DocumentElement);
+                    }
                 }
                 else
-                {
+                {                   
                     if (value != null)
-                        element.Child(Xml.Element("extraParams").Text(value));
+                    {
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(value);
+                        element.Child(doc.DocumentElement);
+                    }
                 }
             }
         }
-
-        //public IDictionary<string, string> ExtraParamsFromDictionary
-        //{
-        //    get
-        //    {
-        //        var extraParameters = new Dictionary<string, string>();
-        //        var xnodeList = element.GetElementsByTagName("extraParams");
-        //        foreach (XmlElement element in xnodeList?.Item(0)?.ChildNodes)
-        //        {
-        //            extraParameters.Add(element.Name, element.InnerText);
-        //        }
-
-        //        return extraParameters;
-        //    }
-        //    set
-        //    {
-        //        if (value != null)
-        //        {
-        //            var doc = new XmlDocument();
-        //            var extraParam = doc.CreateElement("extraParams");
-        //            foreach (var extraParameterKeyValuePair in value)
-        //            {
-        //                var element = doc.CreateElement(extraParameterKeyValuePair.Key, null);
-        //                element.InnerText = extraParameterKeyValuePair.Value;
-        //                extraParam.AppendChild(element);
-        //            }
-
-        //            element.Child(extraParam);
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// A dictionary of alternate forms of the message subjects. The keys of the
@@ -275,6 +252,6 @@ namespace Sharp.Xmpp.Im {
 					return e;
 			}
 			return null;
-		}
+		}        
     }
 }

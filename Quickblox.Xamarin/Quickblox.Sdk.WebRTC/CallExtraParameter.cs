@@ -21,7 +21,7 @@ namespace Quickblox.Sdk.WebRTC
 
         public string Build()
         {
-            XDocument srcTree = new XDocument(
+            var srcTree = new XDocument(
                 new XElement("extraParams",
                     new XElement("moduleIdentifier", "WebRTCVideoChat"),
                     new XElement("signalType", SignalType.call),

@@ -93,20 +93,11 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Request\BaseRequestSettings.cs">
       <Link>GeneralDataModel\Request\BaseRequestSettings.cs</Link>
     </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Request\Filter.cs">
-      <Link>GeneralDataModel\Request\Filter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Request\FilterAggregator.cs">
-      <Link>GeneralDataModel\Request\FilterAggregator.cs</Link>
-    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Request\ListRequest.cs">
       <Link>GeneralDataModel\Request\ListRequest.cs</Link>
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Request\PagedRequestSettings.cs">
       <Link>GeneralDataModel\Request\PagedRequestSettings.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Request\SortOperator.cs">
-      <Link>GeneralDataModel\Request\SortOperator.cs</Link>
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Response\Error.cs">
       <Link>GeneralDataModel\Response\Error.cs</Link>

@@ -42,7 +42,7 @@ namespace Quickblox.Sdk.WebRTC
         /// <param name="caller">The caller.</param>
         /// <param name="receiver">The receiver.</param>
         /// <returns></returns>
-        public CallExtraParameter Call(string sessionId, string caller, string sdp, string platform, string receiver)
+        public CallExtraParameter Call(string sessionId, string sdp, string platform, string caller, string receiver)
         {
             //var jid = BuildJid(caller);
             var jid = BuildSmallJid(caller);

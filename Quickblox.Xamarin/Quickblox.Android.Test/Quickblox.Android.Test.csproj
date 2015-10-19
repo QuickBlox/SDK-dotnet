@@ -68,6 +68,10 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Quickblox.Sdk.WebRTC\Quickblox.Sdk.WebRTC.csproj">
+      <Project>{83b579b2-e522-4f37-a399-0f79f8f47855}</Project>
+      <Name>Quickblox.Sdk.WebRTC</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Quickblox.Sdk\Quickblox.Sdk.Xamarin.csproj">
       <Project>{F5C92500-D225-4473-B169-4C0749FE2A90}</Project>
       <Name>Quickblox.Sdk.Xamarin</Name>
