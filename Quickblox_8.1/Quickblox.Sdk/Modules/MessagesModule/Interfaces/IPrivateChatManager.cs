@@ -27,8 +27,5 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         void ApproveSubscribtionRequest();
         void RejectSubscribtionRequest();
         void Unsubscribe();
-
-        Task Block();
-        Task Unblock();
     }
 }

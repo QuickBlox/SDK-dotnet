@@ -16,10 +16,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private IQuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
-        private string banListName = "banList";
         private readonly int otherUserId;
         private readonly string otherUserJid;
-        private string dialogId;
+        private readonly string dialogId;
 
         #endregion
 
@@ -249,43 +248,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         }
 
         #endregion
-
-        /// <summary>
-        /// Prohibits other user from sending any messages to current user.
-        /// </summary>
-        /// <returns></returns>
-        public async Task Block()
-        {
-            throw new NotImplementedException("User ban is not implemented with Ubiety.");
-
-            //var list = await GetBanListAsync() ?? new List();
-
-            //list.AddItem(new Item(Action.deny, 0, Type.jid, otherUserJid));
-            //var privacyManager = new PrivacyManager(xmpp);
-            //privacyManager.AddList(banListName, list.GetItems());
-            //privacyManager.ChangeActiveList(banListName);
-            //privacyManager.ChangeDefaultList(banListName);
-        }
-
-        /// <summary>
-        /// Allow other user to send send messages to current user.
-        /// </summary>
-        /// <returns></returns>
-        public async Task Unblock()
-        {
-            throw new NotImplementedException("User ban is not implemented with Ubiety.");
-
-            //var list = await GetBanListAsync() ?? new List();
-
-            //if (list.GetItems().Any(i => i.Val == otherUserJid))
-            //{
-            //    var privacyManager = new PrivacyManager(xmpp);
-            //    privacyManager.AddList(banListName, list.GetItems().Where(i => i.Val != otherUserJid).ToArray());
-            //    privacyManager.ChangeActiveList(banListName);
-            //    privacyManager.ChangeDefaultList(banListName);
-            //}
-            
-        }
 
         #endregion
 
