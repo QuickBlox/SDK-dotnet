@@ -35,7 +35,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
         #region Dialogs
 
-        public async Task<HttpResponse<Dialog>> CreateDialogAsync(string dialogName, DialogType dialogType, string occupantsIds = null, string photoId = null)
+        public async Task<HttpResponse<Dialog>> CreateDialogAsync(string dialogName, DialogType dialogType, string occupantsIds, string photoId = null)
         {
             var createDialogRequest = new CreateDialogRequest {Type = (int) dialogType, Name = dialogName, OccupantsIds = occupantsIds, Photo = photoId};
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);

@@ -105,7 +105,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             isReady = false;
         }
 
-        public IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId = null)
+        public IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId)
         {
             return new PrivateChatManager(quickbloxClient, xmppClient, otherUserId, dialogId);
         }

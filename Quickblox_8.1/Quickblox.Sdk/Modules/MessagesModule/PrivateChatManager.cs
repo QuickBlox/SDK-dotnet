@@ -29,7 +29,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        internal PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId = null)
+        internal PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId)
         {
             this.otherUserId = otherUserId;
             this.otherUserJid = string.Format("{0}-{1}@{2}", otherUserId, quickbloxClient.MessagesClient.ApplicationId, quickbloxClient.MessagesClient.ChatEndpoint);
@@ -86,17 +86,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public async Task<bool> AddToFriends(string friendName)
         {
-            if (string.IsNullOrEmpty(dialogId))
-            {
-                var response =
-                    await
-                        quickbloxClient.ChatClient.CreateDialogAsync(friendName, DialogType.Private,
-                            otherUserId.ToString());
-                if (response.StatusCode != HttpStatusCode.Created) return false;
-
-                dialogId = response.Result.Id;
-            }
-
             quickbloxClient.MessagesClient.AddContact(new Contact() {Name = friendName, UserId = otherUserId});
             SubsribeForPresence();
 
