@@ -191,16 +191,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             Unsubscribe();
             SendPresenceInformation(presence.typeEnum.unsubscribed);
-
             
             return true;
         }
 
-        /// <summary>
-        /// Notify a user about a created group dialog.
-        /// </summary>
-        /// <param name="createdDialogId"></param>
-        /// <returns></returns>
         public bool NotifyAboutGroupCreation(string createdDialogId)
         {
             var msg = CreateNewMessage();
