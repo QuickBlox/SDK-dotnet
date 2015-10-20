@@ -4,16 +4,56 @@ using System.Collections.Generic;
 
 namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
 {
+    /// <summary>
+    /// Group chat manager interface.
+    /// </summary>
     public interface IGroupChatManager
     {
+        /// <summary>
+        /// Event when a new group message is received.
+        /// </summary>
         event EventHandler<Message> OnMessageReceived;
 
+        /// <summary>
+        /// Joins XMPP chat room.
+        /// This is obligatory for group chat message sending/receiving.
+        /// </summary>
+        /// <param name="nickName">User nickname in XMPP room.</param>
         void JoinGroup(string nickName);
+
+        /// <summary>
+        /// Sends a group chat message.
+        /// </summary>
+        /// <param name="message">Message text.</param>
+        /// <returns>Is operation successful</returns>
         bool SendMessage(string message);
 
+        /// <summary>
+        /// Sends notification group chat message that this group was created.
+        /// </summary>
+        /// <param name="occupantsIds">Created group occupants IDs</param>
+        /// <returns>Is operation successful</returns>
         bool NotifyAboutGroupCreation(IList<int> occupantsIds);
+
+        /// <summary>
+        /// Sends notification group chat message that new occupants were added to the group.
+        /// </summary>
+        /// <param name="addedOccupantsIds">Added occupants IDs</param>
+        /// <returns>Is operation successful</returns>
         bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds);
+
+        /// <summary>
+        /// Sends notification group chat message that group chat image has been changed.
+        /// </summary>
+        /// <param name="groupImageUrl">New group chat image URL</param>
+        /// <returns>Is operation successful</returns>
         bool NotifyGroupImageChanged(string groupImageUrl);
+
+        /// <summary>
+        /// Sends notification group chat message that group chat name has been changed.
+        /// </summary>
+        /// <param name="groupName">New group chat name</param>
+        /// <returns>Is operation successful</returns>
         bool NotifyGroupNameChanged(string groupName);
     }
 }
