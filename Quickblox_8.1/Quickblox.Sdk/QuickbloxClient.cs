@@ -22,7 +22,7 @@ using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 namespace Quickblox.Sdk
 {
     /// <summary>
-    /// QuickbloxClient class.
+    /// QuickbloxClient class. Primary class in this SDK.
     /// </summary>
     public class QuickbloxClient : IQuickbloxClient
     {
@@ -81,12 +81,12 @@ namespace Quickblox.Sdk
         public ContentClient ContentClient { get; private set; }
         
         /// <summary>
-        /// Authorization module allows to manage users' sessions.
+        /// Authorization module allows to manage user sessions.
         /// </summary>
         public AuthorizationClient CoreClient { get; private set; }
 
         /// <summary>
-        /// Chat module allows to manage users' dialogs.
+        /// Chat module allows to manage user dialogs.
         /// </summary>
         public ChatClient ChatClient { get; private set; }
 
@@ -101,7 +101,7 @@ namespace Quickblox.Sdk
         public NotificationClient NotificationClient { get; private set; }
 
         /// <summary>
-        /// Location module allows to work with users' locations.
+        /// Location module allows to work with user locations.
         /// </summary>
         public LocationClient LocationClient { get; private set; }
 

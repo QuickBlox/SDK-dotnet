@@ -18,7 +18,7 @@ using Quickblox.Sdk.Modules.UsersModule;
 namespace Quickblox.Sdk
 {
     /// <summary>
-    /// QuickbloxClient interface.
+    /// IQuickbloxClient interface.
     /// </summary>
     public interface IQuickbloxClient
     {
@@ -28,12 +28,12 @@ namespace Quickblox.Sdk
         ContentClient ContentClient { get; }
 
         /// <summary>
-        /// Authorization module allows to manage users' sessions.
+        /// Authorization module allows to manage user sessions.
         /// </summary>
         AuthorizationClient CoreClient { get; }
 
         /// <summary>
-        /// Chat module allows to manage users' dialogs.
+        /// Chat module allows to manage user dialogs.
         /// </summary>
         ChatClient ChatClient { get; }
 
@@ -48,7 +48,7 @@ namespace Quickblox.Sdk
         NotificationClient NotificationClient { get; }
 
         /// <summary>
-        /// Location module allows to work with users' locations.
+        /// Location module allows to work with user locations.
         /// </summary>
         LocationClient LocationClient { get; }
 
