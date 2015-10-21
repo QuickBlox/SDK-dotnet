@@ -13,24 +13,27 @@ using Quickblox.Sdk.Serializer;
 
 namespace Quickblox.Sdk.Modules.ContentModule
 {
+    /// <summary>
+    /// Content module allows to manage app contents and settings.
+    /// </summary>
     public class ContentClient
     {
         /// <summary>
-        /// The quickblox client
+        /// QuickbloxClient instance. 
         /// </summary>
         private readonly IQuickbloxClient quickbloxClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentClient"/> class.
         /// </summary>
-        /// <param name="client">The client.</param>
+        /// <param name="client">QuickbloxClient</param>
         internal ContentClient(IQuickbloxClient client)
         {
             this.quickbloxClient = client;
         }
 
         /// <summary>
-        /// Create an entity which is a file in a system.
+        /// Creates an entity which is a file in a system.
         /// </summary>
         /// <param name="createFileRequest">The file parameter.</param>
         /// <returns>Success HTTP Status Code 201</returns>
@@ -187,7 +190,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="fileId">The file identifier.</param>
         /// <param name="updateFileByIdRequest">The update file request parameter.</param>
-        /// <returns></returns>
+        /// <returns>FileInfoResponse</returns>
         public async Task<HttpResponse<FileInfoResponse>> EditFileByIdAsync(Int32 fileId, UpdateFileByIdRequest updateFileByIdRequest)
         {
             
@@ -204,7 +207,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// Delete file by ID. If there are some referents to the file the number of links will be reduced by 1 after deleting. A file will be deleted in fact when the number of links will be equal to 0.
         /// </summary>
         /// <param name="fileId">The file identifier.</param>
-        /// <returns></returns>
+        /// <returns>HttpResponse</returns>
         public async Task<HttpResponse> DeleteFileAsync(Int32 fileId)
         {
             
