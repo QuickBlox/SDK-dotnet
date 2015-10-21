@@ -1,4 +1,5 @@
-﻿using Quickblox.Sdk.Builder;
+﻿using Quickblox.Sdk.GeneralDataModel.Response;
+using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.Cryptographic;
 using Quickblox.Sdk.Http;
@@ -75,37 +76,37 @@ namespace Quickblox.Sdk
 #region Properties
 
         /// <summary>
-        /// The content module allows to manage app contents and settings.
+        /// Content module allows to manage app contents and settings.
         /// </summary>
         public ContentClient ContentClient { get; private set; }
         
         /// <summary>
-        /// The authorization module allows to manage users' sessions.
+        /// Authorization module allows to manage users' sessions.
         /// </summary>
         public AuthorizationClient CoreClient { get; private set; }
 
         /// <summary>
-        /// The chat module allows to manage users' dialogs.
+        /// Chat module allows to manage users' dialogs.
         /// </summary>
         public ChatClient ChatClient { get; private set; }
 
         /// <summary>
-        /// The user module manages all things related to user accounts handling, authentication, account data, password reminding etc.
+        /// User module manages all things related to user accounts handling, authentication, account data, password reminding etc.
         /// </summary>
         public UsersClient UsersClient { get; private set; }
 
         /// <summary>
-        /// The notification module allows to manage push and email notifications to users.
+        /// Notification module allows to manage push and email notifications to users.
         /// </summary>
         public NotificationClient NotificationClient { get; private set; }
 
         /// <summary>
-        /// The location module allows to work with users' locations.
+        /// Location module allows to work with users' locations.
         /// </summary>
         public LocationClient LocationClient { get; private set; }
 
         /// <summary>
-        /// The messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
+        /// Messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
         /// </summary>
 #if !Xamarin
         public IMessagesClient MessagesClient { get; private set; }
@@ -119,20 +120,12 @@ namespace Quickblox.Sdk
         public CustomObjectsClient CustomObjectsClient { get; private set; }
 
         /// <summary>
-        /// UTC DateTime of the last request to the server.
-        /// </summary>
-        public DateTime LastRequest
-        {
-            get { return HttpBase.LastRequest; }
-        }
-
-        /// <summary>
         /// API endpoint
         /// </summary>
         public string ApiEndPoint { get; private set; }
 
         /// <summary>
-        /// Chat endpoint
+        /// XMPP Chat endpoint
         /// </summary>
         public string ChatEndpoint { get; private set; }
 
@@ -140,23 +133,32 @@ namespace Quickblox.Sdk
         /// Quickblox token. Must be set before calling any methods that require authentication.
         /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// UTC DateTime of the last request to the server.
+        /// </summary>
+        public DateTime LastRequest
+        {
+            get { return HttpBase.LastRequest; }
+        }
         
         #endregion
 
         #region Public Members
 
-        public async Task GetAccountSettingsAsync(string accountKey)
+        /// <summary>
+        /// Returns account settings (account ID, endpoints, etc.)
+        /// </summary>
+        /// <param name="accountKey">Account key from admin panel</param>
+        /// <returns>AccountResponse</returns>
+        public async Task<HttpResponse<AccountResponse>> GetAccountSettingsAsync(string accountKey)
         {
             if (accountKey == null) throw new ArgumentNullException("accountKey");
 
             var accountResponse = await HttpService.GetAsync<AccountResponse>(ApiEndPoint, QuickbloxMethods.AccountMethod,
                       RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbAccountKey(accountKey));
 
-            if (accountResponse.Result != null)
-            {
-                this.ApiEndPoint = accountResponse.Result.ApiEndPoint;
-                this.ChatEndpoint = accountResponse.Result.ChatEndPoint;
-            }
+            return accountResponse;
         }
 
         //public void Resume(string token)

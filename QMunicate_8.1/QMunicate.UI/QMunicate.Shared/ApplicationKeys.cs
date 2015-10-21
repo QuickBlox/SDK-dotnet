@@ -4,10 +4,8 @@
     {
         #region Account
 
-        public const string AccountKey = "6Qyiz3pZfNsex1Enqnp7";
         public const string ApiBaseEndPoint = "https://api.quickblox.com";
         public const string ChatEndpoint = "chat.quickblox.com";
-
 
         #endregion
 
