@@ -19,11 +19,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
     #if Xamarin
     #endif
 
+    /// <summary>
+    /// Messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
+    /// </summary>
     public class MessagesClient : IMessagesClient, IRosterManager
     {
         #region Fields
 
-        private IQuickbloxClient quickbloxClient;
+        private readonly IQuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
         private bool isReady;
@@ -33,9 +36,24 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Events
 
+        /// <summary>
+        /// Event occuring when a new message is received.
+        /// </summary>
         public event EventHandler<Message> OnMessageReceived;
+
+        /// <summary>
+        /// Event occuring  when a presence is received.
+        /// </summary>
         public event EventHandler<Presence> OnPresenceReceived;
+
+        /// <summary>
+        /// Event occuring  when your contacts in roster have changed.
+        /// </summary>
         public event EventHandler OnContactsChanged;
+
+        /// <summary>
+        /// Event occuring when xmpp connection is lost.
+        /// </summary>
         public event EventHandler OnDisconnected;
 
         #endregion
@@ -53,14 +71,29 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Properties
 
+        /// <summary>
+        /// Contacts list in roster.
+        /// </summary>
         public List<Contact> Contacts { get; private set; }
 
+        /// <summary>
+        /// Presences list.
+        /// </summary>
         public List<Presence> Presences { get; private set; }
 
+        /// <summary>
+        /// Is XMPP connection open
+        /// </summary>
         public bool IsConnected { get { return xmppClient != null && xmppClient.Connected && isReady; } }
 
+        /// <summary>
+        /// XMPP chat endpoint.
+        /// </summary>
         public string ChatEndpoint { get; private set; }
 
+        /// <summary>
+        /// Quickblox Application ID.
+        /// </summary>
         public int ApplicationId { get; private set; }
 
 
@@ -72,6 +105,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Public methods
 
+        /// <summary>
+        /// Connects to XMPP server.
+        /// </summary>
+        /// <param name="chatEndpoint">XMPP chatendpoint</param>
+        /// <param name="userId">User ID</param>
+        /// <param name="applicationId">Quickblox application ID</param>
+        /// <param name="password">User password</param>
+        /// <returns>Async operation result</returns>
         public async Task Connect(string chatEndpoint, int userId, int applicationId, string password)
         {
             var timeout = new TimeSpan(0, 0, 60);
@@ -96,6 +137,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             await tcs.Task;
         }
 
+        /// <summary>
+        /// Disconnects from XMPP server.
+        /// </summary>
         public void Disconnect()
         {
             isUserDisconnected = true;
@@ -105,16 +149,31 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             isReady = false;
         }
 
+        /// <summary>
+        /// Creates a private one-to-one chat manager.
+        /// </summary>
+        /// <param name="otherUserId">Another user ID</param>
+        /// <param name="dialogId">Dialog ID with another user</param>
+        /// <returns>PrivateChatManager instance.</returns>
         public IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId)
         {
             return new PrivateChatManager(quickbloxClient, xmppClient, otherUserId, dialogId);
         }
 
+        /// <summary>
+        /// Creates a group chat manager.
+        /// </summary>
+        /// <param name="groupJid">Group XMPP room JID.</param>
+        /// <param name="dialogId">Group dialog ID.</param>
+        /// <returns>GroupChatManager</returns>
         public IGroupChatManager GetGroupChatManager(string groupJid, string dialogId)
         {
             return new GroupChatManager(quickbloxClient, xmppClient, groupJid, dialogId);
         }
 
+        /// <summary>
+        /// Requests roster contact list from server.
+        /// </summary>
         public void ReloadContacts()
         {
             iq iq = new iq {type = iq.typeEnum.get};
@@ -122,6 +181,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             xmppClient.Send(iq);
         }
 
+        /// <summary>
+        /// Adds a new contact to roster.
+        /// </summary>
+        /// <param name="contact"></param>
         public void AddContact(Contact contact)
         {
             string jid = BuildJid(contact.UserId);
@@ -135,6 +198,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             xmppClient.Send(iq);
         }
 
+        /// <summary>
+        /// Deletes a contact from roster.
+        /// </summary>
+        /// <param name="userId"></param>
         public void DeleteContact(int userId)
         {
             string jid = BuildJid(userId);

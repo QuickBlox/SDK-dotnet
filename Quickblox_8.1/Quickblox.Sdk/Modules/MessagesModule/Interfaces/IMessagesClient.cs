@@ -13,19 +13,24 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
     public interface IMessagesClient
     {
         /// <summary>
-        /// Event when a new message is received.
+        /// Event occuring when a new message is received.
         /// </summary>
         event EventHandler<Message> OnMessageReceived;
 
         /// <summary>
-        /// Event when a presence is received.
+        /// Event occuring  when a presence is received.
         /// </summary>
         event EventHandler<Presence> OnPresenceReceived;
         
         /// <summary>
-        /// Event when your contacts in roster have changed.
+        /// Event occuring  when your contacts in roster have changed.
         /// </summary>
         event EventHandler OnContactsChanged;
+
+        /// <summary>
+        /// Event occuring when xmpp connection is lost.
+        /// </summary>
+        event EventHandler OnDisconnected;
 
         /// <summary>
         /// Quickblox Application ID.
@@ -48,7 +53,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         List<Presence> Presences { get; }
 
         /// <summary>
-        /// Bool representing if
+        /// Is XMPP connection open
         /// </summary>
         bool IsConnected { get; }
 
@@ -63,7 +68,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         /// <param name="userId">User ID</param>
         /// <param name="applicationId">Quickblox application ID</param>
         /// <param name="password">User password</param>
-        /// <returns></returns>
+        /// <returns>Async operation result</returns>
         Task Connect(string chatEndpoint, int userId, int applicationId, string password);
 
         /// <summary>
@@ -84,7 +89,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         /// </summary>
         /// <param name="groupJid">Group XMPP room JID.</param>
         /// <param name="dialogId">Group dialog ID.</param>
-        /// <returns></returns>
+        /// <returns>GroupChatManager</returns>
         IGroupChatManager GetGroupChatManager(string groupJid, string dialogId);
 
         /// <summary>
