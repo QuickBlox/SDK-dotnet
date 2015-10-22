@@ -11,7 +11,7 @@ using Quickblox.Sdk.Modules.NotificationModule.Responses;
 namespace Quickblox.Sdk.Modules.NotificationModule
 {
     /// <summary>
-    /// Client present API for push
+    /// Push and email notifications client 
     /// http://quickblox.com/developers/Messages
     /// </summary>
     public class NotificationClient

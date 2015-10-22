@@ -15,6 +15,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
 {
     /// <summary>
     /// Content module allows to manage app contents and settings.
+    /// http://quickblox.com/developers/Content
     /// </summary>
     public class ContentClient
     {
