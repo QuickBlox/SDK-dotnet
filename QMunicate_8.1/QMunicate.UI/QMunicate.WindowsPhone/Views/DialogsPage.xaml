@@ -71,7 +71,7 @@
             </AppBarButton>
             <CommandBar.SecondaryCommands>
                 <AppBarButton Label="settings" Command="{Binding SettingsCommand}"/>
-                <AppBarButton Label="invite friends" Command="{Binding InviteFriendsCommand}"/>
+                <!--<AppBarButton Label="invite friends" Command="{Binding InviteFriendsCommand}"/>-->
             </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
