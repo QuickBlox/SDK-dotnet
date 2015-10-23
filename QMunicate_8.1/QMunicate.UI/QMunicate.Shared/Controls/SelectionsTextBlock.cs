@@ -101,9 +101,10 @@ namespace QMunicate.Controls
                 thisControl.textBlock.Inlines.Add(beforeblock);
             }
 
+            var selectedPart = thisControl.Text.Substring(selectionIndex, thisControl.SelectionText.Length);
             var selectionBlock = new Run
             {
-                Text = thisControl.SelectionText,
+                Text = selectedPart,
                 Foreground = new SolidColorBrush(thisControl.SelectionColor)
             };
             thisControl.textBlock.Inlines.Add(selectionBlock);
