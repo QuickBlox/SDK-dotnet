@@ -56,7 +56,7 @@
         <Pivot x:Name="Pivot" Grid.Row="1" SelectionChanged="Pivot_OnSelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{StaticResource LargeFontSize}"/>
+                    <TextBlock Text="{Binding}" FontSize="{StaticResource ExtraLargeFontSize}"/>
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem Header="{StaticResource LocalLabel}">
