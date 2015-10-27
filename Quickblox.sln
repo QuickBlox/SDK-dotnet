@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QMunicate_8.1", "QMunicate_8.1", "{93024201-E145-42C3-9F07-E05DBC9500A1}"
 EndProject
@@ -49,6 +49,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quickblox.Sdk.WebRTC", "Quickblox.Xamarin\Quickblox.Sdk.WebRTC\Quickblox.Sdk.WebRTC.csproj", "{83B579B2-E522-4F37-A399-0F79F8F47855}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinCodeTest", "Quickblox.Xamarin\XamarinCodeTest\XamarinCodeTest.csproj", "{85B30F60-49AF-4F47-9019-CFE25B267A88}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QMunicateUniversal", "QMunicateUniversal", "{D2A2ED93-28A6-48F9-B3E6-47F6CC835D3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate", "QMunicate\QMunicate.csproj", "{6CF22D49-44A2-433F-B41B-66F5534CC1D1}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -513,6 +517,47 @@ Global
 		{85B30F60-49AF-4F47-9019-CFE25B267A88}.TestRelease|x64.Build.0 = Release|Any CPU
 		{85B30F60-49AF-4F47-9019-CFE25B267A88}.TestRelease|x86.ActiveCfg = Release|Any CPU
 		{85B30F60-49AF-4F47-9019-CFE25B267A88}.TestRelease|x86.Build.0 = Release|Any CPU
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|ARM.ActiveCfg = Debug|ARM
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|ARM.Build.0 = Debug|ARM
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|ARM.Deploy.0 = Debug|ARM
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|Mixed Platforms.Deploy.0 = Debug|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|x64.ActiveCfg = Debug|x64
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|x64.Build.0 = Debug|x64
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|x64.Deploy.0 = Debug|x64
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|x86.ActiveCfg = Debug|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|x86.Build.0 = Debug|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Debug|x86.Deploy.0 = Debug|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|Any CPU.ActiveCfg = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|ARM.ActiveCfg = Release|ARM
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|ARM.Build.0 = Release|ARM
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|ARM.Deploy.0 = Release|ARM
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|Mixed Platforms.Build.0 = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|Mixed Platforms.Deploy.0 = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|x64.ActiveCfg = Release|x64
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|x64.Build.0 = Release|x64
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|x64.Deploy.0 = Release|x64
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|x86.ActiveCfg = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|x86.Build.0 = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.Release|x86.Deploy.0 = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|Any CPU.ActiveCfg = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|Any CPU.Build.0 = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|Any CPU.Deploy.0 = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|ARM.ActiveCfg = Release|ARM
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|ARM.Build.0 = Release|ARM
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|ARM.Deploy.0 = Release|ARM
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|Mixed Platforms.ActiveCfg = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|Mixed Platforms.Build.0 = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|Mixed Platforms.Deploy.0 = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|x64.ActiveCfg = Release|x64
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|x64.Build.0 = Release|x64
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|x64.Deploy.0 = Release|x64
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|x86.ActiveCfg = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|x86.Build.0 = Release|x86
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1}.TestRelease|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -536,5 +581,6 @@ Global
 		{3CE40842-E229-4ADE-BB9A-A539453ADDAD} = {F245F1B4-27BF-42C9-8323-82817732E496}
 		{83B579B2-E522-4F37-A399-0F79F8F47855} = {136B0548-2308-4DB4-B557-931032A61C4C}
 		{85B30F60-49AF-4F47-9019-CFE25B267A88} = {136B0548-2308-4DB4-B557-931032A61C4C}
+		{6CF22D49-44A2-433F-B41B-66F5534CC1D1} = {D2A2ED93-28A6-48F9-B3E6-47F6CC835D3E}
 	EndGlobalSection
 EndGlobal
