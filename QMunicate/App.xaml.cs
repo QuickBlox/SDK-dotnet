@@ -15,6 +15,13 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.Logger;
+using QMunicate.Core.MessageService;
+using QMunicate.Core.Navigation;
+using QMunicate.Logger;
+using QMunicate.Services;
+using Quickblox.Sdk;
 
 namespace QMunicate
 {
@@ -29,11 +36,34 @@ namespace QMunicate
         /// </summary>
         public App()
         {
-            Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
-                Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
-                Microsoft.ApplicationInsights.WindowsCollectors.Session);
+            var fileLogger = new FileLogger();
+            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, fileLogger);
+            QmunicateLoggerHolder.LoggerInstance = fileLogger;
+            var fileStorage = new FileStorage();
+
+            ServiceLocator.Locator.Bind<INavigationService, NavigationService>(LifetimeMode.Singleton);
+            ServiceLocator.Locator.Bind<IQuickbloxClient, QuickbloxClient>(quickbloxClient);
+            ServiceLocator.Locator.Bind<IMessageService, MessageService>(LifetimeMode.Singleton);
+            ServiceLocator.Locator.Bind<IDialogsManager, IDialogsManager>(new DialogsManager(quickbloxClient));
+            ServiceLocator.Locator.Bind<IPushNotificationsManager, IPushNotificationsManager>(new PushNotificationsManager(quickbloxClient));
+            ServiceLocator.Locator.Bind<IFileStorage, IFileStorage>(fileStorage);
+            ServiceLocator.Locator.Bind<IImageService, IImageService>(new ImagesService(quickbloxClient, fileStorage));
+            ServiceLocator.Locator.Bind<ICachingQuickbloxClient, ICachingQuickbloxClient>(new CachingQuickbloxClient(quickbloxClient));
+
+            UnhandledException += OnUnhandledException;
+
+            //Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
+            //    Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
+            //    Microsoft.ApplicationInsights.WindowsCollectors.Session);
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+        }
+
+        private async void OnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+            unhandledExceptionEventArgs.Handled = true;
+
+            await QmunicateLoggerHolder.Log(QmunicateLogLevel.Error, unhandledExceptionEventArgs.Exception.ToString());
         }
 
         /// <summary>
@@ -76,10 +106,23 @@ namespace QMunicate
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof(WelcomePage), e.Arguments);
+                var navigationService = ServiceLocator.Locator.Get<INavigationService>();
+                navigationService.Initialize(rootFrame, this.GetPageResolver());
+                rootFrame.Navigate(typeof(WelcomePage), e.Arguments);                
             }
             // Ensure the current window is active
             Window.Current.Activate();
+        }
+
+        private PageResolver GetPageResolver()
+        {
+            var dictionary = new Dictionary<string, Type>();
+            dictionary.Add(ViewLocator.SignUp, typeof(SignUpPage));
+            dictionary.Add(ViewLocator.Login, typeof(LoginPage));
+            dictionary.Add(ViewLocator.ForgotPassword, typeof(ForgotPasswordPage));
+            dictionary.Add(ViewLocator.Welcome, typeof(WelcomePage));
+
+            return new PageResolver(dictionary);
         }
 
         /// <summary>

@@ -5,9 +5,17 @@
     xmlns:local="using:QMunicate.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    DataContext="{Binding WelcomeViewModel, Source={StaticResource ViewModelLocator}}">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Text="Welcome!" Margin="20"/>
-    </Grid>
+    <StackPanel>
+        <Image Source="../Assets/app_logo.png" Height="200" HorizontalAlignment="Center"/>
+        <Image Source="../Assets/title.png" Height="100" HorizontalAlignment="Center"/>
+        <Button Content="connect with Facebook" Command="{Binding FacebookSignUpCommand}" Margin="{StaticResource DefaultMargin}"
+                Foreground="White" BorderBrush="RoyalBlue" Background="RoyalBlue" Width="250"  HorizontalAlignment="Center"/>
+        <Button Content="sign up with email" Command="{Binding EmailSignUpCommand}" Margin="{StaticResource DefaultMargin}"
+                Width="250"  HorizontalAlignment="Center"/>
+        <HyperlinkButton Content="Already have an account?" Command="{Binding LoginCommand}" Foreground="Gray" FontWeight="SemiBold"
+                             FontSize="{StaticResource NormalFontSize}" Margin="0 55 0 0" HorizontalAlignment="Center" />
+    </StackPanel>
 </Page>

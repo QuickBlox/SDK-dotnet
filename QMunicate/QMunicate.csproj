@@ -99,8 +99,53 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationKeys.cs" />
+    <Compile Include="Controls\RadTextBox.cs" />
+    <Compile Include="Controls\SelectionsTextBlock.cs" />
+    <Compile Include="Controls\TypingIndicator.cs" />
+    <Compile Include="Controls\ValidationState.cs" />
+    <Compile Include="Converters\BooleanToNegationConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\HandyDateConverter.cs" />
+    <Compile Include="Converters\IntToVisibilityConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\StringFormatConverter.cs" />
+    <Compile Include="Helper\Helpers.cs" />
+    <Compile Include="Helper\ImageHelper.cs" />
+    <Compile Include="Logger\FileLogger.cs" />
+    <Compile Include="Models\ChatNavigationParameter.cs" />
+    <Compile Include="Models\DialogsNavigationParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Selectors\MessageTemplateSelector.cs" />
+    <Compile Include="Services\CachingQuickbloxClient.cs" />
+    <Compile Include="Services\DialogsManager.cs" />
+    <Compile Include="Services\FileStorage.cs" />
+    <Compile Include="Services\ImagesService.cs" />
+    <Compile Include="Services\PushNotificationsManager.cs" />
+    <Compile Include="SettingsKeys.cs" />
+    <Compile Include="SettingsManager.cs" />
+    <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\PartialViewModels\DayOfMessages.cs" />
+    <Compile Include="ViewModels\PartialViewModels\DialogViewModel.cs" />
+    <Compile Include="ViewModels\PartialViewModels\MessageCollectionViewModel.cs" />
+    <Compile Include="ViewModels\PartialViewModels\MessageViewModel.cs" />
+    <Compile Include="ViewModels\PartialViewModels\SelectableListBoxItem.cs" />
+    <Compile Include="ViewModels\PartialViewModels\UserViewModel.cs" />
+    <Compile Include="ViewModels\SignUpViewModel.cs" />
+    <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WelcomeViewModel.cs" />
+    <Compile Include="ViewLocator.cs" />
+    <Compile Include="Views\ForgotPasswordPage.xaml.cs">
+      <DependentUpon>ForgotPasswordPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignUpPage.xaml.cs">
+      <DependentUpon>SignUpPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
@@ -112,6 +157,9 @@
     <None Include="QMunicate_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\app_logo.png" />
+    <Content Include="Assets\AvatarPlaceholder.png" />
+    <Content Include="Assets\title.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -126,10 +174,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\ForgotPasswordPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SignUpPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\WelcomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QMunicate_8.1\QMunicate.Core\QMunicate.Core.csproj">
+      <Project>{b2b5054e-5424-4424-87b7-e6177069f242}</Project>
+      <Name>QMunicate.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Quickblox_8.1\Quickblox.Sdk\Quickblox.Sdk.csproj">
+      <Project>{08fdea8c-a156-4f7e-8b8a-31228d88b3bc}</Project>
+      <Name>Quickblox.Sdk</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
