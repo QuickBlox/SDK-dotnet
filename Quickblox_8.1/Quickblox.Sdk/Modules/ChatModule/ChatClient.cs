@@ -14,6 +14,10 @@ using Quickblox.Sdk.Modules.Models;
 
 namespace Quickblox.Sdk.Modules.ChatModule
 {
+    /// <summary>
+    /// Chat module allows to manage user dialogs.
+    /// http://quickblox.com/developers/Chat
+    /// </summary>
     public class ChatClient
     {
         #region Fields
@@ -35,7 +39,15 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
         #region Dialogs
 
-        public async Task<HttpResponse<Dialog>> CreateDialogAsync(string dialogName, DialogType dialogType, string occupantsIds = null, string photoId = null)
+        /// <summary>
+        /// Creates a new dialog.
+        /// </summary>
+        /// <param name="dialogName">Dialog name. Is ignored for Private dialogs.</param>
+        /// <param name="dialogType">Dialog type</param>
+        /// <param name="occupantsIds">Occupants IDs (in a string separated by comma)</param>
+        /// <param name="photoId">Photo upload ID.</param>
+        /// <returns></returns>
+        public async Task<HttpResponse<Dialog>> CreateDialogAsync(string dialogName, DialogType dialogType, string occupantsIds, string photoId = null)
         {
             var createDialogRequest = new CreateDialogRequest {Type = (int) dialogType, Name = dialogName, OccupantsIds = occupantsIds, Photo = photoId};
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -43,6 +55,11 @@ namespace Quickblox.Sdk.Modules.ChatModule
                 QuickbloxMethods.CreateDialogMethod, createDialogRequest, headers);
         }
 
+        /// <summary>
+        /// Returns all dialogs associated with current user
+        /// </summary>
+        /// <param name="retrieveDialogsRequest">Retrieve dialogs request info</param>
+        /// <returns></returns>
         public async Task<HttpResponse<RetrieveDialogsResponse>> GetDialogsAsync(RetrieveDialogsRequest retrieveDialogsRequest = null)
         {
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
@@ -50,6 +67,12 @@ namespace Quickblox.Sdk.Modules.ChatModule
                 QuickbloxMethods.GetDialogsMethod, retrieveDialogsRequest, headers);
         }
 
+        /// <summary>
+        /// Updates a dialog. Works only if type=1(PUBLIC_GROUP) or 2(GROUP). 
+        /// Users who are in occupants_ids can update a dialog with type=2(GROUP). If type=1(PUBLIC_GROUP) - only dialog’s owner can update it. 
+        /// </summary>
+        /// <param name="updateDialogRequest">Update dialog request info</param>
+        /// <returns></returns>
         public async Task<HttpResponse<Dialog>> UpdateDialogAsync(UpdateDialogRequest updateDialogRequest)
         {
             if (updateDialogRequest == null)
@@ -60,6 +83,13 @@ namespace Quickblox.Sdk.Modules.ChatModule
             return await HttpService.PutAsync<Dialog, UpdateDialogRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, updateDialogRequest, headers);
         }
 
+        /// <summary>
+        /// Deletes chat dialog. Each user from dialog’s occupant_ids field can remove the dialog.
+        /// This doesn’t mean that this dialog will be removed completely for all the users in this dialog. It will be removed only for current user. 
+        /// To completely remove a dialog - pass force=1. Only owner can do it.
+        /// </summary>
+        /// <param name="dialogId">Diglod ID to be removed</param>
+        /// <returns></returns>
         public async Task<HttpResponse<Object>> DeleteDialogAsync(string dialogId)
         {
             if (dialogId == null)
@@ -75,6 +105,11 @@ namespace Quickblox.Sdk.Modules.ChatModule
 
         #region Messages
 
+        /// <summary>
+        /// Creates a chat message. It’s possible to inject a new chat message to the chat history. In this case this new message won't be delivered to the recipient(s) by XMPP real time transport, it will be just added to the history. If you wont to initiates a real 'send to chat' - pass send_to_chat=1 parameter.
+        /// </summary>
+        /// <param name="createMessageRequest">Create message request info</param>
+        /// <returns></returns>
         public async Task<HttpResponse<CreateMessageResponse>> CreateMessageAsync(CreateMessageRequest createMessageRequest)
         {
             if (createMessageRequest == null)
@@ -85,6 +120,12 @@ namespace Quickblox.Sdk.Modules.ChatModule
                 QuickbloxMethods.CreateMessageMethod, createMessageRequest, headers);
         }
 
+        /// <summary>
+        /// Retrieves all chat messages within particular dialog. It's only possible to read chat messages in dialog if current user id is in occupants_ids field or if dialog's type=1(PUBLIC_GROUP). Server will return dialog's chat messages sorted ascending by date_sent field. 
+        /// All retrieved chat messages will be marked as read after request. 
+        /// </summary>
+        /// <param name="dialogId">Dialog ID</param>
+        /// <returns></returns>
         public async Task<HttpResponse<RetrieveMessagesResponse>> GetMessagesAsync(string dialogId)
         {
             if (dialogId == null)
@@ -98,6 +139,12 @@ namespace Quickblox.Sdk.Modules.ChatModule
             return await GetMessagesAsync(retrieveMessagesRequest);
         }
 
+        /// <summary>
+        /// Retrieves all chat messages within particular dialog. It's only possible to read chat messages in dialog if current user id is in occupants_ids field or if dialog's type=1(PUBLIC_GROUP). Server will return dialog's chat messages sorted ascending by date_sent field. 
+        /// All retrieved chat messages will be marked as read after request. 
+        /// </summary>
+        /// <param name="retrieveMessagesRequest">Get messages info</param>
+        /// <returns></returns>
         public async Task<HttpResponse<RetrieveMessagesResponse>> GetMessagesAsync(RetrieveMessagesRequest retrieveMessagesRequest)
         {
             if (retrieveMessagesRequest == null)
@@ -108,6 +155,12 @@ namespace Quickblox.Sdk.Modules.ChatModule
                 QuickbloxMethods.GetMessagesMethod, retrieveMessagesRequest, headers);
         }
 
+        /// <summary>
+        /// Updates a chat message.
+        /// It's possible to mark all messages as read/delivered - just don't pass a message id.
+        /// </summary>
+        /// <param name="updateMessageRequest"></param>
+        /// <returns></returns>
         public async Task<HttpResponse<RetrieveMessagesResponse>> UpdateMessageAsync(UpdateMessageRequest updateMessageRequest)
         {
             if (updateMessageRequest == null)
@@ -118,6 +171,11 @@ namespace Quickblox.Sdk.Modules.ChatModule
             return await HttpService.PutAsync<RetrieveMessagesResponse, UpdateMessageRequest>(this.quickbloxClient.ApiEndPoint, uriMethod, updateMessageRequest, headers);
         }
 
+        /// <summary>
+        /// Any user in the dialog’s occupant_ids is able to remove a message from the dialog. The message will only be removed for the current user - the message will still be viewable and in the chat history for all other users in the dialog.
+        /// </summary>
+        /// <param name="occupantIds"></param>
+        /// <returns></returns>
         public async Task<HttpResponse<Object>> DeleteMessageAsync(String[] occupantIds)
         {
             if (occupantIds == null)

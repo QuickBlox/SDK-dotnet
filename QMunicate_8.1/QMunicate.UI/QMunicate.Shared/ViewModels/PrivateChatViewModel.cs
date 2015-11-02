@@ -254,32 +254,39 @@ namespace QMunicate.ViewModels
 
         private void CheckIsMessageSendingAllowed()
         {
+            bool isChecked = false;
             for (int i = MessageCollectionViewModel.Messages.Count - 1; i >= 0; i--)
             {
+                if (isChecked) break;
+
                 var currentMessageGroup = MessageCollectionViewModel.Messages[i];
                 for (int j = currentMessageGroup.Count - 1; j >= 0; j--)
                 {
                     var currentMessage = currentMessageGroup[j];
                     if (currentMessage.NotificationType == NotificationTypes.FriendsAccept)
                     {
+                        isChecked = true;
                         break;
                     }
 
                     if (currentMessage.NotificationType == NotificationTypes.FriendsReject || currentMessage.NotificationType == NotificationTypes.FriendsRemove)
                     {
                         IsRequestRejected = true;
+                        isChecked = true;
                         break;
                     }
 
                     if (currentMessage.MessageType == MessageType.Outgoing && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
                     {
                         IsWaitingForContactResponse = true;
+                        isChecked = true;
                         break;
                     }
 
                     if (currentMessage.MessageType == MessageType.Incoming && currentMessage.NotificationType == NotificationTypes.FriendsRequest)
                     {
                         IsActiveContactRequest = true;
+                        isChecked = true;
                         break;
                     }
                 }
@@ -319,7 +326,7 @@ namespace QMunicate.ViewModels
         {
             if (privateChatManager == null) return;
             IsLoading = true;
-            bool accepted = await privateChatManager.AcceptFriend();
+            bool accepted = privateChatManager.AcceptFriend();
 
             if (accepted)
             {
@@ -337,7 +344,7 @@ namespace QMunicate.ViewModels
             if (privateChatManager == null) return;
 
             IsLoading = true;
-            bool rejected = await privateChatManager.RejectFriend();
+            bool rejected = privateChatManager.RejectFriend();
 
             if (rejected)
             {

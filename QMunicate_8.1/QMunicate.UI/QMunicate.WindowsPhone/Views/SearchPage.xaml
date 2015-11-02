@@ -22,7 +22,7 @@
         <DataTemplate x:Key="LocalUserTemplate">
             <StackPanel Orientation="Horizontal" tapListener:TapListener.TapCommand="{Binding DataContext.OpenLocalCommand, ElementName=Page}"
                               tapListener:TapListener.TapCommandParameter="{Binding }">
-                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
+                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55" Margin="0 0 12 0"/>
                 <controls:SelectionsTextBlock Text="{Binding FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"
                                               FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
             </StackPanel>
@@ -30,7 +30,7 @@
         <DataTemplate x:Key="GlobalUserTemplate">
             <StackPanel Orientation="Horizontal" tapListener:TapListener.TapCommand="{Binding DataContext.OpenGlobalCommand, ElementName=Page}"
                               tapListener:TapListener.TapCommandParameter="{Binding }">
-                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
+                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55" Margin="0 0 12 0"/>
                 <controls:SelectionsTextBlock Text="{Binding FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"
                                               FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
             </StackPanel>
@@ -56,7 +56,7 @@
         <Pivot x:Name="Pivot" Grid.Row="1" SelectionChanged="Pivot_OnSelectionChanged">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="{StaticResource LargeFontSize}"/>
+                    <TextBlock Text="{Binding}" FontSize="{StaticResource ExtraLargeFontSize}"/>
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem Header="{StaticResource LocalLabel}">

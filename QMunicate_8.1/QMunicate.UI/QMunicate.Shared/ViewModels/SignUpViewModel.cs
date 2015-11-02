@@ -145,7 +145,17 @@ namespace QMunicate.ViewModels
 
             await CreateSession();
 
-            var response = await QuickbloxClient.UsersClient.SignUpUserAsync(null, Password, email: Email, fullName: FullName);
+            var userSignUpRequest = new UserSignUpRequest
+            {
+                User = new UserRequest()
+                {
+                    Email = email,
+                    FullName = fullName,
+                    Password = password
+                }
+            };
+
+            var response = await QuickbloxClient.UsersClient.SignUpUserAsync(userSignUpRequest);
 
             if (response.StatusCode == HttpStatusCode.Created)
             {

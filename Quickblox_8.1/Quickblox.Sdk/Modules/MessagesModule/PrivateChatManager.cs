@@ -16,10 +16,9 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         private IQuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
-        private string banListName = "banList";
         private readonly int otherUserId;
         private readonly string otherUserJid;
-        private string dialogId;
+        private readonly string dialogId;
 
         #endregion
 
@@ -29,7 +28,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        internal PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId = null)
+        internal PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId)
         {
             this.otherUserId = otherUserId;
             this.otherUserJid = string.Format("{0}-{1}@{2}", otherUserId, quickbloxClient.MessagesClient.ApplicationId, quickbloxClient.MessagesClient.ChatEndpoint);
@@ -84,20 +83,14 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Friends
 
-        public async Task<bool> AddToFriends(string friendName)
+        public bool AddToFriends(string friendName = null)
         {
-            if (string.IsNullOrEmpty(dialogId))
+            var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
+            if (rosterManager != null)
             {
-                var response =
-                    await
-                        quickbloxClient.ChatClient.CreateDialogAsync(friendName, DialogType.Private,
-                            otherUserId.ToString());
-                if (response.StatusCode != HttpStatusCode.Created) return false;
-
-                dialogId = response.Result.Id;
+                rosterManager.AddContact(new Contact() { Name = friendName ?? otherUserId.ToString(), UserId = otherUserId });
             }
 
-            quickbloxClient.MessagesClient.AddContact(new Contact() {Name = friendName, UserId = otherUserId});
             SubsribeForPresence();
 
             var msg = CreateNewMessage();
@@ -118,16 +111,18 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
-        public async Task<bool> AcceptFriend()
+        public bool AcceptFriend(string friendName = null)
         {
-            var userResponse = await quickbloxClient.UsersClient.GetUserByIdAsync(otherUserId);
-            if (userResponse.StatusCode != HttpStatusCode.OK) return false;
-
-            quickbloxClient.MessagesClient.AddContact(new Contact()
+            var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
+            if (rosterManager != null)
             {
-                Name = userResponse.Result.User.FullName,
-                UserId = otherUserId
-            });
+                rosterManager.AddContact(new Contact()
+                {
+                    Name = friendName ?? otherUserId.ToString(),
+                    UserId = otherUserId
+                });
+            }
+
             ApproveSubscribtionRequest();
 
             var msg = CreateNewMessage();
@@ -148,7 +143,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             return true;
         }
 
-        public async Task<bool> RejectFriend()
+        public bool RejectFriend()
         {
             RejectSubscribtionRequest();
 
@@ -188,20 +183,19 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
             xmppClient.Send(msg);
 
-            quickbloxClient.MessagesClient.DeleteContact(otherUserId);
+            var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
+            if (rosterManager != null)
+            {
+                rosterManager.DeleteContact(otherUserId);
+            }
+
             Unsubscribe();
             SendPresenceInformation(presence.typeEnum.unsubscribed);
-
             
             return true;
         }
 
-        /// <summary>
-        /// Notify a user about a created group dialog.
-        /// </summary>
-        /// <param name="createdDialogId"></param>
-        /// <returns></returns>
-        public async Task<bool> NotifyAboutGroupCreation(string createdDialogId)
+        public bool NotifyAboutGroupCreation(string createdDialogId)
         {
             var msg = CreateNewMessage();
             var body = new body { Value = "Notification message" };
@@ -221,68 +215,6 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         }
 
         #endregion
-
-
-        #region Presence
-
-        public void SubsribeForPresence()
-        {
-            SendPresenceInformation(presence.typeEnum.subscribe);
-        }
-
-        public void ApproveSubscribtionRequest()
-        {
-            SendPresenceInformation(presence.typeEnum.subscribed);
-        }
-
-        public void RejectSubscribtionRequest()
-        {
-            SendPresenceInformation(presence.typeEnum.unsubscribed);
-        }
-
-        public void Unsubscribe()
-        {
-            SendPresenceInformation(presence.typeEnum.unsubscribe);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Prohibits other user from sending any messages to current user.
-        /// </summary>
-        /// <returns></returns>
-        public async Task Block()
-        {
-            throw new NotImplementedException("User ban is not implemented with Ubiety.");
-
-            //var list = await GetBanListAsync() ?? new List();
-
-            //list.AddItem(new Item(Action.deny, 0, Type.jid, otherUserJid));
-            //var privacyManager = new PrivacyManager(xmpp);
-            //privacyManager.AddList(banListName, list.GetItems());
-            //privacyManager.ChangeActiveList(banListName);
-            //privacyManager.ChangeDefaultList(banListName);
-        }
-
-        /// <summary>
-        /// Allow other user to send send messages to current user.
-        /// </summary>
-        /// <returns></returns>
-        public async Task Unblock()
-        {
-            throw new NotImplementedException("User ban is not implemented with Ubiety.");
-
-            //var list = await GetBanListAsync() ?? new List();
-
-            //if (list.GetItems().Any(i => i.Val == otherUserJid))
-            //{
-            //    var privacyManager = new PrivacyManager(xmpp);
-            //    privacyManager.AddList(banListName, list.GetItems().Where(i => i.Val != otherUserJid).ToArray());
-            //    privacyManager.ChangeActiveList(banListName);
-            //    privacyManager.ChangeDefaultList(banListName);
-            //}
-            
-        }
 
         #endregion
 
@@ -322,44 +254,35 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             }
         }
 
+        #region Presence
+
+        private void SubsribeForPresence()
+        {
+            SendPresenceInformation(presence.typeEnum.subscribe);
+        }
+
+        private void ApproveSubscribtionRequest()
+        {
+            SendPresenceInformation(presence.typeEnum.subscribed);
+        }
+
+        private void RejectSubscribtionRequest()
+        {
+            SendPresenceInformation(presence.typeEnum.unsubscribed);
+        }
+
+        private void Unsubscribe()
+        {
+            SendPresenceInformation(presence.typeEnum.unsubscribe);
+        }
+
         private void SendPresenceInformation(presence.typeEnum type)
         {
             xmppClient.Send(new presence { type = type, to = otherUserJid });
         }
 
-        //private async Task<List> GetBanListAsync()
-        //{
-        //    TimeSpan timeout = new TimeSpan(0, 0, 5);
-
-        //    TaskCompletionSource<List> tcs = new TaskCompletionSource<List>();
-
-        //    xmpp.OnIq += (sender, iq) =>
-        //    {
-        //        if (iq.Query != null &&  iq.Query.Namespace.Contains("jabber:iq:privacy"))
-        //        {
-        //            Privacy privacy = iq.Query as Privacy;
-        //            if (privacy != null && tcs.Task.Status == TaskStatus.WaitingForActivation)
-        //            {
-        //                tcs.SetResult(privacy.GetList().FirstOrDefault(l => l.Name == banListName));
-        //            }
-
-        //        }
-        //    };
-
-        //    PrivacyManager p = new PrivacyManager(xmpp);
-        //    p.GetList(banListName);
-
-        //    var timer = new Timer(state =>
-        //    {
-        //        if (tcs.Task.Status == TaskStatus.WaitingForActivation)
-        //            tcs.SetResult(null);
-        //    },
-        //        null, timeout, new TimeSpan(0, 0, 0, 0, -1));
-
-        //    return await tcs.Task;
-        //}
-
         #endregion
 
+        #endregion
     }
 }

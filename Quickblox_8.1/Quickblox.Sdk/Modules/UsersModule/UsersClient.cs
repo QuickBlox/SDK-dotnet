@@ -55,39 +55,9 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// If you want to create a user with a some content (f.e. with a photo) you have to create a blob firstly.
         /// The same tags can be used for any number of users.
         /// </summary>
-        /// <param name="login">The login.</param>
-        /// <param name="blobId">ID of associated blob (for example, API User photo).</param>
-        /// <param name="email">The email.</param>
-        /// <param name="externalUserId">The external user identifier.</param>
-        /// <param name="facebookId">The facebook identifier.</param>
-        /// <param name="twitterId">The twitter identifier.</param>
-        /// <param name="fullName">The full name.</param>
-        /// <param name="phone">The phone.</param>
-        /// <param name="website">The website.</param>
-        /// <param name="tagList">The tag list.</param>
-        /// <param name="customData">The custom data.</param>
-        /// <param name="password">The password.</param>
         /// <returns></returns>
-        public async Task<HttpResponse<UserResponse>> SignUpUserAsync(String login, String password, Int32? blobId = null, String email = null, Int32? externalUserId = null, Int32? facebookId = null, Int32? twitterId = null, String fullName = null, String phone = null, String website = null, String[] tagList = null, String customData  = null)
+        public async Task<HttpResponse<UserResponse>> SignUpUserAsync(UserSignUpRequest userSignUpRequest)
         {
-            var userSignUpRequest = new UserSignUpRequest();
-            userSignUpRequest.User = new UserRequest()
-            {
-                Login = login,
-                Email = email,
-                FullName = fullName,
-                Phone = phone,
-                Website = website,
-                TagList = tagList == null ? null : String.Join(",", tagList),
-                CustomData = customData,
-                Password = password
-            };
-
-            userSignUpRequest.User.ExternalUserId = externalUserId;
-            userSignUpRequest.User.BlobId = blobId;
-            userSignUpRequest.User.FacebookId = facebookId;
-            userSignUpRequest.User.TwitterId = twitterId;
-
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.PostAsync<UserResponse, UserSignUpRequest>(this.quickbloxClient.ApiEndPoint,
                         QuickbloxMethods.UsersMethod, userSignUpRequest, headers);

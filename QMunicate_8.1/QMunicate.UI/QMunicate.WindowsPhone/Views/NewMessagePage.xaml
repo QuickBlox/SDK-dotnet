@@ -17,7 +17,7 @@
         <DataTemplate x:Key="LocalUserTemplate">
             <StackPanel Orientation="Horizontal" tapListener:TapListener.TapCommand="{Binding DataContext.OpenContactCommand, ElementName=Page}"
                               tapListener:TapListener.TapCommandParameter="{Binding }">
-                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="40" Height="40" Margin="0 0 12 0"/>
+                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55" Margin="0 0 12 0"/>
                 <controls:SelectionsTextBlock Text="{Binding FullName}" SelectionText="{Binding Text, ElementName=SearchTextBox}" SelectionColor="DodgerBlue"
                                               FontSize="{StaticResource NormalFontSize}" VerticalAlignment="Center"/>
             </StackPanel>
@@ -42,7 +42,7 @@
         </Grid.RowDefinitions>
         <TextBox x:Name="SearchTextBox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  PlaceholderText="Search" Margin="{StaticResource DefaultMargin}"/>
         <HyperlinkButton Grid.Row="1" Content="create group" Command="{Binding CreateGroupCommand}"
-                             FontSize="{StaticResource LargeFontSize}" Margin="{StaticResource DefaultMargin}" />
+                             FontSize="{StaticResource ExtraLargeFontSize}" Margin="{StaticResource DefaultMargin}" />
         
         <ListBox Grid.Row="2" ItemsSource="{Binding Contacts}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
                          ItemTemplate="{StaticResource LocalUserTemplate}" Margin="{StaticResource DefaultMargin}" />

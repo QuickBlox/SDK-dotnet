@@ -296,8 +296,8 @@ namespace QMunicate.ViewModels
 
                 foreach (var contact in selectedContacts)
                 {
-                    var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId);
-                    await privateChatManager.NotifyAboutGroupCreation(createDialogResponse.Result.Id);
+                    var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId, createDialogResponse.Result.Id);
+                    privateChatManager.NotifyAboutGroupCreation(createDialogResponse.Result.Id);
                 }
 
                 groupChatManager.NotifyAboutGroupCreation(createDialogResponse.Result.OccupantsIds);
