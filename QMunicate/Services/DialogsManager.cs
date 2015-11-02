@@ -124,6 +124,8 @@ namespace QMunicate.Services
             {
                 await QmunicateLoggerHolder.Log(QmunicateLogLevel.Warn, "The dialog wasn't found in DialogsManager. Reloading dialogs.");
                 await ReloadDialogs();
+                areAllGroupDialogsJoined = false;
+                JoinAllGroupDialogs();
             }
         }
 
