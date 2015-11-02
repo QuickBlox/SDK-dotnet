@@ -9,8 +9,9 @@ namespace QMunicate.Converters
     {
         public object Convert(Object value, Type targetType, Object parameter, String language)
         {
+            var unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0);
             var dateTimeValue = value as DateTime?;
-            if (!dateTimeValue.HasValue) return null;
+            if (!dateTimeValue.HasValue || dateTimeValue.Value == unixEpoch) return null;
 
             return dateTimeValue.Value.Date == DateTime.Today ? "Today" : dateTimeValue.Value.Date.ToString("dd MMM yyyy");
         }
