@@ -252,7 +252,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             receivedMessage.Body = messageEventArgs.Message.Body;
             receivedMessage.Subject = messageEventArgs.Message.Subject;
             receivedMessage.Thread = messageEventArgs.Message.Thread;
-
+			receivedMessage.ExtraParameter = messageEventArgs.Message.ExtraParameter;
 
             var wappedMessageTyp = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
             receivedMessage.MessageType = wappedMessageTyp;
@@ -361,7 +361,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         public void AddContact(RosterItem user)
         {
-            xmppClient.AddContact(new Sharp.Xmpp.Jid(user.Jid.ToString()), user.Name, user.Groups?.ToArray());
+			xmppClient.AddContact(new Sharp.Xmpp.Jid(user.Jid.ToString()), user.Name, user.Groups != null ? user.Groups.ToArray() : null);
         }
 
         public void RemoveContact(RosterItem user)

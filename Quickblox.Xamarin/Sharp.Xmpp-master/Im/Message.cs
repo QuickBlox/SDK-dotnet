@@ -128,7 +128,7 @@ namespace Sharp.Xmpp.Im {
             {
                 XmlElement bare = GetBare("extraParams");
                 if (bare != null)
-                    return bare.InnerText;
+					return bare.ToXmlString();
                 string k = AlternateBodies.Keys.FirstOrDefault();
                 return k != null ? AlternateBodies[k] : null;
             }

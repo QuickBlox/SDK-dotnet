@@ -110,7 +110,7 @@ namespace Quickblox.Sdk
 #if !Xamarin
         public IMessagesClient MessagesClient { get; private set; }
 #else
-        public MessagesClient MessagesClient { get; }
+		public MessagesClient MessagesClient { get; private set;}
 #endif
         /// <summary>
         /// Custom Objects module provides flexibility to define any data structure(schema) you need.
