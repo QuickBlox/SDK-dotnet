@@ -7,10 +7,10 @@ namespace Quickblox.Sdk.WebRTC
         public string SessionId { private get; set; }
         public string Sdp { private get; set; }
         public string Platform { private get; set; }
-        public string SenderId { private get; set; }
-        public string ReceiverId { private get; set; }
+        public int SenderId { private get; set; }
+        public int ReceiverId { private get; set; }
 
-        public CallExtraParameter(string sessionId, string sdp, string platform, string senderId, string receiverId)
+        public CallExtraParameter(string sessionId, string sdp, string platform, int senderId, int receiverId)
         {
             SessionId = sessionId;
             Sdp = sdp;

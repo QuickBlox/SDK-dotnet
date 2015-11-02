@@ -2,7 +2,7 @@
 
 namespace Quickblox.Sdk.Modules.MessagesModule.Models
 {
-    public class Message
+	public class Message
     {
         public string Id { get; set; }
         public Jid From { get; set; }
@@ -12,6 +12,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Models
         public string Thread { get; set; }
         public DateTime Timestamp { get; set; }
         public MessageType MessageType { get; set; }
+		public string ExtraParameter {get; set;}
 
         public string XmlMessage { get; set; }
     }

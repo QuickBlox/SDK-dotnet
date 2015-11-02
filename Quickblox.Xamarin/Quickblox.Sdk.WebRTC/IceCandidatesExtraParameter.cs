@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Collections.ObjectModel;
 
 namespace Quickblox.Sdk.WebRTC
 {
@@ -7,9 +8,9 @@ namespace Quickblox.Sdk.WebRTC
     {
         public string SessionId { private get; set; }
 
-        public List<IceCandidate> IceCandidates { get; set; }
+        public Collection<IceCandidate> IceCandidates { get; set; }
 
-        public IceCandidatesExtraParameter(string sessionId, List<IceCandidate> iceCandidates)
+		public IceCandidatesExtraParameter(string sessionId, Collection<IceCandidate> iceCandidates)
         {
             SessionId = sessionId;
             IceCandidates = iceCandidates;
