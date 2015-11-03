@@ -25,6 +25,7 @@ namespace QMunicate.ViewModels
         public ForgotPasswordViewModel()
         {
             ResetCommand = new RelayCommand(ResetCommandExecute, () => !IsLoading);
+            BackCommand = new RelayCommand(() => NavigationService.GoBack());
         }
 
         #endregion
@@ -38,6 +39,8 @@ namespace QMunicate.ViewModels
         }
 
         public RelayCommand ResetCommand { get; private set; }
+
+        public RelayCommand BackCommand { get; set; }
 
         #endregion
 
