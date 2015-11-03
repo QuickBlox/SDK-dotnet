@@ -96,32 +96,72 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Controls\RadTextBox.cs">
+      <Link>Controls\RadTextBox.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Controls\SelectionsTextBlock.cs">
+      <Link>Controls\SelectionsTextBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Controls\TypingIndicator.cs">
+      <Link>Controls\TypingIndicator.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Controls\ValidationState.cs">
+      <Link>Controls\ValidationState.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Converters\BooleanToNegationConverter.cs">
+      <Link>Converters\BooleanToNegationConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Converters\BooleanToVisibilityConverter.cs">
+      <Link>Converters\BooleanToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Converters\HandyDateConverter.cs">
+      <Link>Converters\HandyDateConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Converters\IntToVisibilityConverter.cs">
+      <Link>Converters\IntToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Converters\NullToVisibilityConverter.cs">
+      <Link>Converters\NullToVisibilityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Converters\StringFormatConverter.cs">
+      <Link>Converters\StringFormatConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Helper\Helpers.cs">
+      <Link>Helper\Helpers.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Helper\ImageHelper.cs">
+      <Link>Helper\ImageHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Models\ChatNavigationParameter.cs">
+      <Link>Models\ChatNavigationParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Models\DialogsNavigationParameter.cs">
+      <Link>Models\DialogsNavigationParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Selectors\MessageTemplateSelector.cs">
+      <Link>Selectors\MessageTemplateSelector.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Services\CachingQuickbloxClient.cs">
+      <Link>Services\CachingQuickbloxClient.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Services\DialogsManager.cs">
+      <Link>Services\DialogsManager.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Services\FileStorage.cs">
+      <Link>Services\FileStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Services\ImagesService.cs">
+      <Link>Services\ImagesService.cs</Link>
+    </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Services\PushNotificationsManager.cs">
+      <Link>Services\PushNotificationsManager.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="ApplicationKeys.cs" />
-    <Compile Include="Controls\RadTextBox.cs" />
-    <Compile Include="Controls\SelectionsTextBlock.cs" />
-    <Compile Include="Controls\TypingIndicator.cs" />
-    <Compile Include="Controls\ValidationState.cs" />
-    <Compile Include="Converters\BooleanToNegationConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\HandyDateConverter.cs" />
-    <Compile Include="Converters\IntToVisibilityConverter.cs" />
-    <Compile Include="Converters\NullToVisibilityConverter.cs" />
-    <Compile Include="Converters\StringFormatConverter.cs" />
-    <Compile Include="Helper\Helpers.cs" />
-    <Compile Include="Helper\ImageHelper.cs" />
     <Compile Include="Logger\FileLogger.cs" />
-    <Compile Include="Models\ChatNavigationParameter.cs" />
-    <Compile Include="Models\DialogsNavigationParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Selectors\MessageTemplateSelector.cs" />
-    <Compile Include="Services\CachingQuickbloxClient.cs" />
-    <Compile Include="Services\DialogsManager.cs" />
-    <Compile Include="Services\FileStorage.cs" />
-    <Compile Include="Services\ImagesService.cs" />
-    <Compile Include="Services\PushNotificationsManager.cs" />
     <Compile Include="SettingsKeys.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
