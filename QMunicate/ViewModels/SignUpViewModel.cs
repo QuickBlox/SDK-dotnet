@@ -45,6 +45,7 @@ namespace QMunicate.ViewModels
             ChoosePhotoCommand = new RelayCommand(ChoosePhotoCommandExecute, () => !IsLoading);
             SignUpCommand = new RelayCommand(SignUpCommandExecute, () => !IsLoading);
             DeleteUserImageCommand = new RelayCommand(DeleteUserImageCommandExecute, () => !IsLoading);
+            BackCommand = new RelayCommand(BackCommandExecute);
         }
 
         #endregion
@@ -80,6 +81,8 @@ namespace QMunicate.ViewModels
         public RelayCommand SignUpCommand { get; set; }
 
         public RelayCommand DeleteUserImageCommand { get; set; }
+
+        public RelayCommand BackCommand { get; set; }
 
         #endregion
 
@@ -228,6 +231,11 @@ namespace QMunicate.ViewModels
         {
             userImageBytes = null;
             UserImage = null;
+        }
+
+        private void BackCommandExecute()
+        {
+            NavigationService.GoBack();
         }
 
         #endregion
