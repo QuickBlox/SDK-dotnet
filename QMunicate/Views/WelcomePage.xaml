@@ -7,15 +7,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     DataContext="{Binding WelcomeViewModel, Source={StaticResource ViewModelLocator}}">
+    
+    <Page.Resources>
+        <Color x:Key="FacebookColor">#3b5996</Color>
+        <SolidColorBrush x:Key="FacebookBrush" Color="{StaticResource FacebookColor}"  />
+    </Page.Resources>
 
     <StackPanel>
-        <Image Source="../Assets/app_logo.png" Height="200" HorizontalAlignment="Center"/>
-        <Image Source="../Assets/title.png" Height="100" HorizontalAlignment="Center"/>
-        <Button Content="connect with Facebook" Command="{Binding FacebookSignUpCommand}" Margin="{StaticResource DefaultMargin}"
-                Foreground="White" BorderBrush="RoyalBlue" Background="RoyalBlue" Width="250"  HorizontalAlignment="Center"/>
-        <Button Content="sign up with email" Command="{Binding EmailSignUpCommand}" Margin="{StaticResource DefaultMargin}"
-                Width="250"  HorizontalAlignment="Center"/>
+        <Image Source="../Assets/app_logo.png" Height="150" HorizontalAlignment="Center"/>
+        <Image Source="../Assets/title.png" Height="100" HorizontalAlignment="Center" Margin="{StaticResource DefaultMargin}"/>
+        <Button Content="Connect with Facebook" Command="{Binding FacebookSignUpCommand}" Margin="{StaticResource DefaultMargin}"
+                Foreground="White" FontWeight="Bold" BorderThickness="0" Background="{StaticResource FacebookBrush}" Width="300" Height="50" HorizontalAlignment="Center"/>
+        <Button Content="Sign up with email" Command="{Binding EmailSignUpCommand}" Margin="{StaticResource DefaultMargin}"
+                FontWeight="Bold" Foreground="DimGray" BorderThickness="0" Width="300" Height="50" HorizontalAlignment="Center"/>
         <HyperlinkButton Content="Already have an account?" Command="{Binding LoginCommand}" Foreground="Gray" FontWeight="SemiBold"
-                             FontSize="{StaticResource NormalFontSize}" Margin="0 55 0 0" HorizontalAlignment="Center" />
+                             FontSize="{StaticResource NormalFontSize}" Margin="0 20 0 0" HorizontalAlignment="Center" />
+        <TextBlock Text="{Binding CopyrightString}" Foreground="Gray" FontSize="{StaticResource SmallFontSize}" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Center"/>
     </StackPanel>
 </Page>

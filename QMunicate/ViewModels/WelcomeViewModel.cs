@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using Windows.ApplicationModel;
+using Windows.UI.Xaml.Navigation;
 //using Facebook.Client;
 using QMunicate.Core.Command;
 using QMunicate.Core.DependencyInjection;
@@ -15,6 +17,12 @@ namespace QMunicate.ViewModels
 {
     public class WelcomeViewModel : ViewModel
     {
+        #region Fields
+
+        private string copyrightString;
+
+        #endregion
+
         #region Ctor
 
         public WelcomeViewModel()
@@ -31,6 +39,21 @@ namespace QMunicate.ViewModels
         public RelayCommand FacebookSignUpCommand { get; set; }
         public RelayCommand EmailSignUpCommand { get; set; }
         public RelayCommand LoginCommand { get; set; }
+
+        public string CopyrightString
+        {
+            get { return copyrightString; }
+            set { Set(ref copyrightString, value); }
+        }
+
+        #endregion
+
+        #region Navigation
+
+        public override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            CopyrightString = string.Format("© QuickBlox {0} v. {1}", DateTime.Today.Year, Helpers.GetAppVersion());
+        }
 
         #endregion
 
