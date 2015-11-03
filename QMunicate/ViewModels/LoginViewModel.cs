@@ -30,6 +30,7 @@ namespace QMunicate.ViewModels
         {
             ForgotPasswordCommand = new RelayCommand(ForgotPasswordCommandExecute, () => !IsLoading);
             LoginCommand = new RelayCommand(LoginCommandExecute, () => !IsLoading);
+            BackCommand = new RelayCommand(() => NavigationService.GoBack());
 #if DEBUG
             Email = "user1@test.com";
             Password = "12345678";
@@ -61,6 +62,8 @@ namespace QMunicate.ViewModels
         public RelayCommand ForgotPasswordCommand { get; set; }
 
         public RelayCommand LoginCommand { get; set; }
+
+        public RelayCommand BackCommand { get; set; }
 
         #endregion
 

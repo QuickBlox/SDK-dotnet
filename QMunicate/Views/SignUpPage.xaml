@@ -29,7 +29,9 @@
                 <Image DoubleTapped="UIElement_OnDoubleTapped" Height="100" Width="100" Source="{Binding UserImage, TargetNullValue=../Assets/AvatarPlaceholder.png, FallbackValue=../Assets/AvatarPlaceholder.png}" Margin="{StaticResource DefaultMargin}" />
                 <Button Content="Set photo" Margin="{StaticResource DefaultMargin}" Command="{Binding ChoosePhotoCommand}"/>
             </StackPanel>
+            
             <Button Content="Next" Width="280" Height="50" Command="{Binding SignUpCommand}" Foreground="White" FontWeight="Bold" Background="{StaticResource AppBarBrush}" Margin="{StaticResource DefaultMargin}"/>
+            
             <TextBlock Text="By clicking Next, you agree" FontSize="{StaticResource SmallFontSize}" Margin="{StaticResource DefaultHorizontalMargin}" HorizontalAlignment="Center"/>
             <StackPanel Orientation="Horizontal" Margin="{StaticResource DefaultHorizontalMargin}" HorizontalAlignment="Center">
                 <TextBlock Text="to Q-municate" FontSize="{StaticResource SmallFontSize}" VerticalAlignment="Center"/>
