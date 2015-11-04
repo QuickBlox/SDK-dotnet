@@ -169,7 +169,7 @@ namespace QMunicate.ViewModels
                     if (userImageBytes != null)
                         await UploadUserImage(response.Result.User, userImageBytes);
 
-                    NavigationService.Navigate(ViewLocator.Dialogs,
+                    NavigationService.Navigate(ViewLocator.Main,
                                                     new DialogsNavigationParameter
                                                     {
                                                         CurrentUserId = userId.Value,

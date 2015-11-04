@@ -119,7 +119,7 @@ namespace QMunicate.ViewModels
             {
                 QuickbloxClient.Token = response.Result.Session.Token;
                 SettingsManager.Instance.WriteToSettings(SettingsKeys.CurrentUserId, response.Result.Session.UserId);
-                NavigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
+                NavigationService.Navigate(ViewLocator.Main, new DialogsNavigationParameter {CurrentUserId = response.Result.Session.UserId, Password = Password});
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {

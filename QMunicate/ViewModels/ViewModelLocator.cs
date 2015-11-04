@@ -4,25 +4,15 @@ namespace QMunicate.ViewModels
     {
         #region Properties
 
-        public WelcomeViewModel WelcomeViewModel
-        {
-            get { return new WelcomeViewModel(); }
-        }
+        public WelcomeViewModel WelcomeViewModel => new WelcomeViewModel();
 
-        public SignUpViewModel SignUpViewModel
-        {
-            get { return new SignUpViewModel(); }
-        }
+        public SignUpViewModel SignUpViewModel => new SignUpViewModel();
 
-        public LoginViewModel LoginViewModel
-        {
-            get { return new LoginViewModel(); }
-        }
+        public LoginViewModel LoginViewModel => new LoginViewModel();
 
-        public ForgotPasswordViewModel ForgotPasswordViewModel
-        {
-            get { return new ForgotPasswordViewModel(); }
-        }
+        public ForgotPasswordViewModel ForgotPasswordViewModel => new ForgotPasswordViewModel();
+
+        public MainViewModel MainViewModel => new MainViewModel();
 
         #endregion
     }

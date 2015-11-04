@@ -164,8 +164,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsKeys.cs" />
     <Compile Include="SettingsManager.cs" />
+    <Compile Include="ViewModels\DialogsAndSearchViewModel.cs" />
     <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PartialViewModels\DayOfMessages.cs" />
     <Compile Include="ViewModels\PartialViewModels\DialogViewModel.cs" />
     <Compile Include="ViewModels\PartialViewModels\MessageCollectionViewModel.cs" />
@@ -177,11 +179,17 @@
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="ViewModels\WelcomeViewModel.cs" />
     <Compile Include="ViewLocator.cs" />
+    <Compile Include="Views\DialogsAndSearchControl.xaml.cs">
+      <DependentUpon>DialogsAndSearchControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ForgotPasswordPage.xaml.cs">
       <DependentUpon>ForgotPasswordPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SignUpPage.xaml.cs">
       <DependentUpon>SignUpPage.xaml</DependentUpon>
@@ -215,6 +223,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\DialogsAndSearchControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ForgotPasswordPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -222,6 +234,10 @@
     <Page Include="Views\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SignUpPage.xaml">
       <Generator>MSBuild:Compile</Generator>
