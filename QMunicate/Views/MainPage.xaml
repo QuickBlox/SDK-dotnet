@@ -10,9 +10,8 @@
     DataContext="{Binding MainViewModel, Source={StaticResource ViewModelLocator}}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <SplitView  x:Name="SplitView" HorizontalAlignment="Left" DisplayMode="Inline" IsPaneOpen="True"  VerticalAlignment="Stretch">
+        <SplitView HorizontalAlignment="Left" DisplayMode="Inline" IsPaneOpen="True"  VerticalAlignment="Stretch">
             <SplitView.Pane>
-                <!--<TextBlock Text="Pane"/>-->
                 <local:DialogsAndSearchControl DataContext="{Binding DialogsAndSearchViewModel}"/>
             </SplitView.Pane>
             <SplitView.Content>

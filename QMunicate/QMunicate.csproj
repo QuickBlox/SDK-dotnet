@@ -208,6 +208,8 @@
     <Content Include="Assets\app_logo.png" />
     <Content Include="Assets\AvatarPlaceholder.png" />
     <Content Include="Assets\grey_arrow_left.png" />
+    <Content Include="Assets\Icons\ic_new_group.png" />
+    <Content Include="Assets\Icons\ic_settings.png" />
     <Content Include="Assets\title.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
@@ -223,6 +225,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Themes\ContentButtonStyle.xaml">
+      <Link>Themes\ContentButtonStyle.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\DialogsAndSearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -266,6 +273,7 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
