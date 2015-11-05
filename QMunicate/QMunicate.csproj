@@ -165,6 +165,7 @@
     <Compile Include="SettingsKeys.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="ViewModels\DialogsAndSearchViewModel.cs" />
+    <Compile Include="ViewModels\DialogsViewModel.cs" />
     <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="ViewModels\PartialViewModels\MessageViewModel.cs" />
     <Compile Include="ViewModels\PartialViewModels\SelectableListBoxItem.cs" />
     <Compile Include="ViewModels\PartialViewModels\UserViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\SignUpViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
@@ -181,6 +183,9 @@
     <Compile Include="ViewLocator.cs" />
     <Compile Include="Views\DialogsAndSearchControl.xaml.cs">
       <DependentUpon>DialogsAndSearchControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DialogsControl.xaml.cs">
+      <DependentUpon>DialogsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ForgotPasswordPage.xaml.cs">
       <DependentUpon>ForgotPasswordPage.xaml</DependentUpon>
@@ -190,6 +195,9 @@
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchControl.xaml.cs">
+      <DependentUpon>SearchControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SignUpPage.xaml.cs">
       <DependentUpon>SignUpPage.xaml</DependentUpon>
@@ -234,6 +242,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\DialogsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ForgotPasswordPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -243,6 +255,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SearchControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

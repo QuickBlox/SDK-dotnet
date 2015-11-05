@@ -10,21 +10,27 @@
     d:DesignWidth="400">
     
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="{StaticResource DefaultMargin}" VerticalAlignment="Top" />
-        <Button Grid.Column="1" Margin="{StaticResource DefaultMargin}" VerticalAlignment="Top" Visibility="{Binding IsSearchMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Command="{Binding NewGroupCommand}" Style="{StaticResource ContentButtonStyle}">
+        <Button Grid.Column="1" Grid.Row="0" Margin="{StaticResource DefaultMargin}" VerticalAlignment="Top" Visibility="{Binding IsSearchMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Command="{Binding NewGroupCommand}" Style="{StaticResource ContentButtonStyle}">
             <Button.Content>
                 <Image Source="../Assets/Icons/ic_new_group.png" Stretch="None"  />
             </Button.Content>
         </Button>
-        <Button Grid.Column="2" Margin="{StaticResource DefaultMargin}" VerticalAlignment="Top" Visibility="{Binding IsSearchMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Command="{Binding SettingsCommand}" Style="{StaticResource ContentButtonStyle}">
+        <Button Grid.Column="2" Grid.Row="0" Margin="{StaticResource DefaultMargin}" VerticalAlignment="Top" Visibility="{Binding IsSearchMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Command="{Binding SettingsCommand}" Style="{StaticResource ContentButtonStyle}">
             <Button.Content>
                 <Image Source="../Assets/Icons/ic_settings.png" Stretch="None"  />
             </Button.Content>
         </Button>
+        <local:DialogsControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Visibility="{Binding IsSearchMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+        <local:SearchControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Visibility="{Binding IsSearchMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

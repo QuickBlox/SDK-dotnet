@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using QMunicate.Core.Command;
+using QMunicate.Core.Observable;
 
 namespace QMunicate.ViewModels
 {
@@ -20,6 +21,9 @@ namespace QMunicate.ViewModels
 
         public DialogsAndSearchViewModel()
         {
+            DialogsViewModel = new DialogsViewModel();
+            SearchViewModel = new SearchViewModel();
+
             NewGroupCommand = new RelayCommand(NewGroupCommandExecute, () => !IsLoading);
             SettingsCommand = new RelayCommand(SettingsCommandExecute, () => !IsLoading);
         }
@@ -27,6 +31,10 @@ namespace QMunicate.ViewModels
         #endregion
 
         #region Properties
+
+        public DialogsViewModel DialogsViewModel { get; set; }
+
+        public SearchViewModel SearchViewModel { get; set; }
 
         public string SearchText
         {
