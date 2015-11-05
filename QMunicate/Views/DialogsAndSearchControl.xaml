@@ -7,8 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
-    
+    d:DesignWidth="400"
+    x:Name="Page">
+
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -30,7 +31,7 @@
                 <Image Source="../Assets/Icons/ic_settings.png" Stretch="None"  />
             </Button.Content>
         </Button>
-        <local:DialogsControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Visibility="{Binding IsSearchMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-        <local:SearchControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Visibility="{Binding IsSearchMode, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <local:DialogsControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding DialogsViewModel}" Visibility="{Binding DataContext.IsSearchMode, Converter={StaticResource InverseBooleanToVisibilityConverter}, ElementName=Page}"/>
+        <local:SearchControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding SearchViewModel}" Visibility="{Binding DataContext.IsSearchMode, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Page}"/>
     </Grid>
 </UserControl>

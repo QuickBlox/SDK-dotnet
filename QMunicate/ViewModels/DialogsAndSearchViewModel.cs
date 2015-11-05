@@ -8,7 +8,7 @@ using QMunicate.Core.Observable;
 
 namespace QMunicate.ViewModels
 {
-    public class DialogsAndSearchViewModel : ViewModel
+    public class DialogsAndSearchViewModel : ViewModel, IUserControlViewModel
     {
         #region Fields
 
@@ -54,6 +54,15 @@ namespace QMunicate.ViewModels
         {
             get { return isSearchMode; }
             set { Set(ref isSearchMode, value); }
+        }
+
+        #endregion
+
+        #region Base members
+
+        public async Task Initialize(object parameter)
+        {
+            await DialogsViewModel.Initialize(parameter);
         }
 
         #endregion

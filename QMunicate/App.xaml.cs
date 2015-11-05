@@ -108,7 +108,7 @@ namespace QMunicate
                 // parameter
                 var navigationService = ServiceLocator.Locator.Get<INavigationService>();
                 navigationService.Initialize(rootFrame, this.GetPageResolver());
-                rootFrame.Navigate(typeof(MainPage), e.Arguments);                
+                rootFrame.Navigate(typeof(WelcomePage), e.Arguments);                
             }
             // Ensure the current window is active
             Window.Current.Activate();
