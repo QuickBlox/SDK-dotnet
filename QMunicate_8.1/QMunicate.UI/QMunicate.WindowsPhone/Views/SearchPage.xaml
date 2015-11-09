@@ -65,7 +65,11 @@
             </PivotItem>
             <PivotItem Header="{StaticResource GlobalLabel}">
                 <ListView ItemsSource="{Binding GlobalResults}" Background="Transparent" ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
-                         ItemTemplate="{StaticResource GlobalUserTemplate}" />
+                         ItemTemplate="{StaticResource GlobalUserTemplate}">
+                    <interactivity:Interaction.Behaviors>
+                        <behaviors:ListViewIncrementalLoadingBehavior LoadCommand="{Binding LoadMoreGlobalResultsCommand}" />
+                    </interactivity:Interaction.Behaviors>
+                </ListView>
             </PivotItem>
         </Pivot>
     </Grid>

@@ -8,6 +8,7 @@ using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Responses;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -23,11 +24,13 @@ namespace QMunicate.ViewModels
     {
         #region Fields
 
+        private const int numberOfItemsPerPage = 20;
         private string searchText;
         private bool isInGlobalSeachMode;
         private readonly AsyncLock localResultsLock = new AsyncLock();
         private readonly AsyncLock globalResultsLock = new AsyncLock();
         private CancellationTokenSource cts;
+        private uint currentGlobalResultsPage;
 
         #endregion
 
@@ -39,6 +42,7 @@ namespace QMunicate.ViewModels
             LocalResults = new ObservableCollection<UserViewModel>();
             OpenLocalCommand = new RelayCommand<UserViewModel>(u => OpenLocalCommandExecute(u));
             OpenGlobalCommand = new RelayCommand<UserViewModel>(OpenGlobalCommandExecute);
+            LoadMoreGlobalResultsCommand = new RelayCommand(LoadMoreGlobalResultsCommandExecute, () => !IsLoading);
         }
 
         #endregion
@@ -73,6 +77,8 @@ namespace QMunicate.ViewModels
 
         public RelayCommand<UserViewModel> OpenGlobalCommand { get; set; }
 
+        public RelayCommand LoadMoreGlobalResultsCommand { get; set; }
+
         #endregion
 
         #region Navigation
@@ -96,6 +102,8 @@ namespace QMunicate.ViewModels
 
         private async Task GlobalSearch(string searchQuery)
         {
+            currentGlobalResultsPage = 1;
+
             if (string.IsNullOrWhiteSpace(searchQuery))
             {
                 await ClearGlobalResults();
@@ -113,23 +121,8 @@ namespace QMunicate.ViewModels
             cts = new CancellationTokenSource();
             var token = cts.Token;
 
-            var response = await QuickbloxClient.UsersClient.GetUserByFullNameAsync(searchQuery, null, null, token);
-            if (response.StatusCode == HttpStatusCode.OK && !token.IsCancellationRequested)
-            {
-                int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
-                using (await globalResultsLock.LockAsync())
-                {
-                    GlobalResults.Clear();
-                    foreach (UserResponse item in response.Result.Items.Where(i => i.User.Id != currentUserId))
-                    {
-                        GlobalResults.Add(UserViewModel.FromUser(item.User));
-                    }
-                }
-            }
-            else
-            {
-                await ClearGlobalResults();
-            }
+            GlobalResults.Clear();
+            await LoadGlobalResults(searchQuery, currentGlobalResultsPage, true, token);
 
             if (string.IsNullOrEmpty(SearchText))
                 await ClearGlobalResults();
@@ -241,6 +234,43 @@ namespace QMunicate.ViewModels
         private void OpenGlobalCommandExecute(UserViewModel user)
         {
             NavigationService.Navigate(ViewLocator.SendRequest, user);
+        }
+
+        private async void LoadMoreGlobalResultsCommandExecute()
+        {
+            if (IsLoading) return;
+
+            IsLoading = true;
+
+
+            cts = new CancellationTokenSource();
+            var token = cts.Token;
+
+            currentGlobalResultsPage++;
+
+            await LoadGlobalResults(SearchText, currentGlobalResultsPage, false, token);
+
+            IsLoading = false;
+        }
+
+        private async Task LoadGlobalResults(string searchQuery, uint currentPage, bool firstLoad, CancellationToken token)
+        {
+            var response = await QuickbloxClient.UsersClient.GetUserByFullNameAsync(searchQuery, currentPage, numberOfItemsPerPage, token);
+            if (response.StatusCode == HttpStatusCode.OK && !token.IsCancellationRequested)
+            {
+                int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
+                using (await globalResultsLock.LockAsync())
+                {
+                    foreach (UserResponse item in response.Result.Items.Where(i => i.User.Id != currentUserId))
+                    {
+                        GlobalResults.Add(UserViewModel.FromUser(item.User));
+                    }
+                }
+            }
+            else if(firstLoad)
+            {
+                await ClearGlobalResults();
+            }
         }
 
         #endregion
