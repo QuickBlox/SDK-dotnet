@@ -36,10 +36,10 @@
             </StackPanel>
         </DataTemplate>
 
-        <Style x:Key="ListBoxItemContainerStyle" TargetType="ListBoxItem">
+        <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
+                    <ControlTemplate TargetType="ListViewItem">
                         <ContentPresenter Margin="0 0 0 12"/>
                     </ControlTemplate>
                 </Setter.Value>
@@ -60,11 +60,11 @@
                 </DataTemplate>
             </Pivot.HeaderTemplate>
             <PivotItem Header="{StaticResource LocalLabel}">
-                <ListBox ItemsSource="{Binding LocalResults}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
+                <ListView ItemsSource="{Binding LocalResults}" Background="Transparent" ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
                          ItemTemplate="{StaticResource LocalUserTemplate}" />
             </PivotItem>
             <PivotItem Header="{StaticResource GlobalLabel}">
-                <ListBox ItemsSource="{Binding GlobalResults}" Background="Transparent" ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
+                <ListView ItemsSource="{Binding GlobalResults}" Background="Transparent" ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
                          ItemTemplate="{StaticResource GlobalUserTemplate}" />
             </PivotItem>
         </Pivot>
