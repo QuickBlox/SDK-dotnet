@@ -78,7 +78,7 @@ namespace QMunicate.Behaviors
         {
             ScrollViewer view = (ScrollViewer)sender;
             double progress = view.VerticalOffset / view.ScrollableHeight;
-            if (progress > 0.7)
+            if (progress > 0.7 && LoadCommand != null && LoadCommand.CanExecute(null))
             {
                 LoadCommand.Execute(null);
             }

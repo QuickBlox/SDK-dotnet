@@ -127,7 +127,7 @@ namespace QMunicate.ViewModels
             if (string.IsNullOrEmpty(SearchText))
                 await ClearGlobalResults();
 
-            await LoadGlobalResultsImages();
+            await LoadGlobalResultsImages(0);
 
             IsLoading = false;
         }
@@ -165,12 +165,20 @@ namespace QMunicate.ViewModels
             }
         }
 
-        private async Task LoadGlobalResultsImages()
+        /// <summary>
+        /// Loads images of users in Global search. 
+        /// </summary>
+        /// <param name="startIndex">Index to start loading images. Is used in incremental loading.</param>
+        /// <returns></returns>
+        private async Task LoadGlobalResultsImages(int startIndex)
         {
+            if (startIndex < 0 || startIndex >= GlobalResults.Count) return;
+
             using (await globalResultsLock.LockAsync())
             {
-                foreach (UserViewModel userVm in GlobalResults)
+                for (int i = startIndex; i < GlobalResults.Count; i++)
                 {
+                    var userVm = GlobalResults[i];
                     if (userVm.ImageUploadId.HasValue)
                     {
                         var imagesService = ServiceLocator.Locator.Get<IImageService>();
@@ -266,6 +274,8 @@ namespace QMunicate.ViewModels
                         GlobalResults.Add(UserViewModel.FromUser(item.User));
                     }
                 }
+
+                await LoadGlobalResultsImages(GlobalResults.Count - response.Result.Items.Length - 1);
             }
             else if(firstLoad)
             {
