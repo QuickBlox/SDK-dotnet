@@ -233,8 +233,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Themes\ContentButtonStyle.xaml">
-      <Link>Themes\ContentButtonStyle.xaml</Link>
+    <Page Include="Themes\ContentButtonStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
