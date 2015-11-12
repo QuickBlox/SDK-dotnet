@@ -12,7 +12,6 @@ namespace QMunicate.ViewModels
     {
         #region Fields
 
-        private string searchText;
         private bool isSearchMode;
 
         #endregion
@@ -23,6 +22,8 @@ namespace QMunicate.ViewModels
         {
             DialogsViewModel = new DialogsViewModel();
             SearchViewModel = new SearchViewModel();
+
+            SearchViewModel.SearchTextChanged += SearchViewModelOnSearchTextChanged;
 
             NewGroupCommand = new RelayCommand(NewGroupCommandExecute, () => !IsLoading);
             SettingsCommand = new RelayCommand(SettingsCommandExecute, () => !IsLoading);
@@ -35,16 +36,6 @@ namespace QMunicate.ViewModels
         public DialogsViewModel DialogsViewModel { get; set; }
 
         public SearchViewModel SearchViewModel { get; set; }
-
-        public string SearchText
-        {
-            get { return searchText; }
-            set
-            {
-                if (Set(ref searchText, value))
-                    OnSearchTextChanged();
-            }
-        }
 
         public RelayCommand NewGroupCommand { get; set; }
 
@@ -69,12 +60,12 @@ namespace QMunicate.ViewModels
 
         #region Private methods
 
-        private void OnSearchTextChanged()
+        private void SearchViewModelOnSearchTextChanged(object sender, string searchText)
         {
-            if (!string.IsNullOrEmpty(SearchText) && !IsSearchMode)
+            if (!string.IsNullOrEmpty(searchText) && !IsSearchMode)
                 IsSearchMode = true;
 
-            if (string.IsNullOrEmpty(SearchText) && IsSearchMode)
+            if (string.IsNullOrEmpty(searchText) && IsSearchMode)
                 IsSearchMode = false;
         }
 

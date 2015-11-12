@@ -18,6 +18,10 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>QMunicate_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxPackageDir>D:\UwpQmunicateBuilds</AppxPackageDir>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -111,6 +115,9 @@
     <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Converters\BooleanToNegationConverter.cs">
       <Link>Converters\BooleanToNegationConverter.cs</Link>
     </Compile>
+    <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Converters\BooleanToOpacityConverter.cs">
+      <Link>Converters\BooleanToOpacityConverter.cs</Link>
+    </Compile>
     <Compile Include="..\QMunicate_8.1\QMunicate.UI\QMunicate.Shared\Converters\BooleanToVisibilityConverter.cs">
       <Link>Converters\BooleanToVisibilityConverter.cs</Link>
     </Compile>
@@ -160,6 +167,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="ApplicationKeys.cs" />
+    <Compile Include="Behaviors\ListViewIncrementalLoadingBehavior.cs" />
     <Compile Include="Logger\FileLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsKeys.cs" />
@@ -234,6 +242,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Themes\ContentButtonStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\SelectionsTextBlock.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

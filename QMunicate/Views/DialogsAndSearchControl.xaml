@@ -10,7 +10,7 @@
     d:DesignWidth="400"
     x:Name="Page">
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -20,7 +20,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="{StaticResource DefaultMargin}" VerticalAlignment="Top" />
+        <TextBox Text="{Binding SearchViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="30" Margin="{StaticResource DefaultMargin}" VerticalAlignment="Top" />
         <Button Grid.Column="1" Grid.Row="0" Margin="{StaticResource DefaultMargin}" VerticalAlignment="Top" Visibility="{Binding IsSearchMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Command="{Binding NewGroupCommand}" Style="{StaticResource ContentButtonStyle}">
             <Button.Content>
                 <Image Source="../Assets/Icons/ic_new_group.png" Stretch="None"  />

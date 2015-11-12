@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.ViewModels;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -22,6 +23,18 @@ namespace QMunicate.Views
         public SearchControl()
         {
             this.InitializeComponent();
+        }
+
+        private void Pivot_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //var currentPivotItem = Pivot.SelectedItem as PivotItem;
+            //var viewModel = this.DataContext as SearchViewModel;
+            //if (currentPivotItem != null && viewModel != null && this.Resources.ContainsKey("GlobalLabel"))
+            //{
+            //    var globalLabel = this.Resources["GlobalLabel"] as string;
+            //    var pivotItemHeader = currentPivotItem.Header as string;
+            //    viewModel.IsInGlobalSeachMode = pivotItemHeader == globalLabel;
+            //}
         }
     }
 }
