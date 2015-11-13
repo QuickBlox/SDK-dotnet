@@ -19,6 +19,18 @@ namespace QMunicate.ViewModels
 {
     public class DialogsViewModel : ViewModel, IUserControlViewModel
     {
+        #region Fields
+
+        private DialogViewModel selectedDialog;
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler<string> SelectedDialogChanged;
+
+        #endregion
+
         #region Ctor
 
         public DialogsViewModel()
@@ -32,6 +44,18 @@ namespace QMunicate.ViewModels
         #region Properties
 
         public IDialogsManager DialogsManager { get; set; }
+
+        public DialogViewModel SelectedDialog
+        {
+            get { return selectedDialog; }
+            set
+            {
+                if (Set(ref selectedDialog, value))
+                {
+                    SelectedDialogChanged?.Invoke(this, value?.Id);
+                }
+            }
+        }
 
         public RelayCommand<object> OpenChatCommand { get; set; }
 

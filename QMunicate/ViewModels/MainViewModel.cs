@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Navigation;
+using QMunicate.Core.DependencyInjection;
+using QMunicate.Core.Navigation;
+using QMunicate.Models;
+using QMunicate.Services;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 
 namespace QMunicate.ViewModels
 {
@@ -14,13 +19,23 @@ namespace QMunicate.ViewModels
         public MainViewModel()
         {
             DialogsAndSearchViewModel = new DialogsAndSearchViewModel();
+            DialogsAndSearchViewModel.SelectedDialogChanged += DialogsAndSearchViewModelOnSelectedDialogChanged;
+
+            ContentNavigationService = new NavigationService();
         }
+
+        
 
         #endregion
 
         #region Properties
 
         public DialogsAndSearchViewModel DialogsAndSearchViewModel { get; set; }
+
+        /// <summary>
+        /// NavigationService for Content part of a SplitView on MainPage.
+        /// </summary>
+        public INavigationService ContentNavigationService { get; set; }
 
         #endregion
 
@@ -30,8 +45,24 @@ namespace QMunicate.ViewModels
         {
             IsLoading = true;
             await DialogsAndSearchViewModel.Initialize(e.Parameter);
+
+            // this is a testCode
+            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            var dialog = dialogsManager.Dialogs.FirstOrDefault(d => d.DialogType == DialogType.Private);
+
+
+            ContentNavigationService.Navigate(ContentViewLocator.PrivateChat, new ChatNavigationParameter() {Dialog = dialog});
             IsLoading = false;
         }
+
+        #endregion
+
+        #region Private methods
+
+        private void DialogsAndSearchViewModelOnSelectedDialogChanged(object sender, string s)
+        {
+            throw new NotImplementedException();
+        } 
 
         #endregion
     }

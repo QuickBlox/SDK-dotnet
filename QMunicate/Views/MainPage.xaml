@@ -15,7 +15,7 @@
                 <local:DialogsAndSearchControl DataContext="{Binding DialogsAndSearchViewModel}"/>
             </SplitView.Pane>
             <SplitView.Content>
-                <TextBlock Text="This is content"/>
+                <Frame x:Name="ContentFrame"/>
             </SplitView.Content>
         </SplitView>
     </Grid>

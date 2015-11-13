@@ -14,6 +14,8 @@ namespace QMunicate.ViewModels
 
         public MainViewModel MainViewModel => new MainViewModel();
 
+        public PrivateChatViewModel PrivateChatViewModel => new PrivateChatViewModel();
+
         #endregion
     }
 }

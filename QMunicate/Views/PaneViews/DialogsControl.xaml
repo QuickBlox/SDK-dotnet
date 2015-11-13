@@ -26,7 +26,7 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Image Source="{Binding Image, TargetNullValue=../Assets/AvatarPlaceholder.png}" Width="55" Height="55" Grid.RowSpan="2" Margin="0 0 12 0"/>
+                <Image Source="{Binding Image, TargetNullValue=../../Assets/AvatarPlaceholder.png}" Width="55" Height="55" Grid.RowSpan="2" Margin="0 0 12 0"/>
                 <TextBlock Text="{Binding Name}" Grid.Column="1" Grid.Row="0" FontSize="{StaticResource NormalFontSize}"/>
                 <TextBlock Text="{Binding LastActivity}" Grid.Column="1" Grid.Row="1" FontSize="{StaticResource SmallFontSize}" Foreground="Gray"/>
                 <TextBlock Text="{Binding LastMessageSent, Converter={StaticResource HandyDateConverter}}"
@@ -36,8 +36,6 @@
     </UserControl.Resources>
 
     <Grid>
-        <ScrollViewer Margin="{StaticResource DefaultMargin}">
-            <ItemsControl ItemsSource="{Binding DialogsManager.Dialogs}" ItemTemplate="{StaticResource DialogTemplate}"/>
-        </ScrollViewer>
+        <ListView ItemsSource="{Binding DialogsManager.Dialogs}" ItemTemplate="{StaticResource DialogTemplate}" Background="Transparent"  />
     </Grid>
 </UserControl>

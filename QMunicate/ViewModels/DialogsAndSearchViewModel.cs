@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using QMunicate.Core.Command;
 using QMunicate.Core.Observable;
+using QMunicate.ViewModels.PartialViewModels;
 
 namespace QMunicate.ViewModels
 {
@@ -16,6 +17,12 @@ namespace QMunicate.ViewModels
 
         #endregion
 
+        #region Events
+
+        public event EventHandler<string> SelectedDialogChanged;
+
+        #endregion
+
         #region Ctor
 
         public DialogsAndSearchViewModel()
@@ -24,10 +31,13 @@ namespace QMunicate.ViewModels
             SearchViewModel = new SearchViewModel();
 
             SearchViewModel.SearchTextChanged += SearchViewModelOnSearchTextChanged;
+            DialogsViewModel.SelectedDialogChanged += DialogsViewModelOnSelectedDialogChanged;
 
             NewGroupCommand = new RelayCommand(NewGroupCommandExecute, () => !IsLoading);
             SettingsCommand = new RelayCommand(SettingsCommandExecute, () => !IsLoading);
         }
+
+       
 
         #endregion
 
@@ -59,6 +69,11 @@ namespace QMunicate.ViewModels
         #endregion
 
         #region Private methods
+
+        private void DialogsViewModelOnSelectedDialogChanged(object sender, string dialogId)
+        {
+            SelectedDialogChanged?.Invoke(this, dialogId);
+        }
 
         private void SearchViewModelOnSearchTextChanged(object sender, string searchText)
         {
