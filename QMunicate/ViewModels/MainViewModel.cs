@@ -59,9 +59,12 @@ namespace QMunicate.ViewModels
 
         #region Private methods
 
-        private void DialogsAndSearchViewModelOnSelectedDialogChanged(object sender, string s)
+        private void DialogsAndSearchViewModelOnSelectedDialogChanged(object sender, string dialogId)
         {
-            throw new NotImplementedException();
+            var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
+            var dialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == dialogId);
+
+            ContentNavigationService.Navigate(ContentViewLocator.PrivateChat, new ChatNavigationParameter() {Dialog = dialog});
         } 
 
         #endregion

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using QMunicate.Core.Command;
-using QMunicate.Core.Observable;
 using QMunicate.ViewModels.PartialViewModels;
 
 namespace QMunicate.ViewModels
@@ -14,6 +10,7 @@ namespace QMunicate.ViewModels
         #region Fields
 
         private bool isSearchMode;
+        private DialogViewModel selectedDialog;
 
         #endregion
 
@@ -42,6 +39,16 @@ namespace QMunicate.ViewModels
         #endregion
 
         #region Properties
+
+        public DialogViewModel SelectedDialog
+        {
+            get { return selectedDialog; }
+            set
+            {
+                if(Set(ref selectedDialog, value))
+                    SelectedDialogChanged?.Invoke(this, selectedDialog?.Id);
+            }
+        }
 
         public DialogsViewModel DialogsViewModel { get; set; }
 

@@ -36,6 +36,6 @@
     </UserControl.Resources>
 
     <Grid>
-        <ListView ItemsSource="{Binding DialogsManager.Dialogs}" ItemTemplate="{StaticResource DialogTemplate}" Background="Transparent"  />
+        <ListView ItemsSource="{Binding DialogsManager.Dialogs}" SelectedItem="{Binding SelectedDialog, Mode=TwoWay}" ItemTemplate="{StaticResource DialogTemplate}" Background="Transparent"  />
     </Grid>
 </UserControl>
