@@ -8,15 +8,16 @@ using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.Modules.ChatModule;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.CustomObjectModule;
-using Quickblox.Sdk.Modules.MessagesModule;
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 using System;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Logger;
+using Quickblox.Sdk.Modules.ChatXmppModule;
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
 using Quickblox.Sdk.Modules.LocationModule;
 #if !Xamarin
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+
 #endif
 
 namespace Quickblox.Sdk

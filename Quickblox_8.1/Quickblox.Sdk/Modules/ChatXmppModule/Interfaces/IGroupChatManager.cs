@@ -1,8 +1,8 @@
-﻿using Quickblox.Sdk.GeneralDataModel.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
-namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
+namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
 {
     /// <summary>
     /// Group chat manager interface.

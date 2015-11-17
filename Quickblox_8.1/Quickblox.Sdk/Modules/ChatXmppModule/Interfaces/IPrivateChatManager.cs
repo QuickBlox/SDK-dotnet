@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Quickblox.Sdk.GeneralDataModel.Models;
 
-namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
+namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
 {
     /// <summary>
     /// Manager interface for one-to-one private chats.

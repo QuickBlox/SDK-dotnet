@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule
 {

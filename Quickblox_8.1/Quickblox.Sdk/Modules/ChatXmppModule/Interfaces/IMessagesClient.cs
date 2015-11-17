@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 
-
-namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
+namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
 {
     /// <summary>
     /// XMPP chat client interface.

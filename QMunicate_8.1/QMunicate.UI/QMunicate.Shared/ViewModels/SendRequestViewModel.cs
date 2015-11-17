@@ -14,7 +14,6 @@ using QMunicate.Models;
 using QMunicate.Services;
 using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk.Modules.ChatModule.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 
 namespace QMunicate.ViewModels
 {

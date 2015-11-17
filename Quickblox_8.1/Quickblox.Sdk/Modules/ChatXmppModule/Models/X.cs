@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
-namespace Quickblox.Sdk.Modules.MessagesModule.Models
+namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 {
     public class X : XElement
     {

@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml.Media;
 using QMunicate.Core.Observable;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Models;
 
 namespace QMunicate.ViewModels.PartialViewModels

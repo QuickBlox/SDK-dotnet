@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using Quickblox.Sdk.Test.Logger;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule

@@ -1,14 +1,11 @@
-﻿using Quickblox.Sdk.Modules.ChatModule.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
-using System;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using XMPP.tags.jabber.client;
 using XMPP.tags.jabber.protocol.chatstates;
 
-namespace Quickblox.Sdk.Modules.MessagesModule
+namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
     public class PrivateChatManager : IPrivateChatManager
     {

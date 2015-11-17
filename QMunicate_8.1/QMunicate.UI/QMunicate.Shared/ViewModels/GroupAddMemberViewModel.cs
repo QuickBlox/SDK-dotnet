@@ -9,7 +9,6 @@ using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
 using Quickblox.Sdk.Modules.ContentModule;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,6 +21,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 
 namespace QMunicate.ViewModels
 {

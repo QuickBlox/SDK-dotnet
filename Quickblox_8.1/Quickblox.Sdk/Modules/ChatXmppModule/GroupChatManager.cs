@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Text.RegularExpressions;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using XMPP.tags.jabber.client;
 
-namespace Quickblox.Sdk.Modules.MessagesModule
+namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
     //TODO: use conditions if something was different
     #if Xamarin

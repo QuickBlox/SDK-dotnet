@@ -4,7 +4,6 @@ using QMunicate.Helper;
 using QMunicate.Models;
 using Quickblox.Sdk;
 using Quickblox.Sdk.Modules.ChatModule.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Responses;
 using System;
 using System.Collections.ObjectModel;
@@ -17,6 +16,7 @@ using Windows.UI.Xaml.Navigation;
 using QMunicate.Core.AsyncLock;
 using QMunicate.Services;
 using QMunicate.ViewModels.PartialViewModels;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 
 namespace QMunicate.ViewModels
 {

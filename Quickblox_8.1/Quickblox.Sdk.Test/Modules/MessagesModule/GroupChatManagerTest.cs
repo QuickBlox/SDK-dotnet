@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatModule.Requests;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule
 {

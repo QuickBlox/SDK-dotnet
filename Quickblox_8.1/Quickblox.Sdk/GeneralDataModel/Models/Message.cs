@@ -1,6 +1,5 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 
 namespace Quickblox.Sdk.GeneralDataModel.Models
 {
