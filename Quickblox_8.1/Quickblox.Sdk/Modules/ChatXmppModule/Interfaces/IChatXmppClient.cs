@@ -9,7 +9,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
     /// <summary>
     /// XMPP chat client interface.
     /// </summary>
-    public interface IMessagesClient
+    public interface IChatXmppClient
     {
         /// <summary>
         /// Event occuring when a new message is received.

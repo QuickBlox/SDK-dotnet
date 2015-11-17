@@ -40,7 +40,7 @@ namespace QMunicate.Services
         public DialogsManager(IQuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
-            quickbloxClient.MessagesClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
+            quickbloxClient.ChatXmppClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
             Dialogs = new ObservableCollection<DialogViewModel>();
         }
 
@@ -100,7 +100,7 @@ namespace QMunicate.Services
             {
                 if (dialogVm.DialogType == DialogType.Group)
                 {
-                    var groupChatManager = quickbloxClient.MessagesClient.GetGroupChatManager(dialogVm.XmppRoomJid, dialogVm.Id);
+                    var groupChatManager = quickbloxClient.ChatXmppClient.GetGroupChatManager(dialogVm.XmppRoomJid, dialogVm.Id);
                     groupChatManager.JoinGroup(currentUserId.ToString());
                 }
             }
@@ -165,7 +165,7 @@ namespace QMunicate.Services
 
         private string GetUserNameFromContacts(int userId)
         {
-            var otherContact = quickbloxClient.MessagesClient.Contacts.FirstOrDefault(c => c.UserId == userId);
+            var otherContact = quickbloxClient.ChatXmppClient.Contacts.FirstOrDefault(c => c.UserId == userId);
             if (otherContact != null)
                 return otherContact.Name;
 

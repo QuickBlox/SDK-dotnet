@@ -180,7 +180,7 @@ namespace QMunicate.ViewModels
 
             await TurnOffPushNotifications();
 
-            QuickbloxClient.MessagesClient.Disconnect();
+            QuickbloxClient.ChatXmppClient.Disconnect();
             await QuickbloxClient.CoreClient.DeleteSessionAsync(QuickbloxClient.Token);
             SettingsManager.Instance.DeleteFromSettings(SettingsKeys.CurrentUserId);
 

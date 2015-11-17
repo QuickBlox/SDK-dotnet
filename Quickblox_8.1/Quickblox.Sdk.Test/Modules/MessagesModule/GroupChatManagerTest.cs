@@ -52,25 +52,25 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             var sessionResponse = await client1.CoreClient.CreateSessionWithEmailAsync(appId, authKey, authSecret, email1, password1);
             client1.Token = sessionResponse.Result.Session.Token;
 #if DEBUG
-            client1.MessagesClient.DebugClientName = "1";
+            client1.ChatXmppClient.DebugClientName = "1";
 #endif
-            await client1.MessagesClient.Connect(chatEndpoint, id1, (int)appId, password1);
+            await client1.ChatXmppClient.Connect(chatEndpoint, id1, (int)appId, password1);
 
             client2 = new QuickbloxClient(apiEndpoint, chatEndpoint, logger);
             var sessionResponse2 = await client2.CoreClient.CreateSessionWithEmailAsync(appId, authKey, authSecret, email2, password2);
             client2.Token = sessionResponse2.Result.Session.Token;
 #if DEBUG
-            client2.MessagesClient.DebugClientName = "2";
+            client2.ChatXmppClient.DebugClientName = "2";
 #endif
-            await client2.MessagesClient.Connect(chatEndpoint, id2, (int)appId, password2);
+            await client2.ChatXmppClient.Connect(chatEndpoint, id2, (int)appId, password2);
 
             client3 = new QuickbloxClient(apiEndpoint, chatEndpoint, logger);
             var sessionResponse3 = await client2.CoreClient.CreateSessionWithEmailAsync(appId, authKey, authSecret, email2, password2);
             client3.Token = sessionResponse3.Result.Session.Token;
 #if DEBUG
-            client3.MessagesClient.DebugClientName = "3";
+            client3.ChatXmppClient.DebugClientName = "3";
 #endif
-            await client3.MessagesClient.Connect(chatEndpoint, id3, (int)appId, password3);
+            await client3.ChatXmppClient.Connect(chatEndpoint, id3, (int)appId, password3);
         }
 
         [TestMethod]
@@ -81,8 +81,8 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             var createDialogResponse = await client1.ChatClient.CreateDialogAsync("TestDialog1", DialogType.Group, string.Format("{0},{1}", id2, "3125358"));
             Assert.AreEqual(createDialogResponse.StatusCode, HttpStatusCode.Created);
 
-            IGroupChatManager chatManager1 = client1.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
-            IGroupChatManager chatManager2 = client2.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
+            IGroupChatManager chatManager1 = client1.ChatXmppClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
+            IGroupChatManager chatManager2 = client2.ChatXmppClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
 
             chatManager1.JoinGroup(id1.ToString());
             chatManager2.JoinGroup(id2.ToString());
@@ -99,11 +99,11 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [TestMethod]
         public async Task GroupChatTest()
         {
-            IGroupChatManager chatManager1 = client1.MessagesClient.GetGroupChatManager(groupJid, groupDialogId);
+            IGroupChatManager chatManager1 = client1.ChatXmppClient.GetGroupChatManager(groupJid, groupDialogId);
             chatManager1.JoinGroup(id1.ToString());
-            IGroupChatManager chatManager2 = client2.MessagesClient.GetGroupChatManager(groupJid, groupDialogId);
+            IGroupChatManager chatManager2 = client2.ChatXmppClient.GetGroupChatManager(groupJid, groupDialogId);
             chatManager2.JoinGroup(id2.ToString());
-            IGroupChatManager chatManager3 = client3.MessagesClient.GetGroupChatManager(groupJid, groupDialogId);
+            IGroupChatManager chatManager3 = client3.ChatXmppClient.GetGroupChatManager(groupJid, groupDialogId);
             chatManager3.JoinGroup(id3.ToString());
             await Task.Delay(2000);
 

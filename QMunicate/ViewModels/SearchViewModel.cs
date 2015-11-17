@@ -160,14 +160,14 @@ namespace QMunicate.ViewModels
                 LocalResults.Clear();
                 if (string.IsNullOrEmpty(searchQuery))
                 {
-                    foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
+                    foreach (Contact contact in QuickbloxClient.ChatXmppClient.Contacts)
                     {
                         LocalResults.Add(UserViewModel.FromContact(contact));
                     }
                 }
                 else
                 {
-                    foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
+                    foreach (Contact contact in QuickbloxClient.ChatXmppClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
                     {
                         LocalResults.Add(UserViewModel.FromContact(contact));
                     }

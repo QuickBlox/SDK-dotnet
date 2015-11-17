@@ -22,7 +22,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
     /// <summary>
     /// Messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
     /// </summary>
-    public class MessagesClient : IMessagesClient, IRosterManager
+    public class ChatXmppClient : IChatXmppClient, IRosterManager
     {
         #region Fields
 
@@ -60,7 +60,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region Ctor
 
-        internal MessagesClient(QuickbloxClient quickbloxClient)
+        internal ChatXmppClient(QuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
             Contacts = new List<Contact>();

@@ -72,7 +72,7 @@ namespace QMunicate.ViewModels
             var user = e.Parameter as UserViewModel;
             if (user == null) return;
 
-            IsAdded = QuickbloxClient.MessagesClient.Contacts.Any(c => c.UserId == user.UserId);
+            IsAdded = QuickbloxClient.ChatXmppClient.Contacts.Any(c => c.UserId == user.UserId);
 
             UserImage = user.Image;
             UserName = user.FullName;
@@ -99,7 +99,7 @@ namespace QMunicate.ViewModels
             var createDialogResponse = await QuickbloxClient.ChatClient.CreateDialogAsync(UserName, DialogType.Private, otherUserId.ToString());
             if (createDialogResponse.StatusCode != HttpStatusCode.Created) return;
 
-            var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, createDialogResponse.Result.Id);
+            var privateChatManager = QuickbloxClient.ChatXmppClient.GetPrivateChatManager(otherUserId, createDialogResponse.Result.Id);
             privateChatManager.AddToFriends(UserName);
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();

@@ -129,7 +129,7 @@ namespace QMunicate.ViewModels
 
             await MessageCollectionViewModel.LoadMessages(dialogId);
 
-            groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(dialog.XmppRoomJid, dialog.Id);
+            groupChatManager = QuickbloxClient.ChatXmppClient.GetGroupChatManager(dialog.XmppRoomJid, dialog.Id);
             groupChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
             groupChatManager.JoinGroup(currentUserId.ToString());
 

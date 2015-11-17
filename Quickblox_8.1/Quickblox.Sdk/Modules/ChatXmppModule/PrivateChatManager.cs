@@ -28,11 +28,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         internal PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId)
         {
             this.otherUserId = otherUserId;
-            this.otherUserJid = string.Format("{0}-{1}@{2}", otherUserId, quickbloxClient.MessagesClient.ApplicationId, quickbloxClient.MessagesClient.ChatEndpoint);
+            this.otherUserJid = string.Format("{0}-{1}@{2}", otherUserId, quickbloxClient.ChatXmppClient.ApplicationId, quickbloxClient.ChatXmppClient.ChatEndpoint);
             this.dialogId = dialogId;
             this.quickbloxClient = quickbloxClient;
             this.xmppClient = xmppClient;
-            quickbloxClient.MessagesClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
+            quickbloxClient.ChatXmppClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
         }
 
         #endregion
@@ -82,7 +82,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         public bool AddToFriends(string friendName = null)
         {
-            var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
+            var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
             if (rosterManager != null)
             {
                 rosterManager.AddContact(new Contact() { Name = friendName ?? otherUserId.ToString(), UserId = otherUserId });
@@ -110,7 +110,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         public bool AcceptFriend(string friendName = null)
         {
-            var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
+            var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
             if (rosterManager != null)
             {
                 rosterManager.AddContact(new Contact()
@@ -180,7 +180,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
             xmppClient.Send(msg);
 
-            var rosterManager = quickbloxClient.MessagesClient as IRosterManager;
+            var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
             if (rosterManager != null)
             {
                 rosterManager.DeleteContact(otherUserId);

@@ -33,7 +33,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient = client;
             this.groupJid = groupJid;
             this.dialogId = dialogId;
-            quickbloxClient.MessagesClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
+            quickbloxClient.ChatXmppClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
         }
 
         #endregion

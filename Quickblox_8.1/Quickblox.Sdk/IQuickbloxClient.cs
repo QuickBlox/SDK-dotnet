@@ -55,7 +55,7 @@ namespace Quickblox.Sdk
         /// Messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
         /// </summary>
 #if !Xamarin
-        IMessagesClient MessagesClient { get; }
+        IChatXmppClient ChatXmppClient { get; }
 #else
         MessagesClient MessagesClient { get; }
 #endif

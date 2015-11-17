@@ -189,7 +189,7 @@ namespace QMunicate.ViewModels
 
                 if (otherUserId != 0)
                 {
-                    privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);
+                    privateChatManager = QuickbloxClient.ChatXmppClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);
                     privateChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
                     privateChatManager.OnIsTyping += PrivateChatManagerOnOnIsTyping;
                     privateChatManager.OnPausedTyping += PrivateChatManagerOnOnPausedTyping;

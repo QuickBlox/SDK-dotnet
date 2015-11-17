@@ -93,7 +93,7 @@ namespace Quickblox.Sdk
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
             this.LocationClient = new LocationClient(this);
-            this.MessagesClient = new MessagesClient(this);
+            this.ChatXmppClient = new ChatXmppClient(this);
             this.ContentClient = new ContentClient(this);      
             this.CustomObjectsClient = new CustomObjectsClient(this);
         }
@@ -138,9 +138,9 @@ namespace Quickblox.Sdk
         /// Messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
         /// </summary>
 #if !Xamarin
-        public IMessagesClient MessagesClient { get; private set; }
+        public IChatXmppClient ChatXmppClient { get; private set; }
 #else
-        public MessagesClient MessagesClient { get; private set; }
+        public ChatXmppClient ChatXmppClient { get; private set; }
 #endif
         /// <summary>
         /// Custom Objects module provides flexibility to define any data structure(schema) you need.

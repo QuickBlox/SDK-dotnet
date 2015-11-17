@@ -171,7 +171,7 @@ namespace QMunicate.ViewModels
         {
             allContacts = new List<SelectableListBoxItem<UserViewModel>>();
 
-            foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
+            foreach (Contact contact in QuickbloxClient.ChatXmppClient.Contacts)
             {
                 if(existingDialog != null && existingDialog.OccupantIds.Contains(contact.UserId)) continue;
 
@@ -262,7 +262,7 @@ namespace QMunicate.ViewModels
                 var dialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == editedDialog.Id);
                 dialog.OccupantIds = updateDialogResponse.Result.OccupantsIds;
 
-                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(editedDialog.XmppRoomJid, editedDialog.Id);
+                var groupChatManager = QuickbloxClient.ChatXmppClient.GetGroupChatManager(editedDialog.XmppRoomJid, editedDialog.Id);
                 groupChatManager.NotifyAboutGroupUpdate(addedUsers);
 
                 NavigationService.Navigate(ViewLocator.GroupChat, editedDialog.Id);
@@ -291,12 +291,12 @@ namespace QMunicate.ViewModels
                 dialogsManager.Dialogs.Insert(0, dialogVm);
 
                 int currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
-                var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
+                var groupChatManager = QuickbloxClient.ChatXmppClient.GetGroupChatManager(createDialogResponse.Result.XmppRoomJid, createDialogResponse.Result.Id);
                 groupChatManager.JoinGroup(currentUserId.ToString());
 
                 foreach (var contact in selectedContacts)
                 {
-                    var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(contact.Item.UserId, createDialogResponse.Result.Id);
+                    var privateChatManager = QuickbloxClient.ChatXmppClient.GetPrivateChatManager(contact.Item.UserId, createDialogResponse.Result.Id);
                     privateChatManager.NotifyAboutGroupCreation(createDialogResponse.Result.Id);
                 }
 

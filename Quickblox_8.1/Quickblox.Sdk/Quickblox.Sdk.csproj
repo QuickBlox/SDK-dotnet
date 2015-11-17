@@ -105,7 +105,7 @@
     <Compile Include="Modules\LocationModule\Responses\GeoDataWithUserResponse.cs" />
     <Compile Include="Modules\LocationModule\Responses\GeoDatumResponse.cs" />
     <Compile Include="Modules\LocationModule\Responses\GeoDataResponse.cs" />
-    <Compile Include="Modules\ChatXmppModule\Interfaces\IMessagesClient.cs" />
+    <Compile Include="Modules\ChatXmppModule\Interfaces\IChatXmppClient.cs" />
     <Compile Include="Modules\ChatXmppModule\Interfaces\IGroupChatManager.cs" />
     <Compile Include="Modules\ChatXmppModule\Interfaces\IPrivateChatManager.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\Contact.cs" />
@@ -135,7 +135,7 @@
     <Compile Include="GeneralDataModel\Request\PagedRequestSettings.cs" />
     <Compile Include="GeneralDataModel\Response\PagedResponse.cs" />
     <Compile Include="Modules\ChatXmppModule\GroupChatManager.cs" />
-    <Compile Include="Modules\ChatXmppModule\MessagesClient.cs" />
+    <Compile Include="Modules\ChatXmppModule\ChatXmppClient.cs" />
     <Compile Include="Modules\AuthModule\Models\FullUser.cs" />
     <Compile Include="Modules\ChatModule\ChatClient.cs" />
     <Compile Include="Modules\ChatModule\Models\DialogType.cs" />
