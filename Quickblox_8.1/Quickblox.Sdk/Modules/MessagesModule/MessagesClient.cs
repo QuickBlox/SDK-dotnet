@@ -26,7 +26,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
     {
         #region Fields
 
-        private readonly IQuickbloxClient quickbloxClient;
+        private readonly QuickbloxClient quickbloxClient;
         private XMPP.Client xmppClient;
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
         private bool isReady;
@@ -60,7 +60,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        internal MessagesClient(IQuickbloxClient quickbloxClient)
+        internal MessagesClient(QuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
             Contacts = new List<Contact>();
@@ -113,7 +113,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         /// <param name="applicationId">Quickblox application ID</param>
         /// <param name="password">User password</param>
         /// <returns>Async operation result</returns>
-        public async Task Connect(string chatEndpoint, int userId, int applicationId, string password)
+        public async Task Connect(int userId, string password)
         {
             var timeout = new TimeSpan(0, 0, 60);
             var tcs = new TaskCompletionSource<object>();
@@ -132,7 +132,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
             },
             tcs, timeout, new TimeSpan(0, 0, 0, 0, -1));
 
-            OpenConnection(xmppClient, chatEndpoint, userId, applicationId, password);
+            OpenConnection(xmppClient, quickbloxClient.ChatEndpoint, userId, quickbloxClient.ApplicationId, password);
 
             await tcs.Task;
         }

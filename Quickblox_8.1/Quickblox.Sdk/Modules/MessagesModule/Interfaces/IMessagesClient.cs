@@ -64,12 +64,10 @@ namespace Quickblox.Sdk.Modules.MessagesModule.Interfaces
         /// <summary>
         /// Connects to XMPP server.
         /// </summary>
-        /// <param name="chatEndpoint">XMPP chatendpoint</param>
         /// <param name="userId">User ID</param>
-        /// <param name="applicationId">Quickblox application ID</param>
         /// <param name="password">User password</param>
         /// <returns>Async operation result</returns>
-        Task Connect(string chatEndpoint, int userId, int applicationId, string password);
+        Task Connect(int userId, string password);
 
         /// <summary>
         /// Disconnects from XMPP server.

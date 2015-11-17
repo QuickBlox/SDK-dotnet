@@ -85,7 +85,7 @@ namespace QMunicate.ViewModels
         {
             if (!QuickbloxClient.MessagesClient.IsConnected)
             {
-                await QuickbloxClient.MessagesClient.Connect(QuickbloxClient.ChatEndpoint, userId, ApplicationKeys.ApplicationId, password);
+                await QuickbloxClient.MessagesClient.Connect(userId, password);
                 QuickbloxClient.MessagesClient.ReloadContacts();
             }
         }
