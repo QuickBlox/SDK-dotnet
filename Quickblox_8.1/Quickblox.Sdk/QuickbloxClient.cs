@@ -26,16 +26,34 @@ namespace Quickblox.Sdk
     /// </summary>
     public class QuickbloxClient : IQuickbloxClient
     {
-#region Ctor
+        private const string defaultApiEndpoint = "https://api.quickblox.com";
+        private const string defaultChatEndpoint = "chat.quickblox.com";
+
+        #region Ctor
+        /// <summary>
+        /// QuickbloxClient ctor.
+        /// </summary>
+        /// <param name="applicationId">Quickblox application ID</param>
+        /// <param name="authKey">Auth Key</param>
+        /// <param name="authSecret">Auth Secret</param>
+        /// <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
+        public QuickbloxClient(int applicationId, string authKey, string authSecret, ILogger logger = null)
+            : this(applicationId, authKey, authSecret, defaultApiEndpoint, defaultChatEndpoint, logger)
+        {
+
+        }
 
         /// <summary>
         /// QuickbloxClient ctor.
         /// </summary>
+        /// <param name="applicationId">Quickblox application ID</param>
+        /// <param name="authKey">Auth Key</param>
+        /// <param name="authSecret">Auth Secret</param>
         /// <param name="apiEndpoint">API endpoint</param>
         /// <param name="chatEndpoint">XMPP chat endpoint</param>
         /// <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
-        public QuickbloxClient(string apiEndpoint, string chatEndpoint, ILogger logger = null)
-            : this(apiEndpoint, chatEndpoint, new HmacSha1CryptographicProvider(), logger)
+        public QuickbloxClient(int applicationId, string authKey, string authSecret, string apiEndpoint, string chatEndpoint, ILogger logger = null)
+            : this(applicationId, authKey, authSecret, apiEndpoint, chatEndpoint, new HmacSha1CryptographicProvider(), logger)
         {
             
         }
@@ -43,21 +61,29 @@ namespace Quickblox.Sdk
         /// <summary>
         /// QuickbloxClient ctor.
         /// </summary>
+        /// <param name="applicationId">Quickblox application ID</param>
+        /// <param name="authKey">Auth Key</param>
+        /// <param name="authSecret">Auth Secret</param>
         /// <param name="apiEndpoint">API endpoint</param>
         /// <param name="chatEndpoint">XMPP chat endpoint</param>
         /// <param name="cryptographicProvider">HMAC SHA1 Cryptographic Provider</param>
         /// <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
-        public QuickbloxClient(string apiEndpoint, string chatEndpoint, ICryptographicProvider cryptographicProvider, ILogger logger = null)
+        public QuickbloxClient(int applicationId, string authKey, string authSecret, string apiEndpoint, string chatEndpoint, ICryptographicProvider cryptographicProvider, ILogger logger = null)
         {
-            if (apiEndpoint == null) throw new ArgumentNullException("apiEndpoint");
-            if (chatEndpoint == null) throw new ArgumentNullException("chatEndpoint");
-            if (cryptographicProvider == null) throw new ArgumentNullException("cryptographicProvider");
+            if (apiEndpoint == null) throw new ArgumentNullException(nameof(apiEndpoint));
+            if (chatEndpoint == null) throw new ArgumentNullException(nameof(chatEndpoint));
+            if (authKey == null) throw new ArgumentNullException(nameof(authKey));
+            if (authSecret == null) throw new ArgumentNullException(nameof(authSecret));
+            if (cryptographicProvider == null) throw new ArgumentNullException(nameof(cryptographicProvider));
 
             if (logger != null)
             {
                 LoggerHolder.LoggerInstance = logger;
             }
 
+            ApplicationId = applicationId;
+            AuthKey = authKey;
+            AuthSecret = authSecret;
             ApiEndPoint = apiEndpoint;
             ChatEndpoint = chatEndpoint;
 
@@ -71,15 +97,17 @@ namespace Quickblox.Sdk
             this.CustomObjectsClient = new CustomObjectsClient(this);
         }
 
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
+
+        #region Clients
 
         /// <summary>
         /// Content module allows to manage app contents and settings.
         /// </summary>
         public ContentClient ContentClient { get; private set; }
-        
+
         /// <summary>
         /// Authorization module allows to manage user sessions.
         /// </summary>
@@ -111,13 +139,30 @@ namespace Quickblox.Sdk
 #if !Xamarin
         public IMessagesClient MessagesClient { get; private set; }
 #else
-		public MessagesClient MessagesClient { get; private set;}
+        public MessagesClient MessagesClient { get; private set; }
 #endif
         /// <summary>
         /// Custom Objects module provides flexibility to define any data structure(schema) you need.
         /// Schema is defined in QuickBlox Administration Panel. The schema is called Class and contains field names and their type.
         /// </summary>
         public CustomObjectsClient CustomObjectsClient { get; private set; }
+
+        #endregion
+
+        /// <summary>
+        /// Quickblox aplication ID.
+        /// </summary>
+        internal int ApplicationId { get; private set; }
+
+        /// <summary>
+        /// Authorization Key
+        /// </summary>
+        internal string AuthKey { get; private set; }
+
+        /// <summary>
+        /// Authorization Secret
+        /// </summary>
+        internal string AuthSecret { get; private set; }
 
         /// <summary>
         /// API endpoint

@@ -37,7 +37,7 @@ namespace QMunicate
         public App()
         {
             var fileLogger = new FileLogger();
-            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, fileLogger);
+            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, fileLogger);
             QmunicateLoggerHolder.LoggerInstance = fileLogger;
             var fileStorage = new FileStorage();
 
