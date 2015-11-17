@@ -70,11 +70,7 @@ namespace QMunicate.ViewModels
 
             var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionBaseAsync(new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
 
-            if (sessionResponse.StatusCode == HttpStatusCode.Created)
-            {
-                QuickbloxClient.Token = sessionResponse.Result.Session.Token;
-            }
-            else
+            if (sessionResponse.StatusCode != HttpStatusCode.Created)
             {
                 await Helpers.ShowErrors(sessionResponse.Errors, messageService);
                 return;

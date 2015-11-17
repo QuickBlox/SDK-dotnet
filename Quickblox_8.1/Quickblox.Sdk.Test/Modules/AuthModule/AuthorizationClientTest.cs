@@ -50,7 +50,6 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         public async Task GetSessionTest()
         {
             var a = await client.CoreClient.CreateSessionWithLoginAsync(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
-            client.Token = a.Result.Session.Token;
             var response = await client.CoreClient.GetSessionAsync();
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
@@ -60,7 +59,6 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         public async Task DeleteSessionTest()
         {
             var sessionResponse = await client.CoreClient.CreateSessionWithLoginAsync(ApplicationId, AuthorizationKey, AuthorizationSecret, Login, Password);
-            client.Token = sessionResponse.Result.Session.Token;
             var response = await client.CoreClient.DeleteSessionAsync(sessionResponse.Result.Session.Token);
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
@@ -70,7 +68,6 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         public async Task ByLoginTest()
         {
             var sessionResponse = await client.CoreClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
-            client.Token = sessionResponse.Result.Session.Token;
 
             var response = await client.CoreClient.ByLoginAsync(Login, Password);
 
@@ -81,7 +78,6 @@ namespace Quickblox.Sdk.Test.Modules.AuthModule
         public async Task ByEmailTest()
         {
             var sessionResponse = await client.CoreClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
-            client.Token = sessionResponse.Result.Session.Token;
 
             var response = await client.CoreClient.ByEmailAsync(Email, Password);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
@@ -55,6 +56,11 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
 
+            if (resultSessionResponse.StatusCode == HttpStatusCode.Created)
+            {
+                quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            }
+
             return resultSessionResponse;
         }
 
@@ -87,6 +93,11 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
+
+            if (resultSessionResponse.StatusCode == HttpStatusCode.Created)
+            {
+                quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            }
 
             return resultSessionResponse;
         }
@@ -121,6 +132,11 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
+            if (resultSessionResponse.StatusCode == HttpStatusCode.Created)
+            {
+                quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            }
+
             return resultSessionResponse;
         }
 
@@ -151,6 +167,12 @@ namespace Quickblox.Sdk.Modules.AuthModule
                                                                                                         QuickbloxMethods.SessionMethod,
                                                                                                         settings,
                                                                                                         RequestHeadersBuilder.GetDefaultHeaders());
+
+            if (resultSessionResponse.StatusCode == HttpStatusCode.Created)
+            {
+                quickbloxClient.Token = resultSessionResponse.Result.Session.Token;
+            }
+
             return resultSessionResponse;
         }
 
@@ -165,6 +187,12 @@ namespace Quickblox.Sdk.Modules.AuthModule
             var result = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, 
                                                                 QuickbloxMethods.SessionMethod,
                                                                 headers);
+
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                quickbloxClient.Token = null;
+            }
+
             return result;
         }
 

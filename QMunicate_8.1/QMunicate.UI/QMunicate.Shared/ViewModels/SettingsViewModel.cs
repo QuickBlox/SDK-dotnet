@@ -182,7 +182,6 @@ namespace QMunicate.ViewModels
 
             QuickbloxClient.MessagesClient.Disconnect();
             await QuickbloxClient.CoreClient.DeleteSessionAsync(QuickbloxClient.Token);
-            QuickbloxClient.Token = null;
             SettingsManager.Instance.DeleteFromSettings(SettingsKeys.CurrentUserId);
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
