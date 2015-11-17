@@ -188,8 +188,7 @@ namespace QMunicate
 
             if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
             {
-                var response = await quickbloxClient.CoreClient.CreateSessionWithEmailAsync(ApplicationKeys.ApplicationId,
-                        ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, login, password,
+                var response = await quickbloxClient.CoreClient.CreateSessionWithEmailAsync(login, password,
                         deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
                 if (response.StatusCode == HttpStatusCode.Created)
                 {

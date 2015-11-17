@@ -62,8 +62,7 @@ namespace QMunicate.ViewModels
         private async void OnFacebookAuthenticationFinished(AccessTokenData fbSession)
         {
             IsLoading = true;
-            var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionWithSocialNetworkKey(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, "facebook",
-                                                                "public_profile", fbSession.AccessToken, null, null);
+            var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionWithSocialNetworkKey("facebook", "public_profile", fbSession.AccessToken, null, null);
             if (sessionResponse.StatusCode == HttpStatusCode.Created)
             {
                 QuickbloxClient.Token = sessionResponse.Result.Session.Token;

@@ -106,8 +106,7 @@ namespace QMunicate.ViewModels
                 passwordVault.Add(credentials);
             }
 
-            var response = await QuickbloxClient.CoreClient.CreateSessionWithEmailAsync(ApplicationKeys.ApplicationId,
-                ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, Email, Password,
+            var response = await QuickbloxClient.CoreClient.CreateSessionWithEmailAsync(Email, Password,
                 deviceRequestRequest:new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
 
             IsLoading = false;
