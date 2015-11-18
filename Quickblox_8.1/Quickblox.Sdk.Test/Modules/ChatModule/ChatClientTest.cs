@@ -22,7 +22,7 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new FileLogger());
-            var sessionResponse = await this.client.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "to1@test.com", "12345678");
+            var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "to1@test.com", "12345678");
             client.Token = sessionResponse.Result.Session.Token;
         }
 

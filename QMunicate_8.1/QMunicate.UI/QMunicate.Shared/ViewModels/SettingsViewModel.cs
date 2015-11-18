@@ -181,7 +181,7 @@ namespace QMunicate.ViewModels
             await TurnOffPushNotifications();
 
             QuickbloxClient.ChatXmppClient.Disconnect();
-            await QuickbloxClient.CoreClient.DeleteSessionAsync(QuickbloxClient.Token);
+            await QuickbloxClient.AuthenticationClient.DeleteSessionAsync(QuickbloxClient.Token);
             SettingsManager.Instance.DeleteFromSettings(SettingsKeys.CurrentUserId);
 
             var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();

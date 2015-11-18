@@ -186,7 +186,7 @@ namespace QMunicate.ViewModels
         {
             if (!string.IsNullOrEmpty(QuickbloxClient.Token)) return;
 
-            var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionBaseAsync(new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
+            var sessionResponse = await QuickbloxClient.AuthenticationClient.CreateSessionBaseAsync(new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
             if (sessionResponse.StatusCode != HttpStatusCode.Created)
             {
                 await Helpers.ShowErrors(sessionResponse.Errors, messageService);
@@ -195,7 +195,7 @@ namespace QMunicate.ViewModels
 
         private async Task<int?> Login()
         {
-            var loginResponse = await QuickbloxClient.CoreClient.ByEmailAsync(Email, Password);
+            var loginResponse = await QuickbloxClient.AuthenticationClient.ByEmailAsync(Email, Password);
             if (loginResponse.StatusCode == HttpStatusCode.Accepted)
             {
                 SettingsManager.Instance.WriteToSettings(SettingsKeys.CurrentUserId, loginResponse.Result.User.Id);

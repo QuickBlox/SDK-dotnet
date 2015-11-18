@@ -29,7 +29,7 @@ namespace Quickblox.Sdk
         /// <summary>
         /// Authentication module allows to manage user sessions.
         /// </summary>
-        AuthenticationClient CoreClient { get; }
+        AuthenticationClient AuthenticationClient { get; }
 
         /// <summary>
         /// Chat module allows to manage user dialogs.

@@ -88,7 +88,7 @@ namespace QMunicate.ViewModels
         //private async void OnFacebookAuthenticationFinished(AccessTokenData fbSession)
         //{
         //    IsLoading = true;
-        //    var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionWithSocialNetworkKey(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, "facebook",
+        //    var sessionResponse = await QuickbloxClient.AuthenticationClient.CreateSessionWithSocialNetworkKey(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, "facebook",
         //                                                        "public_profile", fbSession.AccessToken, null, null);
         //    if (sessionResponse.StatusCode == HttpStatusCode.Created)
         //    {
