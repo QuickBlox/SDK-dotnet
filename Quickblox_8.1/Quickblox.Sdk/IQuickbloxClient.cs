@@ -52,7 +52,7 @@ namespace Quickblox.Sdk
         LocationClient LocationClient { get; }
 
         /// <summary>
-        /// Messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
+        /// ChatXmpp module allows users to chat with each other in private or group dialogs via XMPP protocol.
         /// </summary>
 #if !Xamarin
         IChatXmppClient ChatXmppClient { get; }

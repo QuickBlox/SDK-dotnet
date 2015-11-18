@@ -16,11 +16,11 @@ using XMPP.tags.jabber.iq.roster;
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
     //TODO: use conditions if something was different
-    #if Xamarin
-    #endif
+#if Xamarin
+#endif
 
     /// <summary>
-    /// Messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
+    /// ChatXmpp module allows users to chat with each other in private or group dialogs via XMPP protocol.
     /// </summary>
     public class ChatXmppClient : IChatXmppClient, IRosterManager
     {
@@ -108,9 +108,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <summary>
         /// Connects to XMPP server.
         /// </summary>
-        /// <param name="chatEndpoint">XMPP chatendpoint</param>
         /// <param name="userId">User ID</param>
-        /// <param name="applicationId">Quickblox application ID</param>
         /// <param name="password">User password</param>
         /// <returns>Async operation result</returns>
         public async Task Connect(int userId, string password)
