@@ -88,7 +88,7 @@ namespace Quickblox.Sdk
             ApiEndPoint = apiEndpoint;
             ChatEndpoint = chatEndpoint;
 
-            this.CoreClient = new AuthorizationClient(this, cryptographicProvider);
+            this.CoreClient = new AuthenticationClient(this, cryptographicProvider);
             this.ChatClient = new ChatClient(this);
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
@@ -110,9 +110,9 @@ namespace Quickblox.Sdk
         public ContentClient ContentClient { get; private set; }
 
         /// <summary>
-        /// Authorization module allows to manage user sessions.
+        /// Authentication module allows to manage user sessions.
         /// </summary>
-        public AuthorizationClient CoreClient { get; private set; }
+        public AuthenticationClient CoreClient { get; private set; }
 
         /// <summary>
         /// Chat module allows to manage user dialogs.

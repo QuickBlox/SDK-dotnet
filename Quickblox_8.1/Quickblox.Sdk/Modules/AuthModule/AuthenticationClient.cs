@@ -19,10 +19,10 @@ using Quickblox.Sdk.Serializer;
 namespace Quickblox.Sdk.Modules.AuthModule
 {
     /// <summary>
-    /// Authorization module allows to manage user sessions.
+    /// Authentication module allows to manage user sessions.
     /// http://quickblox.com/developers/Authentication_and_Authorization
     /// </summary>
-    public class AuthorizationClient
+    public class AuthenticationClient
     {
         #region Fields
 
@@ -33,7 +33,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
 
         #region Ctor
 
-        internal AuthorizationClient(QuickbloxClient client, ICryptographicProvider cryptographicProvider)
+        internal AuthenticationClient(QuickbloxClient client, ICryptographicProvider cryptographicProvider)
         {
             this.quickbloxClient = client;
             this.cryptographicProvider = cryptographicProvider;

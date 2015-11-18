@@ -27,9 +27,9 @@ namespace Quickblox.Sdk
         ContentClient ContentClient { get; }
 
         /// <summary>
-        /// Authorization module allows to manage user sessions.
+        /// Authentication module allows to manage user sessions.
         /// </summary>
-        AuthorizationClient CoreClient { get; }
+        AuthenticationClient CoreClient { get; }
 
         /// <summary>
         /// Chat module allows to manage user dialogs.

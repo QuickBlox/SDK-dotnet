@@ -152,7 +152,7 @@
     <Compile Include="Modules\ChatModule\Responses\RetrieveDialogsResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\RetrieveMessagesResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\UpdateDialogResponse.cs" />
-    <Compile Include="Modules\AuthModule\AuthorizationClient.cs" />
+    <Compile Include="Modules\AuthModule\AuthenticationClient.cs" />
     <Compile Include="Modules\AuthModule\Models\SocialScope.cs" />
     <Compile Include="Modules\AuthModule\Response\AccountResponse.cs" />
     <Compile Include="Modules\AuthModule\Response\LoginResponse.cs" />
