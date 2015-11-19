@@ -459,9 +459,6 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\UsersModule\UsersClient.cs">
       <Link>Modules\UsersModule\UsersClient.cs</Link>
     </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\NotInitializedException.cs">
-      <Link>NotInitializedException.cs</Link>
-    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\QuickbloxClient.cs">
       <Link>QuickbloxClient.cs</Link>
     </Compile>

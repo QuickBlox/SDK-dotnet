@@ -232,9 +232,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
         private void OnClientErrorCallback(object sender, Sharp.Xmpp.Im.ErrorEventArgs args)
         {
             Debug.WriteLine("XMPP: ====>  OnClientError:");
-            throw new QuickbloxSdkException(string.Format("XMPP connection exception. Message: {0}. Exception: {1}",
-                       args.Reason, args.Exception));
-
+            
             var handler = OnErrorReceived;
             if (handler != null)
             {
