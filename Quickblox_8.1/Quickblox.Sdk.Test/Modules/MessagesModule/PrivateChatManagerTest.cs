@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using Quickblox.Sdk.Test.Logger;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule
@@ -47,24 +47,24 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
 
             client1 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, logger);
             //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            //await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
+            //await client1.AuthenticationClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
 #if DEBUG
-            //client1.MessagesClient.DebugClientName = "1";
+            //client1.ChatXmppClient.DebugClientName = "1";
 #endif
-            await client1.MessagesClient.Connect(ChatEndpoint, id1, ApplicationId, password1);
-            chatManager1 = client1.MessagesClient.GetPrivateChatManager(id2, dialogId);
-            client1.MessagesClient.OnPresenceReceived += (sender, presence) => { if (lastPresencesClient1 != null) lastPresencesClient1.Add(presence); };
+            await client1.ChatXmppClient.Connect(ChatEndpoint, id1, ApplicationId, password1);
+            chatManager1 = client1.ChatXmppClient.GetPrivateChatManager(id2, dialogId);
+            client1.ChatXmppClient.OnPresenceReceived += (sender, presence) => { if (lastPresencesClient1 != null) lastPresencesClient1.Add(presence); };
 
             client2 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, logger);
             //await client2.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            //await client2.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
+            //await client2.AuthenticationClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
 #if DEBUG
-            //client2.MessagesClient.DebugClientName = "2";
+            //client2.ChatXmppClient.DebugClientName = "2";
 #endif
-            await client2.MessagesClient.Connect(ChatEndpoint, id2, ApplicationId, password2);
-            chatManager2 = client2.MessagesClient.GetPrivateChatManager(id1, dialogId);
-            client2.MessagesClient.OnMessageReceived += (sender, message) => lastMessageClient2 = message;
-            client2.MessagesClient.OnPresenceReceived += (sender, presence) => { if(lastPresencesClient2 != null) lastPresencesClient2.Add(presence); };
+            await client2.ChatXmppClient.Connect(ChatEndpoint, id2, ApplicationId, password2);
+            chatManager2 = client2.ChatXmppClient.GetPrivateChatManager(id1, dialogId);
+            client2.ChatXmppClient.OnMessageReceived += (sender, message) => lastMessageClient2 = message;
+            client2.ChatXmppClient.OnPresenceReceived += (sender, presence) => { if(lastPresencesClient2 != null) lastPresencesClient2.Add(presence); };
         }
 
         [TestMethod]
@@ -137,7 +137,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         {
             lastPresencesClient1 = new List<Presence>();
 
-            client2.MessagesClient.Disconnect();
+            client2.ChatXmppClient.Disconnect();
             await Task.Delay(5000);
 
             if (!lastPresencesClient1.Any(p => p.From.Contains(jid2) && p.PresenceType == PresenceType.Unavailable))

@@ -7,7 +7,6 @@ using QMunicate.Models;
 using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +16,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using QMunicate.Services;
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
 
 namespace QMunicate.ViewModels
 {
@@ -189,7 +189,7 @@ namespace QMunicate.ViewModels
 
                 if (otherUserId != 0)
                 {
-                    privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);
+                    privateChatManager = QuickbloxClient.ChatXmppClient.GetPrivateChatManager(otherUserId, chatParameter.Dialog.Id);
                     privateChatManager.OnMessageReceived += ChatManagerOnOnMessageReceived;
                     privateChatManager.OnIsTyping += PrivateChatManagerOnOnIsTyping;
                     privateChatManager.OnPausedTyping += PrivateChatManagerOnOnPausedTyping;

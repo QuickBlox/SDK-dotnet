@@ -48,7 +48,7 @@ namespace QMunicate
         public App()
         {
             var fileLogger = new FileLogger();
-            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, fileLogger);
+            var quickbloxClient = new QuickbloxClient(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, ApplicationKeys.ApiBaseEndPoint, ApplicationKeys.ChatEndpoint, fileLogger);
             QmunicateLoggerHolder.LoggerInstance = fileLogger;
             var fileStorage = new FileStorage();
 
@@ -188,12 +188,10 @@ namespace QMunicate
 
             if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password))
             {
-                var response = await quickbloxClient.CoreClient.CreateSessionWithEmailAsync(ApplicationKeys.ApplicationId,
-                        ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, login, password,
+                var response = await quickbloxClient.AuthenticationClient.CreateSessionWithEmailAsync(login, password,
                         deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    quickbloxClient.Token = response.Result.Session.Token;
                     SettingsManager.Instance.WriteToSettings(SettingsKeys.CurrentUserId, response.Result.Session.UserId);
                     navigationService.Navigate(ViewLocator.Dialogs, new DialogsNavigationParameter { CurrentUserId = response.Result.Session.UserId, Password = password });
                     return;

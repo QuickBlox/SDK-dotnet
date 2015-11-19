@@ -83,10 +83,10 @@ namespace QMunicate.ViewModels
 
         private async Task InitializeChat(int userId, string password)
         {
-            if (!QuickbloxClient.MessagesClient.IsConnected)
+            if (!QuickbloxClient.ChatXmppClient.IsConnected)
             {
-                await QuickbloxClient.MessagesClient.Connect(QuickbloxClient.ChatEndpoint, userId, ApplicationKeys.ApplicationId, password);
-                QuickbloxClient.MessagesClient.ReloadContacts();
+                await QuickbloxClient.ChatXmppClient.Connect(userId, password);
+                QuickbloxClient.ChatXmppClient.ReloadContacts();
             }
         }
 

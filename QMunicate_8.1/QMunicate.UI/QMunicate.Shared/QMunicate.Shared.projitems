@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\TypingIndicator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\ValidationState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToNegationConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToOpacityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\HandyDateConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converters\IntToVisibilityConverter.cs" />

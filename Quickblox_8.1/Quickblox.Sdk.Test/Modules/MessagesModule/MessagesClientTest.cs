@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 
 namespace Quickblox.Sdk.Test.Modules.MessagesModule
 {
@@ -24,22 +24,22 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [ClassInitialize]
         public static async Task ClassInitialize(TestContext testContext)
         {
-            client1 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
+            client1 = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
             //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            //await client1.CoreClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
+            //await client1.AuthenticationClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
 #if DEBUG
-            //client1.MessagesClient.DebugClientName = "1";
+            //client1.ChatXmppClient.DebugClientName = "1";
 #endif
-            await client1.MessagesClient.Connect(chatEndpoint, id1, (int)GlobalConstant.ApplicationId, password1);
+            await client1.ChatXmppClient.Connect(id1, password1);
         }
 
         [TestMethod]
         public async Task GetContactsTest()
         {
             bool contactsChanged = false;
-            client1.MessagesClient.OnContactsChanged += (sender, args) => contactsChanged = true;
+            client1.ChatXmppClient.OnContactsChanged += (sender, args) => contactsChanged = true;
 
-            client1.MessagesClient.ReloadContacts();
+            client1.ChatXmppClient.ReloadContacts();
 
             await Task.Delay(10000);
 
@@ -48,7 +48,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
 
 #if DEBUG
             Debug.WriteLine("Roster items received from server:");
-            foreach (var contact in client1.MessagesClient.Contacts)
+            foreach (var contact in client1.ChatXmppClient.Contacts)
             {
                 Debug.WriteLine("ID: {0} Name: {1}", contact.UserId, contact.Name);
             }
@@ -60,10 +60,10 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         {
             var testContact = new Contact {Name = "Test Contact", UserId = 2701450};
 
-            client1.MessagesClient.AddContact(testContact);
+            client1.ChatXmppClient.AddContact(testContact);
             await Task.Delay(10000);
 
-            var contact = client1.MessagesClient.Contacts.FirstOrDefault(c => c.Name == testContact.Name && c.UserId == testContact.UserId);
+            var contact = client1.ChatXmppClient.Contacts.FirstOrDefault(c => c.Name == testContact.Name && c.UserId == testContact.UserId);
             if(contact == null)
                 Assert.Fail("Contact wasn't added to contact list.");
         }
@@ -73,13 +73,13 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         {
             var testContact = new Contact { Name = "Test Contact", UserId = 2701450 };
 
-            client1.MessagesClient.AddContact(testContact);
+            client1.ChatXmppClient.AddContact(testContact);
             await Task.Delay(10000);
 
-            client1.MessagesClient.DeleteContact(testContact.UserId);
+            client1.ChatXmppClient.DeleteContact(testContact.UserId);
             await Task.Delay(10000);
 
-            var contact = client1.MessagesClient.Contacts.FirstOrDefault(c => c.Name == testContact.Name && c.UserId == testContact.UserId);
+            var contact = client1.ChatXmppClient.Contacts.FirstOrDefault(c => c.Name == testContact.Name && c.UserId == testContact.UserId);
             if (contact != null)
                 Assert.Fail("Contact wasn't removed from contact list.");
         }

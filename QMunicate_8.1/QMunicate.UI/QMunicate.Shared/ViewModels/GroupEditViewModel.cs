@@ -159,7 +159,7 @@ namespace QMunicate.ViewModels
                     var dialogsManager = ServiceLocator.Locator.Get<IDialogsManager>();
                     var dialog = dialogsManager.Dialogs.FirstOrDefault(d => d.Id == currentDialog.Id);
 
-                    var groupChatManager = QuickbloxClient.MessagesClient.GetGroupChatManager(currentDialog.XmppRoomJid, currentDialog.Id);
+                    var groupChatManager = QuickbloxClient.ChatXmppClient.GetGroupChatManager(currentDialog.XmppRoomJid, currentDialog.Id);
 
                     if (!string.IsNullOrEmpty(updateDialogRequest.Name))
                     {

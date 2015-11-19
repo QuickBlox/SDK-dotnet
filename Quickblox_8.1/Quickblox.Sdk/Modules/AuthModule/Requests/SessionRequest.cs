@@ -15,7 +15,7 @@ namespace Quickblox.Sdk.Modules.AuthModule.Requests
         }
 
         [JsonProperty("application_id")]
-        public UInt32 ApplicationId { get; set; }
+        public Int32 ApplicationId { get; set; }
 
         [JsonProperty("auth_key")]
         public string AuthKey { get; set; }

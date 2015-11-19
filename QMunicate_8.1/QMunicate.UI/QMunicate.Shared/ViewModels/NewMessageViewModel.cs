@@ -13,7 +13,7 @@ using QMunicate.Models;
 using QMunicate.Services;
 using QMunicate.ViewModels.PartialViewModels;
 using Quickblox.Sdk.Modules.ChatModule.Models;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 
 namespace QMunicate.ViewModels
 {
@@ -76,14 +76,14 @@ namespace QMunicate.ViewModels
             Contacts.Clear();
             if (string.IsNullOrEmpty(searchQuery))
             {
-                foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts)
+                foreach (Contact contact in QuickbloxClient.ChatXmppClient.Contacts)
                 {
                     Contacts.Add(UserViewModel.FromContact(contact));
                 }
             }
             else
             {
-                foreach (Contact contact in QuickbloxClient.MessagesClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
+                foreach (Contact contact in QuickbloxClient.ChatXmppClient.Contacts.Where(c => !string.IsNullOrEmpty(c.Name) && c.Name.IndexOf(searchQuery, StringComparison.OrdinalIgnoreCase) >= 0))
                 {
                     Contacts.Add(UserViewModel.FromContact(contact));
                 }

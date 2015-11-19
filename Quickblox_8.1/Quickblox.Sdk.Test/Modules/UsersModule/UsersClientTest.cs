@@ -26,14 +26,14 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
-            var sessionResponse = await this.client.CoreClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
+            var sessionResponse = await this.client.AuthenticationClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
             client.Token = sessionResponse.Result.Session.Token;
         }
         
         [TestMethod]
         public async Task GetUserByLoginSuccess()
         {
-            await this.client.CoreClient.ByLoginAsync(Login, Password);
+            await this.client.AuthenticationClient.ByLoginAsync(Login, Password);
             var response = await this.client.UsersClient.GetUserByLogin("Test654321");
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
         }
@@ -107,7 +107,7 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         [TestMethod]
         public async Task UpdateUserSuccess()
         {
-            var loginResponse = await this.client.CoreClient.ByLoginAsync("Test654321", Password);
+            var loginResponse = await this.client.AuthenticationClient.ByLoginAsync("Test654321", Password);
             Assert.IsTrue(loginResponse.StatusCode == HttpStatusCode.Accepted);
 
             var updateUserRequest = new UpdateUserRequest();
@@ -128,7 +128,7 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         public async Task UpdateUserGericSuccess()
         {
             var accessTokenFB = "CAAFYnUVKERcBAPPgCYPqm4UZB19SZBZAlkTMQMhZByMipETIJfeZAbjVYp6xf9usgAbxRsLEmvsuPHzgASr4HW62Bj71HKGgDBTdq4PamjQWpQgBbm9OVHoDoJPMluxLOZA73KVfMS5OeL529WCYJbdRTgAgNcZAlrQxRZBTcFknwJZC5bZCNiGhbbjTDE6DcZAbWcZD";
-            var sessionResponse = await client.CoreClient.CreateSessionWithSocialNetworkKey(ApplicationId, AuthorizationKey, AuthorizationSecret, "facebook",
+            var sessionResponse = await client.AuthenticationClient.CreateSessionWithSocialNetworkKey(ApplicationId, AuthorizationKey, AuthorizationSecret, "facebook",
                                                                 "public_profile",
                                                                 accessTokenFB,
                                                                 null,

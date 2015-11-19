@@ -149,7 +149,7 @@ namespace QMunicate.ViewModels
             IsLoading = true;
             var currentUserId = SettingsManager.Instance.ReadFromSettings<int>(SettingsKeys.CurrentUserId);
             int otherUserId = dialog.OccupantIds.FirstOrDefault(id => id != currentUserId);
-            var privateChatManager = QuickbloxClient.MessagesClient.GetPrivateChatManager(otherUserId, dialog.Id);
+            var privateChatManager = QuickbloxClient.ChatXmppClient.GetPrivateChatManager(otherUserId, dialog.Id);
             bool isDeleted = privateChatManager.DeleteFromFriends();
 
             if (isDeleted)

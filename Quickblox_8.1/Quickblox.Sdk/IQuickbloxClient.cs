@@ -5,12 +5,11 @@ using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.Modules.ChatModule;
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.CustomObjectModule;
 using Quickblox.Sdk.Modules.LocationModule;
-using Quickblox.Sdk.Modules.MessagesModule;
 #if !Xamarin
-using Quickblox.Sdk.Modules.MessagesModule.Interfaces;
 #endif
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
@@ -28,9 +27,9 @@ namespace Quickblox.Sdk
         ContentClient ContentClient { get; }
 
         /// <summary>
-        /// Authorization module allows to manage user sessions.
+        /// Authentication module allows to manage user sessions.
         /// </summary>
-        AuthorizationClient CoreClient { get; }
+        AuthenticationClient AuthenticationClient { get; }
 
         /// <summary>
         /// Chat module allows to manage user dialogs.
@@ -53,10 +52,10 @@ namespace Quickblox.Sdk
         LocationClient LocationClient { get; }
 
         /// <summary>
-        /// Messages module allows users to chat with each other in private or group dialogs via XMPP protocol.
+        /// ChatXmpp module allows users to chat with each other in private or group dialogs via XMPP protocol.
         /// </summary>
 #if !Xamarin
-        IMessagesClient MessagesClient { get; }
+        IChatXmppClient ChatXmppClient { get; }
 #else
         MessagesClient MessagesClient { get; }
 #endif

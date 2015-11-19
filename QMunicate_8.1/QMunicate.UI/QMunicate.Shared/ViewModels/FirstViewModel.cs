@@ -62,11 +62,9 @@ namespace QMunicate.ViewModels
         private async void OnFacebookAuthenticationFinished(AccessTokenData fbSession)
         {
             IsLoading = true;
-            var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionWithSocialNetworkKey(ApplicationKeys.ApplicationId, ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret, "facebook",
-                                                                "public_profile", fbSession.AccessToken, null, null);
+            var sessionResponse = await QuickbloxClient.AuthenticationClient.CreateSessionWithSocialNetworkKey("facebook", "public_profile", fbSession.AccessToken, null, null);
             if (sessionResponse.StatusCode == HttpStatusCode.Created)
             {
-                QuickbloxClient.Token = sessionResponse.Result.Session.Token;
                 SettingsManager.Instance.WriteToSettings(SettingsKeys.CurrentUserId, sessionResponse.Result.Session.UserId);
                 NavigationService.Navigate(ViewLocator.Dialogs,
                                                     new DialogsNavigationParameter

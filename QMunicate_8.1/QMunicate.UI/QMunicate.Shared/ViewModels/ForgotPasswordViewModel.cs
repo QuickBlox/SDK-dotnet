@@ -68,15 +68,9 @@ namespace QMunicate.ViewModels
                 return;
             }
 
-            var sessionResponse = await QuickbloxClient.CoreClient.CreateSessionBaseAsync(ApplicationKeys.ApplicationId,
-                        ApplicationKeys.AuthorizationKey, ApplicationKeys.AuthorizationSecret,
-                        new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
+            var sessionResponse = await QuickbloxClient.AuthenticationClient.CreateSessionBaseAsync(new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
 
-            if (sessionResponse.StatusCode == HttpStatusCode.Created)
-            {
-                QuickbloxClient.Token = sessionResponse.Result.Session.Token;
-            }
-            else
+            if (sessionResponse.StatusCode != HttpStatusCode.Created)
             {
                 await Helpers.ShowErrors(sessionResponse.Errors, messageService);
                 return;
