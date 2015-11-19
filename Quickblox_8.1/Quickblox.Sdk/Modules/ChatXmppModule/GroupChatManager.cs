@@ -12,6 +12,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
     #if Xamarin
     #endif
 
+    /// <summary>
+    /// Manager for group dialogs.
+    /// </summary>
     public class GroupChatManager : IGroupChatManager
     {
         #region Fields
@@ -21,6 +24,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         private readonly string groupJid;
         private readonly string dialogId;
 
+        /// <summary>
+        /// Event when a new group message is received.
+        /// </summary>
         public event EventHandler<Message> OnMessageReceived;
 
         #endregion
@@ -40,6 +46,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region IGroupChatManager members
 
+        /// <summary>
+        /// Sends a group chat message.
+        /// </summary>
+        /// <param name="message">Message text.</param>
+        /// <returns>Is operation successful</returns>
         public bool SendMessage(string message)
         {
             var msg = CreateNewMessage();
@@ -62,16 +73,31 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        /// <summary>
+        /// Sends notification group chat message that this group was created.
+        /// </summary>
+        /// <param name="occupantsIds">Created group occupants IDs</param>
+        /// <returns>Is operation successful</returns>
         public bool NotifyAboutGroupCreation(IList<int> occupantsIds)
         {
             return NotifyAbountGroupOccupants(occupantsIds, true);
         }
 
+        /// <summary>
+        /// Sends notification group chat message that new occupants were added to the group.
+        /// </summary>
+        /// <param name="addedOccupantsIds">Added occupants IDs</param>
+        /// <returns>Is operation successful</returns>
         public bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds)
         {
             return NotifyAbountGroupOccupants(addedOccupantsIds, false);
         }
 
+        /// <summary>
+        /// Sends notification group chat message that group chat image has been changed.
+        /// </summary>
+        /// <param name="groupImageUrl">New group chat image URL</param>
+        /// <returns>Is operation successful</returns>
         public bool NotifyGroupImageChanged(string groupImageUrl)
         {
             var msg = CreateNewMessage();
@@ -96,6 +122,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        /// <summary>
+        /// Sends notification group chat message that group chat name has been changed.
+        /// </summary>
+        /// <param name="groupName">New group chat name</param>
+        /// <returns>Is operation successful</returns>
         public bool NotifyGroupNameChanged(string groupName)
         {
             var msg = CreateNewMessage();
@@ -120,6 +151,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        /// <summary>
+        /// Joins XMPP chat room.
+        /// This is obligatory for group chat message sending/receiving.
+        /// </summary>
+        /// <param name="nickName">User nickname in XMPP room.</param>
         public void JoinGroup(string nickName)
         {
             string fullJid = string.Format("{0}/{1}", groupJid, nickName);

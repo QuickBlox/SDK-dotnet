@@ -7,6 +7,9 @@ using XMPP.tags.jabber.protocol.chatstates;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
+    /// <summary>
+    /// Manager for one-to-one private chats.
+    /// </summary>
     public class PrivateChatManager : IPrivateChatManager
     {
         #region Fields
@@ -19,8 +22,19 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #endregion
 
+        /// <summary>
+        /// Event when other user is typing.
+        /// </summary>
         public event EventHandler OnIsTyping;
+
+        /// <summary>
+        /// Event when other user has stopped typing.
+        /// </summary>
         public event EventHandler OnPausedTyping;
+
+        /// <summary>
+        /// Event when a new message is received.
+        /// </summary>
         public event EventHandler<Message> OnMessageReceived;
 
         #region Ctor
@@ -39,6 +53,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region IPrivateChatManager members
 
+        /// <summary>
+        /// Sends a message to other user.
+        /// </summary>
+        /// <param name="message">Message text</param>
+        /// <returns>Is operation successful</returns>
         public bool SendMessage(string message)
         {
             var msg = CreateNewMessage();
@@ -60,6 +79,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        /// <summary>
+        /// Notifies other user that you are typing a message.
+        /// </summary>
         public void NotifyIsTyping()
         {
             var msg = CreateNewMessage();
@@ -69,6 +91,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.Send(msg);
         }
 
+        /// <summary>
+        /// Notifies other user that you've stopped typing a message.
+        /// </summary>
         public void NotifyPausedTyping()
         {
             var msg = CreateNewMessage();
@@ -80,6 +105,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region Friends
 
+        /// <summary>
+        /// Adds other user to your roster, subsribes for his presence, and sends FriendRequest notification message.
+        /// </summary>
+        /// <param name="friendName">Other user name in your roster</param>
+        /// <returns>Is operation successful</returns>
         public bool AddToFriends(string friendName = null)
         {
             var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
@@ -108,6 +138,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        /// <summary>
+        /// Adds other user to your roster, accepts presence subscription request, and sends FriendAccepted notification message.
+        /// </summary>
+        /// <param name="friendName">Other user name in your roster</param>
+        /// <returns>Is operation successful</returns>
         public bool AcceptFriend(string friendName = null)
         {
             var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
@@ -140,6 +175,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        /// <summary>
+        /// Rejects subsription requests and sends FriendRejected notification message.
+        /// </summary>
+        /// <returns>Is operation successful</returns>
         public bool RejectFriend()
         {
             RejectSubscribtionRequest();
@@ -162,6 +201,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        /// <summary>
+        /// Sends FriendRemoved notification messages, removes other user from your roster and unsubscribes from presence.
+        /// </summary>
+        /// <returns>Is operation successful</returns>
         public bool DeleteFromFriends()
         {
             var msg = CreateNewMessage();
@@ -192,6 +235,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        /// <summary>
+        /// Notifies a user about a created group dialog.
+        /// </summary>
+        /// <param name="createdDialogId">Created group dialog ID</param>
+        /// <returns>Is operation successful</returns>
         public bool NotifyAboutGroupCreation(string createdDialogId)
         {
             var msg = CreateNewMessage();
