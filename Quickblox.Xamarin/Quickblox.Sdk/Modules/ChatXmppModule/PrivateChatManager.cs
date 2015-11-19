@@ -32,11 +32,13 @@ namespace Quickblox.Sdk
             this.xmppClient = xmppClient;
         }
 
-        public void SendMessage(string body, string subject = null, string thread = null, MessageType messageType = MessageType.Chat, NotificationType notificationType = NotificationType.None)
+        public void SendMessage(string body, string subject = null, string thread = null, MessageType messageType = MessageType.Chat, NotificationType notificationType = NotificationType.None, bool saveToHistory = true)
         {
             var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
             var jid = new Sharp.Xmpp.Jid(otherUserJid.ToString());
-            var extraParams = SaveToHistory(dialogId);
+            string extraParams = "";
+            if (saveToHistory)
+                extraParams = SaveToHistory(dialogId);
             xmppClient.SendMessage(jid, body, extraParams, subject, thread, wrappedMessageType);
         }
 
