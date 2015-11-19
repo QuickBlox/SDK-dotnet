@@ -1,4 +1,4 @@
-﻿using Quickblox.Sdk.Modules.MessagesModule.Models;
+﻿using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using Sharp.Xmpp.Client;
 using System.Threading.Tasks;
 using System.Net;
@@ -26,7 +26,7 @@ namespace Quickblox.Sdk
         internal PrivateChatManager(IQuickbloxClient quickbloxClient, XmppClient xmppClient, int otherUserId, string dialogId)
         {
             this.otherUserId = otherUserId;
-            this.otherUserJid = quickbloxClient.MessagesClient.BuildJid(otherUserId);
+            this.otherUserJid = quickbloxClient.ChatXmppClient.BuildJid(otherUserId);
             this.dialogId = dialogId;
             this.quickbloxClient = quickbloxClient;
             this.xmppClient = xmppClient;
@@ -63,7 +63,7 @@ namespace Quickblox.Sdk
                 dialogId = response.Result.Id;
             }
 
-           quickbloxClient.MessagesClient.AddContact(item);
+           quickbloxClient.ChatXmppClient.AddContact(item);
            SendMessage("Contact request", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsRequest);
             
            return true;
@@ -71,14 +71,14 @@ namespace Quickblox.Sdk
 
         public bool AcceptFriend(RosterItem item)
         {
-            quickbloxClient.MessagesClient.AddContact(item);
+            quickbloxClient.ChatXmppClient.AddContact(item);
             SendMessage("Request accepted", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsAccept);
             return true;
         }
 
         public bool RejectFriend(RosterItem item)
         {
-            quickbloxClient.MessagesClient.RemoveContact(item);
+            quickbloxClient.ChatXmppClient.RemoveContact(item);
             SendMessage("Request rejected", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsReject);
             return true;
         }
@@ -92,7 +92,7 @@ namespace Quickblox.Sdk
                     return false;
             }
 
-            quickbloxClient.MessagesClient.RemoveContact(item);
+            quickbloxClient.ChatXmppClient.RemoveContact(item);
             return true;
         }
     }

@@ -13,11 +13,11 @@ using Quickblox.Sdk.Modules.UsersModule;
 using System;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Logger;
-using Quickblox.Sdk.Modules.ChatXmppModule;
-using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
 using Quickblox.Sdk.Modules.LocationModule;
+using Quickblox.Sdk.Modules.ChatXmppModule;
 #if !Xamarin
-
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
+#else
 #endif
 
 namespace Quickblox.Sdk

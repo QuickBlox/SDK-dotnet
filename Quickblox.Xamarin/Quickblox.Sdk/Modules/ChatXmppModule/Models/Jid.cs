@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Quickblox.Sdk.Modules.MessagesModule.Models
+namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 {
     /// <summary>
     /// Represents the address of an XMPP entity, also known as Jabber Identifier (JID).

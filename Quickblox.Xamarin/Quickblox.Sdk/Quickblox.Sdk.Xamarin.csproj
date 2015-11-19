@@ -135,8 +135,8 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Logger\LoggerHolder.cs">
       <Link>Logger\LoggerHolder.cs</Link>
     </Compile>
-    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\AuthModule\AuthorizationClient.cs">
-      <Link>Modules\AuthModule\AuthorizationClient.cs</Link>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\AuthModule\AuthenticationClient.cs">
+      <Link>Modules\AuthModule\AuthenticationClient.cs</Link>
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\AuthModule\Models\FullUser.cs">
       <Link>Modules\AuthModule\Models\FullUser.cs</Link>
@@ -489,22 +489,22 @@
     <Compile Include="Help\Timer.cs" />
     <Compile Include="HmacSha1CryptographicProvider.cs" />
     <Compile Include="ICryptographicProvider.cs" />
-    <Compile Include="Modules\MessagesModule\MessageClient.cs" />
-    <Compile Include="Modules\MessagesModule\Models\ActivityChangedEventHandler.cs" />
-    <Compile Include="Modules\MessagesModule\Models\ErrorsEventHandler.cs" />
-    <Compile Include="Modules\MessagesModule\Models\GeneralActivity.cs" />
-    <Compile Include="Modules\MessagesModule\Models\Jid.cs" />
-    <Compile Include="Modules\MessagesModule\Models\MessageType.cs" />
-    <Compile Include="Modules\MessagesModule\Models\NotificationType.cs" />
-    <Compile Include="Modules\MessagesModule\Models\RosterItem.cs" />
-    <Compile Include="Modules\MessagesModule\Models\RosterUpdatedEventHandler.cs" />
-    <Compile Include="Modules\MessagesModule\Models\SubscriptionsEventHandler.cs" />
-    <Compile Include="Modules\MessagesModule\Models\SubscriptionState.cs" />
-    <Compile Include="Modules\MessagesModule\PrivateChatManager.cs" />
+    <Compile Include="Modules\ChatXmppModule\ChatXmppClient.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\ActivityChangedEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\ErrorsEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\GeneralActivity.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\Jid.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\MessageType.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\NotificationType.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\RosterItem.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\RosterUpdatedEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\SubscriptionsEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\SubscriptionState.cs" />
+    <Compile Include="Modules\ChatXmppModule\PrivateChatManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Modules\MessagesModule\Models\Message.cs" />
-    <Compile Include="Modules\MessagesModule\Models\PresenceType.cs" />
-    <Compile Include="Modules\MessagesModule\Interfaces\IPrivateChatManager.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\Message.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\PresenceType.cs" />
+    <Compile Include="Modules\ChatXmppModule\Interfaces\IPrivateChatManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="bouncy_castle_hmac_sha_pcl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">

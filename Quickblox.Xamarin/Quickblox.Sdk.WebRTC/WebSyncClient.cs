@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using System.Xml.Linq;
 using System.Linq;
 using System.Collections.ObjectModel;
@@ -28,8 +28,8 @@ namespace Quickblox.Sdk.WebRTC
         public WebSyncClient(IQuickbloxClient client)
         {
             this.client = client;
-            this.client.MessagesClient.OnMessageReceived += OnMessageReceived;
-            appId = this.client.MessagesClient.AppId;
+            this.client.ChatXmppClient.OnMessageReceived += OnMessageReceived;
+            appId = this.client.ChatXmppClient.AppId;
         }
 
         /// <summary>
@@ -58,9 +58,9 @@ namespace Quickblox.Sdk.WebRTC
         /// <returns></returns>
 		public CallExtraParameter Call(string sessionId, string sdp, string platform, int caller, int receiver, MessageType type = MessageType.Headline)
         {
-            var jid = client.MessagesClient.BuildJid(receiver);
+            var jid = client.ChatXmppClient.BuildJid(receiver);
             var extraParameter = new CallExtraParameter(sessionId, sdp, platform, caller, receiver);
-			this.client.MessagesClient.SendMessage(jid.ToString(), "Call", extraParameter.Build(), null, type);
+			this.client.ChatXmppClient.SendMessage(jid.ToString(), "Call", extraParameter.Build(), null, type);
             return extraParameter;
         }
 
@@ -84,9 +84,9 @@ namespace Quickblox.Sdk.WebRTC
         /// <returns></returns>
         public AcceptExtraParameter Accept(string sessionId, string sdp, string platform, int receiver)
         {
-            var jid = client.MessagesClient.BuildJid(receiver);
+            var jid = client.ChatXmppClient.BuildJid(receiver);
             var extraParameter = new AcceptExtraParameter(sessionId, sdp, platform);
-			this.client.MessagesClient.SendMessage(jid.ToString(), "Accept", extraParameter.Build(), null, MessageType.Headline);
+			this.client.ChatXmppClient.SendMessage(jid.ToString(), "Accept", extraParameter.Build(), null, MessageType.Headline);
             return extraParameter;
         }
 
@@ -105,9 +105,9 @@ namespace Quickblox.Sdk.WebRTC
         /// <returns></returns>
         public RejectExtraParameter Reject(string sessionId, int receiver)
         {
-            var jid = client.MessagesClient.BuildJid(receiver);
+            var jid = client.ChatXmppClient.BuildJid(receiver);
             var extraParameter = new RejectExtraParameter(sessionId);
-			this.client.MessagesClient.SendMessage(jid.ToString(), "Reject", extraParameter.Build(), null, MessageType.Headline);
+			this.client.ChatXmppClient.SendMessage(jid.ToString(), "Reject", extraParameter.Build(), null, MessageType.Headline);
             return extraParameter;
         }
 
@@ -128,9 +128,9 @@ namespace Quickblox.Sdk.WebRTC
         public HangUpExtraParameter HangUp(string sessionId, int receiver)
         {
             // jid = BuildJid(caller);
-            var jid = client.MessagesClient.BuildJid(receiver);
+            var jid = client.ChatXmppClient.BuildJid(receiver);
             var extraParameter = new HangUpExtraParameter(sessionId);
-			this.client.MessagesClient.SendMessage(jid.ToString(), "HangUp", extraParameter.Build(), null, MessageType.Headline);
+			this.client.ChatXmppClient.SendMessage(jid.ToString(), "HangUp", extraParameter.Build(), null, MessageType.Headline);
             return extraParameter;
         }
 
@@ -163,9 +163,9 @@ namespace Quickblox.Sdk.WebRTC
         public IceCandidatesExtraParameter IceCandidates(string sessionId, int receiver, Collection<IceCandidate> iceCandidates)
         {
             // jid = BuildJid(caller);
-            var jid = client.MessagesClient.BuildJid(receiver);
+            var jid = client.ChatXmppClient.BuildJid(receiver);
             var extraParameter = new IceCandidatesExtraParameter(sessionId, iceCandidates);
-			this.client.MessagesClient.SendMessage(jid.ToString(), "IceCandidates", extraParameter.Build(), null, MessageType.Headline);
+			this.client.ChatXmppClient.SendMessage(jid.ToString(), "IceCandidates", extraParameter.Build(), null, MessageType.Headline);
             return extraParameter;
         }
 

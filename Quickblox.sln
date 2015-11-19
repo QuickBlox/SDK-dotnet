@@ -55,9 +55,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMunicate", "QMunicate\QMunicate.csproj", "{6CF22D49-44A2-433F-B41B-66F5534CC1D1}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		QMunicate_8.1\QMunicate.UI\QMunicate.Shared\QMunicate.Shared.projitems*{ba7acff7-a9db-46a4-a6b8-9089128dc102}*SharedItemsImports = 13
 		QMunicate_8.1\QMunicate.Database\QMunicate.Shared.Database\QMunicate.Shared.Database.projitems*{11de446e-95e7-45d6-805f-28bd7ac00dd7}*SharedItemsImports = 4

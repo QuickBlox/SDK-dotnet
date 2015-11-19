@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Quickblox.Sdk.Modules.MessagesModule.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using Sharp.Xmpp.Client;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Quickblox.Sdk.Modules.MessagesModule
+namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
-    public class MessagesClient
+    public class ChatXmppClient
     {
         #region Fields
 
@@ -31,7 +31,7 @@ namespace Quickblox.Sdk.Modules.MessagesModule
 
         #region Ctor
 
-        public MessagesClient(IQuickbloxClient quickbloxClient)
+        public ChatXmppClient(IQuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
             Contacts = new List<RosterItem>();

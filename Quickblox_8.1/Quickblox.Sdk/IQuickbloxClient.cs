@@ -5,12 +5,15 @@ using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
 using Quickblox.Sdk.Modules.ChatModule;
-using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
 using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.CustomObjectModule;
 using Quickblox.Sdk.Modules.LocationModule;
 #if !Xamarin
+using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
+#else
+using Quickblox.Sdk.Modules.ChatXmppModule;
 #endif
+
 using Quickblox.Sdk.Modules.NotificationModule;
 using Quickblox.Sdk.Modules.UsersModule;
 
@@ -57,7 +60,7 @@ namespace Quickblox.Sdk
 #if !Xamarin
         IChatXmppClient ChatXmppClient { get; }
 #else
-        MessagesClient MessagesClient { get; }
+        ChatXmppClient ChatXmppClient { get; }
 #endif
 
         /// <summary>

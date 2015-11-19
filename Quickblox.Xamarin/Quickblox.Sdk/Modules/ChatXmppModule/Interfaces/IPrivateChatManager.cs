@@ -1,4 +1,4 @@
-﻿using Quickblox.Sdk.Modules.MessagesModule.Models;
+﻿using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using System.Threading.Tasks;
 
 namespace Quickblox.Sdk

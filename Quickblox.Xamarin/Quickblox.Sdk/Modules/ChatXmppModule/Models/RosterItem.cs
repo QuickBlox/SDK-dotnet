@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Quickblox.Sdk.Modules.MessagesModule.Models
+namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 {
     /// <summary>
 	/// Represents a roster item wrapper.
