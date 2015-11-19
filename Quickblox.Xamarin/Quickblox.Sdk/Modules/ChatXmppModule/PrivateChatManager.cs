@@ -53,50 +53,6 @@ namespace Quickblox.Sdk
 
             return srcTree.ToString();
         }
-
-        public async Task<bool> AddToFriends(RosterItem item)
-        {
-            if (string.IsNullOrEmpty(dialogId))
-            {
-                var response = await quickbloxClient.ChatClient.CreateDialogAsync(item.Name, DialogType.Private, otherUserId.ToString());
-                if (response.StatusCode != HttpStatusCode.Created)
-                    return false;
-
-                dialogId = response.Result.Id;
-            }
-
-           quickbloxClient.ChatXmppClient.AddContact(item);
-           SendMessage("Contact request", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsRequest);
-            
-           return true;
-        }
-
-        public bool AcceptFriend(RosterItem item)
-        {
-            quickbloxClient.ChatXmppClient.AddContact(item);
-            SendMessage("Request accepted", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsAccept);
-            return true;
-        }
-
-        public bool RejectFriend(RosterItem item)
-        {
-            quickbloxClient.ChatXmppClient.RemoveContact(item);
-            SendMessage("Request rejected", thread: dialogId, messageType: MessageType.Chat, notificationType: NotificationType.FriendsReject);
-            return true;
-        }
-
-        public async Task<bool> RemoveFriend(RosterItem item)
-        {
-            if (string.IsNullOrEmpty(dialogId))
-            {
-                var response = await quickbloxClient.ChatClient.DeleteDialogAsync(dialogId);
-                if (response.StatusCode != HttpStatusCode.OK)
-                    return false;
-            }
-
-            quickbloxClient.ChatXmppClient.RemoveContact(item);
-            return true;
-        }
     }
 }
 
