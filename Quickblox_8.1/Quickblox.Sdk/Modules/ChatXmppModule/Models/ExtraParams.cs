@@ -66,6 +66,15 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         }
     }
 
+    public class DeletedId : XElement
+    {
+        public static XName XName = XName.Get("deleted_id", "jabber:client");
+
+        public DeletedId() : base(XName)
+        {
+        }
+    }
+
     public class NotificationType : XElement
     {
         public static XName XName = XName.Get("notification_type", "jabber:client");

@@ -359,6 +359,14 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 {
                     result.OccupantsIds = occupantsIds.Value;
                 }
+
+                var deletedId = extraParams.Element(DeletedId.XName);
+                if (deletedId != null)
+                {
+                    int deletedIdInt;
+                    if(int.TryParse(deletedId.Value, out deletedIdInt))
+                        result.DeletedId = deletedIdInt;
+                }
             }
         }
 
