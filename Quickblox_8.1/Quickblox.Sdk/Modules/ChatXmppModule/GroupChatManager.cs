@@ -213,6 +213,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             if (message1.From.Contains(groupJid))
             {
+                if (string.IsNullOrEmpty(message1.MessageText)) return; // for IsTyping/PausedTyping messages
+
                 var handler = OnMessageReceived;
                 if (handler != null)
                     handler(this, message1);
