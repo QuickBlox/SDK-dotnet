@@ -11,28 +11,20 @@ namespace Quickblox.Android.Test
 {
     [Activity(Label = "Quickblox.Android.Test", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
-    {
-        private const uint ApplicationId = 1;
-        private const string AuthorizationKey = "PbyzYKc33jaVaAQ";
-        private const string AuthorizationSecret = "9y28hmJr-tRAUFH";
-        private const string ApiBaseEndPoint = "https://apistage3.quickblox.com";
-        private const string ChatEndpoint = "chatstage3.quickblox.com";
-        private const string Login = "Eduardo";
-        private const string Password = "eduardo123";
+    {      
+        public const string AccountKey = "Xh9wmkt6NeDVe4sLEETq";
+        public const string ApiBaseEndPoint = "http://apidateifi.quickblox.com";
+        public const int ApplicationId = 6;
+        public const string AuthorizationKey = "n5bxC3eeKtqAXFu";
+        public const string AuthorizationSecret = "zcqRqh3gCuFdMRd";
+        public const string ChatEndpoint = "chatdateifi.quickblox.com";
 
-		private QuickbloxClient client;
+        private QuickbloxClient client;
 
         #region chats
-        private static string email1 = "ed2@mail.ru";
-        private static string password1 = "edward123";
-		private static int id1 = 49;
-		private static string jid1 = "49-1"; //@chat.quickblox.com";
-
-        private static string email2 = "ed@mail.ru";
-        private static string password2 = "edward123";
-        private static int id2 = 48;
-		private static string jid2 = "48-1"; //@chat.quickblox.com";
-
+        private static string password1 = "cb33972b5b5de0afa5e0a37e8b416d8d03fce738";
+		private static int id1 = 40606;
+        
         private static QuickbloxClient client1;
         private static IPrivateChatManager chatManager1;
         //private static List<Presence> lastPresencesClient1;
@@ -62,19 +54,24 @@ namespace Quickblox.Android.Test
         private async void OnClicked(object o, EventArgs e)
         {
             Console.WriteLine("Start");
-            client1 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, new HmacSha1CryptographicProvider());
+            client1 = new QuickbloxClient(ApplicationId, AuthorizationKey, AuthorizationSecret, ApiBaseEndPoint, ChatEndpoint);
 #if DEBUG
-            client1.MessagesClient.DebugClientName = "1";
+            client1.ChatXmppClient.DebugClientName = "1";
 #endif
             Console.WriteLine("Start connect. Id: " + id1 + 
                                 " AppId: "+ ApplicationId + 
                                 " Password: " + password1);
+            //try
+            //
+                client1.ChatXmppClient.Connect(ChatEndpoint, id1, (int)ApplicationId, password1);
+           // }
+            //catch (Exception ex)
+            //{
 
-            client1.MessagesClient.Connect(ChatEndpoint, id1, (int)ApplicationId, password1);
+            //}
 
             Console.WriteLine("Client connected");
 
-            chatManager1 = client1.MessagesClient.GetPrivateChatManager(id2, dialogId);
 //            client1.MessagesClient.OnPresenceReceived += (sender, presence) => { if (lastPresencesClient1 != null) lastPresencesClient1.Add(presence); };
 
             //client2 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, new HmacSha1CryptographicProvider());
