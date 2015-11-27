@@ -46,6 +46,9 @@ namespace Quickblox.Sdk.GeneralDataModel.Models
         [JsonProperty("occupants_ids")]
         public string OccupantsIds { get; set; }
 
+        [JsonProperty("deleted_id")]
+        public int DeletedId { get; set; }
+
         #endregion
 
         #region XXMP chat properties
