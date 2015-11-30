@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using ARSoft.Tools.Net.Dns;
 
 namespace Sharp.Xmpp.Core {
 	/// <summary>
@@ -20,15 +19,7 @@ namespace Sharp.Xmpp.Core {
 	/// </summary>
 	/// <remarks>For implementation details, refer to RFC 3920.</remarks>
 	public class XmppCore : IDisposable {
-
-        /// <summary>
-        /// The DNS SRV name records
-        /// </summary>
-        private List<SrvRecord> dnsRecordList;
-        /// <summary>
-        /// The current SRV DNS record to use
-        /// </summary>
-        private SrvRecord dnsCurrent;
+     
         /// <summary>
         /// Bool variable indicating whether DNS records are initialised
         /// </summary>
@@ -283,18 +274,9 @@ namespace Sharp.Xmpp.Core {
 		/// is not a valid port number.</exception>
 		public XmppCore(string hostname, string username, string password,
 			int port = 5222, bool tls = true, RemoteCertificateValidationCallback validate = null) {
-
-                moveNextSrvDNS(hostname);
-                if (dnsCurrent != null)
-                {
-                    Hostname = dnsCurrent.Target;
-                    Port = dnsCurrent.Port;
-                }
-                else
-                {
-                    Hostname = hostname;
-                    Port = port;
-                }
+                        
+                Hostname = hostname;
+                Port = port;
 				Username = username;
 				Password = password;
 				Tls = tls;
@@ -319,78 +301,12 @@ namespace Sharp.Xmpp.Core {
 		/// is not a valid port number.</exception>
 		public XmppCore(string hostname, int port = 5222, bool tls = true,
 			RemoteCertificateValidationCallback validate = null) {
-
-            moveNextSrvDNS(hostname);
-            if (dnsCurrent != null)
-            {
-                Hostname = dnsCurrent.Target;
-                Port = dnsCurrent.Port;
-            }
-            else
-            {
-                Hostname = hostname;
-                Port = port;
-            }
+                      
+            Hostname = hostname;
+            Port = port;
 			Tls = tls;
 			Validate = validate;
 		}
-
-        /// <summary>
-        /// Initialises and resolves the DNS Domain, and set to dnsCurrent the next
-        /// SRV record to use
-        /// </summary>
-        /// <param name="domain">XMPP Domain</param>
-        /// <returns>XMPP server hostname for the Domain</returns>
-        private SrvRecord moveNextSrvDNS(string domain)    {
-            
-            domain.ThrowIfNullOrEmpty("domain");
-            //If already a lookup has being made return
-            if (dnsIsInit) {
-                //If it is already init we remove the current 
-                if (dnsRecordList != null && dnsCurrent != null) dnsRecordList.Remove(dnsCurrent);
-                dnsCurrent = dnsRecordList.FirstOrDefault();
-                return dnsCurrent;
-            };
-            dnsIsInit = true;
-
-            DnsMessage dnsMessage = DnsClient.Default.Resolve("_xmpp-client._tcp." + domain, RecordType.Srv);
-            if ((dnsMessage == null) || ((dnsMessage.ReturnCode != ReturnCode.NoError) && (dnsMessage.ReturnCode != ReturnCode.NxDomain)))
-            {
-                //If DNS SRV records lookup fails then continue with the host name 
-                #if DEBUG
-                System.Diagnostics.Debug.WriteLine("DNS Lookup Failed");
-                #endif
-                return null;
-            }
-            else
-            {
-                var tempList = new List<SrvRecord>();
-                
-                foreach (DnsRecordBase dnsRecord in dnsMessage.AnswerRecords)
-                {
-                    SrvRecord srvRecord = dnsRecord as SrvRecord;
-                    if (srvRecord != null)
-                    {
-                        tempList.Add(srvRecord);
-                        Console.WriteLine(srvRecord.ToString());
-                        Console.WriteLine("  |--- Name " + srvRecord.Name);
-                        Console.WriteLine("  |--- Port: " + srvRecord.Port);
-                        Console.WriteLine("  |--- Priority" + srvRecord.Priority);
-                        Console.WriteLine("  |--- Type " + srvRecord.RecordType);
-                        Console.WriteLine("  |--- Target: " + srvRecord.Target);
-                        Console.WriteLine();
-                    }
-                }
-                dnsRecordList = tempList.OrderBy(o => o.Priority).ThenBy(order => order.Weight).ToList();
-
-                dnsCurrent = dnsRecordList.FirstOrDefault();
-                return dnsCurrent;
-            }                   
-
-        }
-
-
-
         
        	/// <summary>
 		/// Establishes a connection to the XMPP server.
