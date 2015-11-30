@@ -21,15 +21,16 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new FileLogger());
-            var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "to1@test.com", "12345678");
+            this.client = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new FileLogger());
+            var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithEmailAsync( "to1@test.com", "12345678");
             client.Token = sessionResponse.Result.Session.Token;
         }
 
         [TestMethod]
         public async Task CreateDialogSuccessTest()
         {
-            var response = await this.client.ChatClient.CreateDialogAsync("New test dialog", DialogType.PublicGroup);
+            string occupantsIds = "3323859,3323883";
+            var response = await this.client.ChatClient.CreateDialogAsync("New test dialog", DialogType.PublicGroup, occupantsIds);
             Assert.AreEqual(response.StatusCode, HttpStatusCode.Created);
         }
 
@@ -44,7 +45,8 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
         [TestMethod]
         public async Task CreateMessageSuccessTest()
         {
-            var responseCreateDialog = await this.client.ChatClient.CreateDialogAsync("New test dialog", DialogType.PublicGroup);
+            string occupantsIds = "3323859,3323883";
+            var responseCreateDialog = await this.client.ChatClient.CreateDialogAsync("New test dialog", DialogType.PublicGroup, occupantsIds);
             Assert.AreEqual(responseCreateDialog.StatusCode, HttpStatusCode.Created);
 
             var createMessageRequest = new CreateMessageRequest() {ChatDialogId = responseCreateDialog.Result.Id, Message = "Hello"};

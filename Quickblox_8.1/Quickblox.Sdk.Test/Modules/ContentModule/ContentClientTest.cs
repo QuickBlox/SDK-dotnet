@@ -22,9 +22,8 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
-            var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithLoginAsync(GlobalConstant.ApplicationId,
-                    GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "Test654321", "Test12345",
+            this.client = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
+            var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithLoginAsync("Test654321", "Test12345",
                     deviceRequestRequest:
                         new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
             client.Token = sessionResponse.Result.Session.Token;
