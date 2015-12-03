@@ -50,6 +50,18 @@ namespace Quickblox.Sdk.Modules.UsersModule
         }
 
         /// <summary>
+        /// Retrieve all Users for current account. Return custom User's model that extended UserModule.Models.User class
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="retrieveUsersesRequest">Filter settings</param>
+        /// <returns></returns>
+        public async Task<HttpResponse<RetrieveUsersResponse<T>>> RetrieveUsersAsync<T>(RetrieveUsersRequest retrieveUsersesRequest = null) where T : User
+        {
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+            return await HttpService.GetAsync<RetrieveUsersResponse<T>, RetrieveUsersRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.UsersMethod, retrieveUsersesRequest, headers);
+        }
+
+        /// <summary>
         /// API User sign up. Use for the identification of the mobile applications users. The request can contain all, some or none of the optional parameters.
         /// Login, email, facebook ID, twitter ID and the external user ID should not be taken previously.
         /// If you want to create a user with a some content (f.e. with a photo) you have to create a blob firstly.
