@@ -19,8 +19,8 @@ namespace Quickblox.Sdk.Test.Modules.LocationModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
-            var sessionResponse = await this.client.AuthenticationClient.CreateSessionBaseAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret);
+            this.client = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
+            var sessionResponse = await this.client.AuthenticationClient.CreateSessionBaseAsync();
             client.Token = sessionResponse.Result.Session.Token;
         }
 
@@ -128,7 +128,7 @@ namespace Quickblox.Sdk.Test.Modules.LocationModule
         public async Task FindGeoDataSuccessTest()
         {
             var accessTokenFB = "CAAFYnUVKERcBAPPgCYPqm4UZB19SZBZAlkTMQMhZByMipETIJfeZAbjVYp6xf9usgAbxRsLEmvsuPHzgASr4HW62Bj71HKGgDBTdq4PamjQWpQgBbm9OVHoDoJPMluxLOZA73KVfMS5OeL529WCYJbdRTgAgNcZAlrQxRZBTcFknwJZC5bZCNiGhbbjTDE6DcZAbWcZD";
-            var sessionResponse = await client.AuthenticationClient.CreateSessionWithSocialNetworkKey(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, "facebook",
+            var sessionResponse = await client.AuthenticationClient.CreateSessionWithSocialNetworkKey("facebook",
                                                                 "public_profile",
                                                                 accessTokenFB,
                                                                 null,

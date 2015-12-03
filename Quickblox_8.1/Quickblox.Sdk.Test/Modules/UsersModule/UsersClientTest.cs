@@ -25,8 +25,8 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
-            var sessionResponse = await this.client.AuthenticationClient.CreateSessionBaseAsync(ApplicationId, AuthorizationKey, AuthorizationSecret);
+            this.client = new QuickbloxClient((int)ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
+            var sessionResponse = await this.client.AuthenticationClient.CreateSessionBaseAsync();
             client.Token = sessionResponse.Result.Session.Token;
         }
         
@@ -86,7 +86,17 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         [TestMethod]
         public async Task SignUpUserSuccess()
         {
-            var response = await this.client.UsersClient.SignUpUserAsync("Test1234567", "qwerty123456", email:"test2@mail.ru");
+            UserSignUpRequest userSignUpRequest = new UserSignUpRequest()
+            {
+                User = new UserRequest()
+                {
+                    Login = "Test1234567",
+                    Password = "qwerty123456",
+                    Email = "test2@mail.ru"
+                }
+            };
+
+            var response = await this.client.UsersClient.SignUpUserAsync(userSignUpRequest);
             Assert.IsTrue(response.StatusCode == HttpStatusCode.Created); // login is aready taken
         }
 
@@ -128,7 +138,7 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         public async Task UpdateUserGericSuccess()
         {
             var accessTokenFB = "CAAFYnUVKERcBAPPgCYPqm4UZB19SZBZAlkTMQMhZByMipETIJfeZAbjVYp6xf9usgAbxRsLEmvsuPHzgASr4HW62Bj71HKGgDBTdq4PamjQWpQgBbm9OVHoDoJPMluxLOZA73KVfMS5OeL529WCYJbdRTgAgNcZAlrQxRZBTcFknwJZC5bZCNiGhbbjTDE6DcZAbWcZD";
-            var sessionResponse = await client.AuthenticationClient.CreateSessionWithSocialNetworkKey(ApplicationId, AuthorizationKey, AuthorizationSecret, "facebook",
+            var sessionResponse = await client.AuthenticationClient.CreateSessionWithSocialNetworkKey("facebook",
                                                                 "public_profile",
                                                                 accessTokenFB,
                                                                 null,
@@ -156,7 +166,7 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         [TestMethod]
         public async Task RetrieveUsersUnauthorizedTest()
         {
-            QuickbloxClient client2 = new QuickbloxClient(GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
+            QuickbloxClient client2 = new QuickbloxClient((int)ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
             var response = await client2.UsersClient.RetrieveUsersAsync();
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.Unauthorized);

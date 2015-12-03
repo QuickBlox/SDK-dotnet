@@ -54,34 +54,5 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             }
 #endif
         }
-
-        [TestMethod]
-        public async Task AddContactTest()
-        {
-            var testContact = new Contact {Name = "Test Contact", UserId = 2701450};
-
-            client1.ChatXmppClient.AddContact(testContact);
-            await Task.Delay(10000);
-
-            var contact = client1.ChatXmppClient.Contacts.FirstOrDefault(c => c.Name == testContact.Name && c.UserId == testContact.UserId);
-            if(contact == null)
-                Assert.Fail("Contact wasn't added to contact list.");
-        }
-
-        [TestMethod]
-        public async Task DeleteContactTest()
-        {
-            var testContact = new Contact { Name = "Test Contact", UserId = 2701450 };
-
-            client1.ChatXmppClient.AddContact(testContact);
-            await Task.Delay(10000);
-
-            client1.ChatXmppClient.DeleteContact(testContact.UserId);
-            await Task.Delay(10000);
-
-            var contact = client1.ChatXmppClient.Contacts.FirstOrDefault(c => c.Name == testContact.Name && c.UserId == testContact.UserId);
-            if (contact != null)
-                Assert.Fail("Contact wasn't removed from contact list.");
-        }
     }
 }

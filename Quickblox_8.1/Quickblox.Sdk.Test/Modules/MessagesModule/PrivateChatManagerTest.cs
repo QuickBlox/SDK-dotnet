@@ -45,23 +45,19 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         {
             var logger = new DebugLogger();
 
-            client1 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, logger);
-            //await client1.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            //await client1.AuthenticationClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email1, password1);
+            client1 = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, ApiBaseEndPoint, ChatEndpoint, logger);
 #if DEBUG
             //client1.ChatXmppClient.DebugClientName = "1";
 #endif
-            await client1.ChatXmppClient.Connect(ChatEndpoint, id1, ApplicationId, password1);
+            await client1.ChatXmppClient.Connect(id1, password1);
             chatManager1 = client1.ChatXmppClient.GetPrivateChatManager(id2, dialogId);
             client1.ChatXmppClient.OnPresenceReceived += (sender, presence) => { if (lastPresencesClient1 != null) lastPresencesClient1.Add(presence); };
 
-            client2 = new QuickbloxClient(ApiBaseEndPoint, ChatEndpoint, logger);
-            //await client2.InitializeClientAsync(GlobalConstant.ApiBaseEndPoint, GlobalConstant.AccountKey, new HmacSha1CryptographicProvider());
-            //await client2.AuthenticationClient.CreateSessionWithEmailAsync(GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, email2, password2);
+            client2 = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, ApiBaseEndPoint, ChatEndpoint, logger);
 #if DEBUG
             //client2.ChatXmppClient.DebugClientName = "2";
 #endif
-            await client2.ChatXmppClient.Connect(ChatEndpoint, id2, ApplicationId, password2);
+            await client2.ChatXmppClient.Connect(id2, password2);
             chatManager2 = client2.ChatXmppClient.GetPrivateChatManager(id1, dialogId);
             client2.ChatXmppClient.OnMessageReceived += (sender, message) => lastMessageClient2 = message;
             client2.ChatXmppClient.OnPresenceReceived += (sender, presence) => { if(lastPresencesClient2 != null) lastPresencesClient2.Add(presence); };
@@ -109,30 +105,6 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         }
 
         [TestMethod]
-        public async Task PresenceSubscribeTest()
-        {
-            lastPresencesClient2 = new List<Presence>();
-
-            chatManager1.SubsribeForPresence();
-            await Task.Delay(5000);
-
-            if (!lastPresencesClient2.Any(p => p.From.Contains(jid1) && p.PresenceType == PresenceType.Subscribe))
-                Assert.Fail("The presence subscribtion wasn't received by client2");
-        }
-
-        [TestMethod]
-        public async Task PresenceApproveTest()
-        {
-            lastPresencesClient1 = new List<Presence>();
-
-            chatManager2.ApproveSubscribtionRequest();
-            await Task.Delay(5000);
-
-            if (!lastPresencesClient1.Any(p => p.From.Contains(jid2) && p.PresenceType == PresenceType.Subscribed))
-                Assert.Fail("The presence approval wasn't received by client1");
-        }
-
-        [TestMethod]
         public async Task DisconnectTest()
         {
             lastPresencesClient1 = new List<Presence>();
@@ -159,35 +131,6 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
 
             if (lastMessageClient2 == null || lastMessageClient2.Attachments == null || lastMessageClient2.Attachments.Count() != 1 || lastMessageClient2.Attachments[0].Id != attachemntId)
                 Assert.Fail("The message wasn't received correctly by client 2.");
-        }
-
-        /// <summary>
-        /// Doesn't work. Not implemented yet for Ubiety libarary.
-        /// </summary>
-        /// <returns></returns>
-        [TestMethod]
-        public async Task PrivacyListTest()
-        {
-            string messageText = "Test message";
-
-            await chatManager2.Unblock();
-
-            lastMessageClient2 = null;
-            chatManager1.SendMessage(messageText);
-            await Task.Delay(5000);
-
-            if (lastMessageClient2 == null || lastMessageClient2.MessageText != messageText)
-                Assert.Fail("The message wasn't received by client2");
-
-            await chatManager2.Block();
-
-            lastMessageClient2 = null;
-            chatManager1.SendMessage(messageText);
-            await Task.Delay(5000);
-
-            if (lastMessageClient2 != null)
-                Assert.Fail("Blocking doesn't work");
-
         }
     }
 }

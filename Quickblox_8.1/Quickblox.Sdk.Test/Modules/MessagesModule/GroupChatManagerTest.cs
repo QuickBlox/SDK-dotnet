@@ -48,29 +48,29 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         {
             var logger = new Logger.DebugLogger();
 
-            client1 = new QuickbloxClient(apiEndpoint, chatEndpoint, logger);
-            var sessionResponse = await client1.AuthenticationClient.CreateSessionWithEmailAsync(appId, authKey, authSecret, email1, password1);
+            client1 = new QuickbloxClient((int)appId, authKey, authSecret, apiEndpoint, chatEndpoint, logger);
+            var sessionResponse = await client1.AuthenticationClient.CreateSessionWithEmailAsync(email1, password1);
             client1.Token = sessionResponse.Result.Session.Token;
 #if DEBUG
             client1.ChatXmppClient.DebugClientName = "1";
 #endif
-            await client1.ChatXmppClient.Connect(chatEndpoint, id1, (int)appId, password1);
+            await client1.ChatXmppClient.Connect(id1, password1);
 
-            client2 = new QuickbloxClient(apiEndpoint, chatEndpoint, logger);
-            var sessionResponse2 = await client2.AuthenticationClient.CreateSessionWithEmailAsync(appId, authKey, authSecret, email2, password2);
+            client2 = new QuickbloxClient((int)appId, authKey, authSecret, apiEndpoint, chatEndpoint, logger);
+            var sessionResponse2 = await client2.AuthenticationClient.CreateSessionWithEmailAsync(email2, password2);
             client2.Token = sessionResponse2.Result.Session.Token;
 #if DEBUG
             client2.ChatXmppClient.DebugClientName = "2";
 #endif
-            await client2.ChatXmppClient.Connect(chatEndpoint, id2, (int)appId, password2);
+            await client2.ChatXmppClient.Connect(id2, password2);
 
-            client3 = new QuickbloxClient(apiEndpoint, chatEndpoint, logger);
-            var sessionResponse3 = await client2.AuthenticationClient.CreateSessionWithEmailAsync(appId, authKey, authSecret, email2, password2);
+            client3 = new QuickbloxClient((int)appId, authKey, authSecret, apiEndpoint, chatEndpoint, logger);
+            var sessionResponse3 = await client2.AuthenticationClient.CreateSessionWithEmailAsync(email2, password2);
             client3.Token = sessionResponse3.Result.Session.Token;
 #if DEBUG
             client3.ChatXmppClient.DebugClientName = "3";
 #endif
-            await client3.ChatXmppClient.Connect(chatEndpoint, id3, (int)appId, password3);
+            await client3.ChatXmppClient.Connect(id3, password3);
         }
 
         [TestMethod]
