@@ -65,8 +65,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var body = new body {Value = message};
             
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory {Value = "1"});
-            extraParams.Add(new DialogId {Value = dialogId});
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             
             msg.Add(body, extraParams);
             if (!xmppClient.Connected)
@@ -123,9 +123,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var msg = CreateNewMessage();
             var body = new body {Value = "Contact request"};
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory {Value = "1"});
-            extraParams.Add(new DialogId {Value = dialogId});
-            extraParams.Add(new NotificationType {Value = ((int) NotificationTypes.FriendsRequest).ToString()});
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.FriendsRequest).ToString());
 
             msg.Add(body, extraParams);
             if (!xmppClient.Connected)
@@ -160,9 +160,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var msg = CreateNewMessage();
             var body = new body {Value = "Request accepted"};
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory {Value = "1"});
-            extraParams.Add(new DialogId {Value = dialogId});
-            extraParams.Add(new NotificationType {Value = ((int) NotificationTypes.FriendsAccept).ToString()});
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.FriendsAccept).ToString());
 
             msg.Add(body, extraParams);
             if (!xmppClient.Connected)
@@ -186,9 +186,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var msg = CreateNewMessage();
             var body = new body {Value = "Request rejected"};
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory {Value = "1"});
-            extraParams.Add(new DialogId {Value = dialogId});
-            extraParams.Add(new NotificationType {Value = ((int) NotificationTypes.FriendsReject).ToString()});
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.FriendsReject).ToString());
 
             msg.Add(body, extraParams);
             if (!xmppClient.Connected)
@@ -210,9 +210,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var msg = CreateNewMessage();
             var body = new body { Value = "Contact removed" };
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
-            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.FriendsRemove).ToString() });
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.FriendsRemove).ToString());
 
             msg.Add(body, extraParams);
             if (!xmppClient.Connected)
@@ -235,6 +235,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        //TODO:delete this
         /// <summary>
         /// Notifies a user about a created group dialog.
         /// </summary>
@@ -242,21 +243,23 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <returns>Is operation successful</returns>
         public bool NotifyAboutGroupCreation(string createdDialogId)
         {
-            var msg = CreateNewMessage();
-            var body = new body { Value = "Notification message" };
-            var extraParams = new ExtraParams();
-            extraParams.Add(new DialogId { Value = createdDialogId });
-            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupCreate).ToString() });
+            throw new QuickbloxSdkException("This methods is to be deleted.");
 
-            msg.Add(body, extraParams);
-            if (!xmppClient.Connected)
-            {
-                xmppClient.Connect();
-                return false;
-            }
+            //var msg = CreateNewMessage();
+            //var body = new body { Value = "Notification message" };
+            //var extraParams = new ExtraParams();
+            //extraParams.Add(new DialogId { Value = createdDialogId });
+            //extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupCreate).ToString() });
 
-            xmppClient.Send(msg);
-            return true;
+            //msg.Add(body, extraParams);
+            //if (!xmppClient.Connected)
+            //{
+            //    xmppClient.Connect();
+            //    return false;
+            //}
+
+            //xmppClient.Send(msg);
+            //return true;
         }
 
         #endregion

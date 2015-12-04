@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
@@ -318,10 +319,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var extraParams = source.Element(ExtraParams.XName);
             if (extraParams != null)
             {
-                var dialogId = extraParams.Element(DialogId.XName);
+                var dialogId = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.dialog_id));
                 if (dialogId != null) result.ChatDialogId = dialogId.Value;
 
-                var dateSent = extraParams.Element(DateSent.XName);
+                var dateSent = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.date_sent));
                 if (dateSent != null)
                 {
                     long longValue;
@@ -331,40 +332,40 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                     }
                 }
 
-                var notificationType = extraParams.Element(NotificationType.XName);
+                var notificationType = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.notification_type));
                 if (notificationType != null)
                 {
                     int intValue;
                     if (int.TryParse(notificationType.Value, out intValue))
                     {
-                        if (Enum.IsDefined(typeof(NotificationTypes), intValue))
-                            result.NotificationType = (NotificationTypes)intValue;
+                        if (Enum.IsDefined(typeof (NotificationTypes), intValue))
+                            result.NotificationType = (NotificationTypes) intValue;
                     }
                 }
 
-                var roomPhoto = extraParams.Element(RoomPhoto.XName);
+                var roomPhoto = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.room_photo));
                 if (roomPhoto != null)
                 {
                     result.RoomPhoto = roomPhoto.Value;
                 }
 
-                var roomName = extraParams.Element(RoomName.XName);
+                var roomName = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.room_name));
                 if (roomName != null)
                 {
                     result.RoomName = roomName.Value;
                 }
 
-                var occupantsIds = extraParams.Element(OccupantsIds.XName);
+                var occupantsIds = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.occupants_ids));
                 if (occupantsIds != null)
                 {
                     result.OccupantsIds = occupantsIds.Value;
                 }
 
-                var deletedId = extraParams.Element(DeletedId.XName);
+                var deletedId = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.deleted_id));
                 if (deletedId != null)
                 {
                     int deletedIdInt;
-                    if(int.TryParse(deletedId.Value, out deletedIdInt))
+                    if (int.TryParse(deletedId.Value, out deletedIdInt))
                         result.DeletedId = deletedIdInt;
                 }
             }

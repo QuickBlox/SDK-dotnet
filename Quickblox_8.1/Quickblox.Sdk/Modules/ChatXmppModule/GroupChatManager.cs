@@ -58,8 +58,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var body = new body { Value = message };
 
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
 
             msg.Add(body, extraParams);
 
@@ -105,10 +105,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var body = new body { Value = "Notification message" };
 
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
-            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupUpdate).ToString() });
-            extraParams.Add(new RoomPhoto { Value = groupImageUrl });
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.GroupUpdate).ToString());
+            extraParams.AddNew(ExtraParamsList.room_photo, groupImageUrl);
 
             msg.Add(body, extraParams);
 
@@ -134,10 +134,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var body = new body { Value = "Notification message" };
 
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
-            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupUpdate).ToString() });
-            extraParams.Add(new RoomName { Value = groupName });
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.GroupUpdate).ToString());
+            extraParams.AddNew(ExtraParamsList.room_name, groupName);
 
             msg.Add(body, extraParams);
 
@@ -192,10 +192,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             occupantsIdsString = occupantsIdsString.Trim(',');
 
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory {Value = "1"});
-            extraParams.Add(new DialogId {Value = dialogId});
-            extraParams.Add(new NotificationType {Value = ((int) (isGroupCreation ? NotificationTypes.GroupCreate : NotificationTypes.GroupUpdate)).ToString()});
-            extraParams.Add(new OccupantsIds {Value = occupantsIdsString});
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, ((int)(isGroupCreation ? NotificationTypes.GroupCreate : NotificationTypes.GroupUpdate)).ToString());
+            extraParams.AddNew(ExtraParamsList.occupants_ids, occupantsIdsString);
 
             msg.Add(body, extraParams);
 
@@ -215,9 +215,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             {
                 if (string.IsNullOrEmpty(message1.MessageText)) return; // for IsTyping/PausedTyping messages
 
-                var handler = OnMessageReceived;
-                if (handler != null)
-                    handler(this, message1);
+                OnMessageReceived?.Invoke(this, message1);
             }
         }
 
