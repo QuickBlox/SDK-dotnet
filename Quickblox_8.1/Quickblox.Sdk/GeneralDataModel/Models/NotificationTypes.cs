@@ -14,4 +14,12 @@
         LeaveDialog = 24,
         CreateDialog = 25
     }
+
+    public static class NotificationTypesExtentions
+    {
+        public static string ToIntString(this NotificationTypes notificationType)
+        {
+            return ((int) notificationType).ToString();
+        }
+    }
 }

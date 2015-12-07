@@ -10,10 +10,15 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         dialog_id,
         room_photo,
         room_name,
+        room_jid,
         occupants_ids,
+        current_occupant_ids,
+        added_occupant_ids,
+        deleted_occupant_ids,
         deleted_id,
         notification_type,
-        moduleIdentifier
+        moduleIdentifier, // for System messages
+        type // dialogType (Private/Group/Public Group)
     }
 
     public class ExtraParams : XElement

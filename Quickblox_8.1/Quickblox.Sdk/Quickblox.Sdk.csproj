@@ -62,6 +62,7 @@
     <Compile Include="GeneralDataModel\Filters\FieldFilter.cs" />
     <Compile Include="Modules\ChatModule\Requests\RetrieveDialogsRequest.cs" />
     <Compile Include="Modules\ChatModule\Requests\RetrieveMessagesRequest.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\SystemMessage.cs" />
     <Compile Include="Modules\ContentModule\ContentClient.cs" />
     <Compile Include="Modules\ContentModule\ContentClientHelper.cs" />
     <Compile Include="Modules\ContentModule\Models\Blob.cs" />
