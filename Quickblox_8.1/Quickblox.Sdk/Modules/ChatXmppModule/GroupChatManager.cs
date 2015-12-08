@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
@@ -106,15 +107,16 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 SendGroupInfoSystemMessage(occupant, dialogInfo);
             }
 
-            return NotifyAbountGroupOccupants(addedOccupantsIds, false);
+            return NotifyAbountGroupOccupants(addedOccupantsIds, false, dialogInfo.UpdateAt);
         }
 
         /// <summary>
         /// Sends notification group chat message that group chat image has been changed.
         /// </summary>
         /// <param name="groupImageUrl">New group chat image URL</param>
+        /// <param name="updatedAt">DateTime when a group was updated (from update response)</param>
         /// <returns>Is operation successful</returns>
-        public bool NotifyGroupImageChanged(string groupImageUrl)
+        public bool NotifyGroupImageChanged(string groupImageUrl, DateTime updatedAt)
         {
             var msg = CreateNewMessage();
 
@@ -125,6 +127,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.GroupUpdate).ToString());
             extraParams.AddNew(ExtraParamsList.room_photo, groupImageUrl);
+            extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
+
 
             msg.Add(body, extraParams);
 
@@ -142,8 +146,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// Sends notification group chat message that group chat name has been changed.
         /// </summary>
         /// <param name="groupName">New group chat name</param>
+        /// <param name="updatedAt">DateTime when a group was updated (from update response)</param>
         /// <returns>Is operation successful</returns>
-        public bool NotifyGroupNameChanged(string groupName)
+        public bool NotifyGroupNameChanged(string groupName, DateTime updatedAt)
         {
             var msg = CreateNewMessage();
 
@@ -152,8 +157,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
-            extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.GroupUpdate).ToString());
+            extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupUpdate.ToIntString());
             extraParams.AddNew(ExtraParamsList.room_name, groupName);
+            extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
 
             msg.Add(body, extraParams);
 
@@ -215,9 +221,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.added_occupant_ids, BuildUsersString(dialogInfo.OccupantsIds.ToList()));
             extraParams.AddNew(ExtraParamsList.type, ((int)DialogType.Group).ToString());
 
-            var body = new body { Value = "Notification message" };
-
-            message.Add(body, extraParams);
+            message.Add(extraParams);
 
             if (!xmppClient.Connected)
             {
@@ -229,7 +233,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
-        private bool NotifyAbountGroupOccupants(IList<int> occupantsIds, bool isGroupCreation)
+        private bool NotifyAbountGroupOccupants(IList<int> occupantsIds, bool isGroupCreation, DateTime? updatedAt = null)
         {
             var msg = CreateNewMessage();
 
@@ -242,6 +246,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.AddNew(ExtraParamsList.notification_type, ((int)(isGroupCreation ? NotificationTypes.GroupCreate : NotificationTypes.GroupUpdate)).ToString());
             extraParams.AddNew(ExtraParamsList.occupants_ids, occupantsIdsString);
+
+            if(!isGroupCreation && updatedAt != null)
+                extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.Value.ToUnixEpoch().ToString());
+
 
             msg.Add(body, extraParams);
 

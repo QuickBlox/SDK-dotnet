@@ -48,14 +48,16 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         /// Sends notification group chat message that group chat image has been changed.
         /// </summary>
         /// <param name="groupImageUrl">New group chat image URL</param>
+        /// <param name="updatedAt">DateTime when a group was updated (from update response)</param>
         /// <returns>Is operation successful</returns>
-        bool NotifyGroupImageChanged(string groupImageUrl);
+        bool NotifyGroupImageChanged(string groupImageUrl, DateTime updatedAt);
 
         /// <summary>
         /// Sends notification group chat message that group chat name has been changed.
         /// </summary>
         /// <param name="groupName">New group chat name</param>
+        /// <param name="updatedAt">DateTime when a group was updated (from update response)</param>
         /// <returns>Is operation successful</returns>
-        bool NotifyGroupNameChanged(string groupName);
+        bool NotifyGroupNameChanged(string groupName, DateTime updatedAt);
     }
 }

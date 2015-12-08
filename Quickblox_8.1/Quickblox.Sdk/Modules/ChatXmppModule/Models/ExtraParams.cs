@@ -16,6 +16,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         added_occupant_ids,
         deleted_occupant_ids,
         deleted_id,
+        room_updated_date,
         notification_type,
         moduleIdentifier, // for System messages
         type // dialogType (Private/Group/Public Group)
