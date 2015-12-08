@@ -91,23 +91,24 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 SendGroupInfoSystemMessage(occupant, dialogInfo);
             }
 
-            return NotifyAbountGroupOccupants(dialogInfo.OccupantsIds, true);
+            return NotifyAbountGroupOccupantsOnCreation(dialogInfo.OccupantsIds);
         }
 
         /// <summary>
         /// Sends notification group chat message that new occupants were added to the group.
         /// </summary>
         /// <param name="addedOccupantsIds">Added occupants IDs</param>
+        /// <param name="deletedOccupantsIds">deleted occupants IDs</param>
         /// <param name="dialogInfo">Dialog information</param>
         /// <returns>Is operation successful</returns>
-        public bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds, Dialog dialogInfo)
+        public bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds, IList<int> deletedOccupantsIds, Dialog dialogInfo)
         {
             foreach (int occupant in addedOccupantsIds)
             {
                 SendGroupInfoSystemMessage(occupant, dialogInfo);
             }
 
-            return NotifyAbountGroupOccupants(addedOccupantsIds, false, dialogInfo.UpdateAt);
+            return NotifyAbountGroupOccupantsOnUpdate(dialogInfo.OccupantsIds, addedOccupantsIds, deletedOccupantsIds, dialogInfo.UpdateAt);
         }
 
         /// <summary>
@@ -233,23 +234,19 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
-        private bool NotifyAbountGroupOccupants(IList<int> occupantsIds, bool isGroupCreation, DateTime? updatedAt = null)
+        private bool NotifyAbountGroupOccupantsOnCreation(IList<int> addedOccupantsIds)
         {
             var msg = CreateNewMessage();
 
-            var body = new body {Value = "Notification message."};
+            var body = new body { Value = "Notification message." };
 
-            string occupantsIdsString = BuildUsersString(occupantsIds);
+            string addedOccupants = BuildUsersString(addedOccupantsIds);
 
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
-            extraParams.AddNew(ExtraParamsList.notification_type, ((int)(isGroupCreation ? NotificationTypes.GroupCreate : NotificationTypes.GroupUpdate)).ToString());
-            extraParams.AddNew(ExtraParamsList.occupants_ids, occupantsIdsString);
-
-            if(!isGroupCreation && updatedAt != null)
-                extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.Value.ToUnixEpoch().ToString());
-
+            extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupCreate.ToIntString());
+            extraParams.AddNew(ExtraParamsList.added_occupant_ids, addedOccupants);
 
             msg.Add(body, extraParams);
 
@@ -262,6 +259,38 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.Send(msg);
             return true;
         }
+
+        private bool NotifyAbountGroupOccupantsOnUpdate(IList<int> currentOccupantsIds, IList<int> addedOccupantsIds, IList<int> deletedOccupantsIds, DateTime updatedAt)
+        {
+            var msg = CreateNewMessage();
+
+            var body = new body {Value = "Notification message."};
+
+            string currentOccupants = BuildUsersString(currentOccupantsIds);
+            string addedOccupants = BuildUsersString(addedOccupantsIds);
+            string deletedOccupants = BuildUsersString(deletedOccupantsIds);
+
+            var extraParams = new ExtraParams();
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupUpdate.ToIntString());
+            extraParams.AddNew(ExtraParamsList.current_occupant_ids, currentOccupants);
+            extraParams.AddNew(ExtraParamsList.added_occupant_ids, addedOccupants);
+            extraParams.AddNew(ExtraParamsList.deleted_occupant_ids, deletedOccupants);
+            extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
+
+            msg.Add(body, extraParams);
+
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
+
 
         private void MessagesClientOnOnMessageReceived(object sender, Message message1)
         {

@@ -32,6 +32,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         /// <summary>
         /// Sends notification group chat message that this group was created.
         /// </summary>
+        /// <param name="addedOccupantsIds">Added occupants IDs</param>
         /// <param name="dialogInfo">Dialog information</param>
         /// <returns>Is operation successful</returns>
         bool NotifyAboutGroupCreation(IList<int> addedOccupantsIds, Dialog dialogInfo);
@@ -40,9 +41,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         /// Sends notification group chat message that new occupants were added to the group.
         /// </summary>
         /// <param name="addedOccupantsIds">Added occupants IDs</param>
+        /// <param name="deletedOccupantsIds">Deleted occupants IDs</param>
         /// <param name="dialogInfo">Dialog information</param>
         /// <returns>Is operation successful</returns>
-        bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds, Dialog dialogInfo);
+        bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds, IList<int> deletedOccupantsIds, Dialog dialogInfo);
 
         /// <summary>
         /// Sends notification group chat message that group chat image has been changed.

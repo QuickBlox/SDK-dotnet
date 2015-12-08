@@ -121,7 +121,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             var updateDialogResponse = await client1.ChatClient.UpdateDialogAsync(updateDialogRequest);
             Assert.AreEqual(HttpStatusCode.OK, updateDialogResponse.StatusCode);
 
-            groupChatManager.NotifyAboutGroupUpdate(new List<int> {id3}, updateDialogResponse.Result);
+            groupChatManager.NotifyAboutGroupUpdate(new List<int> {id3}, new List<int>(),  updateDialogResponse.Result);
 
             await Task.Delay(5000);
         }
