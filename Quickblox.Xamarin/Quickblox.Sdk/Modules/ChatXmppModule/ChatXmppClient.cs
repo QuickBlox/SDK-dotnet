@@ -397,7 +397,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         public IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId = null)
         {
-            return new PrivateChatManager(quickbloxClient, xmppClient, otherUserId, dialogId);
+            return new PrivateChatManager(quickbloxClient, otherUserId, dialogId);
         }
 
         //public IGroupChatManager GetGroupChatManager(string groupJid)

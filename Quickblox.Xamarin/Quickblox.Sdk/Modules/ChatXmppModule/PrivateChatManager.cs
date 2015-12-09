@@ -1,8 +1,5 @@
 ﻿using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using Sharp.Xmpp.Client;
-using System.Threading.Tasks;
-using System.Net;
-using Quickblox.Sdk.Modules.ChatModule.Models;
 using System;
 using System.Xml.Linq;
 
@@ -23,13 +20,12 @@ namespace Quickblox.Sdk
 
         //public event EventHandler<Message> OnMessageReceived;
 
-        internal PrivateChatManager(IQuickbloxClient quickbloxClient, XmppClient xmppClient, int otherUserId, string dialogId)
+        internal PrivateChatManager(IQuickbloxClient quickbloxClient, int otherUserId, string dialogId)
         {
             this.otherUserId = otherUserId;
             this.otherUserJid = quickbloxClient.ChatXmppClient.BuildJid(otherUserId);
             this.dialogId = dialogId;
             this.quickbloxClient = quickbloxClient;
-            this.xmppClient = xmppClient;
         }
 
         public void SendMessage(string body, string subject = null, string thread = null, MessageType messageType = MessageType.Chat, NotificationType notificationType = NotificationType.None, bool saveToHistory = true)
@@ -39,7 +35,7 @@ namespace Quickblox.Sdk
             string extraParams = "";
             if (saveToHistory)
                 extraParams = SaveToHistory(dialogId);
-            xmppClient.SendMessage(jid, body, extraParams, subject, thread, wrappedMessageType);
+            this.quickbloxClient.ChatXmppClient.XmppClient.SendMessage(jid, body, extraParams, subject, thread, wrappedMessageType);
         }
 
         private string SaveToHistory(string dialogId)
