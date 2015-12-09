@@ -17,6 +17,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         event EventHandler<Message> OnMessageReceived;
 
         /// <summary>
+        /// Event occuring when a new System message is received.
+        /// </summary>
+        event EventHandler<SystemMessage> OnSystemMessageReceived;
+
+        /// <summary>
         /// Event occuring  when a presence is received.
         /// </summary>
         event EventHandler<Presence> OnPresenceReceived;

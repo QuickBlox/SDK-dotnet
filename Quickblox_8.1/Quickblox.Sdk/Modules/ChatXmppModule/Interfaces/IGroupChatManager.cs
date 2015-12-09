@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.Models;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
 {
@@ -31,29 +32,34 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         /// <summary>
         /// Sends notification group chat message that this group was created.
         /// </summary>
-        /// <param name="occupantsIds">Created group occupants IDs</param>
+        /// <param name="addedOccupantsIds">Added occupants IDs</param>
+        /// <param name="dialogInfo">Dialog information</param>
         /// <returns>Is operation successful</returns>
-        bool NotifyAboutGroupCreation(IList<int> occupantsIds);
+        bool NotifyAboutGroupCreation(IList<int> addedOccupantsIds, Dialog dialogInfo);
 
         /// <summary>
         /// Sends notification group chat message that new occupants were added to the group.
         /// </summary>
         /// <param name="addedOccupantsIds">Added occupants IDs</param>
+        /// <param name="deletedOccupantsIds">Deleted occupants IDs</param>
+        /// <param name="dialogInfo">Dialog information</param>
         /// <returns>Is operation successful</returns>
-        bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds);
+        bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds, IList<int> deletedOccupantsIds, Dialog dialogInfo);
 
         /// <summary>
         /// Sends notification group chat message that group chat image has been changed.
         /// </summary>
         /// <param name="groupImageUrl">New group chat image URL</param>
+        /// <param name="updatedAt">DateTime when a group was updated (from update response)</param>
         /// <returns>Is operation successful</returns>
-        bool NotifyGroupImageChanged(string groupImageUrl);
+        bool NotifyGroupImageChanged(string groupImageUrl, DateTime updatedAt);
 
         /// <summary>
         /// Sends notification group chat message that group chat name has been changed.
         /// </summary>
         /// <param name="groupName">New group chat name</param>
+        /// <param name="updatedAt">DateTime when a group was updated (from update response)</param>
         /// <returns>Is operation successful</returns>
-        bool NotifyGroupNameChanged(string groupName);
+        bool NotifyGroupNameChanged(string groupName, DateTime updatedAt);
     }
 }

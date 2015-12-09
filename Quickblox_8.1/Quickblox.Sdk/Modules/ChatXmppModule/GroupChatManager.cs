@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
 using Quickblox.Sdk.Modules.ChatXmppModule.Models;
+using Quickblox.Sdk.Modules.Models;
 using XMPP.tags.jabber.client;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
@@ -40,6 +44,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             this.groupJid = groupJid;
             this.dialogId = dialogId;
             quickbloxClient.ChatXmppClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
+
         }
 
         #endregion
@@ -58,8 +63,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var body = new body { Value = message };
 
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
 
             msg.Add(body, extraParams);
 
@@ -76,39 +81,55 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <summary>
         /// Sends notification group chat message that this group was created.
         /// </summary>
-        /// <param name="occupantsIds">Created group occupants IDs</param>
+        /// <param name="addedOccupantsIds">Added occupants IDs</param>
+        /// <param name="dialogInfo">Dialog information</param>
         /// <returns>Is operation successful</returns>
-        public bool NotifyAboutGroupCreation(IList<int> occupantsIds)
+        public bool NotifyAboutGroupCreation(IList<int> addedOccupantsIds, Dialog dialogInfo)
         {
-            return NotifyAbountGroupOccupants(occupantsIds, true);
+            foreach (int occupant in addedOccupantsIds)
+            {
+                SendGroupInfoSystemMessage(occupant, dialogInfo);
+            }
+
+            return NotifyAbountGroupOccupantsOnCreation(dialogInfo.OccupantsIds);
         }
 
         /// <summary>
         /// Sends notification group chat message that new occupants were added to the group.
         /// </summary>
         /// <param name="addedOccupantsIds">Added occupants IDs</param>
+        /// <param name="deletedOccupantsIds">deleted occupants IDs</param>
+        /// <param name="dialogInfo">Dialog information</param>
         /// <returns>Is operation successful</returns>
-        public bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds)
+        public bool NotifyAboutGroupUpdate(IList<int> addedOccupantsIds, IList<int> deletedOccupantsIds, Dialog dialogInfo)
         {
-            return NotifyAbountGroupOccupants(addedOccupantsIds, false);
+            foreach (int occupant in addedOccupantsIds)
+            {
+                SendGroupInfoSystemMessage(occupant, dialogInfo);
+            }
+
+            return NotifyAbountGroupOccupantsOnUpdate(dialogInfo.OccupantsIds, addedOccupantsIds, deletedOccupantsIds, dialogInfo.UpdateAt);
         }
 
         /// <summary>
         /// Sends notification group chat message that group chat image has been changed.
         /// </summary>
         /// <param name="groupImageUrl">New group chat image URL</param>
+        /// <param name="updatedAt">DateTime when a group was updated (from update response)</param>
         /// <returns>Is operation successful</returns>
-        public bool NotifyGroupImageChanged(string groupImageUrl)
+        public bool NotifyGroupImageChanged(string groupImageUrl, DateTime updatedAt)
         {
             var msg = CreateNewMessage();
 
             var body = new body { Value = "Notification message" };
 
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
-            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupUpdate).ToString() });
-            extraParams.Add(new RoomPhoto { Value = groupImageUrl });
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.GroupUpdate).ToString());
+            extraParams.AddNew(ExtraParamsList.room_photo, groupImageUrl);
+            extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
+
 
             msg.Add(body, extraParams);
 
@@ -126,18 +147,20 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// Sends notification group chat message that group chat name has been changed.
         /// </summary>
         /// <param name="groupName">New group chat name</param>
+        /// <param name="updatedAt">DateTime when a group was updated (from update response)</param>
         /// <returns>Is operation successful</returns>
-        public bool NotifyGroupNameChanged(string groupName)
+        public bool NotifyGroupNameChanged(string groupName, DateTime updatedAt)
         {
             var msg = CreateNewMessage();
 
             var body = new body { Value = "Notification message" };
 
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory { Value = "1" });
-            extraParams.Add(new DialogId { Value = dialogId });
-            extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupUpdate).ToString() });
-            extraParams.Add(new RoomName { Value = groupName });
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupUpdate.ToIntString());
+            extraParams.AddNew(ExtraParamsList.room_name, groupName);
+            extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
 
             msg.Add(body, extraParams);
 
@@ -182,20 +205,48 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             };
         }
 
-        private bool NotifyAbountGroupOccupants(IList<int> occupantsIds, bool isGroupCreation)
+        private bool SendGroupInfoSystemMessage(int userId, Dialog dialogInfo)
+        {
+            var userJid = BuildUserJid(userId);
+
+            var message = new message();
+            message.to = userJid;
+            message.type = message.typeEnum.headline;
+
+            var extraParams = new ExtraParams();
+            extraParams.AddNew(ExtraParamsList.moduleIdentifier, SystemMessage.SystemMessageModuleIdentifier);
+            extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupCreate.ToIntString());
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogInfo.Id);
+            extraParams.AddNew(ExtraParamsList.room_name, dialogInfo.Name);
+            extraParams.AddNew(ExtraParamsList.room_jid, dialogInfo.XmppRoomJid);
+            extraParams.AddNew(ExtraParamsList.added_occupant_ids, BuildUsersString(dialogInfo.OccupantsIds.ToList()));
+            extraParams.AddNew(ExtraParamsList.type, ((int)DialogType.Group).ToString());
+
+            message.Add(extraParams);
+
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(message);
+            return true;
+        }
+
+        private bool NotifyAbountGroupOccupantsOnCreation(IList<int> addedOccupantsIds)
         {
             var msg = CreateNewMessage();
 
-            var body = new body {Value = "Notification message."};
+            var body = new body { Value = "Notification message." };
 
-            string occupantsIdsString = occupantsIds.Aggregate("", (current, occupantsId) => current + occupantsId.ToString() + ",");
-            occupantsIdsString = occupantsIdsString.Trim(',');
+            string addedOccupants = BuildUsersString(addedOccupantsIds);
 
             var extraParams = new ExtraParams();
-            extraParams.Add(new SaveToHistory {Value = "1"});
-            extraParams.Add(new DialogId {Value = dialogId});
-            extraParams.Add(new NotificationType {Value = ((int) (isGroupCreation ? NotificationTypes.GroupCreate : NotificationTypes.GroupUpdate)).ToString()});
-            extraParams.Add(new OccupantsIds {Value = occupantsIdsString});
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupCreate.ToIntString());
+            extraParams.AddNew(ExtraParamsList.added_occupant_ids, addedOccupants);
 
             msg.Add(body, extraParams);
 
@@ -209,16 +260,59 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
+        private bool NotifyAbountGroupOccupantsOnUpdate(IList<int> currentOccupantsIds, IList<int> addedOccupantsIds, IList<int> deletedOccupantsIds, DateTime updatedAt)
+        {
+            var msg = CreateNewMessage();
+
+            var body = new body {Value = "Notification message."};
+
+            string currentOccupants = BuildUsersString(currentOccupantsIds);
+            string addedOccupants = BuildUsersString(addedOccupantsIds);
+            string deletedOccupants = BuildUsersString(deletedOccupantsIds);
+
+            var extraParams = new ExtraParams();
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupUpdate.ToIntString());
+            extraParams.AddNew(ExtraParamsList.current_occupant_ids, currentOccupants);
+            extraParams.AddNew(ExtraParamsList.added_occupant_ids, addedOccupants);
+            extraParams.AddNew(ExtraParamsList.deleted_occupant_ids, deletedOccupants);
+            extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
+
+            msg.Add(body, extraParams);
+
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+            return true;
+        }
+
+
         private void MessagesClientOnOnMessageReceived(object sender, Message message1)
         {
             if (message1.From.Contains(groupJid))
             {
                 if (string.IsNullOrEmpty(message1.MessageText)) return; // for IsTyping/PausedTyping messages
 
-                var handler = OnMessageReceived;
-                if (handler != null)
-                    handler(this, message1);
+                OnMessageReceived?.Invoke(this, message1);
             }
+        }
+
+        private string BuildUserJid(int userId)
+        {
+            return $"{userId}-{quickbloxClient.ChatXmppClient.ApplicationId}@{quickbloxClient.ChatXmppClient.ChatEndpoint}";
+        }
+
+        private string BuildUsersString(IList<int> users)
+        {
+            if (!users.Any()) return null;
+
+            string occupantsIdsString = users.Aggregate("", (current, occupantsId) => current + occupantsId.ToString() + ",");
+            return occupantsIdsString.Trim(',');
         }
 
         #endregion

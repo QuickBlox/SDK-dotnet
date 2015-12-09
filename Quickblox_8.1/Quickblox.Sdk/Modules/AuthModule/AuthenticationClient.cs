@@ -265,7 +265,7 @@ namespace Quickblox.Sdk.Modules.AuthModule
             {
                 ApplicationId = applicationId,
                 AuthKey = authKey,
-                Timestamp = (long) DateTimeBuilder.ToUnixEpoch(DateTime.UtcNow)/1000,
+                Timestamp = DateTime.UtcNow.ToUnixEpoch(),
                 Nonce = new Random().Next(10000)
             };
             return settings;

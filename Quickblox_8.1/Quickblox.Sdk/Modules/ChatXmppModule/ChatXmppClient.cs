@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
@@ -40,6 +42,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// Event occuring when a new message is received.
         /// </summary>
         public event EventHandler<Message> OnMessageReceived;
+
+        /// <summary>
+        /// Event occuring when a new message is received.
+        /// </summary>
+        public event EventHandler<SystemMessage> OnSystemMessageReceived;
 
         /// <summary>
         /// Event occuring  when a presence is received.
@@ -292,14 +299,50 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private void OnMessage(message msg)
         {
+            if (msg.type == message.typeEnum.headline)
+            {
+                var extraParams = msg.Element(ExtraParams.XName);
+                var moduleIdentifier = extraParams?.Element(ExtraParams.GetXNameFor(ExtraParamsList.moduleIdentifier));
+
+                if (moduleIdentifier != null && moduleIdentifier.Value == SystemMessage.SystemMessageModuleIdentifier)
+                {
+                   OnSystemMessage(msg);
+                }
+            }
+
             var receivedMessage = new Message();
 
             FillFields(msg, receivedMessage);
             FillExtraParamsFields(msg, receivedMessage);
 
-            var handler = OnMessageReceived;
-            if (handler != null)
-                handler(this, receivedMessage);
+            OnMessageReceived?.Invoke(this, receivedMessage);
+        }
+
+        private void OnSystemMessage(message msg)
+        {
+            var extraParams = msg.Element(ExtraParams.XName);
+            var notificationType = GetNotificationType(extraParams);
+            if (notificationType == NotificationTypes.GroupCreate || notificationType == NotificationTypes.GroupUpdate)
+            {
+                var groupInfoMessage = new GroupInfoMessage
+                {
+                    DialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id),
+                    RoomJid = GetExtraParam(extraParams, ExtraParamsList.room_jid),
+                    RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name)
+                };
+
+                var dateSent = GetExtraParam(extraParams, ExtraParamsList.date_sent);
+                if (dateSent != null)
+                {
+                    long longValue;
+                    if (long.TryParse(dateSent, out longValue))
+                    {
+                        groupInfoMessage.DateSent = longValue.ToDateTime();
+                    }
+                }
+
+                OnSystemMessageReceived?.Invoke(this, groupInfoMessage);
+            }
         }
 
         private void FillFields(message source, Message result)
@@ -318,10 +361,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var extraParams = source.Element(ExtraParams.XName);
             if (extraParams != null)
             {
-                var dialogId = extraParams.Element(DialogId.XName);
-                if (dialogId != null) result.ChatDialogId = dialogId.Value;
+                result.ChatDialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id);
 
-                var dateSent = extraParams.Element(DateSent.XName);
+                var dateSent = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.date_sent));
                 if (dateSent != null)
                 {
                     long longValue;
@@ -331,43 +373,51 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                     }
                 }
 
-                var notificationType = extraParams.Element(NotificationType.XName);
-                if (notificationType != null)
-                {
-                    int intValue;
-                    if (int.TryParse(notificationType.Value, out intValue))
-                    {
-                        if (Enum.IsDefined(typeof(NotificationTypes), intValue))
-                            result.NotificationType = (NotificationTypes)intValue;
-                    }
-                }
+                result.NotificationType = GetNotificationType(extraParams);
 
-                var roomPhoto = extraParams.Element(RoomPhoto.XName);
-                if (roomPhoto != null)
-                {
-                    result.RoomPhoto = roomPhoto.Value;
-                }
+                result.RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo);
+                result.RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name);
+                result.OccupantsIds = GetExtraParam(extraParams, ExtraParamsList.occupants_ids);
+                result.CurrentOccupantsIds = GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids);
+                result.AddedOccupantsIds = GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids);
+                result.DeletedOccupantsIds = GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids);
 
-                var roomName = extraParams.Element(RoomName.XName);
-                if (roomName != null)
+                long roomUpdateDate;
+                if(Int64.TryParse(GetExtraParam(extraParams, ExtraParamsList.room_updated_date), out roomUpdateDate))
                 {
-                    result.RoomName = roomName.Value;
+                    result.RoomUpdateDate = roomUpdateDate;
                 }
-
-                var occupantsIds = extraParams.Element(OccupantsIds.XName);
-                if (occupantsIds != null)
-                {
-                    result.OccupantsIds = occupantsIds.Value;
-                }
-
-                var deletedId = extraParams.Element(DeletedId.XName);
+            
+                var deletedId = GetExtraParam(extraParams, ExtraParamsList.deleted_id);
                 if (deletedId != null)
                 {
                     int deletedIdInt;
-                    if(int.TryParse(deletedId.Value, out deletedIdInt))
+                    if (int.TryParse(deletedId, out deletedIdInt))
                         result.DeletedId = deletedIdInt;
                 }
             }
+        }
+
+        private NotificationTypes GetNotificationType(XElement extraParams)
+        {
+            var notificationType = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.notification_type));
+            if (notificationType != null)
+            {
+                int intValue;
+                if (int.TryParse(notificationType.Value, out intValue))
+                {
+                    if (Enum.IsDefined(typeof(NotificationTypes), intValue))
+                        return (NotificationTypes)intValue;
+                }
+            }
+
+            return default(NotificationTypes);
+        }
+
+        private string GetExtraParam(XElement extraParams, ExtraParamsList neededExtraParam)
+        {
+            var extraParam = extraParams.Element(ExtraParams.GetXNameFor(neededExtraParam));
+            return extraParam?.Value;
         }
 
         private void OnPresence(presence presence)

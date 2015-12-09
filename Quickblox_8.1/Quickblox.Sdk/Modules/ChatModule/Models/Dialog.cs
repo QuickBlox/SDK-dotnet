@@ -14,6 +14,9 @@ namespace Quickblox.Sdk.Modules.Models
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
 
+        [JsonProperty("updated_at")]
+        public DateTime UpdateAt { get; set; }
+
         [JsonProperty("last_message")]
         public string LastMessage { get; set; }
 

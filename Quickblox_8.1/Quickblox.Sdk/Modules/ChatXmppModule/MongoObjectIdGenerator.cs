@@ -47,7 +47,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private static int GetTimestampFromDateTime(DateTime timestamp)
         {
-            var secondsSinceEpoch = timestamp.ToUnixEpoch()/1000;
+            var secondsSinceEpoch = timestamp.ToUnixEpoch();
             if (secondsSinceEpoch < int.MinValue || secondsSinceEpoch > int.MaxValue)
             {
                 throw new ArgumentOutOfRangeException("timestamp");

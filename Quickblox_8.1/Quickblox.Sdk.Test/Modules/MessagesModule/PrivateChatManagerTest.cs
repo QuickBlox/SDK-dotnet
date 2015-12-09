@@ -12,22 +12,22 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
     [TestClass]
     public class PrivateChatManagerTest
     {
-        public const string ApiBaseEndPoint = "https://apistage5.quickblox.com";
-        public const string ChatEndpoint = "chatstage5.quickblox.com";
+        public const string ApiBaseEndPoint = "https://api.quickblox.com";
+        public const string ChatEndpoint = "chat.quickblox.com";
 
-        public const int ApplicationId = 11;
-        public const string AuthorizationKey = "b93JELTaGSLvWpv";
-        public const string AuthorizationSecret = "mf-dBWzc2-NAgUg";
+        public const int ApplicationId = 13318;
+        public const string AuthorizationKey = "WzrAY7vrGmbgFfP";
+        public const string AuthorizationSecret = "xS2uerEveGHmEun";
 
         private static string email1 = "user1@test.com";
         private static string password1 = "12345678";
-        private static int id1 = 450;
-        private static string jid1 = "450-11@chat.quickblox.com";
+        private static int id1 = 5719149;
+        private static string jid1 = $"{id1}-{ApplicationId}@chat.quickblox.com";
 
         private static string email2 = "user2@test.com";
         private static string password2 = "12345678";
-        private static int id2 = 451;
-        private static string jid2 = "451-11@chat.quickblox.com";
+        private static int id2 = 5513419;
+        private static string jid2 = $"{id2}-{ApplicationId}@chat.quickblox.com";
 
         private static QuickbloxClient client1;
         private static IPrivateChatManager chatManager1;
@@ -45,17 +45,17 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         {
             var logger = new DebugLogger();
 
-            client1 = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, ApiBaseEndPoint, ChatEndpoint, logger);
+            client1 = new QuickbloxClient(ApplicationId, AuthorizationKey, AuthorizationSecret, ApiBaseEndPoint, ChatEndpoint, logger);
 #if DEBUG
-            //client1.ChatXmppClient.DebugClientName = "1";
+            client1.ChatXmppClient.DebugClientName = "1";
 #endif
             await client1.ChatXmppClient.Connect(id1, password1);
             chatManager1 = client1.ChatXmppClient.GetPrivateChatManager(id2, dialogId);
             client1.ChatXmppClient.OnPresenceReceived += (sender, presence) => { if (lastPresencesClient1 != null) lastPresencesClient1.Add(presence); };
 
-            client2 = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, ApiBaseEndPoint, ChatEndpoint, logger);
+            client2 = new QuickbloxClient(ApplicationId, AuthorizationKey, AuthorizationSecret, ApiBaseEndPoint, ChatEndpoint, logger);
 #if DEBUG
-            //client2.ChatXmppClient.DebugClientName = "2";
+            client2.ChatXmppClient.DebugClientName = "2";
 #endif
             await client2.ChatXmppClient.Connect(id2, password2);
             chatManager2 = client2.ChatXmppClient.GetPrivateChatManager(id1, dialogId);

@@ -46,8 +46,20 @@ namespace Quickblox.Sdk.GeneralDataModel.Models
         [JsonProperty("occupants_ids")]
         public string OccupantsIds { get; set; }
 
+        [JsonProperty("current_occupant_ids")]
+        public string CurrentOccupantsIds { get; set; }
+
+        [JsonProperty("added_occupant_ids")]
+        public string AddedOccupantsIds { get; set; }
+
+        [JsonProperty("deleted_occupant_ids")]
+        public string DeletedOccupantsIds { get; set; }
+
         [JsonProperty("deleted_id")]
         public int DeletedId { get; set; }
+
+        [JsonProperty("room_updated_date")]
+        public long RoomUpdateDate { get; set; }
 
         #endregion
 
