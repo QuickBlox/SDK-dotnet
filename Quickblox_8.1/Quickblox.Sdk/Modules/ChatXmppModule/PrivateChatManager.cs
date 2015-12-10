@@ -235,33 +235,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
-        //TODO:delete this
-        /// <summary>
-        /// Notifies a user about a created group dialog.
-        /// </summary>
-        /// <param name="createdDialogId">Created group dialog ID</param>
-        /// <returns>Is operation successful</returns>
-        public bool NotifyAboutGroupCreation(string createdDialogId)
-        {
-            throw new QuickbloxSdkException("This methods is to be deleted.");
-
-            //var msg = CreateNewMessage();
-            //var body = new body { Value = "Notification message" };
-            //var extraParams = new ExtraParams();
-            //extraParams.Add(new DialogId { Value = createdDialogId });
-            //extraParams.Add(new NotificationType { Value = ((int)NotificationTypes.GroupCreate).ToString() });
-
-            //msg.Add(body, extraParams);
-            //if (!xmppClient.Connected)
-            //{
-            //    xmppClient.Connect();
-            //    return false;
-            //}
-
-            //xmppClient.Send(msg);
-            //return true;
-        }
-
         #endregion
 
         #endregion

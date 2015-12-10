@@ -218,6 +218,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupCreate.ToIntString());
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogInfo.Id);
             extraParams.AddNew(ExtraParamsList.room_name, dialogInfo.Name);
+            extraParams.AddNew(ExtraParamsList.room_photo, dialogInfo.Photo);
             extraParams.AddNew(ExtraParamsList.room_jid, dialogInfo.XmppRoomJid);
             extraParams.AddNew(ExtraParamsList.added_occupant_ids, BuildUsersString(dialogInfo.OccupantsIds.ToList()));
             extraParams.AddNew(ExtraParamsList.type, ((int)DialogType.Group).ToString());

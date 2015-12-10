@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 {
@@ -35,6 +36,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 
         public string RoomName { get; set; }
 
+        public string RoomPhoto { get; set; }
+
         public DateTime RoomUpdatedDate { get; set; }
 
         public DateTime RoomLastMessageDate { get; set; }
@@ -42,6 +45,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         public string RoomJid { get; set; }
 
         public int[] AddedOccupantIds { get; set; }
+
+        public DialogType DialogType { get; set; }
     }
 
 

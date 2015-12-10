@@ -38,7 +38,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 
         public void AddNew(string paramName, string value, string paramNamespace = DefaultNamespace)
         {
-            var extraParam = new XElement(XName.Get(paramName, paramNamespace)) {Value = value};
+            var extraParam = new XElement(XName.Get(paramName, paramNamespace)) {Value = value ?? ""};
             this.Add(extraParam);
         }
 

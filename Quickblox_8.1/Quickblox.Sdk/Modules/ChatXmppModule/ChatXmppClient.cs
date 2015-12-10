@@ -309,13 +309,15 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                    OnSystemMessage(msg);
                 }
             }
+            else
+            {
+                var receivedMessage = new Message();
 
-            var receivedMessage = new Message();
+                FillFields(msg, receivedMessage);
+                FillExtraParamsFields(msg, receivedMessage);
 
-            FillFields(msg, receivedMessage);
-            FillExtraParamsFields(msg, receivedMessage);
-
-            OnMessageReceived?.Invoke(this, receivedMessage);
+                OnMessageReceived?.Invoke(this, receivedMessage);
+            }
         }
 
         private void OnSystemMessage(message msg)
@@ -328,7 +330,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 {
                     DialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id),
                     RoomJid = GetExtraParam(extraParams, ExtraParamsList.room_jid),
-                    RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name)
+                    RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name),
+                    RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo),
+                    AddedOccupantIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids)).ToArray(),
                 };
 
                 var dateSent = GetExtraParam(extraParams, ExtraParamsList.date_sent);
@@ -470,6 +474,22 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                         handler(this, new EventArgs());
                 }
             }
+        }
+
+        private List<int> ConvertStringToIntArray(string occupantsIdsString)
+        {
+            var occupantsIds = new List<int>();
+            if (string.IsNullOrEmpty(occupantsIdsString)) return occupantsIds;
+
+            var idsStrings = occupantsIdsString.Split(',');
+            foreach (string idsString in idsStrings)
+            {
+                int id;
+                if (int.TryParse(idsString, out id))
+                    occupantsIds.Add(id);
+            }
+
+            return occupantsIds;
         }
 
         #region Working with JIDs

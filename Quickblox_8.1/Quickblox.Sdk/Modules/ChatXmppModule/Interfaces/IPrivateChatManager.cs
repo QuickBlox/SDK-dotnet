@@ -57,13 +57,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         bool DeleteFromFriends();
 
         /// <summary>
-        /// Notifies a user about a created group dialog.
-        /// </summary>
-        /// <param name="createdDialogId">Created group dialog ID</param>
-        /// <returns>Is operation successful</returns>
-        bool NotifyAboutGroupCreation(string createdDialogId);
-
-        /// <summary>
         /// Notifies other user that you are typing a message.
         /// </summary>
         void NotifyIsTyping();
