@@ -381,10 +381,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
                 result.RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo);
                 result.RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name);
-                result.OccupantsIds = GetExtraParam(extraParams, ExtraParamsList.occupants_ids);
-                result.CurrentOccupantsIds = GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids);
-                result.AddedOccupantsIds = GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids);
-                result.DeletedOccupantsIds = GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids);
+                result.OccupantsIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.occupants_ids));
+                result.CurrentOccupantsIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids));
+                result.AddedOccupantsIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids));
+                result.DeletedOccupantsIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids));
 
                 long roomUpdateDate;
                 if(Int64.TryParse(GetExtraParam(extraParams, ExtraParamsList.room_updated_date), out roomUpdateDate))

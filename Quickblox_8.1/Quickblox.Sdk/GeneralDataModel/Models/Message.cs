@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Quickblox.Sdk.GeneralDataModel.Models
@@ -44,16 +46,16 @@ namespace Quickblox.Sdk.GeneralDataModel.Models
         public string RoomName { get; set; }
 
         [JsonProperty("occupants_ids")]
-        public string OccupantsIds { get; set; }
+        public IList<int> OccupantsIds { get; set; }
 
         [JsonProperty("current_occupant_ids")]
-        public string CurrentOccupantsIds { get; set; }
+        public IList<int> CurrentOccupantsIds { get; set; }
 
         [JsonProperty("added_occupant_ids")]
-        public string AddedOccupantsIds { get; set; }
+        public IList<int> AddedOccupantsIds { get; set; }
 
         [JsonProperty("deleted_occupant_ids")]
-        public string DeletedOccupantsIds { get; set; }
+        public IList<int> DeletedOccupantsIds { get; set; }
 
         [JsonProperty("deleted_id")]
         public int DeletedId { get; set; }
