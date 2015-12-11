@@ -45,6 +45,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AsyncLock\AsyncLock.cs" />
+    <Compile Include="Converters\StringIntListConverter.cs" />
     <Compile Include="Cryptographic\HmacSha1CryptographicProvider.cs" />
     <Compile Include="Cryptographic\ICryptographicProvider.cs" />
     <Compile Include="GeneralDataModel\Models\Device.cs" />

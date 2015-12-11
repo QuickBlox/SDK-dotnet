@@ -6,8 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.Converters;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Logger;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
 using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using XMPP;
@@ -326,13 +328,15 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var notificationType = GetNotificationType(extraParams);
             if (notificationType == NotificationTypes.GroupCreate || notificationType == NotificationTypes.GroupUpdate)
             {
+                var stringIntListConverter = new StringIntListConverter();
+
                 var groupInfoMessage = new GroupInfoMessage
                 {
                     DialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id),
                     RoomJid = GetExtraParam(extraParams, ExtraParamsList.room_jid),
                     RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name),
                     RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo),
-                    AddedOccupantIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids)).ToArray(),
+                    CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids)).ToArray(),
                 };
 
                 var dateSent = GetExtraParam(extraParams, ExtraParamsList.date_sent);
@@ -342,6 +346,16 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                     if (long.TryParse(dateSent, out longValue))
                     {
                         groupInfoMessage.DateSent = longValue.ToDateTime();
+                    }
+                }
+
+                var dialogType = GetExtraParam(extraParams, ExtraParamsList.type);
+                if (dialogType != null)
+                {
+                    int intValue;
+                    if (int.TryParse(dialogType, out intValue) && Enum.IsDefined(typeof(DialogType), intValue))
+                    {
+                        groupInfoMessage.DialogType = (DialogType) intValue;
                     }
                 }
 
@@ -377,14 +391,16 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                     }
                 }
 
+                var stringIntListConverter = new StringIntListConverter();
+
                 result.NotificationType = GetNotificationType(extraParams);
 
                 result.RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo);
                 result.RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name);
-                result.OccupantsIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.occupants_ids));
-                result.CurrentOccupantsIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids));
-                result.AddedOccupantsIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids));
-                result.DeletedOccupantsIds = ConvertStringToIntArray(GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids));
+                result.OccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.occupants_ids));
+                result.CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids));
+                result.AddedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids));
+                result.DeletedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids));
 
                 long roomUpdateDate;
                 if(Int64.TryParse(GetExtraParam(extraParams, ExtraParamsList.room_updated_date), out roomUpdateDate))
@@ -476,22 +492,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
         }
 
-        private List<int> ConvertStringToIntArray(string occupantsIdsString)
-        {
-            var occupantsIds = new List<int>();
-            if (string.IsNullOrEmpty(occupantsIdsString)) return occupantsIds;
-
-            var idsStrings = occupantsIdsString.Split(',');
-            foreach (string idsString in idsStrings)
-            {
-                int id;
-                if (int.TryParse(idsString, out id))
-                    occupantsIds.Add(id);
-            }
-
-            return occupantsIds;
-        }
-
         #region Working with JIDs
 
         private string BuildJid(int userId)
@@ -520,37 +520,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         #endregion
-
-        //TODO: parse attachemnts from extraparams with Ubiety
-        //private void XmppConnectionOnOnMessage(object sender, AgsMessage msg)
-        //{
-        //    string extraParams = msg.GetTag("extraParams");
-        //    var attachments = new List<Attachment>();
-        //    if (!string.IsNullOrEmpty(extraParams))
-        //    {
-        //        XmlReaderSettings settings = new XmlReaderSettings {ConformanceLevel = ConformanceLevel.Fragment};
-        //        using (XmlReader reader = XmlReader.Create(new StringReader(extraParams), settings))
-        //        {
-        //            while (reader.Read())
-        //            {
-        //                if (reader.NodeType == XmlNodeType.Element)
-        //                {
-        //                    if (reader.Name == "Attachment")
-        //                    {
-        //                        var attachmentXml = reader.ReadOuterXml();
-        //                        var xmlSerializer = new XmlSerializer();
-        //                        var attachment = xmlSerializer.Deserialize<Attachment>(attachmentXml);
-        //                        if(attachment != null) attachments.Add(attachment);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    var handler = OnMessageReceived;
-        //    if (handler != null)
-        //        handler(this, new Message {From = msg.From.ToString(), To = msg.To.ToString(), MessageText = msg.Body, Attachments = attachments.ToArray()});
-        //}
 
         #endregion
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.Converters;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
 using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
@@ -207,11 +208,13 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private bool SendGroupInfoSystemMessage(int userId, Dialog dialogInfo)
         {
-            var userJid = BuildUserJid(userId);
+            var message = new message
+            {
+                to = BuildUserJid(userId),
+                type = XMPP.tags.jabber.client.message.typeEnum.headline
+            };
 
-            var message = new message();
-            message.to = userJid;
-            message.type = message.typeEnum.headline;
+            var stringIntListConverter = new StringIntListConverter();
 
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.moduleIdentifier, SystemMessage.SystemMessageModuleIdentifier);
@@ -220,8 +223,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.room_name, dialogInfo.Name);
             extraParams.AddNew(ExtraParamsList.room_photo, dialogInfo.Photo);
             extraParams.AddNew(ExtraParamsList.room_jid, dialogInfo.XmppRoomJid);
-            extraParams.AddNew(ExtraParamsList.added_occupant_ids, BuildUsersString(dialogInfo.OccupantsIds.ToList()));
-            extraParams.AddNew(ExtraParamsList.type, ((int)DialogType.Group).ToString());
+            extraParams.AddNew(ExtraParamsList.current_occupant_ids, stringIntListConverter.ConvertToString(dialogInfo.OccupantsIds.ToList()));
+            extraParams.AddNew(ExtraParamsList.type, ((int)dialogInfo.Type).ToString());
 
             message.Add(extraParams);
 
@@ -241,7 +244,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
             var body = new body { Value = "Notification message." };
 
-            string addedOccupants = BuildUsersString(addedOccupantsIds);
+            var stringIntListConverter = new StringIntListConverter();
+            string addedOccupants = stringIntListConverter.ConvertToString(addedOccupantsIds);
 
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
@@ -267,9 +271,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
             var body = new body {Value = "Notification message."};
 
-            string currentOccupants = BuildUsersString(currentOccupantsIds);
-            string addedOccupants = BuildUsersString(addedOccupantsIds);
-            string deletedOccupants = BuildUsersString(deletedOccupantsIds);
+            var stringIntListConverter = new StringIntListConverter();
+
+            string currentOccupants = stringIntListConverter.ConvertToString(currentOccupantsIds);
+            string addedOccupants = stringIntListConverter.ConvertToString(addedOccupantsIds);
+            string deletedOccupants = stringIntListConverter.ConvertToString(deletedOccupantsIds);
 
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
@@ -306,14 +312,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         private string BuildUserJid(int userId)
         {
             return $"{userId}-{quickbloxClient.ChatXmppClient.ApplicationId}@{quickbloxClient.ChatXmppClient.ChatEndpoint}";
-        }
-
-        private string BuildUsersString(IList<int> users)
-        {
-            if (!users.Any()) return null;
-
-            string occupantsIdsString = users.Aggregate("", (current, occupantsId) => current + occupantsId.ToString() + ",");
-            return occupantsIdsString.Trim(',');
         }
 
         #endregion

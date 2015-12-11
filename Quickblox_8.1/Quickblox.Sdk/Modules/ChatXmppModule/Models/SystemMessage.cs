@@ -44,7 +44,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 
         public string RoomJid { get; set; }
 
-        public int[] AddedOccupantIds { get; set; }
+        public int[] CurrentOccupantsIds { get; set; }
 
         public DialogType DialogType { get; set; }
     }
