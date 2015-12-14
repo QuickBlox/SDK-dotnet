@@ -333,7 +333,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 var groupInfoMessage = new GroupInfoMessage
                 {
                     DialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id),
-                    RoomJid = GetExtraParam(extraParams, ExtraParamsList.room_jid),
                     RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name),
                     RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo),
                     CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids)).ToArray(),

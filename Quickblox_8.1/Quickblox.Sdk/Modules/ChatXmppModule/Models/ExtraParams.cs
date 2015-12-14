@@ -10,7 +10,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         dialog_id,
         room_photo,
         room_name,
-        room_jid,
         occupants_ids,
         current_occupant_ids,
         added_occupant_ids,
