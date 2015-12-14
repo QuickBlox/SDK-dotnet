@@ -219,6 +219,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.moduleIdentifier, SystemMessage.SystemMessageModuleIdentifier);
             extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupCreate.ToIntString());
+            extraParams.AddNew(ExtraParamsList.date_sent, DateTime.UtcNow.ToUnixEpoch().ToString());
+            extraParams.AddNew(ExtraParamsList.room_updated_date, dialogInfo.UpdateAt.ToUnixEpoch().ToString());
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogInfo.Id);
             extraParams.AddNew(ExtraParamsList.room_name, dialogInfo.Name);
             extraParams.AddNew(ExtraParamsList.room_photo, dialogInfo.Photo);

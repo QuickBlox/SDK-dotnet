@@ -335,18 +335,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                     DialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id),
                     RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name),
                     RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo),
+                    DateSent = GetDateTimeExtraParam(extraParams, ExtraParamsList.date_sent),
+                    RoomUpdatedDate = GetDateTimeExtraParam(extraParams, ExtraParamsList.room_updated_date),
                     CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids)).ToArray(),
                 };
-
-                var dateSent = GetExtraParam(extraParams, ExtraParamsList.date_sent);
-                if (dateSent != null)
-                {
-                    long longValue;
-                    if (long.TryParse(dateSent, out longValue))
-                    {
-                        groupInfoMessage.DateSent = longValue.ToDateTime();
-                    }
-                }
 
                 var dialogType = GetExtraParam(extraParams, ExtraParamsList.type);
                 if (dialogType != null)
@@ -437,6 +429,21 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             var extraParam = extraParams.Element(ExtraParams.GetXNameFor(neededExtraParam));
             return extraParam?.Value;
+        }
+
+        private DateTime GetDateTimeExtraParam(XElement extraParams, ExtraParamsList neededExtraParam)
+        {
+            var dateTimeExtraParam = GetExtraParam(extraParams, neededExtraParam);
+            if (dateTimeExtraParam != null)
+            {
+                long longValue;
+                if (long.TryParse(dateTimeExtraParam, out longValue))
+                {
+                    return longValue.ToDateTime();
+                }
+            }
+
+            return default(DateTime);
         }
 
         private void OnPresence(presence presence)
