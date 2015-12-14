@@ -20,13 +20,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         public NotificationTypes NotificationType { get; set; }
     }
 
-    public enum DialogUpdateInfos
-    {
-        UpdatedDialogPhoto = 1,
-        UpdatedDialogName = 2,
-        ModifiedOccupantsList = 3
-    }
-
+    
     /// <summary>
     /// GroupInfo message is sent when a user was added to a new or already existing group dialog.
     /// </summary>

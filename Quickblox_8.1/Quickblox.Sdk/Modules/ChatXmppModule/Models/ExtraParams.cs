@@ -3,6 +3,9 @@ using XMPP.tags.jabber.protocol.archive;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 {
+    /// <summary>
+    /// List of extra params used in Quickblox SDK
+    /// </summary>
     public enum ExtraParamsList
     {
         save_to_history,
@@ -17,8 +20,18 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         deleted_id,
         room_updated_date,
         notification_type,
-        moduleIdentifier, // for System messages
-        type // dialogType (Private/Group/Public Group)
+        /// <summary>
+        /// Information for System messages
+        /// </summary>
+        moduleIdentifier, 
+        /// <summary>
+        /// Dialog Type (Private/Group/Public Group)
+        /// </summary>
+        type,
+        /// <summary>
+        /// Information about what was updated in a dialog
+        /// </summary>
+        dialog_update_info
     }
 
     public class ExtraParams : XElement

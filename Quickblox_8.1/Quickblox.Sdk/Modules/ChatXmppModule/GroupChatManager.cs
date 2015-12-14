@@ -130,7 +130,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.notification_type, ((int)NotificationTypes.GroupUpdate).ToString());
             extraParams.AddNew(ExtraParamsList.room_photo, groupImageUrl);
             extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
-
+            extraParams.AddNew(ExtraParamsList.dialog_update_info, DialogUpdateInfos.UpdatedDialogPhoto.ToIntString());
 
             msg.Add(body, extraParams);
 
@@ -162,6 +162,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupUpdate.ToIntString());
             extraParams.AddNew(ExtraParamsList.room_name, groupName);
             extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
+            extraParams.AddNew(ExtraParamsList.dialog_update_info, DialogUpdateInfos.UpdatedDialogName.ToIntString());
 
             msg.Add(body, extraParams);
 
@@ -253,6 +254,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupCreate.ToIntString());
             extraParams.AddNew(ExtraParamsList.added_occupant_ids, addedOccupants);
+            extraParams.AddNew(ExtraParamsList.current_occupant_ids, addedOccupants);
 
             msg.Add(body, extraParams);
 
@@ -275,17 +277,26 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var stringIntListConverter = new StringIntListConverter();
 
             string currentOccupants = stringIntListConverter.ConvertToString(currentOccupantsIds);
-            string addedOccupants = stringIntListConverter.ConvertToString(addedOccupantsIds);
-            string deletedOccupants = stringIntListConverter.ConvertToString(deletedOccupantsIds);
 
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupUpdate.ToIntString());
             extraParams.AddNew(ExtraParamsList.current_occupant_ids, currentOccupants);
-            extraParams.AddNew(ExtraParamsList.added_occupant_ids, addedOccupants);
-            extraParams.AddNew(ExtraParamsList.deleted_occupant_ids, deletedOccupants);
             extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
+            extraParams.AddNew(ExtraParamsList.dialog_update_info, DialogUpdateInfos.ModifiedOccupantsList.ToIntString());
+
+            if (addedOccupantsIds != null && addedOccupantsIds.Any())
+            {
+                var addedOccupants = stringIntListConverter.ConvertToString(addedOccupantsIds);
+                extraParams.AddNew(ExtraParamsList.added_occupant_ids, addedOccupants);
+            }
+
+            if (deletedOccupantsIds != null && deletedOccupantsIds.Any())
+            {
+                var deletedOccupants = stringIntListConverter.ConvertToString(deletedOccupantsIds);
+                extraParams.AddNew(ExtraParamsList.deleted_occupant_ids, deletedOccupants);
+            }
 
             msg.Add(body, extraParams);
 
@@ -298,7 +309,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.Send(msg);
             return true;
         }
-
 
         private void MessagesClientOnOnMessageReceived(object sender, Message message1)
         {
