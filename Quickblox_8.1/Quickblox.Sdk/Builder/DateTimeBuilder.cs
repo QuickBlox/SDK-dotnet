@@ -1,4 +1,5 @@
 ﻿using System;
+using Quickblox.Sdk.Logger;
 
 namespace Quickblox.Sdk.Builder
 {
@@ -23,7 +24,16 @@ namespace Quickblox.Sdk.Builder
 
         public static DateTime ToDateTime(this long unixTime)
         {
-            return UnixEpoch.AddSeconds(unixTime).ToLocalTime();
+            try
+            {
+                return UnixEpoch.AddSeconds(unixTime).ToLocalTime();
+            }
+            catch (Exception ex)
+            {
+                LoggerHolder.LoggerInstance.Log(LogLevel.Error, $"Failed to convert {unixTime} to DateTime. Exception: {ex}");
+                return default(DateTime);
+            }
+            
         }
 
         #endregion
