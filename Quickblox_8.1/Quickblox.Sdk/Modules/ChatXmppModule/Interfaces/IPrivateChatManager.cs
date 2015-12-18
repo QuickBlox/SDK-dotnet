@@ -29,7 +29,14 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         /// <param name="message">Message text</param>
         /// <returns>Is operation successful</returns>
         bool SendMessage(string message);
-        
+
+        /// <summary>
+        /// Sends an attachemnt to another user.
+        /// </summary>
+        /// <param name="attachment">Attachment</param>
+        /// <returns></returns>
+        bool SendAttachemnt(Attachment attachment);
+
         /// <summary>
         /// Adds other user to your roster, subsribes for his presence, and sends FriendRequest notification message.
         /// </summary>

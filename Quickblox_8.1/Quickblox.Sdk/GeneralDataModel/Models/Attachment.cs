@@ -1,24 +1,49 @@
-﻿using System.Runtime.Serialization;
-using System.Xml.Serialization;
+﻿using System.Xml.Linq;
 using Newtonsoft.Json;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 
 namespace Quickblox.Sdk.GeneralDataModel.Models
 {
-    [DataContract(Name = "attachment")]
-    public class Attachment
+    public class Attachment : Tag
     {
-        [XmlAttribute("id")]
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public string Id
+        {
+            get { return (string) GetAttributeValue("id"); }
+            set { SetAttributeValue("id", value); }
+        }
 
-        [XmlAttribute("type")]
         [JsonProperty("type")]
-        public string Type { get; set; }
+        public string Type
+        {
+            get { return (string) GetAttributeValue("type"); }
+            set { SetAttributeValue("type", value); }
+        }
 
-        [XmlAttribute("name")]
-        public string Name { get; set; }
+        [JsonProperty("name")]
+        public string Name
+        {
+            get { return (string) GetAttributeValue("name"); }
+            set { SetAttributeValue("name", value); }
+        }
 
-        [XmlAttribute("url")]
-        public string Url { get; set; }
+        [JsonProperty("url")]
+        public string Url
+        {
+            get { return (string) GetAttributeValue("url"); }
+            set { SetAttributeValue("url", value); }
+        }
+
+        #region Ctor
+
+        public Attachment() : base(XName.Get("attachment", "jabber:client"))
+        {
+        }
+
+        public Attachment(XElement other) : base(other)
+        {
+        }
+
+        #endregion
     }
 }
