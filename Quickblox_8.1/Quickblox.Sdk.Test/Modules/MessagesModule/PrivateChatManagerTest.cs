@@ -120,10 +120,11 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [TestMethod]
         public async Task SendAttachmentTest()
         {
-            var attachment = new Attachment();
+            var attachment = new AttachmentTag();
             attachment.Id = "546464654";
             attachment.Name = "Test";
             attachment.Url = "http://image.com/3242423.jpg";
+            attachment.Type = "photo";
             chatManager2.OnMessageReceived += (sender, message) =>
             {
                 Debug.WriteLine("Attachment was received");

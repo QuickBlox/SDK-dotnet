@@ -84,7 +84,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         /// <param name="attachment">Attachment</param>
         /// <returns></returns>
-        public bool SendAttachemnt(Attachment attachment)
+        public bool SendAttachemnt(AttachmentTag attachment)
         {
             var msg = CreateNewMessage();
 

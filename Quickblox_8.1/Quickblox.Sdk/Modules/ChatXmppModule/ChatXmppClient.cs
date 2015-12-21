@@ -317,6 +317,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
                 FillFields(msg, receivedMessage);
                 FillExtraParamsFields(msg, receivedMessage);
+                FillAttachments(msg, receivedMessage);
 
                 OnMessageReceived?.Invoke(this, receivedMessage);
             }
@@ -405,6 +406,27 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                     int deletedIdInt;
                     if (int.TryParse(deletedId, out deletedIdInt))
                         result.DeletedId = deletedIdInt;
+                }
+            }
+        }
+
+        private void FillAttachments(message source, Message result)
+        {
+            var extraParams = source.Element(ExtraParams.XName);
+            if (extraParams != null)
+            {
+                var attachmentParam = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.attachment));
+                if (attachmentParam != null)
+                {
+                    var attachemnt = new Attachment
+                    {
+                        Name = attachmentParam.GetAttributeValue(XName.Get("name"))?.ToString(),
+                        Id = attachmentParam.GetAttributeValue(XName.Get("id"))?.ToString(),
+                        Type = attachmentParam.GetAttributeValue(XName.Get("type"))?.ToString(),
+                        Url = attachmentParam.GetAttributeValue(XName.Get("url"))?.ToString()
+                    };
+
+                    result.Attachments = new Attachment[] {attachemnt};
                 }
             }
         }
