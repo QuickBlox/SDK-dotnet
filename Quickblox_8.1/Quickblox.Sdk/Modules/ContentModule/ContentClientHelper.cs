@@ -24,13 +24,15 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// </summary>
         /// <param name="imageBytes">Image bytes</param>
         /// <returns>Image link</returns>
-        public async Task<string> UploadPublicImage(byte[] imageBytes)
+        public async Task<ImageUploadResult> UploadPublicImage(byte[] imageBytes)
         {
+            var imageUploadResult = new ImageUploadResult();
+
             var createFileRequest = new CreateFileRequest()
             {
                 Blob = new BlobRequest()
                 {
-                    Name = String.Format("image_{0}.jpeg", Guid.NewGuid()),
+                    Name = $"image_{Guid.NewGuid()}.jpeg",
                     IsPublic = true
                 }
             };
@@ -38,6 +40,8 @@ namespace Quickblox.Sdk.Modules.ContentModule
             var createFileInfoResponse = await contentClient.CreateFileInfoAsync(createFileRequest);
 
             if (createFileInfoResponse.StatusCode != HttpStatusCode.Created) return null;
+
+            imageUploadResult.BlodId = createFileInfoResponse.Result.Blob.Id;
 
             var uploadFileRequest = new UploadFileRequest
             {
@@ -53,13 +57,15 @@ namespace Quickblox.Sdk.Modules.ContentModule
 
             if (uploadFileResponse.StatusCode != HttpStatusCode.Created) return null;
 
+            imageUploadResult.Url = uploadFileResponse.Result.Location;
+
             var blobUploadCompleteRequest = new BlobUploadCompleteRequest
             {
                 BlobUploadSize = new BlobUploadSize() { Size = (uint)imageBytes.Length }
             };
             var response = await contentClient.FileUploadCompleteAsync(createFileInfoResponse.Result.Blob.Id, blobUploadCompleteRequest);
 
-            return uploadFileResponse.Result.Location;
+            return imageUploadResult;
         }
 
         /// <summary>
@@ -73,7 +79,7 @@ namespace Quickblox.Sdk.Modules.ContentModule
             {
                 Blob = new BlobRequest()
                 {
-                    Name = String.Format("image_{0}.jpeg", Guid.NewGuid()),
+                    Name = $"image_{Guid.NewGuid()}.jpeg",
                     IsPublic = false
                 }
             };

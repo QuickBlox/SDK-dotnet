@@ -68,6 +68,7 @@
     <Compile Include="Modules\ChatXmppModule\Models\SystemMessage.cs" />
     <Compile Include="Modules\ContentModule\ContentClient.cs" />
     <Compile Include="Modules\ContentModule\ContentClientHelper.cs" />
+    <Compile Include="Modules\ContentModule\ImageUploadResult.cs" />
     <Compile Include="Modules\ContentModule\Models\Blob.cs" />
     <Compile Include="Modules\ContentModule\Models\BlobObjectAccess.cs" />
     <Compile Include="Modules\ContentModule\Models\BlobRequest.cs" />
