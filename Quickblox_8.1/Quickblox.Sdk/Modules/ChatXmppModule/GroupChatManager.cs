@@ -252,7 +252,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
-            extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupCreate.ToIntString());
+            extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupUpdate.ToIntString());
             extraParams.AddNew(ExtraParamsList.added_occupant_ids, addedOccupants);
             extraParams.AddNew(ExtraParamsList.current_occupant_ids, addedOccupants);
 
