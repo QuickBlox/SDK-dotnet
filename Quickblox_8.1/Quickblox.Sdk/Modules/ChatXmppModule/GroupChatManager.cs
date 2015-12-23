@@ -224,9 +224,13 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.room_updated_date, dialogInfo.UpdateAt.ToUnixEpoch().ToString());
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogInfo.Id);
             extraParams.AddNew(ExtraParamsList.room_name, dialogInfo.Name);
-            extraParams.AddNew(ExtraParamsList.room_photo, dialogInfo.Photo);
             extraParams.AddNew(ExtraParamsList.current_occupant_ids, stringIntListConverter.ConvertToString(dialogInfo.OccupantsIds.ToList()));
             extraParams.AddNew(ExtraParamsList.type, ((int)dialogInfo.Type).ToString());
+
+            if (!string.IsNullOrEmpty(dialogInfo.Photo))
+            {
+                extraParams.AddNew(ExtraParamsList.room_photo, dialogInfo.Photo);
+            }
 
             message.Add(extraParams);
 
