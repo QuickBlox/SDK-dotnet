@@ -57,6 +57,9 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Builder\UrlBuilder.cs">
       <Link>Builder\UrlBuilder.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Converters\StringIntListConverter.cs">
+      <Link>Converters\StringIntListConverter.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Filters\FieldFilter.cs">
       <Link>GeneralDataModel\Filters\FieldFilter.cs</Link>
     </Compile>
