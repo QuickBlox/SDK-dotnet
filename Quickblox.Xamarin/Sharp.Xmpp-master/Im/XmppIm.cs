@@ -320,6 +320,28 @@ namespace Sharp.Xmpp.Im {
 			}
 		}
 
+		public Roster Reconnect(string resource = null) {
+			if (disposed)
+				throw new ObjectDisposedException(GetType().FullName);
+
+			try {
+				core.Connect(resource);
+				// If no username has been providd, don't establish a session.
+				if (Username == null)
+					return null;
+				// Establish a session (Refer to RFC 3921, Section 3. Session Establishment).
+				EstablishSession();
+				// Retrieve user's roster as recommended (Refer to RFC 3921, Section 7.3).
+				Roster roster = GetRoster();
+				// Send initial presence.
+				SendPresence(new Presence());
+				return roster;
+			} catch (SocketException e) {
+				throw new IOException("Could not connect to the server", e);
+			}
+		}
+
+
 		/// <summary>
 		/// Authenticates with the XMPP server using the specified username and
 		/// password.
