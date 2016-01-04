@@ -529,6 +529,10 @@ namespace Sharp.Xmpp.Client {
 			im.Connect(resource);
 		}
 
+		public void Reconnect(string resource = null) {
+			im.Reconnect(resource);
+		}
+
 		/// <summary>
 		/// Authenticates with the XMPP server using the specified username and
 		/// password.

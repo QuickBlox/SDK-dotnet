@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Quickblox.Sdk.Modules.ChatXmppModule.Models;
-using Sharp.Xmpp.Client;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
+using Sharp.Xmpp.Client;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
@@ -42,7 +42,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region Properties
 
-        internal XmppClient XmppClient
+		internal XmppClient XmppClient
         {
             get {
                 if (xmppClient == null)
@@ -437,6 +437,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
             xmppClient.Dispose();
         }
+
+		public void Reconnect(){
+			xmppClient.Reconnect ();
+		}
 
         #endregion
     }
