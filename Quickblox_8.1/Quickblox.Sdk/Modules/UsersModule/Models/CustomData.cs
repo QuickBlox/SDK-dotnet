@@ -7,13 +7,16 @@ using Newtonsoft.Json;
 
 namespace Quickblox.Sdk.Modules.UsersModule.Models
 {
+    /// <summary>
+    /// Custom data for User
+    /// </summary>
     public class CustomData
     {
         [JsonProperty("avatar_url")]
         public string AvatarUrl { get; set; }
 
         [JsonProperty("is_import")]
-        public bool IsImport { get; set; }
+        public string IsImport { get; set; }
 
         [JsonProperty("status")]
         public string Status { get; set; }
