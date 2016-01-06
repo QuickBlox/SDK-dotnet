@@ -12,3 +12,4 @@ namespace Quickblox.Sdk.Modules.ContentModule
         public int BlodId { get; set; }
     }
 }
+
