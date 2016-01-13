@@ -130,6 +130,7 @@
     <Compile Include="Modules\NotificationModule\Models\UserWithTags.cs" />
     <Compile Include="Modules\NotificationModule\Requests\EditEventRequest.cs" />
     <Compile Include="Modules\NotificationModule\Responses\CreateSubscriptionResponseItem.cs" />
+    <Compile Include="Modules\UsersModule\Models\CustomData.cs" />
     <Compile Include="Modules\UsersModule\Models\UserSortFilter.cs" />
     <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
     <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
