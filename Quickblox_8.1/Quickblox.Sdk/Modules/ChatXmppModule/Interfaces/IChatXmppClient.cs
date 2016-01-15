@@ -32,6 +32,16 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         event EventHandler OnContactsChanged;
 
         /// <summary>
+        /// Event occuring when a contact is added to contact list.
+        /// </summary>
+        event EventHandler<Contact> OnContactAdded;
+
+        /// <summary>
+        /// Event occuring when a contact is removed from contact list.
+        /// </summary>
+        event EventHandler<Contact> OnContactRemoved;
+
+        /// <summary>
         /// Event occuring when xmpp connection is lost.
         /// </summary>
         event EventHandler OnDisconnected;
