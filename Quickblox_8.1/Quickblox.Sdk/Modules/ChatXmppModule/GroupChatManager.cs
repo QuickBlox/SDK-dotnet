@@ -80,6 +80,36 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         /// <summary>
+        /// Sends an attachemnt to the group chat.
+        /// </summary>
+        /// <param name="attachment">Attachment</param>
+        /// <returns></returns>
+        public bool SendAttachemnt(AttachmentTag attachment)
+        {
+            var msg = CreateNewMessage();
+
+            var body = new body { Value = "Attachment" };
+
+            var extraParams = new ExtraParams();
+            extraParams.AddNew(ExtraParamsList.save_to_history, "1");
+            extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
+            extraParams.Add(attachment);
+
+            msg.Add(body, extraParams);
+
+            if (!xmppClient.Connected)
+            {
+                xmppClient.Connect();
+                return false;
+            }
+
+            xmppClient.Send(msg);
+
+            return true;
+        }
+
+
+        /// <summary>
         /// Sends notification group chat message that this group was created.
         /// </summary>
         /// <param name="addedOccupantsIds">Added occupants IDs</param>
