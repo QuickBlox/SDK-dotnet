@@ -378,9 +378,30 @@ namespace Sharp.Xmpp.Core {
 			// reconnect.
 			Username = username;
 			Password = password;
-			Disconnect();
+			DisconnectInternal();
 			Connect(this.resource);
 		}
+
+        /// <summary>
+		/// Disconnect with the XMPP server
+		/// password.
+		/// </summary>
+        public void Disconnect()
+        {
+            AssertValid();
+            DisconnectInternal();
+        }
+
+        /// <summary>
+		/// Reconnect with the XMPP server
+		/// password.
+		/// </summary>
+        public void Reconnect()
+        {
+			AssertValid();
+            DisconnectInternal();
+            Connect(this.resource);
+        }
 
 		/// <summary>
 		/// Sends a Message stanza with the specified attributes and content to the
@@ -687,7 +708,7 @@ namespace Sharp.Xmpp.Core {
             //FIXME, instead of asert valid I have ifs, only for the closing
 			//AssertValid();
 			// Close the XML stream.
-			if (Connected) Disconnect();
+			if (Connected) DisconnectInternal();
             if (!disposed) Dispose();
 		}
 
@@ -1135,7 +1156,7 @@ namespace Sharp.Xmpp.Core {
 		/// <summary>
 		/// Disconnects from the XMPP server.
 		/// </summary>
-		void Disconnect() {
+		void DisconnectInternal() {
 			if (!Connected)
 				return;
 			// Close the XML stream.
