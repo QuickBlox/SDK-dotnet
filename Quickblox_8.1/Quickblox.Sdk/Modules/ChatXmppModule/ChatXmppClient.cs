@@ -232,6 +232,18 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.Send(iq);
         }
 
+        /// <summary>
+        /// Enables Message Carbons which allows to have sync conversations in case a user has several devices.
+        /// </summary>
+        public void EnableMessageCarbons()
+        {
+            var carbonsEnable = new MessageCarbonsEnable();
+            iq iq = new iq { type = iq.typeEnum.set, id="enable1" };
+            iq.Add(carbonsEnable);
+
+            xmppClient.Send(iq);
+        }
+
         #endregion
 
         #region Private methods
