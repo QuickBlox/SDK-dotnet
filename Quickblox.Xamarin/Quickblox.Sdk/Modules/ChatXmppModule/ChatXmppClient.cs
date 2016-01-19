@@ -424,7 +424,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.Connect();
         }
 
-        public void Disconnect()
+        public void Close()
         {
             UnSubcribeEvents(xmppClient);
 
@@ -435,7 +435,12 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             AppId = 0;
             MyJid = null;
 
-            xmppClient.Dispose();
+            xmppClient.Close();
+        }
+
+        public void Disconnect()
+        {
+            xmppClient.Disconnect();
         }
 
 		public void Reconnect(){
