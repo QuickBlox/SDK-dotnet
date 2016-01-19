@@ -61,6 +61,16 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         public event EventHandler OnContactsChanged;
 
         /// <summary>
+        /// Event occuring when a contact is added to contact list.
+        /// </summary>
+        public event EventHandler<Contact> OnContactAdded;
+
+        /// <summary>
+        /// Event occuring when a contact is removed from contact list.
+        /// </summary>
+        public event EventHandler<Contact> OnContactRemoved;
+
+        /// <summary>
         /// Event occuring when xmpp connection is lost.
         /// </summary>
         public event EventHandler OnDisconnected;
@@ -218,6 +228,18 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             rosterQuery.Add(rosterItem);
             iq iq = new iq { type = iq.typeEnum.set };
             iq.Add(rosterQuery);
+
+            xmppClient.Send(iq);
+        }
+
+        /// <summary>
+        /// Enables Message Carbons which allows to have sync conversations in case a user has several devices.
+        /// </summary>
+        public void EnableMessageCarbons()
+        {
+            var carbonsEnable = new MessageCarbonsEnable();
+            iq iq = new iq { type = iq.typeEnum.set, id="enable1" };
+            iq.Add(carbonsEnable);
 
             xmppClient.Send(iq);
         }
@@ -482,18 +504,27 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
                         Contacts.RemoveAll(c => c.UserId == userId);
 
+                        var contact = new Contact { Name = item.name, UserId = userId };
+
                         if (item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.both
                             || item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.from
                             || item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.to)
                         {
-                            Contact contact = new Contact { Name = item.name, UserId = userId };
                             Contacts.Add(contact);
+
+                            if (iq.type == iq.typeEnum.set)
+                            {
+                                OnContactAdded?.Invoke(this, contact);
+                            }
+                        }
+
+                        if (item.subscription == item.subscriptionEnum.remove && iq.type == iq.typeEnum.set)
+                        {
+                            OnContactRemoved?.Invoke(this, contact);
                         }
                     }
 
-                    var handler = OnContactsChanged;
-                    if (handler != null)
-                        handler(this, new EventArgs());
+                    OnContactsChanged?.Invoke(this, new EventArgs());
                 }
             }
         }

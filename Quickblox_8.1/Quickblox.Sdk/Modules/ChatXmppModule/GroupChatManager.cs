@@ -92,7 +92,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 SendGroupInfoSystemMessage(occupant, dialogInfo);
             }
 
-            return NotifyAbountGroupOccupantsOnCreation(dialogInfo.OccupantsIds);
+            return NotifyAbountGroupOccupantsOnCreation(dialogInfo.OccupantsIds, dialogInfo.UpdateAt);
         }
 
         /// <summary>
@@ -244,7 +244,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
-        private bool NotifyAbountGroupOccupantsOnCreation(IList<int> addedOccupantsIds)
+        private bool NotifyAbountGroupOccupantsOnCreation(IList<int> addedOccupantsIds, DateTime groupCreationDate)
         {
             var msg = CreateNewMessage();
 
@@ -259,6 +259,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.notification_type, NotificationTypes.GroupUpdate.ToIntString());
             extraParams.AddNew(ExtraParamsList.added_occupant_ids, addedOccupants);
             extraParams.AddNew(ExtraParamsList.current_occupant_ids, addedOccupants);
+            extraParams.AddNew(ExtraParamsList.dialog_update_info, DialogUpdateInfos.ModifiedOccupantsList.ToIntString());
+            extraParams.AddNew(ExtraParamsList.room_updated_date, groupCreationDate.ToUnixEpoch().ToString());
 
             msg.Add(body, extraParams);
 

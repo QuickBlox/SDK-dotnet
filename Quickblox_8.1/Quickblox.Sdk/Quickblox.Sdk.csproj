@@ -64,9 +64,11 @@
     <Compile Include="GeneralDataModel\Filters\FieldFilter.cs" />
     <Compile Include="Modules\ChatModule\Requests\RetrieveDialogsRequest.cs" />
     <Compile Include="Modules\ChatModule\Requests\RetrieveMessagesRequest.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\MessageCarbonsEnable.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\SystemMessage.cs" />
     <Compile Include="Modules\ContentModule\ContentClient.cs" />
     <Compile Include="Modules\ContentModule\ContentClientHelper.cs" />
+    <Compile Include="Modules\ContentModule\ImageUploadResult.cs" />
     <Compile Include="Modules\ContentModule\Models\Blob.cs" />
     <Compile Include="Modules\ContentModule\Models\BlobObjectAccess.cs" />
     <Compile Include="Modules\ContentModule\Models\BlobRequest.cs" />
@@ -128,6 +130,7 @@
     <Compile Include="Modules\NotificationModule\Models\UserWithTags.cs" />
     <Compile Include="Modules\NotificationModule\Requests\EditEventRequest.cs" />
     <Compile Include="Modules\NotificationModule\Responses\CreateSubscriptionResponseItem.cs" />
+    <Compile Include="Modules\UsersModule\Models\CustomData.cs" />
     <Compile Include="Modules\UsersModule\Models\UserSortFilter.cs" />
     <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
     <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
