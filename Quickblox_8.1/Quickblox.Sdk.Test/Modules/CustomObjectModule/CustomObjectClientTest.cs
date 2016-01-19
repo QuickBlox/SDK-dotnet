@@ -60,6 +60,13 @@ namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
             testCustomObjectModel.CreateCustomObject.BooleanField = true;
             testCustomObjectModel.CreateCustomObject.StringField = "Test1";
             testCustomObjectModel.CreateCustomObject.ArrayField = new List<int>() {123, 123, 123};
+            testCustomObjectModel.CreateCustomObject.Permissions = new Sdk.Modules.CustomObjectModule.Models.Permissions()
+            {
+                UpdatePermissions = new Sdk.Modules.CustomObjectModule.Models.UpdatePermissions()
+                {
+                    AccessState = Sdk.Modules.CustomObjectModule.Models.Access.open
+                }
+            };
             var response = await this.client.CustomObjectsClient.CreateCustomObjectsAsync(ClassName, testCustomObjectModel);
             Assert.IsTrue(response.StatusCode == HttpStatusCode.Created);
             Assert.IsTrue(response.Result != null);

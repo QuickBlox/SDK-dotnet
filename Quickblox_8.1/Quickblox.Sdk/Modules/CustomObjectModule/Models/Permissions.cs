@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Quickblox.Sdk.Modules.CustomObjectModule.Models
 {
@@ -17,18 +18,21 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule.Models
     public class ReadPermissions
     {
         [JsonProperty(PropertyName = "access")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public Access AccessState { get; set; }
     }
 
     public class UpdatePermissions
     {
         [JsonProperty(PropertyName = "access")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public Access AccessState { get; set; }
     }
 
     public class DeletePermissions
     {
         [JsonProperty(PropertyName = "access")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public Access AccessState { get; set; }
     }
 
