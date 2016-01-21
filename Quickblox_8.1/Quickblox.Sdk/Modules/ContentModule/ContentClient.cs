@@ -146,11 +146,15 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// Download File (Get File as a redirect to the S3 object) by uid. 'uid' is a parameter which should be taken from the response of the request for the creating a file. To have a possibility to download a file you should set a status complete to your file firstly.
         /// </summary>
         /// <param name="fileGuid">The file unique identifier.</param>
+        /// <param name="isPublic">Is file public</param>
         /// <returns>Success HTTP Status Code 301</returns>
-        public async Task<HttpResponse<Byte[]>> DownloadFileByUid(String fileGuid)
+        public async Task<HttpResponse<Byte[]>> DownloadFileByUid(String fileGuid, bool isPublic)
         {
-            
             var uriMethod = String.Format(QuickbloxMethods.DownloadFileByUIdMethod, fileGuid);
+            if (!isPublic)
+            {
+                uriMethod += $"?token={quickbloxClient.Token}";
+            }
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var downloadFileResponse = await HttpService.GetBytesAsync(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
             return downloadFileResponse;
