@@ -23,11 +23,30 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 #if Xamarin
 #endif
 
+
+
     /// <summary>
     /// ChatXmpp module allows users to chat with each other in private or group dialogs via XMPP protocol.
     /// </summary>
+    //TODO: refactor this. Move contacts functionality to some ContactManager, Presences to some PresenceManager
     public class ChatXmppClient : IChatXmppClient, IRosterManager
     {
+        private enum JidType
+        {
+            /// <summary>
+            /// Type is unknown
+            /// </summary>
+            Unknown,
+            /// <summary>
+            /// User's JID
+            /// </summary>
+            Private,
+            /// <summary>
+            /// User's JID in some group chat
+            /// </summary>
+            Group
+        }
+
         #region Fields
 
         private readonly QuickbloxClient quickbloxClient;
@@ -470,20 +489,28 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private void OnPresence(presence presence)
         {
+            var fromJidType = DetermineJidType(presence.from);
+
+            if (fromJidType == JidType.Private)
+            {
+                OnPrivatePresence(presence);
+            }
+        }
+
+        private void OnPrivatePresence(presence presence)
+        {
             var receivedPresence = new Presence
             {
-                From = presence.from,
-                To = presence.to,
+                UserId = GetQbUserIdFromJid(presence.@from),
                 PresenceType = (PresenceType) presence.type
             };
 
-            Presences.RemoveAll(p => p.From == receivedPresence.From);
+            Presences.RemoveAll(p => p.UserId == receivedPresence.UserId);
             Presences.Add(receivedPresence);
 
-            var handler = OnPresenceReceived;
-            if (handler != null)
-                handler(this, receivedPresence);
+            OnPresenceReceived?.Invoke(this, receivedPresence);
         }
+
 
         private void OnIq(iq iq)
         {
@@ -533,7 +560,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private string BuildJid(int userId)
         {
-            return string.Format("{0}-{1}@{2}", userId, ApplicationId, ChatEndpoint);
+            return $"{userId}-{ApplicationId}@{ChatEndpoint}";
         }
 
         private int GetQbUserIdFromJid(string jid)
@@ -554,6 +581,27 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 return senderId;
 
             return 0;
+        }
+
+        private JidType DetermineJidType(string jid)
+        {
+            if(string.IsNullOrEmpty(jid))
+                return JidType.Unknown;
+
+            var jidParts = jid.Split('@');
+
+            if (jidParts.Length != 2) // userPart@serverPart
+                return JidType.Unknown;
+
+            var serverPart = jidParts[1];
+
+            if(serverPart.StartsWith(quickbloxClient.MucChatEndpoint))
+                return JidType.Group;
+
+            if(serverPart.StartsWith(quickbloxClient.ChatEndpoint))
+                return JidType.Private;
+
+            return JidType.Unknown;
         }
 
         #endregion
