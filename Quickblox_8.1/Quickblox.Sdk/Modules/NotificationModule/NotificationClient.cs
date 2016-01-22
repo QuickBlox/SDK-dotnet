@@ -35,6 +35,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="сreatePushTokenRequest">The сreate push token request.</param>
         /// <returns>Success HTTP Status Code 201</returns>
+        [Obsolete]
         public async Task<HttpResponse<CreatePushTokenResponse>> CreatePushTokenAsync(CreatePushTokenRequest сreatePushTokenRequest)
         {
             
@@ -52,6 +53,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="pushTokenId">The push token identifier.</param>
         /// <returns>Success HTTP Status Code 200</returns>
+        [Obsolete]
         public async Task<HttpResponse> DeletePushTokenAsync(String pushTokenId)
         {
             
@@ -68,6 +70,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// </summary>
         /// <param name="type">Notification channel type.</param>
         /// <returns>Success HTTP Status Code 201</returns>
+        [Obsolete]
         public async Task<HttpResponse<CreateSubscriptionResponseItem[]>> CreateSubscriptionsAsync(NotificationChannelType type)
         {
             
@@ -76,6 +79,22 @@ namespace Quickblox.Sdk.Modules.NotificationModule
             var resultSubscriptionResponse = await HttpService.PostAsync<CreateSubscriptionResponseItem[], CreateSubscriptionsRequest>(this.quickbloxClient.ApiEndPoint,
                                                                                                         QuickbloxMethods.SubscriptionsMethod,
                                                                                                         createSubscriptions,
+                                                                                                        headers);
+            return resultSubscriptionResponse;
+        }
+
+        /// <summary>
+        /// Сreate device based subscriptions. The authorization token should contain the device parameters. If the subscription is creating for the windows phone pushes make sure that Microsoft Push Notifications have a status "enabled" in the Web Administration Panel.
+        /// </summary>
+        /// <param name="createSubscriptionsRequest">Parameter for subscription request</param>
+        /// <returns>Success HTTP Status Code 201</returns>
+        public async Task<HttpResponse<CreateSubscriptionResponseItem[]>> CreateSubscriptionsAsync(CreateSubscriptionsRequest createSubscriptionsRequest)
+        {
+
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+            var resultSubscriptionResponse = await HttpService.PostAsync<CreateSubscriptionResponseItem[], CreateSubscriptionsRequest>(this.quickbloxClient.ApiEndPoint,
+                                                                                                        QuickbloxMethods.SubscriptionsMethod,
+                                                                                                        createSubscriptionsRequest,
                                                                                                         headers);
             return resultSubscriptionResponse;
         }
