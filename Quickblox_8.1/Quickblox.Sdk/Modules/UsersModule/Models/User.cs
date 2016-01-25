@@ -34,13 +34,13 @@ namespace Quickblox.Sdk.Modules.UsersModule.Models
         public string Website { get; set; }
 
         [JsonProperty("created_at")]
-        public string CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         [JsonProperty("updated_at")]
-        public string UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("last_request_at")]
-        public string LastRequestAt { get; set; }
+        public DateTime? LastRequestAt { get; set; }
 
         [JsonProperty("external_user_id")]
         public string ExternalUserId { get; set; }
