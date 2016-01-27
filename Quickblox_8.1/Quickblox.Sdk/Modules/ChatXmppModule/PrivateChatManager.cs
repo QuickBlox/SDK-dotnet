@@ -25,17 +25,17 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <summary>
         /// Event when other user is typing.
         /// </summary>
-        public event EventHandler OnIsTyping;
+        public event EventHandler OpponentStartedTyping;
 
         /// <summary>
         /// Event when other user has stopped typing.
         /// </summary>
-        public event EventHandler OnPausedTyping;
+        public event EventHandler OpponentPausedTyping;
 
         /// <summary>
         /// Event when a new message is received.
         /// </summary>
-        public event EventHandler<Message> OnMessageReceived;
+        public event EventHandler<Message> MessageReceived;
 
         #region Ctor
 
@@ -46,7 +46,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             this.dialogId = dialogId;
             this.quickbloxClient = quickbloxClient;
             this.xmppClient = xmppClient;
-            quickbloxClient.ChatXmppClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
+            quickbloxClient.ChatXmppClient.MessageReceived += MessagesClientOnOnMessageReceived;
         }
 
         #endregion
@@ -255,23 +255,19 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             if (message1.IsTyping)
             {
-                var handler = OnIsTyping;
-                if (handler != null) handler(this, new EventArgs());
+                OpponentStartedTyping?.Invoke(this, new EventArgs());
             }
 
             if (message1.IsPausedTyping)
             {
-                var handler = OnPausedTyping;
-                if (handler != null) handler(this, new EventArgs());
+                OpponentPausedTyping?.Invoke(this, new EventArgs());
             }
 
             if (string.IsNullOrEmpty(message1.MessageText)) return;
 
             if (message1.From.Contains(otherUserJid) && message1.NotificationType != NotificationTypes.GroupCreate)
             {
-                var handler = OnMessageReceived;
-                if (handler != null)
-                    handler(this, message1);
+                MessageReceived?.Invoke(this, message1);
             }
         }
 

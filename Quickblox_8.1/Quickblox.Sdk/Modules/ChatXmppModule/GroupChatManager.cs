@@ -32,7 +32,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <summary>
         /// Event when a new group message is received.
         /// </summary>
-        public event EventHandler<Message> OnMessageReceived;
+        public event EventHandler<Message> MessageReceived;
 
         #endregion
 
@@ -44,7 +44,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient = client;
             this.groupJid = groupJid;
             this.dialogId = dialogId;
-            quickbloxClient.ChatXmppClient.OnMessageReceived += MessagesClientOnOnMessageReceived;
+            quickbloxClient.ChatXmppClient.MessageReceived += MessagesClientOnOnMessageReceived;
 
         }
 
@@ -322,7 +322,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             {
                 if (string.IsNullOrEmpty(message1.MessageText)) return; // for IsTyping/PausedTyping messages
 
-                OnMessageReceived?.Invoke(this, message1);
+                MessageReceived?.Invoke(this, message1);
             }
         }
 

@@ -11,17 +11,17 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         /// <summary>
         /// Event when other user is typing.
         /// </summary>
-        event EventHandler OnIsTyping;
+        event EventHandler OpponentStartedTyping;
 
         /// <summary>
         /// Event when other user has stopped typing.
         /// </summary>
-        event EventHandler OnPausedTyping;
+        event EventHandler OpponentPausedTyping;
 
         /// <summary>
         /// Event when a new message is received.
         /// </summary>
-        event EventHandler<Message> OnMessageReceived;
+        event EventHandler<Message> MessageReceived;
 
         /// <summary>
         /// Sends a message to other user.

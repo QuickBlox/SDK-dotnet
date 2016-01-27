@@ -14,37 +14,37 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         /// <summary>
         /// Event occuring when a new message is received.
         /// </summary>
-        event EventHandler<Message> OnMessageReceived;
+        event EventHandler<Message> MessageReceived;
 
         /// <summary>
         /// Event occuring when a new System message is received.
         /// </summary>
-        event EventHandler<SystemMessage> OnSystemMessageReceived;
+        event EventHandler<SystemMessage> SystemMessageReceived;
 
         /// <summary>
         /// Event occuring  when a presence is received.
         /// </summary>
-        event EventHandler<Presence> OnPresenceReceived;
+        event EventHandler<Presence> PresenceReceived;
         
         /// <summary>
         /// Event occuring  when your contacts in roster have changed.
         /// </summary>
-        event EventHandler OnContactsChanged;
+        event EventHandler ContactsChanged;
 
         /// <summary>
         /// Event occuring when a contact is added to contact list.
         /// </summary>
-        event EventHandler<Contact> OnContactAdded;
+        event EventHandler<Contact> ContactAdded;
 
         /// <summary>
         /// Event occuring when a contact is removed from contact list.
         /// </summary>
-        event EventHandler<Contact> OnContactRemoved;
+        event EventHandler<Contact> ContactRemoved;
 
         /// <summary>
         /// Event occuring when xmpp connection is lost.
         /// </summary>
-        event EventHandler OnDisconnected;
+        event EventHandler Disconnected;
 
         /// <summary>
         /// Quickblox Application ID.

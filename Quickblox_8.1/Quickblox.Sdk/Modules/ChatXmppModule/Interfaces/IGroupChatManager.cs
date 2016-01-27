@@ -13,7 +13,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         /// <summary>
         /// Event when a new group message is received.
         /// </summary>
-        event EventHandler<Message> OnMessageReceived;
+        event EventHandler<Message> MessageReceived;
 
         /// <summary>
         /// Joins XMPP chat room.

@@ -43,37 +43,37 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <summary>
         /// Event occuring when a new message is received.
         /// </summary>
-        public event EventHandler<Message> OnMessageReceived;
+        public event EventHandler<Message> MessageReceived;
 
         /// <summary>
         /// Event occuring when a new message is received.
         /// </summary>
-        public event EventHandler<SystemMessage> OnSystemMessageReceived;
+        public event EventHandler<SystemMessage> SystemMessageReceived;
 
         /// <summary>
         /// Event occuring  when a presence is received.
         /// </summary>
-        public event EventHandler<Presence> OnPresenceReceived;
+        public event EventHandler<Presence> PresenceReceived;
 
         /// <summary>
         /// Event occuring  when your contacts in roster have changed.
         /// </summary>
-        public event EventHandler OnContactsChanged;
+        public event EventHandler ContactsChanged;
 
         /// <summary>
         /// Event occuring when a contact is added to contact list.
         /// </summary>
-        public event EventHandler<Contact> OnContactAdded;
+        public event EventHandler<Contact> ContactAdded;
 
         /// <summary>
         /// Event occuring when a contact is removed from contact list.
         /// </summary>
-        public event EventHandler<Contact> OnContactRemoved;
+        public event EventHandler<Contact> ContactRemoved;
 
         /// <summary>
         /// Event occuring when xmpp connection is lost.
         /// </summary>
-        public event EventHandler OnDisconnected;
+        public event EventHandler Disconnected;
 
         #endregion
 
@@ -280,7 +280,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 if(!isUserDisconnected)
                     client.Connect();
 
-                var handler = OnDisconnected;
+                var handler = Disconnected;
                 if (handler != null)
                     handler(this, new EventArgs());
             };
@@ -340,7 +340,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 FillFields(msg, receivedMessage);
                 FillExtraParamsFields(msg, receivedMessage);
 
-                OnMessageReceived?.Invoke(this, receivedMessage);
+                MessageReceived?.Invoke(this, receivedMessage);
             }
         }
 
@@ -372,7 +372,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                     }
                 }
 
-                OnSystemMessageReceived?.Invoke(this, groupInfoMessage);
+                SystemMessageReceived?.Invoke(this, groupInfoMessage);
             }
         }
 
@@ -480,7 +480,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             Presences.RemoveAll(p => p.From == receivedPresence.From);
             Presences.Add(receivedPresence);
 
-            var handler = OnPresenceReceived;
+            var handler = PresenceReceived;
             if (handler != null)
                 handler(this, receivedPresence);
         }
@@ -514,17 +514,17 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
                             if (iq.type == iq.typeEnum.set)
                             {
-                                OnContactAdded?.Invoke(this, contact);
+                                ContactAdded?.Invoke(this, contact);
                             }
                         }
 
                         if (item.subscription == item.subscriptionEnum.remove && iq.type == iq.typeEnum.set)
                         {
-                            OnContactRemoved?.Invoke(this, contact);
+                            ContactRemoved?.Invoke(this, contact);
                         }
                     }
 
-                    OnContactsChanged?.Invoke(this, new EventArgs());
+                    ContactsChanged?.Invoke(this, new EventArgs());
                 }
             }
         }
