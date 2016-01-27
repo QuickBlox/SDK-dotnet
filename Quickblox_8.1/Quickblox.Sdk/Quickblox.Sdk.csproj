@@ -65,6 +65,7 @@
     <Compile Include="Modules\ChatModule\Requests\RetrieveDialogsRequest.cs" />
     <Compile Include="Modules\ChatModule\Requests\RetrieveMessagesRequest.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\MessageCarbonsEnable.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\MessageCarbonsMessageSent.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\SystemMessage.cs" />
     <Compile Include="Modules\ContentModule\BlobUploadInfo.cs" />
     <Compile Include="Modules\ContentModule\ContentClient.cs" />

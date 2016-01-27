@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Windows.UI.Xaml.Documents;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Converters;
 using Quickblox.Sdk.GeneralDataModel.Models;
@@ -49,6 +50,16 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// Event occuring when a new message is received.
         /// </summary>
         public event EventHandler<SystemMessage> SystemMessageReceived;
+
+        /// <summary>
+        /// Event occuring when a new message has been sent by the current user but from a different device (Message carbons)
+        /// </summary>
+        public event EventHandler<Message> MessageSent;
+
+        /// <summary>
+        /// Event occuring when a new message has been sent by the current user but from a different device (Message carbons)
+        /// </summary>
+        public event EventHandler<SystemMessage> SystemMessageSent;
 
         /// <summary>
         /// Event occuring  when a presence is received.
@@ -323,71 +334,72 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private void OnMessage(message msg)
         {
-            if (msg.type == message.typeEnum.headline)
-            {
-                var extraParams = msg.Element(ExtraParams.XName);
-                var moduleIdentifier = extraParams?.Element(ExtraParams.GetXNameFor(ExtraParamsList.moduleIdentifier));
+            var messageCarbonMessageSent = msg.Element(MessageCarbonsMessageSent.XName);
+            var forwardedMessage = messageCarbonMessageSent?.Element(ForwardedMessage.XName);
+            var messageSent = forwardedMessage?.Element(XMPP.tags.jabber.client.Namespace.message);
 
-                if (moduleIdentifier != null && moduleIdentifier.Value == SystemMessage.SystemMessageModuleIdentifier)
+            if (messageSent != null)
+            {
+                if (CheckIsSystemMessage(messageSent))
                 {
-                   OnSystemMessage(msg);
+                    OnSystemMessageSent(messageSent);
+                }
+                else
+                {
+                    OnUsualMessageSent(messageSent);   
                 }
             }
             else
             {
-                var receivedMessage = new Message();
-
-                FillFields(msg, receivedMessage);
-                FillExtraParamsFields(msg, receivedMessage);
-
-                MessageReceived?.Invoke(this, receivedMessage);
-            }
-        }
-
-        private void OnSystemMessage(message msg)
-        {
-            var extraParams = msg.Element(ExtraParams.XName);
-            var notificationType = GetNotificationType(extraParams);
-            if (notificationType == NotificationTypes.GroupCreate || notificationType == NotificationTypes.GroupUpdate)
-            {
-                var stringIntListConverter = new StringIntListConverter();
-
-                var groupInfoMessage = new GroupInfoMessage
+                if (CheckIsSystemMessage(msg))
                 {
-                    DialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id),
-                    RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name),
-                    RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo),
-                    DateSent = GetDateTimeExtraParam(extraParams, ExtraParamsList.date_sent),
-                    RoomUpdatedDate = GetDateTimeExtraParam(extraParams, ExtraParamsList.room_updated_date),
-                    CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids)).ToArray(),
-                };
-
-                var dialogType = GetExtraParam(extraParams, ExtraParamsList.type);
-                if (dialogType != null)
-                {
-                    int intValue;
-                    if (int.TryParse(dialogType, out intValue) && Enum.IsDefined(typeof(DialogType), intValue))
-                    {
-                        groupInfoMessage.DialogType = (DialogType) intValue;
-                    }
+                    OnSystemMessage(msg);
                 }
-
-                SystemMessageReceived?.Invoke(this, groupInfoMessage);
+                else
+                {
+                    OnUsualMessage(msg);
+                }
             }
         }
 
-        private void FillFields(message source, Message result)
-        {
-            result.From = source.from;
-            result.To = source.to;
-            result.MessageText = source.body;
+        #region Usual messages
 
-            result.SenderId = source.type == message.typeEnum.groupchat ? GetQbUserIdFromGroupJid(source.from) : GetQbUserIdFromJid(source.from);
+        private void OnUsualMessage(message msg)
+        {
+            var receivedMessage = new Message();
+
+            FillUsualMessageFields(msg, receivedMessage);
+            FillUsualMessageExtraParamsFields(msg, receivedMessage);
+
+            MessageReceived?.Invoke(this, receivedMessage);
+        }
+
+        private void OnUsualMessageSent(XMPP.tags.Tag msg)
+        {
+            var receivedMessage = new Message();
+
+            FillUsualMessageFields(msg, receivedMessage);
+            FillUsualMessageExtraParamsFields(msg, receivedMessage);
+
+            MessageSent?.Invoke(this, receivedMessage);
+        }
+
+        private void FillUsualMessageFields(XMPP.tags.Tag source, Message result)
+        {
+            string from = source.GetAttributeValue(XName.Get("from")).ToString();
+            string to = source.GetAttributeValue(XName.Get("to")).ToString();
+            string type = source.GetAttributeValue(XName.Get("type")).ToString();
+
+            result.From = from;
+            result.To = to;
+            result.MessageText = source.Element(XName.Get("body", "jabber:client"))?.Value;
+
+            result.SenderId = type == message.typeEnum.groupchat.ToString() ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
             result.IsTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.composing) != null;
             result.IsPausedTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.paused) != null;
         }
 
-        private void FillExtraParamsFields(message source, Message result)
+        private void FillUsualMessageExtraParamsFields(XMPP.tags.Tag source, Message result)
         {
             var extraParams = source.Element(ExtraParams.XName);
             if (extraParams != null)
@@ -416,11 +428,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 result.DeletedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids));
 
                 long roomUpdateDate;
-                if(Int64.TryParse(GetExtraParam(extraParams, ExtraParamsList.room_updated_date), out roomUpdateDate))
+                if (Int64.TryParse(GetExtraParam(extraParams, ExtraParamsList.room_updated_date), out roomUpdateDate))
                 {
                     result.RoomUpdateDate = roomUpdateDate;
                 }
-            
+
                 var deletedId = GetExtraParam(extraParams, ExtraParamsList.deleted_id);
                 if (deletedId != null)
                 {
@@ -430,6 +442,76 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 }
             }
         }
+
+        #endregion
+
+        #region System messages
+
+        private bool CheckIsSystemMessage(XMPP.tags.Tag msg)
+        {
+            var msgType = msg.GetAttributeValue(XName.Get("type")).ToString();
+            if (msgType != message.typeEnum.headline.ToString())
+                return false;
+
+            var extraParams = msg.Element(ExtraParams.XName);
+            var moduleIdentifier = extraParams?.Element(ExtraParams.GetXNameFor(ExtraParamsList.moduleIdentifier));
+
+            if (moduleIdentifier == null || moduleIdentifier.Value != SystemMessage.SystemMessageModuleIdentifier)
+                return false;
+
+            return true;
+        }
+
+        private void OnSystemMessage(XMPP.tags.Tag msg)
+        {
+            var extraParams = msg.Element(ExtraParams.XName);
+            var notificationType = GetNotificationType(extraParams);
+            if (notificationType == NotificationTypes.GroupCreate || notificationType == NotificationTypes.GroupUpdate)
+            {
+                var groupInfoMessage = new GroupInfoMessage();
+                FillGroupInfoMessageFields(msg, groupInfoMessage);
+                SystemMessageReceived?.Invoke(this, groupInfoMessage);
+            }
+        }
+
+        private void OnSystemMessageSent(XMPP.tags.Tag msg)
+        {
+            var extraParams = msg.Element(ExtraParams.XName);
+            var notificationType = GetNotificationType(extraParams);
+            if (notificationType == NotificationTypes.GroupCreate || notificationType == NotificationTypes.GroupUpdate)
+            {
+                var groupInfoMessage = new GroupInfoMessage();
+                FillGroupInfoMessageFields(msg, groupInfoMessage);
+                SystemMessageSent?.Invoke(this, groupInfoMessage);
+            }
+        }
+
+        private void FillGroupInfoMessageFields(XMPP.tags.Tag source, GroupInfoMessage groupInfoMessage)
+        {
+            var extraParams = source.Element(ExtraParams.XName);
+            var stringIntListConverter = new StringIntListConverter();
+
+            groupInfoMessage.DialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id);
+            groupInfoMessage.RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name);
+            groupInfoMessage.RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo);
+            groupInfoMessage.DateSent = GetDateTimeExtraParam(extraParams, ExtraParamsList.date_sent);
+            groupInfoMessage.RoomUpdatedDate = GetDateTimeExtraParam(extraParams, ExtraParamsList.room_updated_date);
+            groupInfoMessage.CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids)).ToArray();
+
+            var dialogType = GetExtraParam(extraParams, ExtraParamsList.type);
+            if (dialogType != null)
+            {
+                int intValue;
+                if (int.TryParse(dialogType, out intValue) && Enum.IsDefined(typeof(DialogType), intValue))
+                {
+                    groupInfoMessage.DialogType = (DialogType)intValue;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Working with ExtraParams
 
         private NotificationTypes GetNotificationType(XElement extraParams)
         {
@@ -468,13 +550,17 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return default(DateTime);
         }
 
+        #endregion
+
+        #region Presences and IQ
+
         private void OnPresence(presence presence)
         {
             var receivedPresence = new Presence
             {
                 From = presence.from,
                 To = presence.to,
-                PresenceType = (PresenceType) presence.type
+                PresenceType = (PresenceType)presence.type
             };
 
             Presences.RemoveAll(p => p.From == receivedPresence.From);
@@ -528,6 +614,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 }
             }
         }
+
+        #endregion
 
         #region Working with JIDs
 
