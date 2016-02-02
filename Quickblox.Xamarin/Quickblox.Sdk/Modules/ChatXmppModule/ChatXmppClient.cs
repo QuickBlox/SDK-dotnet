@@ -245,6 +245,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             Debug.WriteLine("XMPP: ====> OnMessageReceived:");
 
             var receivedMessage = new Message();
+            receivedMessage.Id = messageEventArgs.Message.Id;
             receivedMessage.From = messageEventArgs.Message.From.ToString();
             receivedMessage.To = messageEventArgs.Message.To.ToString();
             receivedMessage.Body = messageEventArgs.Message.Body;
