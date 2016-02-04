@@ -94,6 +94,9 @@ namespace Quickblox.Sdk
             this.NotificationClient = new NotificationClient(this);
             this.LocationClient = new LocationClient(this);
             this.ChatXmppClient = new ChatXmppClient(this);
+#if Xamarin
+            this.WebSyncClient = new WebSyncClient(this);
+#endif
             this.ContentClient = new ContentClient(this);      
             this.CustomObjectsClient = new CustomObjectsClient(this);
         }
@@ -141,6 +144,8 @@ namespace Quickblox.Sdk
         public IChatXmppClient ChatXmppClient { get; private set; }
 #else
         public ChatXmppClient ChatXmppClient { get; private set; }
+
+        public WebSyncClient WebSyncClient { get; private set; }
 #endif
         /// <summary>
         /// Custom Objects module provides flexibility to define any data structure(schema) you need.
@@ -153,17 +158,17 @@ namespace Quickblox.Sdk
         /// <summary>
         /// Quickblox aplication ID.
         /// </summary>
-        internal int ApplicationId { get; private set; }
+        public int ApplicationId { get; private set; }
 
         /// <summary>
         /// Authorization Key
         /// </summary>
-        internal string AuthKey { get; private set; }
+        public string AuthKey { get; private set; }
 
         /// <summary>
         /// Authorization Secret
         /// </summary>
-        internal string AuthSecret { get; private set; }
+        public string AuthSecret { get; private set; }
 
         /// <summary>
         /// API endpoint

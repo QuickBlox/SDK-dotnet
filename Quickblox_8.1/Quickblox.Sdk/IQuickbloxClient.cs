@@ -61,6 +61,8 @@ namespace Quickblox.Sdk
         IChatXmppClient ChatXmppClient { get; }
 #else
         ChatXmppClient ChatXmppClient { get; }
+
+        WebSyncClient WebSyncClient { get; }
 #endif
 
         /// <summary>
@@ -68,6 +70,21 @@ namespace Quickblox.Sdk
         /// Schema is defined in QuickBlox Administration Panel. The schema is called Class and contains field names and their type.
         /// </summary>
         CustomObjectsClient CustomObjectsClient { get; }
+
+        /// <summary>
+        /// Quickblox aplication ID.
+        /// </summary>
+        int ApplicationId { get; }
+
+        /// <summary>
+        /// Authorization Key
+        /// </summary>
+        string AuthKey { get; }
+
+        /// <summary>
+        /// Authorization Secret
+        /// </summary>
+        string AuthSecret { get; }
 
         /// <summary>
         /// API endpoint
