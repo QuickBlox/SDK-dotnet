@@ -594,7 +594,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             Presences.RemoveAll(p => p.UserId == receivedPresence.UserId);
             Presences.Add(receivedPresence);
 
-            OnPresenceReceived?.Invoke(this, receivedPresence);
+            PresenceReceived?.Invoke(this, receivedPresence);
         }
 
 
