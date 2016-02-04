@@ -169,11 +169,16 @@ namespace Quickblox.Sdk
         /// API endpoint
         /// </summary>
         public string ApiEndPoint { get; private set; }
-
+        
         /// <summary>
         /// XMPP Chat endpoint
         /// </summary>
         public string ChatEndpoint { get; private set; }
+
+        /// <summary>
+        /// Group chats XMPP endpoint.
+        /// </summary>
+        public string MucChatEndpoint => $"muc.{ChatEndpoint}";
 
         /// <summary>
         /// Quickblox token. Must be set before calling any methods that require authentication.
