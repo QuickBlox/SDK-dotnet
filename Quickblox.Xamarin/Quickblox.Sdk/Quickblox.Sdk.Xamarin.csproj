@@ -32,6 +32,7 @@
     <DefineConstants>TRACE;Xamarin</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Quickblox.Sdk.Xamarin.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TestRelease|AnyCPU'">
     <OutputPath>bin\TestRelease\</OutputPath>
@@ -543,7 +544,7 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Sharp.Xmpp">
-      <HintPath>..\Sharp.Xmpp-master\bin\Debug\Sharp.Xmpp.dll</HintPath>
+      <HintPath>..\Sharp.Xmpp-master\bin\Release\Sharp.Xmpp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
