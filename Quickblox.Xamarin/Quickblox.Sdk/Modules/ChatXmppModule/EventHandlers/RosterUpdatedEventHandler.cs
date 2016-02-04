@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Quickblox.Sdk.Modules.ChatXmppModule.Models;
+using System;
 
-namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
+namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
     public delegate void RosterUpdatedEventHandler(object sender, RosterUpdatedEventArgs rosterUpdatedEventArgs);
 

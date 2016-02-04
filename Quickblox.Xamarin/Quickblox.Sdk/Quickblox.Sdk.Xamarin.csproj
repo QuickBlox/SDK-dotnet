@@ -87,6 +87,9 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Models\Device.cs">
       <Link>GeneralDataModel\Models\Device.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Models\DialogUpdateInfos.cs">
+      <Link>GeneralDataModel\Models\DialogUpdateInfos.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\GeneralDataModel\Models\Message.cs">
       <Link>GeneralDataModel\Models\Message.cs</Link>
     </Compile>
@@ -212,6 +215,9 @@
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Responses\UpdateDialogResponse.cs">
       <Link>Modules\ChatModule\Responses\UpdateDialogResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\MongoObjectIdGenerator.cs">
+      <Link>Modules\ChatXmppModule\MongoObjectIdGenerator.cs</Link>
     </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ContentModule\ContentClient.cs">
       <Link>Modules\ContentModule\ContentClient.cs</Link>
@@ -493,21 +499,40 @@
     <Compile Include="HmacSha1CryptographicProvider.cs" />
     <Compile Include="ICryptographicProvider.cs" />
     <Compile Include="Modules\ChatXmppModule\ChatXmppClient.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\ActivityChangedEventHandler.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\ErrorsEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\ActivityChangedEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\AttachmentExtraParamValue.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\Availability.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\ChatState.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\ChatStateChangedEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\ErrorsEventHandler.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\GeneralActivity.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\Jid.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\MessageType.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\NotificationType.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\RosterItem.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\RosterUpdatedEventHandler.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\SubscriptionsEventHandler.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\SubscriptionState.cs" />
-    <Compile Include="Modules\ChatXmppModule\PrivateChatManager.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\Message.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\MessageEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\MessageType.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\Mood.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\MoodChangedEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\NotificationType.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\PresenceType.cs" />
-    <Compile Include="Modules\ChatXmppModule\Interfaces\IPrivateChatManager.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\RosterItem.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\RosterUpdatedEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\Status.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\StatusEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\SubscriptionsEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\SubscriptionState.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\TuneEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\TuneInformation.cs" />
+    <Compile Include="Modules\ChatXmppModule\ExtraParameters\AcceptExtraParameter.cs" />
+    <Compile Include="Modules\ChatXmppModule\ExtraParameters\CallExtraParameter.cs" />
+    <Compile Include="Modules\ChatXmppModule\ExtraParameters\ChatMessageExtraParameter.cs" />
+    <Compile Include="Modules\ChatXmppModule\ExtraParameters\HangUpExtraParameter.cs" />
+    <Compile Include="Modules\ChatXmppModule\ExtraParameters\IceCandidate.cs" />
+    <Compile Include="Modules\ChatXmppModule\ExtraParameters\IceCandidatesExtraParameter.cs" />
+    <Compile Include="Modules\ChatXmppModule\ExtraParameters\IExtraParameter.cs" />
+    <Compile Include="Modules\ChatXmppModule\ExtraParameters\RejectExtraParameter.cs" />
+    <Compile Include="Modules\ChatXmppModule\ExtraParameters\SignalType.cs" />
+    <Compile Include="Modules\ChatXmppModule\WebSyncClient.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="bouncy_castle_hmac_sha_pcl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">

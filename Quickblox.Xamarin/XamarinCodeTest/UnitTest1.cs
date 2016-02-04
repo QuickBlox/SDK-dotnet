@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Quickblox.Sdk.WebRTC;
 using System.Collections.ObjectModel;
+using Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters;
 
 namespace XamarinCodeTest
 {
@@ -41,6 +41,17 @@ namespace XamarinCodeTest
 
             var message = new Sharp.Xmpp.Im.Message("234234-42", "sdfsdf", result);
             var messageText = message.ToString();
+        }
+
+        [TestMethod]
+        public void GeneralMessageExtraParameterTest()
+        {
+            ChatMessageExtraParameter a = new ChatMessageExtraParameter("234234234sfdgsfg345345f", true, new Quickblox.Sdk.Modules.ChatXmppModule.Models.AttachmentExtraParamValue()
+            {
+                Id = "00000000000111111111"
+            });
+         
+            var resultString = a.Build();
         }
     }
 }

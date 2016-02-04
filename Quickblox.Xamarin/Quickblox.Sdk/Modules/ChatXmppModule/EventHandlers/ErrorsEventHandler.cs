@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
+namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
     public delegate void ErrorsEventHandler(object sender, ErrorEventArgs errorsEventArgs);
 
