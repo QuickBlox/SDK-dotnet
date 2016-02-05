@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using Quickblox.Sdk.Modules.Models;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
@@ -28,6 +29,13 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Interfaces
         /// <param name="message">Message text.</param>
         /// <returns>Is operation successful</returns>
         bool SendMessage(string message);
+
+        /// <summary>
+        /// Sends an attachemnt to the group chat.
+        /// </summary>
+        /// <param name="attachment">Attachment</param>
+        /// <returns></returns>
+        bool SendAttachemnt(AttachmentTag attachment);
 
         /// <summary>
         /// Sends notification group chat message that this group was created.

@@ -389,6 +389,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
             FillUsualMessageFields(msg, receivedMessage);
             FillUsualMessageExtraParamsFields(msg, receivedMessage);
+            FillAttachments(msg, receivedMessage);
 
             MessageReceived?.Invoke(this, receivedMessage);
             }
@@ -524,6 +525,27 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 if (int.TryParse(dialogType, out intValue) && Enum.IsDefined(typeof(DialogType), intValue))
                 {
                     groupInfoMessage.DialogType = (DialogType)intValue;
+                }
+            }
+        }
+
+        private void FillAttachments(message source, Message result)
+        {
+            var extraParams = source.Element(ExtraParams.XName);
+            if (extraParams != null)
+            {
+                var attachmentParam = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.attachment));
+                if (attachmentParam != null)
+                {
+                    var attachemnt = new Attachment
+                    {
+                        Name = attachmentParam.GetAttributeValue(XName.Get("name"))?.ToString(),
+                        Id = attachmentParam.GetAttributeValue(XName.Get("id"))?.ToString(),
+                        Type = attachmentParam.GetAttributeValue(XName.Get("type"))?.ToString(),
+                        Url = attachmentParam.GetAttributeValue(XName.Get("url"))?.ToString()
+                    };
+
+                    result.Attachments = new Attachment[] {attachemnt};
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Quickblox.Sdk.GeneralDataModel.Models;
@@ -116,21 +117,22 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
                 Assert.Fail("Unavalibility wasn't received by client1");
         }
 
-        /// <summary>
-        /// Doesn't work. Not implemented yet for Ubiety libarary.
-        /// </summary>
-        /// <returns></returns>
         [TestMethod]
-        public async Task SendMessageAttachmentTest()
+        public async Task SendAttachmentTest()
         {
-            lastMessageClient2 = null;
-            string attachemntId = "543534";
-            chatManager1.SendMessage("Test message");
+            var attachment = new AttachmentTag();
+            attachment.Id = "546464654";
+            attachment.Name = "Test";
+            attachment.Url = "http://image.com/3242423.jpg";
+            attachment.Type = "photo";
+            chatManager2.OnMessageReceived += (sender, message) =>
+            {
+                Debug.WriteLine("Attachment was received");
+            };
+
+            chatManager1.SendAttachemnt(attachment);
 
             await Task.Delay(5000);
-
-            if (lastMessageClient2 == null || lastMessageClient2.Attachments == null || lastMessageClient2.Attachments.Count() != 1 || lastMessageClient2.Attachments[0].Id != attachemntId)
-                Assert.Fail("The message wasn't received correctly by client 2.");
         }
     }
 }

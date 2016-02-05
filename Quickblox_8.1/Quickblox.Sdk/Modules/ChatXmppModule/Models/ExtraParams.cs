@@ -31,7 +31,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         /// <summary>
         /// Information about what was updated in a dialog
         /// </summary>
-        dialog_update_info
+        dialog_update_info,
+        /// <summary>
+        /// Message attachment
+        /// </summary>
+        attachment
     }
 
     public class ExtraParams : XElement
