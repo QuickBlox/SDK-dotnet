@@ -146,6 +146,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             rosterManager?.AddContact(new Contact() { Name = contactName ?? otherUserId.ToString(), UserId = otherUserId });
 
             SubsribeForPresence();
+            ApproveSubscribtionRequest();
 
             if (createChatMessage)
             {
@@ -170,6 +171,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 UserId = otherUserId
             });
 
+            SubsribeForPresence();
             ApproveSubscribtionRequest();
 
             if (createChatMessage)

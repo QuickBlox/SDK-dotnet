@@ -55,6 +55,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
         private bool isReady;
         private bool isUserDisconnected;
+        private List<item> unsubscribedRosterItems; 
 
         #endregion
 
@@ -607,6 +608,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private void OnPrivatePresence(presence presence)
         {
+            AutorespondToSubscribe(presence);
+
             var receivedPresence = new Presence
             {
                 UserId = GetQbUserIdFromJid(presence.@from),
@@ -619,6 +622,14 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             PresenceReceived?.Invoke(this, receivedPresence);
         }
 
+        //TODO: this is supposed to be done by server automatically. Since it doesn't work had to implement it myself
+        private void AutorespondToSubscribe(presence presence)
+        {
+            if (presence.type == presence.typeEnum.subscribe && unsubscribedRosterItems.Any(it => it.jid == presence.from))
+            {
+                xmppClient.Send(new presence { type = presence.typeEnum.subscribed, to = presence.from });
+            }
+        }
 
         private void OnIq(iq iq)
         {
@@ -630,6 +641,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                     if (iq.type == iq.typeEnum.result || Contacts == null)
                     {
                         Contacts = new List<Contact>();
+                        unsubscribedRosterItems = new List<item>();
                     }
 
                     foreach (var item in query.itemElements)
@@ -656,6 +668,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                         if (item.subscription == item.subscriptionEnum.remove && iq.type == iq.typeEnum.set)
                         {
                             ContactRemoved?.Invoke(this, contact);
+                        }
+
+                        if (item.subscription == item.subscriptionEnum.none)
+                        {
+                            unsubscribedRosterItems.Add(item);
                         }
                     }
 
