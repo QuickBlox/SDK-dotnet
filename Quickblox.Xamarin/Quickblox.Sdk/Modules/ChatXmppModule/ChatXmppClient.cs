@@ -303,6 +303,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             receivedMessage.Body = messageEventArgs.Message.Body;
             receivedMessage.Subject = messageEventArgs.Message.Subject;
             receivedMessage.Thread = messageEventArgs.Message.Thread;
+            receivedMessage.Timestamp = messageEventArgs.Message.Timestamp;
 			receivedMessage.ExtraParameter = messageEventArgs.Message.ExtraParameter;
 
             var wappedMessageTyp = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
