@@ -6,7 +6,7 @@ using Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters;
 namespace XamarinCodeTest
 {
     [TestClass]
-    public class UnitTest1
+    public class ExtraParametersBuildTest
     {
         [TestMethod]
         public void CallExtraParameterBuildTest()

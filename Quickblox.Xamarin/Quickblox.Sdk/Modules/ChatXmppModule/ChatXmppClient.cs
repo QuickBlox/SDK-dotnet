@@ -336,6 +336,12 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.SendMessage(jid, body, extraParams, subject, dialogId, wrappedMessageType);
         }
 
+        public void SendMessage(string jid, string body, string extraParams, string dialogId, string subject = null, MessageType messageType = MessageType.Chat)
+        {
+            var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
+            xmppClient.SendMessage(jid, body, extraParams, subject, dialogId, wrappedMessageType);
+        }
+
         public void ReloadContacts()
         {
             this.Contacts.Clear();
