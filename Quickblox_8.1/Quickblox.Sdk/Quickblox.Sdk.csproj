@@ -202,6 +202,7 @@
     <Compile Include="Modules\UsersModule\Requests\RetrieveUsersRequest.cs" />
     <Compile Include="Modules\UsersModule\Requests\UpdateUserRequest.cs" />
     <Compile Include="Modules\UsersModule\Requests\UserRequest.cs" />
+    <Compile Include="Modules\UsersModule\Requests\UserRequestWithTag.cs" />
     <Compile Include="Modules\UsersModule\Responses\RetrieveUsersResponse.cs" />
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

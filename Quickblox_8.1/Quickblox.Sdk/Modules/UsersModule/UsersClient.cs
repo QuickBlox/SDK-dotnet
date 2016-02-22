@@ -173,17 +173,17 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// <param name="page">Page number of the book of the results that you want to get. By default: 1</param>
         /// <param name="perPage">The maximum number of results per page. Min: 1. Max: 100. By default: 10</param>
         /// <returns></returns>
-        public async Task<HttpResponse<PagedResponse<UserResponse>>> GetUserByTagsAsync(String[] tags, UInt32? page, UInt32 perPage)
+        public async Task<HttpResponse<PagedResponse<UserResponse>>> GetUserByTagsAsync(String[] tags, UInt32 page = 1, UInt32 perPage = 10)
         {
-            var byUserTag = new UserRequest()
+            var byUserTag = new UserRequestWithTag()
             {
-                TagList = String.Join(",", tags),
+                Tags = String.Join(",", tags),
                 Page = page,
                 PerPage = perPage
             };
 
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequest>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTwitterIdMethod, byUserTag, headers);
+            return await HttpService.GetAsync<PagedResponse<UserResponse>, UserRequestWithTag>(this.quickbloxClient.ApiEndPoint, QuickbloxMethods.GetUserByTagsMethod, byUserTag, headers);
         }
 
         /// <summary>
