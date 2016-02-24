@@ -55,7 +55,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
         private bool isReady;
         private bool isUserDisconnected;
-        private List<item> unsubscribedRosterItems; 
+        private List<item> unsubscribedRosterItems = new List<item>(); //TODO: clear this on logout 
 
         #endregion
 
