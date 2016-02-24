@@ -8,6 +8,7 @@ using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.Modules.UsersModule.Models;
 using Quickblox.Sdk.Modules.UsersModule.Requests;
 using Quickblox.Sdk.Test.Modules.UsersModule.Models;
+using Quickblox.Sdk.Test.Logger;
 
 namespace Quickblox.Sdk.Test.Modules.UsersModule
 {
@@ -25,7 +26,7 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient((int)ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
+            this.client = new QuickbloxClient((int)ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new DebugLogger());
             var sessionResponse = await this.client.AuthenticationClient.CreateSessionBaseAsync();
             client.Token = sessionResponse.Result.Session.Token;
         }
@@ -56,6 +57,13 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         public async Task GetUserByTwitterIdSuccess()
         {
             var response = await this.client.UsersClient.GetUserByTwitterIdAsync(158564);
+            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task GetUserByTagsIdSuccess()
+        {
+            var response = await this.client.UsersClient.GetUserByTagsAsync(new[] { "test" });
             Assert.IsTrue(response.StatusCode == HttpStatusCode.OK);
         }
 

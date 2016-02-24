@@ -74,7 +74,7 @@ namespace Quickblox.Sdk.GeneralDataModel.Models
         public int DeletedId { get; set; }
 
         [JsonProperty("room_updated_date")]
-        public long RoomUpdateDate { get; set; }
+        public double RoomUpdateDate { get; set; }
 
         #endregion
 

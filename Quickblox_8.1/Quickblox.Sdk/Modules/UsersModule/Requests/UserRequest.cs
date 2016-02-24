@@ -5,7 +5,7 @@ using Quickblox.Sdk.GeneralDataModel.Request;
 namespace Quickblox.Sdk.Modules.UsersModule.Requests
 {
     /// <summary>
-    /// User to be used in User sign up request.
+    /// Used for updating user information.
     /// </summary>
     public class UserRequest : PagedRequestSettings
     {

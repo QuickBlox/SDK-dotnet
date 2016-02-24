@@ -54,7 +54,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="GlobalConstant.cs" />
+    <Compile Include="XmppClientTest.cs" />
+    <Compile Include="ExtraParametersBuildTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

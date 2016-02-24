@@ -33,26 +33,26 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
             await client1.ChatXmppClient.Connect(id1, password1);
         }
 
-        [TestMethod]
-        public async Task GetContactsTest()
-        {
-            bool contactsChanged = false;
-            client1.ChatXmppClient.OnContactsChanged += (sender, args) => contactsChanged = true;
+//        [TestMethod]
+//        public async Task GetContactsTest()
+//        {
+//            bool contactsChanged = false;
+//            client1.ChatXmppClient.OnContactsChanged += (sender, args) => contactsChanged = true;
 
-            client1.ChatXmppClient.ReloadContacts();
+//            client1.ChatXmppClient.ReloadContacts();
 
-            await Task.Delay(10000);
+//            await Task.Delay(10000);
 
-            if(!contactsChanged)
-                Assert.Fail("Contacts were not received");
+//            if(!contactsChanged)
+//                Assert.Fail("Contacts were not received");
 
-#if DEBUG
-            Debug.WriteLine("Roster items received from server:");
-            foreach (var contact in client1.ChatXmppClient.Contacts)
-            {
-                Debug.WriteLine("ID: {0} Name: {1}", contact.UserId, contact.Name);
-            }
-#endif
-        }
+//#if DEBUG
+//            Debug.WriteLine("Roster items received from server:");
+//            foreach (var contact in client1.ChatXmppClient.Contacts)
+//            {
+//                Debug.WriteLine("ID: {0} Name: {1}", contact.UserId, contact.Name);
+//            }
+//#endif
+//        }
     }
 }

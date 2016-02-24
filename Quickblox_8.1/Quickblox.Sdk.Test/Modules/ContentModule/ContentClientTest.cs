@@ -121,7 +121,7 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
             //Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
             //var firstFile = getFilesResponse.Result.Items.Last();
 
-            var downloadFileResponse = await this.client.ContentClient.DownloadFileByUid("35f6c9cb777340d989ba01770bcc4e2000");
+            var downloadFileResponse = await this.client.ContentClient.DownloadFileByUid("35f6c9cb777340d989ba01770bcc4e2000", false);
             Assert.AreEqual(downloadFileResponse.StatusCode, HttpStatusCode.OK);
         }
 
@@ -132,14 +132,14 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
             Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
             var firstFile = getFilesResponse.Result.Items.Last();
 
-            var downloadFileResponse = await this.client.ContentClient.DownloadFileByUid(firstFile.Blob.Uid);
+            var downloadFileResponse = await this.client.ContentClient.DownloadFileByUid(firstFile.Blob.Uid, false);
             Assert.IsNotNull(downloadFileResponse.Errors);
         }
 
         [TestMethod]
         public async Task UploadFileViaHelperTest()
         {
-            var contentHelper = new ContentClientHelper(client.ContentClient);
+            var contentHelper = new ContentClientHelper(client);
 
             var uri = new Uri("ms-appx:///Modules/ContentModule/Assets/1.jpg");
             var storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);
@@ -160,7 +160,7 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
         [TestMethod]
         public async Task DownloadByIdTest()
         {
-            var contentHelper = new ContentClientHelper(client.ContentClient);
+            var contentHelper = new ContentClientHelper(client);
 
             var uri = new Uri("ms-appx:///Modules/ContentModule/Assets/1.jpg");
             var storageFile = await StorageFile.GetFileFromApplicationUriAsync(uri);

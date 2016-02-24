@@ -457,6 +457,9 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\UsersModule\Requests\UserRequest.cs">
       <Link>Modules\UsersModule\Requests\UserRequest.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\UsersModule\Requests\UserRequestWithTag.cs">
+      <Link>Modules\UsersModule\Requests\UserRequestWithTag.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\UsersModule\Requests\UserSignUpRequest.cs">
       <Link>Modules\UsersModule\Requests\UserSignUpRequest.cs</Link>
     </Compile>
@@ -544,7 +547,7 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Sharp.Xmpp">
-      <HintPath>..\Sharp.Xmpp-master\bin\Release\Sharp.Xmpp.dll</HintPath>
+      <HintPath>..\Sharp.Xmpp-master\bin\Debug\Sharp.Xmpp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

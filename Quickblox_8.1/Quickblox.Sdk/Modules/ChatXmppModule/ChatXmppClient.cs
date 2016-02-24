@@ -448,8 +448,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 result.AddedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids));
                 result.DeletedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids));
 
-                long roomUpdateDate;
-                if (Int64.TryParse(GetExtraParam(extraParams, ExtraParamsList.room_updated_date), out roomUpdateDate))
+                double roomUpdateDate;
+                if (Double.TryParse(GetExtraParam(extraParams, ExtraParamsList.room_updated_date), out roomUpdateDate))
                 {
                     result.RoomUpdateDate = roomUpdateDate;
                 }

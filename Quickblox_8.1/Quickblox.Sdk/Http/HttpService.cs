@@ -290,7 +290,14 @@ namespace Quickblox.Sdk.Http
                 catch (Exception)
                 {
                     httpResponse.Errors = new Dictionary<string, string[]>();
-                    httpResponse.Errors.Add(" ", new[] { stringContent });
+                    if (!string.IsNullOrWhiteSpace(stringContent))
+                    {
+                        httpResponse.Errors.Add("Unknown", new[] { stringContent });
+                    }
+                    else
+                    {
+                        httpResponse.Errors.Add("Not Found", new[] { "Not Found" });
+                    }
                 }
             }
 

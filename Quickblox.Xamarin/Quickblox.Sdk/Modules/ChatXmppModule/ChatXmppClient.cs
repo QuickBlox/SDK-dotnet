@@ -303,6 +303,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             receivedMessage.Body = messageEventArgs.Message.Body;
             receivedMessage.Subject = messageEventArgs.Message.Subject;
             receivedMessage.Thread = messageEventArgs.Message.Thread;
+            receivedMessage.Timestamp = messageEventArgs.Message.Timestamp;
 			receivedMessage.ExtraParameter = messageEventArgs.Message.ExtraParameter;
 
             var wappedMessageTyp = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
@@ -333,6 +334,12 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
             var jidString = BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
             var jid = new Sharp.Xmpp.Jid(jidString);
+            xmppClient.SendMessage(jid, body, extraParams, subject, dialogId, wrappedMessageType);
+        }
+
+        public void SendMessage(string jid, string body, string extraParams, string dialogId, string subject = null, MessageType messageType = MessageType.Chat)
+        {
+            var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
             xmppClient.SendMessage(jid, body, extraParams, subject, dialogId, wrappedMessageType);
         }
 
