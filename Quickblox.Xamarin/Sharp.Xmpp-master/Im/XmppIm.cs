@@ -446,6 +446,14 @@ namespace Sharp.Xmpp.Im {
 			core.SendMessage(message);
 		}
 
+        public void JoinToGroup(Jid to, Jid from)
+        {
+            AssertValid();
+            to.ThrowIfNull("jid");
+            Presence p = new Presence(to, from, PresenceType.Available);
+            SendPresence(p);
+        }
+
 		/// <summary>
 		/// Sends a request to subscribe to the presence of the contact with the
 		/// specified JID.
