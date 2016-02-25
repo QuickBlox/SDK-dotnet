@@ -449,7 +449,8 @@ namespace Sharp.Xmpp.Im {
         public void JoinToGroup(Jid to, Jid from)
         {
             AssertValid();
-            to.ThrowIfNull("jid");
+            to.ThrowIfNull("to");
+            from.ThrowIfNull("from");
             Presence p = new Presence(to, from, PresenceType.Available);
             SendPresence(p);
         }

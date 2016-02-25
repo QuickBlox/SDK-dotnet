@@ -611,27 +611,40 @@ namespace Sharp.Xmpp.Client {
 			im.SendMessage(message);
 		}
 
-		/// <summary>
-		/// Sets the availability status. 
-		/// </summary>
-		/// <param name="availability">The availability state. Can be one of the
-		/// values from the Availability enumeration, however not
-		/// Availability.Offline.</param>
-		/// <param name="message">An optional message providing a detailed
-		/// description of the availability state.</param>
-		/// <param name="priority">Provides a hint for stanza routing.</param>
-		/// <param name="language">The language of the description of the
-		/// availability state.</param>
-		/// <exception cref="ArgumentException">The availability parameter has a
-		/// value of Availability.Offline.</exception>
-		/// <exception cref="IOException">There was a failure while writing to or reading
-		/// from the network.</exception>
-		/// <exception cref="InvalidOperationException">The XmppClient instance is not
-		/// connected to a remote host, or the XmppClient instance has not authenticated with
-		/// the XMPP server.</exception>
-		/// <exception cref="ObjectDisposedException">The XmppClient object has been
-		/// disposed.</exception>
-		public void SetStatus(Availability availability, string message = null,
+        /// <summary>
+        /// Joins to group.
+        /// </summary>
+        /// <param name="to">To.</param>
+        /// <param name="from">From.</param>
+        public void JoinToGroup(Jid to, Jid from)
+        {
+            AssertValid();
+            to.ThrowIfNull("to");
+            from.ThrowIfNull("from");
+            im.JoinToGroup(to, from);
+        }
+
+        /// <summary>
+        /// Sets the availability status. 
+        /// </summary>
+        /// <param name="availability">The availability state. Can be one of the
+        /// values from the Availability enumeration, however not
+        /// Availability.Offline.</param>
+        /// <param name="message">An optional message providing a detailed
+        /// description of the availability state.</param>
+        /// <param name="priority">Provides a hint for stanza routing.</param>
+        /// <param name="language">The language of the description of the
+        /// availability state.</param>
+        /// <exception cref="ArgumentException">The availability parameter has a
+        /// value of Availability.Offline.</exception>
+        /// <exception cref="IOException">There was a failure while writing to or reading
+        /// from the network.</exception>
+        /// <exception cref="InvalidOperationException">The XmppClient instance is not
+        /// connected to a remote host, or the XmppClient instance has not authenticated with
+        /// the XMPP server.</exception>
+        /// <exception cref="ObjectDisposedException">The XmppClient object has been
+        /// disposed.</exception>
+        public void SetStatus(Availability availability, string message = null,
 			sbyte priority = 0, CultureInfo language = null) {
 			AssertValid();
 			im.SetStatus(availability, message, 0, language);
