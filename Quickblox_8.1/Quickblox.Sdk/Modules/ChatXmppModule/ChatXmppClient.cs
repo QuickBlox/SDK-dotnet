@@ -471,8 +471,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private bool CheckIsSystemMessage(XMPP.tags.Tag msg)
         {
-            var msgType = msg.GetAttributeValue(XName.Get("type")).ToString();
-            if (msgType != message.typeEnum.headline.ToString())
+            var msgType = msg.GetAttributeValue(XName.Get("type"));
+
+            if (msgType == null || msgType.ToString() != message.typeEnum.headline.ToString())
                 return false;
 
             var extraParams = msg.Element(ExtraParams.XName);
