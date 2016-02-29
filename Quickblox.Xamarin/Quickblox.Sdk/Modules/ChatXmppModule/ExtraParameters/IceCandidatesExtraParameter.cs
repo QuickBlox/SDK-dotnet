@@ -6,9 +6,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
 {
     public class IceCandidatesExtraParameter : IExtraParameter
     {
-        public string SessionId { private get; set; }
+        public string SessionId {  get; private set; }
 
-        public Collection<IceCandidate> IceCandidates { get; set; }
+        public Collection<IceCandidate> IceCandidates { get; private set; }
 
 		public IceCandidatesExtraParameter(string sessionId, Collection<IceCandidate> iceCandidates)
         {

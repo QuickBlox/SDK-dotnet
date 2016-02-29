@@ -4,7 +4,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
 {
     public class HangUpExtraParameter : IExtraParameter
     {
-        public string SessionId { private get; set; }
+        public string SessionId {  get; private set; }
 
         public HangUpExtraParameter(string sessionId)
         {

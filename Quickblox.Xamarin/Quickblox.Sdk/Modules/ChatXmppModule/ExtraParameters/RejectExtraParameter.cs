@@ -4,7 +4,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
 {
     public class RejectExtraParameter : IExtraParameter
     {
-        public string SessionId { private get; set; }
+        public string SessionId { get; private set; }
 
         public RejectExtraParameter(string sessionId)
         {

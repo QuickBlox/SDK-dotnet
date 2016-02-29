@@ -4,11 +4,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
 {
     public class CallExtraParameter : IExtraParameter
     {
-        public string SessionId { private get; set; }
-        public string Sdp { private get; set; }
-        public string Platform { private get; set; }
-        public int SenderId { private get; set; }
-        public int ReceiverId { private get; set; }
+        public string SessionId { get; private set; }
+        public string Sdp { get; private set; }
+        public string Platform { get; private set; }
+        public int SenderId { get; private set; }
+        public int ReceiverId { get; private set; }
 
         public CallExtraParameter(string sessionId, string sdp, string platform, int senderId, int receiverId)
         {
