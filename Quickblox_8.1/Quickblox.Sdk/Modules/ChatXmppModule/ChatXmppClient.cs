@@ -39,7 +39,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
         private bool isReady;
         private bool isUserDisconnected;
-        private List<item> unsubscribedRosterItems = new List<item>(); //TODO: clear this on logout 
+        private List<item> unsubscribedRosterItems = new List<item>(); //roster items (contacts) that are not subscribed to us yet
 
         #endregion
 
@@ -176,6 +176,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             isUserDisconnected = true;
             Contacts.Clear();
+            unsubscribedRosterItems.Clear();
             xmppClient.Send(new presence { type = presence.typeEnum.unavailable });
             xmppClient.Disconnect();
             isReady = false;
@@ -606,7 +607,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             PresenceReceived?.Invoke(this, receivedPresence);
         }
 
-        //TODO: this is supposed to be done by server automatically. Since it doesn't work had to implement it myself
         private void AutorespondToSubscribe(presence presence)
         {
             if (presence.type == presence.typeEnum.subscribe && unsubscribedRosterItems.Any(it => it.jid == presence.from))
@@ -654,7 +654,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                             ContactRemoved?.Invoke(this, contact);
                         }
 
-                        if (item.subscription == item.subscriptionEnum.none)
+                        if (item.subscription == item.subscriptionEnum.to || item.subscription == item.subscriptionEnum.none)
                         {
                             unsubscribedRosterItems.Add(item);
                         }
