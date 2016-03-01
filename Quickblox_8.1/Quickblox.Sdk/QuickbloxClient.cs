@@ -183,7 +183,13 @@ namespace Quickblox.Sdk
         /// <summary>
         /// Group chats XMPP endpoint.
         /// </summary>
-        public string MucChatEndpoint => $"muc.{ChatEndpoint}";
+        public string MucChatEndpoint
+        {
+            get
+            {
+                return string.Format("muc.{0}", ChatEndpoint);
+            }
+        }
 
         /// <summary>
         /// Quickblox token. Must be set before calling any methods that require authentication.

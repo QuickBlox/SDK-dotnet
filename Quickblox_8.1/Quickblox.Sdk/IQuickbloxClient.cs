@@ -97,6 +97,11 @@ namespace Quickblox.Sdk
         string ChatEndpoint { get; }
 
         /// <summary>
+        /// Group chats XMPP endpoint.
+        /// </summary>
+        string MucChatEndpoint { get; }
+
+        /// <summary>
         /// Quickblox token. Must be set before calling any methods that require authentication.
         /// </summary>
         string Token { get; set; }
