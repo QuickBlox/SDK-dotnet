@@ -32,22 +32,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
     //TODO: refactor this. Move contacts functionality to some ContactManager, Presences to some PresenceManager
     public class ChatXmppClient : IChatXmppClient, IRosterManager
     {
-        private enum JidType
-        {
-            /// <summary>
-            /// Type is unknown
-            /// </summary>
-            Unknown,
-            /// <summary>
-            /// User's JID
-            /// </summary>
-            Private,
-            /// <summary>
-            /// User's JID in some group chat
-            /// </summary>
-            Group
-        }
-
         #region Fields
 
         private readonly QuickbloxClient quickbloxClient;

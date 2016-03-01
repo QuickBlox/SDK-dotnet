@@ -217,6 +217,18 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatModule\Responses\UpdateDialogResponse.cs">
       <Link>Modules\ChatModule\Responses\UpdateDialogResponse.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\AttachmentTag.cs">
+      <Link>Modules\ChatXmppModule\Models\AttachmentTag.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\ExtraParams.cs">
+      <Link>Modules\ChatXmppModule\Models\ExtraParams.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\JidType.cs">
+      <Link>Modules\ChatXmppModule\Models\JidType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\Tag.cs">
+      <Link>Modules\ChatXmppModule\Models\Tag.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\MongoObjectIdGenerator.cs">
       <Link>Modules\ChatXmppModule\MongoObjectIdGenerator.cs</Link>
     </Compile>
@@ -511,12 +523,10 @@
     <Compile Include="Modules\ChatXmppModule\EventHandlers\ErrorsEventHandler.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\GeneralActivity.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\Jid.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\Message.cs" />
     <Compile Include="Modules\ChatXmppModule\EventHandlers\MessageEventHandler.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\MessageType.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\Mood.cs" />
     <Compile Include="Modules\ChatXmppModule\EventHandlers\MoodChangedEventHandler.cs" />
-    <Compile Include="Modules\ChatXmppModule\Models\NotificationType.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\PresenceType.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\RosterItem.cs" />
     <Compile Include="Modules\ChatXmppModule\EventHandlers\RosterUpdatedEventHandler.cs" />
@@ -535,6 +545,7 @@
     <Compile Include="Modules\ChatXmppModule\ExtraParameters\IExtraParameter.cs" />
     <Compile Include="Modules\ChatXmppModule\ExtraParameters\RejectExtraParameter.cs" />
     <Compile Include="Modules\ChatXmppModule\ExtraParameters\SignalType.cs" />
+    <Compile Include="Modules\ChatXmppModule\PrivateChatManager.cs" />
     <Compile Include="Modules\ChatXmppModule\WebSyncClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

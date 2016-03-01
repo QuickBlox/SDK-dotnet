@@ -799,44 +799,84 @@ namespace Sharp.Xmpp.Client {
 			im.RemoveFromRoster(item);
 		}
 
-		/// <summary>
-		/// Publishes the image located at the specified path as the user's avatar.
-		/// </summary>
-		/// <param name="filePath">The path to the image to publish as the user's
-		/// avatar.</param>
-		/// <exception cref="ArgumentNullException">The filePath parameter is
-		/// null.</exception>
-		/// <exception cref="ArgumentException">filePath is a zero-length string,
-		/// contains only white space, or contains one or more invalid
-		/// characters.</exception>
-		/// <exception cref="PathTooLongException">The specified path, file name,
-		/// or both exceed the system-defined maximum length. For example, on
-		/// Windows-based platforms, paths must be less than 248 characters, and
-		/// file names must be less than 260 characters.</exception>
-		/// <exception cref="DirectoryNotFoundException">The specified path is
-		/// invalid, (for example, it is on an unmapped drive).</exception>
-		/// <exception cref="UnauthorizedAccessException">The path specified is
-		/// a directory, or the caller does not have the required
-		/// permission.</exception>
-		/// <exception cref="FileNotFoundException">The file specified in
-		/// filePath was not found.</exception>
-		/// <exception cref="NotSupportedException">filePath is in an invalid
-		/// format, or the server does not support the 'Personal Eventing
-		/// Protocol' extension.</exception>
-		/// <exception cref="XmppErrorException">The server returned an XMPP error code.
-		/// Use the Error property of the XmppErrorException to obtain the specific
-		/// error condition.</exception>
-		/// <exception cref="XmppException">The server returned invalid data or another
-		/// unspecified XMPP error occurred.</exception>
-		/// <exception cref="InvalidOperationException">The XmppClient instance is not
-		/// connected to a remote host, or the XmppClient instance has not authenticated with
-		/// the XMPP server.</exception>
-		/// <exception cref="ObjectDisposedException">The XmppClient object has been
-		/// disposed.</exception>
-		/// <remarks>
-		/// The following file types are supported:
-		///  BMP, GIF, JPEG, PNG and TIFF.
-		/// </remarks>
+        /// <summary>
+        /// Requests the subscription.
+        /// </summary>
+        /// <param name="jid">The JID of the roster item.</param>
+        public void RequestSubscription(Jid jid)
+        {
+            AssertValid();
+            im.RequestSubscription(jid);
+        }
+
+        /// <summary>
+        /// Refuses the subscription request.
+        /// </summary>
+        /// <param name="jid">The JID of the roster item.</param>
+        public void RefuseSubscriptionRequest(Jid jid)
+        {
+            AssertValid();
+            im.RefuseSubscriptionRequest(jid);
+        }
+
+        /// <summary>
+        /// Approves the subscription request.
+        /// </summary>
+        /// <param name="jid">The JID of the roster item.</param>
+        public void ApproveSubscriptionRequest(Jid jid)
+        {
+            AssertValid();
+            im.ApproveSubscriptionRequest(jid);
+        }
+
+        /// <summary>
+        /// Revokes the subscription.
+        /// </summary>
+        /// <param name="jid">The JID of the roster item.</param>
+        public void RevokeSubscription(Jid jid)
+        {
+            AssertValid();
+            im.RevokeSubscription(jid);
+        }
+
+        /// <summary>
+        /// Publishes the image located at the specified path as the user's avatar.
+        /// </summary>
+        /// <param name="filePath">The path to the image to publish as the user's
+        /// avatar.</param>
+        /// <exception cref="ArgumentNullException">The filePath parameter is
+        /// null.</exception>
+        /// <exception cref="ArgumentException">filePath is a zero-length string,
+        /// contains only white space, or contains one or more invalid
+        /// characters.</exception>
+        /// <exception cref="PathTooLongException">The specified path, file name,
+        /// or both exceed the system-defined maximum length. For example, on
+        /// Windows-based platforms, paths must be less than 248 characters, and
+        /// file names must be less than 260 characters.</exception>
+        /// <exception cref="DirectoryNotFoundException">The specified path is
+        /// invalid, (for example, it is on an unmapped drive).</exception>
+        /// <exception cref="UnauthorizedAccessException">The path specified is
+        /// a directory, or the caller does not have the required
+        /// permission.</exception>
+        /// <exception cref="FileNotFoundException">The file specified in
+        /// filePath was not found.</exception>
+        /// <exception cref="NotSupportedException">filePath is in an invalid
+        /// format, or the server does not support the 'Personal Eventing
+        /// Protocol' extension.</exception>
+        /// <exception cref="XmppErrorException">The server returned an XMPP error code.
+        /// Use the Error property of the XmppErrorException to obtain the specific
+        /// error condition.</exception>
+        /// <exception cref="XmppException">The server returned invalid data or another
+        /// unspecified XMPP error occurred.</exception>
+        /// <exception cref="InvalidOperationException">The XmppClient instance is not
+        /// connected to a remote host, or the XmppClient instance has not authenticated with
+        /// the XMPP server.</exception>
+        /// <exception cref="ObjectDisposedException">The XmppClient object has been
+        /// disposed.</exception>
+        /// <remarks>
+        /// The following file types are supported:
+        ///  BMP, GIF, JPEG, PNG and TIFF.
+        /// </remarks>
 #if WINDOWSPLATFORM
 		public void SetAvatar(string filePath) {
 			AssertValid();

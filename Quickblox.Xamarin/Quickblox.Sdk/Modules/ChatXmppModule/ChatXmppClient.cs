@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using Sharp.Xmpp.Client;
+using Quickblox.Sdk.GeneralDataModel.Models;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
@@ -300,7 +301,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             receivedMessage.Id = messageEventArgs.Message.Id;
             receivedMessage.From = messageEventArgs.Message.From.ToString();
             receivedMessage.To = messageEventArgs.Message.To.ToString();
-            receivedMessage.Body = messageEventArgs.Message.Body;
+            receivedMessage.MessageText = messageEventArgs.Message.Body;
             receivedMessage.Subject = messageEventArgs.Message.Subject;
             receivedMessage.Thread = messageEventArgs.Message.Thread;
             receivedMessage.Timestamp = messageEventArgs.Message.Timestamp;
@@ -479,6 +480,37 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             int userId;
             if (!int.TryParse(match.Groups[1].Value, out userId)) return 0;
             return userId;
+        }
+
+        private static int GetQbUserIdFromGroupJid(string groupJid)
+        {
+            int senderId;
+            var jidParts = groupJid.Split('/');
+            if (int.TryParse(jidParts.Last(), out senderId))
+                return senderId;
+
+            return 0;
+        }
+
+        private JidType DetermineJidType(string jid)
+        {
+            if (string.IsNullOrEmpty(jid))
+                return JidType.Unknown;
+
+            var jidParts = jid.Split('@');
+
+            if (jidParts.Length != 2) // userPart@serverPart
+                return JidType.Unknown;
+
+            var serverPart = jidParts[1];
+
+            if (serverPart.StartsWith(quickbloxClient.MucChatEndpoint))
+                return JidType.Group;
+
+            if (serverPart.StartsWith(quickbloxClient.ChatEndpoint))
+                return JidType.Private;
+
+            return JidType.Unknown;
         }
 
         #endregion

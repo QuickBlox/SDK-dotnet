@@ -1,4 +1,5 @@
-﻿using Quickblox.Sdk.Modules.ChatXmppModule.Models;
+﻿using Quickblox.Sdk.GeneralDataModel.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using System;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
