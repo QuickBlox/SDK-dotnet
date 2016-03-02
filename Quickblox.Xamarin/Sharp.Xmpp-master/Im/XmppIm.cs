@@ -1504,11 +1504,11 @@ namespace Sharp.Xmpp.Im {
 			}
 		}
 
-		/// <summary>
-		/// Callback invoked when a message stanza has been received.
-		/// </summary>
-		/// <param name="message">The received message stanza.</param>
-		void OnMessage(Message message) {
+        /// <summary>
+        /// Callback invoked when a message stanza has been received.
+        /// </summary>
+        /// <param name="message">The received message stanza.</param>
+        void OnMessage(Message message) {
 			// Invoke IInput<Message> Plugins.
 			foreach (var ext in extensions) {
 				var filter = ext as IInputFilter<Message>;

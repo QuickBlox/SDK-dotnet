@@ -22,19 +22,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         #endregion
 
         /// <summary>
-        /// Event when other user is typing.
-        /// </summary>
-        public event EventHandler OpponentStartedTyping;
-
-        /// <summary>
-        /// Event when other user has stopped typing.
-        /// </summary>
-        public event EventHandler OpponentPausedTyping;
-
-        /// <summary>
         /// Event when a new message is received.
         /// </summary>
-        public event EventHandler<Message> MessageReceived;
+        public event MessageEventHandler MessageReceived;
 
         #region Ctor
 
@@ -57,25 +47,13 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         /// <param name="message">Message text</param>
         /// <returns>Is operation successful</returns>
-        public bool SendMessage(string message)
+        public void SendMessage(string message)
         {
-            var msg = CreateNewMessage();
-
-            var body = new body { Value = message };
-
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
 
-            msg.Add(body, extraParams);
-            if (!xmppClient.Connected)
-            {
-                xmppClient.Connect();
-                return false;
-            }
-
-            xmppClient.Send(msg);
-            return true;
+            xmppClient.SendMessage(new Sharp.Xmpp.Jid(otherUserJid), message, extraParams.ToString(), null, dialogId, Sharp.Xmpp.Im.MessageType.Chat);
         }
 
         /// <summary>
@@ -83,53 +61,59 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         /// <param name="attachment">Attachment</param>
         /// <returns></returns>
-        public bool SendAttachemnt(AttachmentTag attachment)
+        public void SendAttachemnt(AttachmentTag attachment)
         {
-            var msg = CreateNewMessage();
-
-            var body = new body { Value = "Attachment" };
-
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.Add(attachment);
 
-            msg.Add(body, extraParams);
-
-            if (!xmppClient.Connected)
-            {
-                xmppClient.Connect();
-                return false;
-            }
-
-            xmppClient.Send(msg);
-
-            return true;
+            xmppClient.SendMessage(new Sharp.Xmpp.Jid(otherUserJid), "Attachment", extraParams.ToString(), null, dialogId, Sharp.Xmpp.Im.MessageType.Chat);
         }
 
+        #region Notify ChatState
+
         /// <summary>
-        /// Notifies other user that you are typing a message.
+        /// Notifies other user that you are composing a message.
         /// </summary>
         public void NotifyIsTyping()
         {
-            var msg = CreateNewMessage();
-            var composing = new composing();
-            msg.Add(composing);
-
-            xmppClient.Send(msg);
+            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Composing);
         }
 
         /// <summary>
-        /// Notifies other user that you've stopped typing a message.
+        /// Notifies other user that you are paused a message.
         /// </summary>
         public void NotifyPausedTyping()
         {
-            var msg = CreateNewMessage();
-            var paused = new paused();
-            msg.Add(paused);
-
-            xmppClient.Send(msg);
+            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Paused);
         }
+
+        /// <summary>
+        /// Notifies other user that you are active a message.
+        /// </summary>
+        public void NotifyActiveInChat()
+        {
+            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Active);
+        }
+
+        /// <summary>
+        /// Notifies other user that you are inactive a message.
+        /// </summary>
+        public void NotifyInactiveInChat()
+        {
+            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Inactive);
+        }
+
+        /// <summary>
+        /// Notifies the gone in chat.
+        /// </summary>
+        public void NotifyGoneInChat()
+        {
+            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Gone);
+        }
+
+        #endregion
 
         #region Friends
 
@@ -141,11 +125,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <returns>Is operation successful</returns>
         public bool AddToFriends(bool createChatMessage, string contactName = null)
         {
-            var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
-            rosterManager?.AddContact(new Contact() { Name = contactName ?? otherUserId.ToString(), UserId = otherUserId });
+            var rosterItem = new RosterItem(new Jid(otherUserJid), contactName ?? otherUserId.ToString());
+            quickbloxClient.ChatXmppClient.AddContact(rosterItem);
 
             SubsribeForPresence();
-            ApproveSubscribtionRequest();
 
             if (createChatMessage)
             {
@@ -225,73 +208,47 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region Private methods
         
-        private bool SendFriendsNotification(string messageText, NotificationTypes notificationType)
+        private void SendFriendsNotification(string messageText, NotificationTypes notificationType)
         {
-            var msg = CreateNewMessage();
-            var body = new body { Value = messageText };
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.AddNew(ExtraParamsList.notification_type, ((int)notificationType).ToString());
 
-            msg.Add(body, extraParams);
-            if (!xmppClient.Connected)
-            {
-                xmppClient.Connect();
-                return false;
-            }
-
-            xmppClient.Send(msg);
-            return true;
+            xmppClient.SendMessage(new Sharp.Xmpp.Jid(otherUserJid), messageText, extraParams.ToString(), null, dialogId, Sharp.Xmpp.Im.MessageType.Chat);
         }
 
 
-        private void MessagesClientOnOnMessageReceived(object sender, Message message1)
+        private void MessagesClientOnOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
-            if (message1.IsTyping)
-            {
-                OpponentStartedTyping?.Invoke(this, new EventArgs());
-            }
+            if (string.IsNullOrEmpty(messageEventArgs.Message.MessageText)) return;
 
-            if (message1.IsPausedTyping)
+            if (string.Equals(messageEventArgs.Jid.ToString() , otherUserJid) && messageEventArgs.Message.NotificationType != NotificationTypes.GroupCreate)
             {
-                OpponentPausedTyping?.Invoke(this, new EventArgs());
-            }
-
-            if (string.IsNullOrEmpty(message1.MessageText)) return;
-
-            if (message1.From.Contains(otherUserJid) && message1.NotificationType != NotificationTypes.GroupCreate)
-            {
-                MessageReceived?.Invoke(this, message1);
+                MessageReceived?.Invoke(this, messageEventArgs);
             }
         }
 
         #region Presence
 
-        private void SubsribeForPresence()
+        public void SubsribeForPresence()
         {
-            xmppClient.RefuseSubscriptionRequest(Subsc)
-            SendPresenceInformation(presence.typeEnum.subscribe);
+            xmppClient.RequestSubscription(new Sharp.Xmpp.Jid(otherUserJid));
         }
 
-        private void ApproveSubscribtionRequest()
+        public void ApproveSubscribtionRequest()
         {
-            SendPresenceInformation(presence.typeEnum.subscribed);
+            xmppClient.ApproveSubscriptionRequest(new Sharp.Xmpp.Jid(otherUserJid));
         }
 
-        private void RejectSubscribtionRequest()
+        public void RejectSubscribtionRequest()
         {
-            SendPresenceInformation(presence.typeEnum.unsubscribed);
+            xmppClient.RefuseSubscriptionRequest(new Sharp.Xmpp.Jid(otherUserJid));
         }
 
-        private void Unsubscribe()
+        public void Unsubscribe()
         {
-            SendPresenceInformation(presence.typeEnum.unsubscribe);
-        }
-
-        private void SendPresenceInformation(presence.typeEnum type)
-        {
-            xmppClient.
+            xmppClient.RevokeSubscription(new Sharp.Xmpp.Jid(otherUserJid));
         }
 
         #endregion

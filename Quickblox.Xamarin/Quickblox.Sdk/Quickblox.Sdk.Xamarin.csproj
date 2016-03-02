@@ -516,6 +516,7 @@
     <Compile Include="ICryptographicProvider.cs" />
     <Compile Include="Modules\ChatXmppModule\ChatXmppClient.cs" />
     <Compile Include="Modules\ChatXmppModule\EventHandlers\ActivityChangedEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\GroupChatManager.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\AttachmentExtraParamValue.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\Availability.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\ChatState.cs" />

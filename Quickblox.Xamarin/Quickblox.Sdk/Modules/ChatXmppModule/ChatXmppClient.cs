@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Sharp.Xmpp.Client;
 using Quickblox.Sdk.GeneralDataModel.Models;
+using System.Threading;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
@@ -302,15 +303,18 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             receivedMessage.From = messageEventArgs.Message.From.ToString();
             receivedMessage.To = messageEventArgs.Message.To.ToString();
             receivedMessage.MessageText = messageEventArgs.Message.Body;
-            receivedMessage.Subject = messageEventArgs.Message.Subject;
-            receivedMessage.Thread = messageEventArgs.Message.Thread;
-            receivedMessage.Timestamp = messageEventArgs.Message.Timestamp;
-			receivedMessage.ExtraParameter = messageEventArgs.Message.ExtraParameter;
+            //receivedMessage.Subject = messageEventArgs.Message.Subject;
+            receivedMessage.ChatDialogId = messageEventArgs.Message.Thread;
+            receivedMessage.DateSent = messageEventArgs.Message.Timestamp.Ticks / 1000;
+			//receivedMessage.ExtraParameter = messageEventArgs.Message.ExtraParameter;
 
             var wappedMessageTyp = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
-            receivedMessage.MessageType = wappedMessageTyp;
-            receivedMessage.XmlMessage = messageEventArgs.Message.ToString();
+            //receivedMessage.MessageType = wappedMessageTyp;
+            //receivedMessage.XmlMessage = messageEventArgs.Message.ToString();
 
+            receivedMessage.SenderId = wappedMessageTyp == MessageType.Groupchat ? GetQbUserIdFromGroupJid(messageEventArgs.Message.From.ToString()) : 
+                                                                                   GetQbUserIdFromJid(messageEventArgs.Message.From.ToString());
+            
             Debug.WriteLine("XMPP: ====> " + 
                             " From: " + messageEventArgs.Message.From  + 
                             " To: " + messageEventArgs.Message.To +
@@ -418,8 +422,42 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         #endregion
-        
-		#region Completed
+
+        #region Completed
+
+        public async Task ConnectAsync(int userId, string password)
+        {
+            var timeout = new TimeSpan(0, 0, 60);
+            var tcs = new TaskCompletionSource<object>();
+            Contacts = new List<RosterItem>();
+            Presences = new List<Jid>();
+
+            xmppClient = new XmppClient(quickbloxClient.ChatEndpoint, MySmallJid.ToString(), password);
+            xmppClient.StatusChanged += (sender, args) =>
+            {
+                if (tcs.Task.Status == TaskStatus.WaitingForActivation)
+                    tcs.TrySetResult(null);
+            };
+
+            this.userId = userId;
+
+            xmppClient.Tls = false;
+            xmppClient.Port = 5222;
+            xmppClient.Password = password;
+
+            SubscribeEvents(xmppClient);
+            xmppClient.Connect();
+
+            var timer = new Timer(state =>
+            {
+                var myTcs = (TaskCompletionSource<object>)state;
+                if (myTcs.Task.Status == TaskStatus.WaitingForActivation)
+                    myTcs.TrySetException(new QuickbloxSdkException("Failed to fully initialize xmpp connection because of timeout."));
+            },
+            tcs, timeout, new TimeSpan(0, 0, 0, 0, -1));
+
+            await tcs.Task;
+        }
 
         public void Connect(int userId, string password)
         {
@@ -447,14 +485,36 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.Close();
         }
 
-        public void Disconnect()
+  //      public void Disconnect()
+  //      {
+  //          xmppClient.Disconnect();
+  //      }
+
+		//public void Reconnect(){
+		//	xmppClient.Reconnect ();
+		//}
+
+        /// <summary>
+        /// Creates a private one-to-one chat manager.
+        /// </summary>
+        /// <param name="otherUserId">Another user ID</param>
+        /// <param name="dialogId">Dialog ID with another user</param>
+        /// <returns>PrivateChatManager instance.</returns>
+        public PrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId)
         {
-            xmppClient.Disconnect();
+            return new PrivateChatManager(quickbloxClient, xmppClient, otherUserId, dialogId);
         }
 
-		public void Reconnect(){
-			xmppClient.Reconnect ();
-		}
+        /// <summary>
+        /// Creates a group chat manager.
+        /// </summary>
+        /// <param name="groupJid">Group XMPP room JID.</param>
+        /// <param name="dialogId">Group dialog ID.</param>
+        /// <returns>GroupChatManager</returns>
+        public GroupChatManager GetGroupChatManager(string groupJid, string dialogId)
+        {
+            return new GroupChatManager(quickbloxClient, xmppClient, groupJid, dialogId);
+        }
 
         #endregion
 
@@ -472,7 +532,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return jid;
         }
 
-        public static int GetUserIdFromJid(string jid)
+        public static int GetQbUserIdFromJid(string jid)
         {
             var match = qbJidRegex.Match(jid);
 

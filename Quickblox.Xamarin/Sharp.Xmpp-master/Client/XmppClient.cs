@@ -747,8 +747,6 @@ namespace Sharp.Xmpp.Client {
 			jid.ThrowIfNull("jid");
 			// Create a roster item for the new contact.
 			im.AddToRoster(new RosterItem(jid, name, groups));
-			// Request a subscription from the contact.
-			im.RequestSubscription(jid);
 		}
 
 		/// <summary>
@@ -948,22 +946,33 @@ namespace Sharp.Xmpp.Client {
 			userMood.SetMood(mood, description);
 		}
 
-		/// <summary>
-		/// Sets the user's activity to the specified activity value(s).
-		/// </summary>
-		/// <param name="activity">A value from the GeneralActivity enumeration to
-		/// set the user's general activity to.</param>
-		/// <param name="specific">A value from the SpecificActivity enumeration
-		/// best describing the user's activity in more detail.</param>
-		/// <param name="description">A natural-language description of, or reason
-		/// for, the activity.</param>
-		/// <exception cref="InvalidOperationException">The XmppClient instance is not
-		/// connected to a remote host, or the XmppClient instance has not authenticated with
-		/// the XMPP server.</exception>
-		/// <exception cref="ObjectDisposedException">The XmppClient object has been
-		/// disposed.</exception>
-		/// <include file='Examples.xml' path='S22/Xmpp/Client/XmppClient[@name="SetActivity"]/*'/>
-		public void SetActivity(GeneralActivity activity, SpecificActivity specific =
+        /// <summary>
+        /// Sets the state of the chat.
+        /// </summary>
+        /// <param name="jid">The jid.</param>
+        /// <param name="chatState">State of the chat.</param>
+        public void SetChatState(Jid jid, ChatState chatState)
+        {
+            AssertValid();
+            chatStateNotifications.SetChatState(jid, chatState);
+        }
+
+        /// <summary>
+        /// Sets the user's activity to the specified activity value(s).
+        /// </summary>
+        /// <param name="activity">A value from the GeneralActivity enumeration to
+        /// set the user's general activity to.</param>
+        /// <param name="specific">A value from the SpecificActivity enumeration
+        /// best describing the user's activity in more detail.</param>
+        /// <param name="description">A natural-language description of, or reason
+        /// for, the activity.</param>
+        /// <exception cref="InvalidOperationException">The XmppClient instance is not
+        /// connected to a remote host, or the XmppClient instance has not authenticated with
+        /// the XMPP server.</exception>
+        /// <exception cref="ObjectDisposedException">The XmppClient object has been
+        /// disposed.</exception>
+        /// <include file='Examples.xml' path='S22/Xmpp/Client/XmppClient[@name="SetActivity"]/*'/>
+        public void SetActivity(GeneralActivity activity, SpecificActivity specific =
 			SpecificActivity.Other, string description = null) {
 			AssertValid();
 			userActivity.SetActivity(activity, specific, description);

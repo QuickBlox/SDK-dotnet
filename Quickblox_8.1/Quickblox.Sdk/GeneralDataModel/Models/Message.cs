@@ -84,10 +84,12 @@ namespace Quickblox.Sdk.GeneralDataModel.Models
 
         public string To { get; set; }
 
+#if !Xamarin
         public bool IsTyping { get; set; }
 
         public bool IsPausedTyping { get; set; }
+#endif
 
-        #endregion
+#endregion
     }
 }
