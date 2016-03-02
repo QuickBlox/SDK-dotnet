@@ -30,14 +30,24 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         /// <summary>
+        /// Gets the type of the message.
+        /// </summary>
+        public MessageType MessageType
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the MessageEventArgs class.
         /// </summary>
         /// <exception cref="ArgumentNullException">The jid parameter or the message
         /// parameter is null.</exception>
-        public MessageEventArgs(Jid jid, Message message)
+        public MessageEventArgs(Jid jid, Message message, MessageType messageType)
         {
             Jid = jid;
             Message = message;
+            MessageType = messageType;
         }
     }
 }

@@ -120,10 +120,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <summary>
         /// Adds other user to your roster, subsribes for his presence, and sends FriendRequest notification message.
         /// </summary>
-        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <param name="contactName">Opponents name in your contact list</param>
+        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <returns>Is operation successful</returns>
-        public bool AddToFriends(bool createChatMessage, string contactName = null)
+        public void AddToFriends(string contactName = null, bool createChatMessage = false)
         {
             var rosterItem = new RosterItem(new Jid(otherUserJid), contactName ?? otherUserId.ToString());
             quickbloxClient.ChatXmppClient.AddContact(rosterItem);
@@ -132,36 +132,28 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
             if (createChatMessage)
             {
-                return SendFriendsNotification("Contact request", NotificationTypes.FriendsRequest);
+                SendFriendsNotification("Contact request", NotificationTypes.FriendsRequest);
             }
-
-            return true;
         }
 
         /// <summary>
         /// Adds other user to your roster, accepts presence subscription request, and sends FriendAccepted notification message.
         /// </summary>
-        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <param name="contactName">Opponents name in your contact list</param>
+        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <returns>Is operation successful</returns>
-        public bool AcceptFriend(bool createChatMessage, string contactName = null)
+        public void AcceptFriend(string contactName = null, bool createChatMessage = false)
         {
-            var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
-            rosterManager?.AddContact(new Contact()
-            {
-                Name = contactName ?? otherUserId.ToString(),
-                UserId = otherUserId
-            });
+            var rosterItem = new RosterItem(new Jid(otherUserJid), contactName ?? otherUserId.ToString());
+            quickbloxClient.ChatXmppClient.AddContact(rosterItem);
 
-            SubsribeForPresence();
             ApproveSubscribtionRequest();
+            SubsribeForPresence();
 
             if (createChatMessage)
             {
-                return SendFriendsNotification("Request accepted", NotificationTypes.FriendsAccept);
+                SendFriendsNotification("Request accepted", NotificationTypes.FriendsAccept);
             }
-
-            return true;
         }
 
         /// <summary>
@@ -169,16 +161,14 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <returns>Is operation successful</returns>
-        public bool RejectFriend(bool createChatMessage)
+        public void RejectFriend(bool createChatMessage)
         {
             RejectSubscribtionRequest();
 
             if (createChatMessage)
             {
-                return SendFriendsNotification("Request rejected", NotificationTypes.FriendsReject);
+                SendFriendsNotification("Request rejected", NotificationTypes.FriendsReject);
             }
-
-            return true;
         }
 
         /// <summary>
@@ -186,20 +176,16 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <returns>Is operation successful</returns>
-        public bool DeleteFromFriends(bool createChatMessage)
+        public void DeleteFromFriends(bool createChatMessage)
         {
+            quickbloxClient.ChatXmppClient.RemoveContact(otherUserId);
+
             if (createChatMessage)
             {
-                return SendFriendsNotification("Contact removed", NotificationTypes.FriendsRemove);
+                SendFriendsNotification("Contact removed", NotificationTypes.FriendsRemove);
             }
 
-            var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
-            rosterManager?.DeleteContact(otherUserId);
-
             Unsubscribe();
-            SendPresenceInformation(presence.typeEnum.unsubscribed);
-
-            return true;
         }
 
         #endregion

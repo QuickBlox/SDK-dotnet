@@ -1,5 +1,4 @@
 ﻿using System.Xml.Linq;
-using XMPP.tags.jabber.protocol.archive;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 {

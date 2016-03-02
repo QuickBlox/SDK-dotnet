@@ -167,19 +167,21 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private void OnMessageReceived(object sender, MessageEventArgs e)
         {
-            if (e.Message.MessageType == MessageType.Headline)
+            if (e.MessageType == MessageType.Headline)
             {
-				var extraParameters = e.Message.ExtraParameter;
-				var elements = XElement.Parse(extraParameters);
+                //var extraParameters = e.Message.ExtraParameter;
+                //var elements = XElement.Parse(extraParameters);
 
-				var element = elements.Elements (XName.Get("moduleIdentifier", "jabber:client")).FirstOrDefault();
+                var elements = e.Message.ExtraParameters;
+
+                var element = elements.Elements (XName.Get("moduleIdentifier", "jabber:client")).FirstOrDefault();
 				if (element == null || element.Value != webRTCVideoChat) 
 					return;
 
 				var videoChatMessage = new VideoChatMessage ();
 
-				videoChatMessage.Caller = e.Message.From.GetUserId ();
-				videoChatMessage.Receiver = e.Message.To.GetUserId ();
+				videoChatMessage.Caller = ChatXmppClient.GetQbUserIdFromJid(e.Message.From);
+				videoChatMessage.Receiver = ChatXmppClient.GetQbUserIdFromJid(e.Message.To);
 
 				var session = elements.Elements (XName.Get("sessionID", "jabber:client")).FirstOrDefault ();
 				videoChatMessage.Guid = session != null ? session.Value : null;

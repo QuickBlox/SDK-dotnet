@@ -9,6 +9,7 @@ using System.IO;
 using Sharp.Xmpp.Client;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using System.Threading;
+using System.Xml.Linq;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
@@ -306,13 +307,14 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             //receivedMessage.Subject = messageEventArgs.Message.Subject;
             receivedMessage.ChatDialogId = messageEventArgs.Message.Thread;
             receivedMessage.DateSent = messageEventArgs.Message.Timestamp.Ticks / 1000;
-			//receivedMessage.ExtraParameter = messageEventArgs.Message.ExtraParameter;
+			
+            receivedMessage.ExtraParameters = XElement.Parse(messageEventArgs.Message.ExtraParameter);
 
-            var wappedMessageTyp = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
+            var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
             //receivedMessage.MessageType = wappedMessageTyp;
             //receivedMessage.XmlMessage = messageEventArgs.Message.ToString();
 
-            receivedMessage.SenderId = wappedMessageTyp == MessageType.Groupchat ? GetQbUserIdFromGroupJid(messageEventArgs.Message.From.ToString()) : 
+            receivedMessage.SenderId = wappedMessageType == MessageType.Groupchat ? GetQbUserIdFromGroupJid(messageEventArgs.Message.From.ToString()) : 
                                                                                    GetQbUserIdFromJid(messageEventArgs.Message.From.ToString());
             
             Debug.WriteLine("XMPP: ====> " + 
@@ -326,7 +328,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var handler = MessageReceived;
             if (handler != null)
             {
-                handler.Invoke(this, new MessageEventArgs(new Jid(messageEventArgs.Jid.ToString()), receivedMessage));
+                handler.Invoke(this, new MessageEventArgs(new Jid(messageEventArgs.Jid.ToString()), receivedMessage, wappedMessageType));
             }
         }
 

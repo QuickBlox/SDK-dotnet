@@ -156,6 +156,41 @@ namespace Quickblox.Sdk.Modules.ChatModule
         }
 
         /// <summary>
+        /// Retrieves all chat messages within particular dialog. It's only possible to read chat messages in dialog if current user id is in occupants_ids field or if dialog's type=1(PUBLIC_GROUP). Server will return dialog's chat messages sorted ascending by date_sent field. 
+        /// All retrieved chat messages will be marked as read after request. 
+        /// </summary>
+        /// <param name="dialogId">Dialog ID</param>
+        /// <returns></returns>
+        public async Task<HttpResponse<RetrieveMessagesResponse<T>>> GetMessagesAsync<T>(string dialogId) where T : Message
+        {
+            if (dialogId == null)
+                throw new ArgumentNullException("dialogId");
+
+            var retrieveMessagesRequest = new RetrieveMessagesRequest();
+            var aggregator = new FilterAggregator();
+            aggregator.Filters.Add(new FieldFilter<string>(() => new Message().ChatDialogId, dialogId));
+            retrieveMessagesRequest.Filter = aggregator;
+
+            return await GetMessagesAsync<T>(retrieveMessagesRequest);
+        }
+
+        /// <summary>
+        /// Retrieves all chat messages within particular dialog. It's only possible to read chat messages in dialog if current user id is in occupants_ids field or if dialog's type=1(PUBLIC_GROUP). Server will return dialog's chat messages sorted ascending by date_sent field. 
+        /// All retrieved chat messages will be marked as read after request. 
+        /// </summary>
+        /// <param name="retrieveMessagesRequest">Get messages info</param>
+        /// <returns></returns>
+        public async Task<HttpResponse<RetrieveMessagesResponse<T>>> GetMessagesAsync<T>(RetrieveMessagesRequest retrieveMessagesRequest) where T : Message
+        {
+            if (retrieveMessagesRequest == null)
+                throw new ArgumentNullException("retrieveMessagesRequest");
+
+            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
+            return await HttpService.GetAsync<RetrieveMessagesResponse<T>, RetrieveMessagesRequest>(this.quickbloxClient.ApiEndPoint,
+                QuickbloxMethods.GetMessagesMethod, retrieveMessagesRequest, headers);
+        }
+
+        /// <summary>
         /// Updates a chat message.
         /// It's possible to mark all messages as read/delivered - just don't pass a message id.
         /// </summary>

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Quickblox.Sdk.Converters;
+using System.Xml.Linq;
 
 namespace Quickblox.Sdk.GeneralDataModel.Models
 {
@@ -84,12 +85,14 @@ namespace Quickblox.Sdk.GeneralDataModel.Models
 
         public string To { get; set; }
 
+        public XElement ExtraParameters { get; internal set; }
+
 #if !Xamarin
         public bool IsTyping { get; set; }
 
         public bool IsPausedTyping { get; set; }
 #endif
 
-#endregion
+        #endregion
     }
 }
