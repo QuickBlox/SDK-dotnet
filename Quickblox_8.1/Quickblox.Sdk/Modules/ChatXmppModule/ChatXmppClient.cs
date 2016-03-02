@@ -150,7 +150,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var timeout = new TimeSpan(0, 0, 60);
             var tcs = new TaskCompletionSource<object>();
             XMPP.Client xmppClient = new XMPP.Client();
-            xmppClient.OnReady += (sender, args) => 
+            xmppClient.OnReady += (sender, args) =>
             {
                 if (tcs.Task.Status == TaskStatus.WaitingForActivation)
                     tcs.TrySetResult(null);
@@ -209,7 +209,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         public void ReloadContacts()
         {
-            iq iq = new iq {type = iq.typeEnum.get};
+            iq iq = new iq { type = iq.typeEnum.get };
             iq.Add(new query());
             xmppClient.Send(iq);
         }
@@ -222,7 +222,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             string jid = BuildJid(contact.UserId);
 
-            var rosterItem = new item {jid = jid, name = contact.Name};
+            var rosterItem = new item { jid = jid, name = contact.Name };
             var rosterQuery = new query();
             rosterQuery.Add(rosterItem);
             iq iq = new iq { type = iq.typeEnum.set };
@@ -239,7 +239,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             string jid = BuildJid(userId);
 
-            var rosterItem = new item { jid = jid, subscription = item.subscriptionEnum.remove};
+            var rosterItem = new item { jid = jid, subscription = item.subscriptionEnum.remove };
             var rosterQuery = new query();
             rosterQuery.Add(rosterItem);
             iq iq = new iq { type = iq.typeEnum.set };
@@ -254,7 +254,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         public void EnableMessageCarbons()
         {
             var carbonsEnable = new MessageCarbonsEnable();
-            iq iq = new iq { type = iq.typeEnum.set, id="enable1" };
+            iq iq = new iq { type = iq.typeEnum.set, id = "enable1" };
             iq.Add(carbonsEnable);
 
             xmppClient.Send(iq);
@@ -281,7 +281,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             client.Settings.AuthenticationTypes = MechanismType.Plain;
             client.Settings.Id = BuildJid(userId);
             client.Settings.Password = password;
-            
+
             client.OnReceive += ClientOnOnReceive;
             client.OnReady += (sender, args) => isReady = true;
             client.OnError +=
@@ -293,7 +293,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
             client.OnDisconnected += (sender, args) =>
             {
-                if(!isUserDisconnected)
+                if (!isUserDisconnected)
                     client.Connect();
 
                 var handler = Disconnected;
@@ -343,16 +343,16 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var forwardedMessage = messageCarbonMessageSent?.Element(ForwardedMessage.XName);
             var messageSent = forwardedMessage?.Element(XMPP.tags.jabber.client.Namespace.message);
 
-            if (messageSent != null)
-                {
+            if (messageSent != null) // message sent from this account but on a different device
+            {
                 if (CheckIsSystemMessage(messageSent))
                 {
                     OnSystemMessageSent(messageSent);
                 }
                 else
                 {
-                    OnUsualMessageSent(messageSent);   
-            }
+                    OnUsualMessageSent(messageSent);
+                }
             }
             else
             {
@@ -371,15 +371,19 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private void OnUsualMessage(message msg)
         {
-                var receivedMessage = new Message();
+            var receivedMessage = new Message();
 
             FillUsualMessageFields(msg, receivedMessage);
             FillUsualMessageExtraParamsFields(msg, receivedMessage);
             FillAttachments(msg, receivedMessage);
 
             MessageReceived?.Invoke(this, receivedMessage);
-            }
+        }
 
+        /// <summary>
+        /// Method is called when a message (not system message) was sent from this account but on a different device.
+        /// </summary>
+        /// <param name="msg">Message</param>
         private void OnUsualMessageSent(XMPP.tags.Tag msg)
         {
             var receivedMessage = new Message();
@@ -388,7 +392,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             FillUsualMessageExtraParamsFields(msg, receivedMessage);
 
             MessageSent?.Invoke(this, receivedMessage);
-                    }
+        }
 
         private void FillUsualMessageFields(XMPP.tags.Tag source, Message result)
         {
@@ -438,7 +442,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 {
                     result.RoomUpdateDate = roomUpdateDate;
                 }
-            
+
                 var deletedId = GetExtraParam(extraParams, ExtraParamsList.deleted_id);
                 if (deletedId != null)
                 {
@@ -455,8 +459,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private bool CheckIsSystemMessage(XMPP.tags.Tag msg)
         {
-            var msgType = msg.GetAttributeValue(XName.Get("type")).ToString();
-            if (msgType != message.typeEnum.headline.ToString())
+            var msgType = msg.GetAttributeValue(XName.Get("type"));
+
+            if (msgType == null || msgType.ToString() != message.typeEnum.headline.ToString())
                 return false;
 
             var extraParams = msg.Element(ExtraParams.XName);
@@ -480,6 +485,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
         }
 
+        /// <summary>
+        /// Method is called when a system message was sent from this account but on a different device.
+        /// </summary>
+        /// <param name="msg">Message</param>
         private void OnSystemMessageSent(XMPP.tags.Tag msg)
         {
             var extraParams = msg.Element(ExtraParams.XName);
@@ -531,7 +540,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                         Url = attachmentParam.GetAttributeValue(XName.Get("url"))?.ToString()
                     };
 
-                    result.Attachments = new Attachment[] {attachemnt};
+                    result.Attachments = new Attachment[] { attachemnt };
                 }
             }
         }
@@ -598,7 +607,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var receivedPresence = new Presence
             {
                 UserId = GetQbUserIdFromJid(presence.@from),
-                PresenceType = (PresenceType) presence.type
+                PresenceType = (PresenceType)presence.type
             };
 
             Presences.RemoveAll(p => p.UserId == receivedPresence.UserId);
@@ -696,7 +705,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private JidType DetermineJidType(string jid)
         {
-            if(string.IsNullOrEmpty(jid))
+            if (string.IsNullOrEmpty(jid))
                 return JidType.Unknown;
 
             var jidParts = jid.Split('@');
@@ -706,10 +715,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
             var serverPart = jidParts[1];
 
-            if(serverPart.StartsWith(quickbloxClient.MucChatEndpoint))
+            if (serverPart.StartsWith(quickbloxClient.MucChatEndpoint))
                 return JidType.Group;
 
-            if(serverPart.StartsWith(quickbloxClient.ChatEndpoint))
+            if (serverPart.StartsWith(quickbloxClient.ChatEndpoint))
                 return JidType.Private;
 
             return JidType.Unknown;
