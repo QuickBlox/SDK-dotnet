@@ -40,8 +40,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #endregion
 
-        #region IPrivateChatManager members
-
         /// <summary>
         /// Sends a message to other user.
         /// </summary>
@@ -188,11 +186,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             Unsubscribe();
         }
 
-        #endregion
 
         #endregion
 
-        #region Private methods
         
         private void SendFriendsNotification(string messageText, NotificationTypes notificationType)
         {
@@ -236,8 +232,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             xmppClient.RevokeSubscription(new Sharp.Xmpp.Jid(otherUserJid));
         }
-
-        #endregion
 
         #endregion
     }

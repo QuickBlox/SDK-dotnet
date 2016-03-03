@@ -226,6 +226,9 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\JidType.cs">
       <Link>Modules\ChatXmppModule\Models\JidType.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\SystemMessage.cs">
+      <Link>Modules\ChatXmppModule\Models\SystemMessage.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\Tag.cs">
       <Link>Modules\ChatXmppModule\Models\Tag.cs</Link>
     </Compile>
