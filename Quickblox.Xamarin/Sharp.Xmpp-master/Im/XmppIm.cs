@@ -451,7 +451,12 @@ namespace Sharp.Xmpp.Im {
             AssertValid();
             to.ThrowIfNull("to");
             from.ThrowIfNull("from");
-            Presence p = new Presence(to, from, PresenceType.Available);
+
+            var x = Xml.Element("x", "http://jabber.org/protocol/muc");
+            var history = Xml.Element("history", "http://jabber.org/protocol/muc");
+            history.Attr("maxstanzas", "0");
+            x.Child(history);
+            Presence p = new Presence(to, from, PresenceType.Available, data: x);
             SendPresence(p);
         }
 
