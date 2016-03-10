@@ -14,7 +14,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         #region Fields
 
         private IQuickbloxClient quickbloxClient;
-        private XmppClient xmppClient;
         private readonly int otherUserId;
         private readonly string otherUserJid;
         private readonly string dialogId;
@@ -28,13 +27,12 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region Ctor
 
-        internal PrivateChatManager(IQuickbloxClient quickbloxClient, XmppClient xmppClient, int otherUserId, string dialogId)
+        internal PrivateChatManager(IQuickbloxClient quickbloxClient, int otherUserId, string dialogId)
         {
             this.otherUserId = otherUserId;
             this.otherUserJid = ChatXmppClient.BuildJid(otherUserId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
             this.dialogId = dialogId;
             this.quickbloxClient = quickbloxClient;
-            this.xmppClient = xmppClient;
             quickbloxClient.ChatXmppClient.MessageReceived += MessagesClientOnOnMessageReceived;
         }
 
@@ -51,7 +49,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
 
-            xmppClient.SendMessage(new Sharp.Xmpp.Jid(otherUserJid), message, extraParams.ToString(), null, dialogId, Sharp.Xmpp.Im.MessageType.Chat);
+            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, message, extraParams.ToString(), dialogId, null);
         }
 
         /// <summary>
@@ -66,7 +64,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.Add(attachment);
 
-            xmppClient.SendMessage(new Sharp.Xmpp.Jid(otherUserJid), "Attachment", extraParams.ToString(), null, dialogId, Sharp.Xmpp.Im.MessageType.Chat);
+            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, "Attachment", extraParams.ToString(), dialogId, null);
         }
 
         #region Notify ChatState
@@ -76,7 +74,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         public void NotifyIsTyping()
         {
-            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Composing);
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Composing);
         }
 
         /// <summary>
@@ -84,7 +82,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         public void NotifyPausedTyping()
         {
-            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Paused);
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Paused);
         }
 
         /// <summary>
@@ -92,7 +90,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         public void NotifyActiveInChat()
         {
-            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Active);
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Active);
         }
 
         /// <summary>
@@ -100,7 +98,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         public void NotifyInactiveInChat()
         {
-            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Inactive);
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Inactive);
         }
 
         /// <summary>
@@ -108,7 +106,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         public void NotifyGoneInChat()
         {
-            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), Sharp.Xmpp.Extensions.ChatState.Gone);
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Gone);
         }
 
         #endregion
@@ -197,7 +195,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.AddNew(ExtraParamsList.notification_type, ((int)notificationType).ToString());
 
-            xmppClient.SendMessage(new Sharp.Xmpp.Jid(otherUserJid), messageText, extraParams.ToString(), null, dialogId, Sharp.Xmpp.Im.MessageType.Chat);
+            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, messageText, extraParams.ToString(), dialogId, null);
         }
 
 
@@ -215,22 +213,22 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         public void SubsribeForPresence()
         {
-            xmppClient.RequestSubscription(new Sharp.Xmpp.Jid(otherUserJid));
+            quickbloxClient.ChatXmppClient.SetSubscribtionStatus(otherUserJid, SubscriptionMessageType.RequestSubscription);
         }
 
         public void ApproveSubscribtionRequest()
         {
-            xmppClient.ApproveSubscriptionRequest(new Sharp.Xmpp.Jid(otherUserJid));
+            quickbloxClient.ChatXmppClient.SetSubscribtionStatus(otherUserJid, SubscriptionMessageType.ApproveSubscription);
         }
 
         public void RejectSubscribtionRequest()
         {
-            xmppClient.RefuseSubscriptionRequest(new Sharp.Xmpp.Jid(otherUserJid));
+            quickbloxClient.ChatXmppClient.SetSubscribtionStatus(otherUserJid, SubscriptionMessageType.RefuseSubscription);
         }
 
         public void Unsubscribe()
         {
-            xmppClient.RevokeSubscription(new Sharp.Xmpp.Jid(otherUserJid));
+            quickbloxClient.ChatXmppClient.SetSubscribtionStatus(otherUserJid, SubscriptionMessageType.RevokeSubscription);
         }
 
         #endregion

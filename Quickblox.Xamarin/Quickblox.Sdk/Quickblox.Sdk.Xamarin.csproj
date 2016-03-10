@@ -537,6 +537,7 @@
     <Compile Include="Modules\ChatXmppModule\Models\Status.cs" />
     <Compile Include="Modules\ChatXmppModule\EventHandlers\StatusEventHandler.cs" />
     <Compile Include="Modules\ChatXmppModule\EventHandlers\SubscriptionsEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\SubscriptionMessageType.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\SubscriptionState.cs" />
     <Compile Include="Modules\ChatXmppModule\EventHandlers\TuneEventHandler.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\TuneInformation.cs" />

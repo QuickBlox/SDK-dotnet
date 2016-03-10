@@ -585,12 +585,12 @@ namespace Sharp.Xmpp.Client {
 		/// <exception cref="ObjectDisposedException">The XmppClient object has been
 		/// disposed.</exception>
 		/// <include file='Examples.xml' path='S22/Xmpp/Client/XmppClient[@name="SendMessage-1"]/*'/>
-		public void SendMessage(Jid to, string body, string extraParamets = null, string subject = null,
+		public Message SendMessage(Jid to, string body, string extraParamets = null, string subject = null,
 			string thread = null, MessageType type = MessageType.Normal,
 			CultureInfo language = null) {
 			AssertValid();
 			to.ThrowIfNull("to");
-			im.SendMessage(to, body, extraParamets, subject, thread, type, language);
+			return im.SendMessage(to, body, extraParamets, subject, thread, type, language);
 		}
 
 		/// <summary>
@@ -605,10 +605,10 @@ namespace Sharp.Xmpp.Client {
 		/// the XMPP server.</exception>
 		/// <exception cref="ObjectDisposedException">The XmppClient object has been
 		/// disposed.</exception>
-		public void SendMessage(Message message) {
+		public Message SendMessage(Message message) {
 			AssertValid();
 			message.ThrowIfNull("message");
-			im.SendMessage(message);
+			return im.SendMessage(message);
 		}
 
         /// <summary>

@@ -400,16 +400,17 @@ namespace Sharp.Xmpp.Im {
 		/// the XMPP server.</exception>
 		/// <exception cref="ObjectDisposedException">The XmppIm object has been
 		/// disposed.</exception>
-		public void SendMessage(Jid to, string body, string extraParams = null, string subject = null,
+		public Message SendMessage(Jid to, string body, string extraParams = null, string subject = null,
 			string thread = null, MessageType type = MessageType.Normal,
 			CultureInfo language = null) {
 				AssertValid();
 				to.ThrowIfNull("to");
 				Message m = new Message(to, body, extraParams, subject, thread, type, language);
 				SendMessage(m);
+            return m;
 		}
 
-        public void SendMessage(Jid to, string extraParams, string subject = null,
+        public Message SendMessage(Jid to, string extraParams, string subject = null,
             string thread = null, MessageType type = MessageType.Normal,
             CultureInfo language = null)
         {
@@ -418,6 +419,7 @@ namespace Sharp.Xmpp.Im {
             extraParams.ThrowIfNullOrEmpty("extraParams");
             Message m = new Message(to, null, extraParams, subject, thread, type, language);
             SendMessage(m);
+            return m;
         }
 
         /// <summary>
@@ -432,7 +434,7 @@ namespace Sharp.Xmpp.Im {
         /// the XMPP server.</exception>
         /// <exception cref="ObjectDisposedException">The XmppIm object has been
         /// disposed.</exception>
-        public void SendMessage(Message message) {
+        public Message SendMessage(Message message) {
 			AssertValid();
 			message.ThrowIfNull("message");
 			// "Stamp" the sender's JID onto the message. 
@@ -444,6 +446,7 @@ namespace Sharp.Xmpp.Im {
 					filter.Output(message);
 			}
 			core.SendMessage(message);
+            return message;
 		}
 
         public void JoinToGroup(Jid to, Jid from)
