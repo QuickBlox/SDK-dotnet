@@ -208,7 +208,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             if (createChatMessage)
             {
-                return SendFriendsNotification("Contact removed", NotificationTypes.FriendsRemove);
+                SendFriendsNotification("Contact removed", NotificationTypes.FriendsRemove);
             }
 
             var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
