@@ -14,7 +14,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         private string dialogId;
         private string groupJid;
         private IQuickbloxClient quickbloxClient;
-        private XmppClient xmppClient;
 
         /// <summary>
         /// Event when a new group message is received.
@@ -136,8 +135,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <param name="nickName">User nickname in XMPP room.</param>
         public void JoinGroup(string nickName)
         {
-            string fullJid = string.Format("{0}/{1}", groupJid, nickName);
-            xmppClient.JoinToGroup(new Sharp.Xmpp.Jid(fullJid), new Sharp.Xmpp.Jid(quickbloxClient.ChatXmppClient.MyJid.ToString()));
+            quickbloxClient.ChatXmppClient.JoinToGroup(groupJid, nickName);
         }
 
         private void SendGroupInfoSystemMessage(int userId, Dialog dialogInfo)

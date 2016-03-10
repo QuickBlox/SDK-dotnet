@@ -400,24 +400,24 @@ namespace Sharp.Xmpp.Im {
 		/// the XMPP server.</exception>
 		/// <exception cref="ObjectDisposedException">The XmppIm object has been
 		/// disposed.</exception>
-		public Message SendMessage(Jid to, string body, string extraParams = null, string subject = null,
+		public Message SendMessage(Jid to, string messageId, string body, string extraParams = null, string subject = null,
 			string thread = null, MessageType type = MessageType.Normal,
 			CultureInfo language = null) {
 				AssertValid();
 				to.ThrowIfNull("to");
-				Message m = new Message(to, body, extraParams, subject, thread, type, language);
+				Message m = new Message(to, messageId, body, extraParams, subject, thread, type, language);
 				SendMessage(m);
             return m;
 		}
 
-        public Message SendMessage(Jid to, string extraParams, string subject = null,
+        public Message SendMessage(Jid to, string messageId, string extraParams, string subject = null,
             string thread = null, MessageType type = MessageType.Normal,
             CultureInfo language = null)
         {
             AssertValid();
             to.ThrowIfNull("to");
             extraParams.ThrowIfNullOrEmpty("extraParams");
-            Message m = new Message(to, null, extraParams, subject, thread, type, language);
+            Message m = new Message(to, messageId, null, extraParams, subject, thread, type, language);
             SendMessage(m);
             return m;
         }

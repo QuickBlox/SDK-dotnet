@@ -338,18 +338,20 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         public void SendMessage(int userId, string body, string extraParams, string dialogId, string subject = null, MessageType messageType = MessageType.Chat)
         {
+            var messageId = MongoObjectIdGenerator.GetNewObjectIdString();
             var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
             var jidString = BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
             var jid = new Sharp.Xmpp.Jid(jidString);
-            var message = xmppClient.SendMessage(jid, body, extraParams, subject, dialogId, wrappedMessageType);
+            var message = xmppClient.SendMessage(jid, messageId, body, extraParams, subject, dialogId, wrappedMessageType);
 
             LoggerHolder.Log(LogLevel.Debug, "XMPP: SentMessage ====> " + message.DataString);
         }
 
         public void SendMessage(string jid, string body, string extraParams, string dialogId, string subject = null, MessageType messageType = MessageType.Chat)
         {
+            var messageId = MongoObjectIdGenerator.GetNewObjectIdString();
             var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
-            var message = xmppClient.SendMessage(jid, body, extraParams, subject, dialogId, wrappedMessageType);
+            var message = xmppClient.SendMessage(messageId, jid, body, extraParams, subject, dialogId, wrappedMessageType);
 
             LoggerHolder.Log(LogLevel.Debug, "XMPP: SentMessage ====> " + message.DataString);
         }
@@ -452,6 +454,12 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         public void RemoveContact(int userId)
         {
             xmppClient.RemoveContact(new Sharp.Xmpp.Jid(BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint)));
+        }
+
+        public void JoinToGroup(string groupJid, string nickName)
+        {
+            string fullJid = string.Format("{0}/{1}", groupJid, nickName);
+            xmppClient.JoinToGroup(new Sharp.Xmpp.Jid(fullJid), new Sharp.Xmpp.Jid(quickbloxClient.ChatXmppClient.MyJid.ToString()));
         }
 
         #endregion

@@ -190,13 +190,14 @@ namespace Sharp.Xmpp.Im {
         /// the stanza.</param>
         /// <exception cref="ArgumentNullException">The to parameter is null.</exception>
         /// <exception cref="ArgumentException">The body parameter is the empty string.</exception>
-        public Message(Jid to, string body = null, string extraParams = null, string subject = null, string thread = null,
+        public Message(Jid to, string id = null, string body = null, string extraParams = null, string subject = null, string thread = null,
 			MessageType type = MessageType.Normal, CultureInfo language = null)
 			: base(to, null, null, null, language) {
 				to.ThrowIfNull("to");
 				AlternateSubjects = new XmlDictionary(element, "subject", "xml:lang");
 				AlternateBodies = new XmlDictionary(element, "body", "xml:lang");
                 ExtraParameter = extraParams;
+                Id = id;
 				Type = type;
 				Body = body;
 				Subject = subject; 
