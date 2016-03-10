@@ -80,5 +80,11 @@ namespace Quickblox.Sdk.Modules.UsersModule.Requests
         /// </summary>
         [JsonProperty("custom_data", NullValueHandling = NullValueHandling.Ignore)]
         public String CustomData { get; set; }
+
+        /// <summary>
+        /// Old user password (required only if new password provided)
+        /// </summary>
+        [JsonProperty("old_password", NullValueHandling = NullValueHandling.Ignore)]
+        public string OldPassword { get; set; }
     }
 }
