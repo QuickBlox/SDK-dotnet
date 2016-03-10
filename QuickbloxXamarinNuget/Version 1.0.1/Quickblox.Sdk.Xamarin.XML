@@ -1,0 +1,2414 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Quickblox.Sdk.Xamarin</name>
+    </assembly>
+    <members>
+        <member name="T:Quickblox.Sdk.Builder.DateTimeBuilder">
+            <summary>
+            DateTimeBuilder class.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Builder.UrlBuilder">
+            <summary>
+            UrlBuilder class.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.GeneralDataModel.Filters.FieldFilter`1.BuildFilter">
+            <summary>
+            Builds the filter.
+            </summary>
+            <returns>Formated string</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.GeneralDataModel.Filters.FieldFilterWithOperator`1.BuildFilter">
+            <summary>
+            Builds the filter.
+            </summary>
+            <returns>Formated string</returns>
+        </member>
+        <member name="T:Quickblox.Sdk.GeneralDataModel.Filters.SearchOperators">
+            <summary>
+            lt (Less Than operator), 
+            lte (Less Than or Equal to operator), 
+            gt (Greater Than operator), 
+            gte (Greater Than or Equal to operator), 
+            ne (Not Equal to operator),
+            in (Contained IN array operator), 
+            nin (Not contained IN array), 
+            all (ALL contained IN array),
+            or (OR operator),
+            ctn (Contains substring operator)
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Models.DeviceRequest.Platform">
+            <summary>
+            Platform of device, which is the source of API requests to Quickblox
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Models.DeviceRequest.Udid">
+            <summary>
+            UDID (Unique Device identifier) of device, which is the source of API requests to Quickblox. This must be anything sequence which uniquely identify particular device. This is needed to support schema: 1 User - Multiple devices.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Models.DeviceResponse.Platform">
+            <summary>
+            Platform of device, which is the source of API requests to Quickblox.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Models.DeviceResponse.Udid">
+            <summary>
+            UDID (Unique Device identifier) of device, which is the source of API requests to Quickblox. This must be anything sequence which uniquely identify particular device. This is needed to support schema: 1 User - Multiple devices.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Models.PlatformName.Platform">
+            <summary>
+            Platform of device, which is the source of API requests to Quickblox.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.GeneralDataModel.Models.DialogUpdateInfos">
+            <summary>
+            Information about what was modified in a dialog. Is sent as an extra param.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.GeneralDataModel.Models.Message">
+            <summary>
+            Message class representing message from REST API and message from XMPP.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Request.BaseRequestSettings.Headers">
+            <summary>
+            Возвращает коллекцию хедеров и их значений.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Request.ListRequest.Limit">
+            <summary>
+            Limit search results to N records. Useful for pagination. Default value - 100.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Request.ListRequest.Skip">
+            <summary>
+            Skip N records in search results. Useful for pagination. Default (if not specified): 0.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Request.ListRequest.Count">
+            <summary>
+            Count search results. Response will contain only count of records found.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Request.PagedRequestSettings.Page">
+            <summary>
+            page No  Unsigned Integer	3	Page number of the book of the results that you want to get.By default: 1
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.GeneralDataModel.Request.PagedRequestSettings.PerPage">
+            <summary>
+            per_page No  Unsigned Integer	15	The maximum number of results per page.Min: 1. Max: 100. By default: 10 
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.GeneralDataModel.Response.HttpHeadersExtensions">
+            <summary>
+            HttpHeadersExtensions class.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.GeneralDataModel.Response.HttpHeadersExtensions.SetRequestHeaders(System.Net.Http.Headers.HttpHeaders,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.Collections.Generic.IEnumerable{System.String}}})">
+            <summary>
+            Длбавляет новый заголовок и его значения в коллекцию HttpHeaders без проверки предоставленных сведений.
+            </summary>
+            <param name="httpRequestHeaders">Представляет коллекцию заголовков запроса, как определено в RFC 2616.</param>
+            <param name="headers">Коллекция заголовков и их значения, как указано в RFC 2616.</param>
+        </member>
+        <member name="F:Quickblox.Sdk.GeneralDataModel.Filter.UserOperator.Gt">
+            <summary>
+            Sample: will return users withs IDs greater than 3
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.GeneralDataModel.Filter.UserOperator.Lt">
+            <summary>
+            Sample: will return users withs IDs less than 34
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.GeneralDataModel.Filter.UserOperator.Ge">
+            <summary>
+            Sample: will return users withs IDs greater than or equal to 445
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.GeneralDataModel.Filter.UserOperator.Le">
+            <summary>
+            Sample: Will return users withs IDs less than or equal 2241
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.GeneralDataModel.Filter.UserOperator.Eq">
+            <summary>
+            Sample: Will return a user withs ID equal to 3
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.GeneralDataModel.Filter.UserOperator.Ne">
+            <summary>
+            Sample: Will return users withs IDs not equal to 3
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.GeneralDataModel.Filter.UserOperator.Between">
+            <summary>
+            Sample: Will return users withs IDs between 3 and 2241
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.GeneralDataModel.Filter.UserOperator.In">
+            <summary>
+            Sample: Will return users withs IDs 3,45,2241
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Http.HttpBase.LastRequest">
+            <summary>
+            Возварщает время последнего запроса в UTC.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.IQuickbloxClient">
+            <summary>
+            IQuickbloxClient interface.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.ContentClient">
+            <summary>
+            Content module allows to manage app contents and settings.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.AuthenticationClient">
+            <summary>
+            Authentication module allows to manage user sessions.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.ChatClient">
+            <summary>
+            Chat module allows to manage user dialogs.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.UsersClient">
+            <summary>
+            User module manages all things related to user accounts handling, authentication, account data, password reminding etc.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.NotificationClient">
+            <summary>
+            Notification module allows to manage push and email notifications to users.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.LocationClient">
+            <summary>
+            Location module allows to work with user locations.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.ChatXmppClient">
+            <summary>
+            ChatXmpp module allows users to chat with each other in private or group dialogs via XMPP protocol.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.CustomObjectsClient">
+            <summary>
+            Custom Objects module provides flexibility to define any data structure(schema) you need.
+            Schema is defined in QuickBlox Administration Panel. The schema is called Class and contains field names and their type.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.ApplicationId">
+            <summary>
+            Quickblox aplication ID.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.AuthKey">
+            <summary>
+            Authorization Key
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.AuthSecret">
+            <summary>
+            Authorization Secret
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.ApiEndPoint">
+            <summary>
+            API endpoint
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.ChatEndpoint">
+            <summary>
+            XMPP Chat endpoint
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.Token">
+            <summary>
+            Quickblox token. Must be set before calling any methods that require authentication.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.IQuickbloxClient.LastRequest">
+            <summary>
+            UTC DateTime of the last request to the server.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.IQuickbloxClient.GetAccountSettingsAsync(System.String)">
+            <summary>
+            Returns account settings (account ID, endpoints, etc.)
+            </summary>
+            <param name="accountKey">Account key from admin panel</param>
+            <returns>AccountResponse</returns>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.AuthModule.AuthenticationClient">
+            <summary>
+            Authentication module allows to manage user sessions.
+            http://quickblox.com/developers/Authentication_and_Authorization
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.AuthModule.AuthenticationClient.CreateSessionBaseAsync(Quickblox.Sdk.GeneralDataModel.Models.DeviceRequest)">
+            <summary>
+            Creates an Application session (not User seesion).
+            </summary>
+            <param name="deviceRequestRequest">Device info</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.AuthModule.AuthenticationClient.CreateSessionWithLoginAsync(System.String,System.String,System.String,System.String,System.String,System.String,Quickblox.Sdk.GeneralDataModel.Models.DeviceRequest)">
+            <summary>
+            Creates a User session.
+            </summary>
+            <param name="userLogin">User login</param>
+            <param name="userPassword">User password</param>
+            <param name="provider">Provider</param>
+            <param name="scope">Scope</param>
+            <param name="socialToken">Social Token</param>
+            <param name="socialSecret">Social secret</param>
+            <param name="deviceRequestRequest">deviceInfo</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.AuthModule.AuthenticationClient.CreateSessionWithEmailAsync(System.String,System.String,System.String,System.String,System.String,System.String,Quickblox.Sdk.GeneralDataModel.Models.DeviceRequest)">
+            <summary>
+            Creates a User session.
+            </summary>
+            <param name="userEmail">User Email</param>
+            <param name="userPassword">User password</param>
+            <param name="provider">Provider</param>
+            <param name="scope">Scope</param>
+            <param name="socialToken">Social Token</param>
+            <param name="socialSecret">Social secret</param>
+            <param name="deviceRequestRequest">deviceInfo</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.AuthModule.AuthenticationClient.CreateSessionWithSocialNetworkKey(System.String,System.String,System.String,System.String,Quickblox.Sdk.GeneralDataModel.Models.DeviceRequest)">
+            <summary>
+            Creates a User session.
+            </summary>
+            <param name="provider">Provider</param>
+            <param name="scope">Scope</param>
+            <param name="socialToken">Social Token</param>
+            <param name="socialSecret">Social secret</param>
+            <param name="deviceRequestRequest">deviceInfo</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.AuthModule.AuthenticationClient.DeleteSessionAsync(System.String)">
+            <summary>
+            Deletes a session.
+            </summary>
+            <param name="token">Session token.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.AuthModule.AuthenticationClient.GetSessionAsync">
+            <summary>
+            Returns current session.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.AuthModule.AuthenticationClient.ByLoginAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Upgrades current Application session to User session.
+            </summary>
+            <param name="login">User login</param>
+            <param name="password">User password</param>
+            <param name="provider">Privider</param>
+            <param name="scope">Scope</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.AuthModule.AuthenticationClient.ByEmailAsync(System.String,System.String,System.String,System.String)">
+            <summary>
+            Upgrades current Application session to User session.
+            </summary>
+            <param name="email">User email</param>
+            <param name="password">User password</param>
+            <param name="provider">Privider</param>
+            <param name="scope">Scope</param>
+            <returns></returns>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatModule.ChatClient">
+            <summary>
+            Chat module allows to manage user dialogs.
+            http://quickblox.com/developers/Chat
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatModule.ChatClient.CreateDialogAsync(System.String,Quickblox.Sdk.Modules.ChatModule.Models.DialogType,System.String,System.String)">
+            <summary>
+            Creates a new dialog.
+            </summary>
+            <param name="dialogName">Dialog name. Is ignored for Private dialogs.</param>
+            <param name="dialogType">Dialog type</param>
+            <param name="occupantsIds">Occupants IDs (in a string separated by comma)</param>
+            <param name="photoId">Photo upload ID.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatModule.ChatClient.GetDialogsAsync(Quickblox.Sdk.Modules.ChatModule.Requests.RetrieveDialogsRequest)">
+            <summary>
+            Returns all dialogs associated with current user
+            </summary>
+            <param name="retrieveDialogsRequest">Retrieve dialogs request info</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatModule.ChatClient.UpdateDialogAsync(Quickblox.Sdk.Modules.ChatModule.Requests.UpdateDialogRequest)">
+            <summary>
+            Updates a dialog. Works only if type=1(PUBLIC_GROUP) or 2(GROUP). 
+            Users who are in occupants_ids can update a dialog with type=2(GROUP). If type=1(PUBLIC_GROUP) - only dialog’s owner can update it. 
+            </summary>
+            <param name="updateDialogRequest">Update dialog request info</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatModule.ChatClient.DeleteDialogAsync(System.String)">
+            <summary>
+            Deletes chat dialog. Each user from dialog’s occupant_ids field can remove the dialog.
+            This doesn’t mean that this dialog will be removed completely for all the users in this dialog. It will be removed only for current user. 
+            To completely remove a dialog - pass force=1. Only owner can do it.
+            </summary>
+            <param name="dialogId">Diglod ID to be removed</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatModule.ChatClient.CreateMessageAsync(Quickblox.Sdk.Modules.ChatModule.Requests.CreateMessageRequest)">
+            <summary>
+            Creates a chat message. It’s possible to inject a new chat message to the chat history. In this case this new message won't be delivered to the recipient(s) by XMPP real time transport, it will be just added to the history. If you wont to initiates a real 'send to chat' - pass send_to_chat=1 parameter.
+            </summary>
+            <param name="createMessageRequest">Create message request info</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatModule.ChatClient.GetMessagesAsync(System.String)">
+            <summary>
+            Retrieves all chat messages within particular dialog. It's only possible to read chat messages in dialog if current user id is in occupants_ids field or if dialog's type=1(PUBLIC_GROUP). Server will return dialog's chat messages sorted ascending by date_sent field. 
+            All retrieved chat messages will be marked as read after request. 
+            </summary>
+            <param name="dialogId">Dialog ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatModule.ChatClient.GetMessagesAsync(Quickblox.Sdk.Modules.ChatModule.Requests.RetrieveMessagesRequest)">
+            <summary>
+            Retrieves all chat messages within particular dialog. It's only possible to read chat messages in dialog if current user id is in occupants_ids field or if dialog's type=1(PUBLIC_GROUP). Server will return dialog's chat messages sorted ascending by date_sent field. 
+            All retrieved chat messages will be marked as read after request. 
+            </summary>
+            <param name="retrieveMessagesRequest">Get messages info</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatModule.ChatClient.UpdateMessageAsync(Quickblox.Sdk.Modules.ChatModule.Requests.UpdateMessageRequest)">
+            <summary>
+            Updates a chat message.
+            It's possible to mark all messages as read/delivered - just don't pass a message id.
+            </summary>
+            <param name="updateMessageRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatModule.ChatClient.DeleteMessageAsync(System.String[])">
+            <summary>
+            Any user in the dialog’s occupant_ids is able to remove a message from the dialog. The message will only be removed for the current user - the message will still be viewable and in the chat history for all other users in the dialog.
+            </summary>
+            <param name="occupantIds"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatModule.Requests.UpdateDialogRequest.PullAll">
+            <summary>
+            Occupants to be removed
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatModule.Requests.UpdateDialogRequest.PushAll">
+            <summary>
+            Occupants to be added
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.ActivityChangedEventArgs.Activity">
+            <summary>
+            The general activity of the XMPP entity.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.ActivityChangedEventArgs.Specific">
+            <summary>
+            The specific activity of the XMPP entity.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.ActivityChangedEventArgs.Description">
+            <summary>
+            a natural-language description of, or reason for, the activity. This
+            may be null.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.Models.Availability">
+            <summary>
+            Defines the possible values for a user's availability status.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Availability.Offline">
+            <summary>
+            The user or resource is offline and unavailable.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Availability.Online">
+            <summary>
+            The user or resource is online and available.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Availability.Away">
+            <summary>
+            The user or resource is temporarily away.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Availability.Chat">
+            <summary>
+            The user or resource is actively interested in chatting.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Availability.DoNotDisturb">
+            <summary>
+            The user or resource is busy.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Availability.ExtendedAway">
+            <summary>
+            The user or resource is away for an extended period.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.Models.ChatState">
+            <summary>
+            Defines possible values for the chat state of an XMPP user.
+            </summary>
+            <remarks>
+            Refer to XEP-0085 for a detailed description of the different states
+            defined here.
+            </remarks>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.ChatState.Active">
+            <summary>
+            The user is actively participating in the chat session.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.ChatState.Inactive">
+            <summary>
+            The user has not been actively participating in the chat session.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.ChatState.Gone">
+            <summary>
+            The user has effectively ended their participation in the chat session.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.ChatState.Composing">
+            <summary>
+            The user is composing a message.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.ChatState.Paused">
+            <summary>
+            The user had been composing but now has stopped.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.DoingChores">
+            <summary>
+            Doing chores.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Drinking">
+            <summary>
+            Drinking.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Eating">
+            <summary>
+            Eating.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Exercising">
+            <summary>
+            Exercising (Cycling, Jogging, Swimming, etc.).
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Grooming">
+            <summary>
+            Grooming.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.HavingAppointment">
+            <summary>
+            Having an appointment.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Inactive">
+            <summary>
+            Currently inactive.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Relaxing">
+            <summary>
+            Relaxing.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Talking">
+            <summary>
+            Talking to somebody.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Traveling">
+            <summary>
+            Traveling.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Working">
+            <summary>
+            Working.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.GeneralActivity.Undefined">
+            <summary>
+            Undefined activity.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid">
+            <summary>
+            Represents the address of an XMPP entity, also known as Jabber Identifier (JID).
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.Domain">
+            <summary>
+            The domain identifier of the JID.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.Node">
+            <summary>
+            The node identifier of the JID. This may be null or empty.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.Resource">
+            <summary>
+            The resource identifier of the JID. This may be null or empty.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.IsBareJid">
+            <summary>
+            Determines whether the JID is a 'bare JID', i.e. a JID without resource
+            identifier.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.IsFullJid">
+            <summary>
+            Determines whether the JID is a 'full JID', i.e. a JID with both a node
+            and a resource identifier.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the JID class.
+            </summary>
+            <param name="jid">A string from which to construct the JID.</param>
+            <exception cref="T:System.ArgumentNullException">The jid parameter is
+            null.</exception>
+            <exception cref="T:System.ArgumentException">The jid parameter does not
+            represent a valid JID.</exception>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the JID class using the specified domain,
+            node and optionally resource.
+            </summary>
+            <param name="domain">The domain of the JID.</param>
+            <param name="node">The node of the JID.</param>
+            <param name="resource">The resource of the JID. This may be omitted.</param>
+            <exception cref="T:System.ArgumentNullException">The domain parameter is null.</exception>
+            <exception cref="T:System.ArgumentException">The domain parameter is the
+            empty string.</exception>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.op_Implicit(System.String)~Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid">
+            <summary>
+            Implicit conversion operator for type string to type Jid.
+            </summary>
+            <param name="jid">The string to convert into a Jid instance.</param>
+            <returns>A Jid instance created from the specified string.</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.GetBareJid">
+            <summary>
+            Returns a new JID instance representing the 'bare JID' constructd from
+            this JID.
+            </summary>
+            <returns>A bare JID constructed from this JID instance.</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.ToString">
+            <summary>
+            Returns a textual representation of the JID.
+            </summary>
+            <returns>A textual representation of this JID instance.</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.Equals(System.Object)">
+            <summary>
+            Determines whether the specified object is equal to this Jid
+            instance.
+            </summary>
+            <param name="obj">The object to compare with the current object.</param>
+            <returns>True if the specified object is semantically equal to this
+            Jid instance; Otherwise false.</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.GetHashCode">
+            <summary>
+            Returns the hash code of this instance.
+            </summary>
+            <returns>The hash code of this JID instance.</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.op_Equality(Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid,Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid)">
+            <summary>
+            Determines whether the specified Jid objects are equal.
+            </summary>
+            <param name="a">The first object.</param>
+            <param name="b">The second object.</param>
+            <returns>True if the specified objects are semantically equal;
+            Otherwise false.</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid.op_Inequality(Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid,Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid)">
+            <summary>
+            Determines whether the specified Jid objects are unequal.
+            </summary>
+            <param name="a">The first object.</param>
+            <param name="b">The second object.</param>
+            <returns>True if the specified objects are not semantically equal;
+            Otherwise false.</returns>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood">
+            <summary>
+            Defines possible values for the mood of an XMPP user.
+            </summary>
+            <remarks>Refer to XEP-0107 for a detailed listing and description of the
+            various mood values.</remarks>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Afraid">
+            <summary>
+            Impressed with fear or apprehension; in fear; apprehensive.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Amazed">
+            <summary>
+            Astonished; confounded with fear, surprise or wonder.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Amarous">
+            <summary>
+            Inclined to love; having a propensity to love, or to sexual enjoyment;
+            loving, fond, affectionate, passionate, lustful, sexual, etc.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Angry">
+            <summary>
+            Displaying or feeling anger, i.e., a strong feeling of displeasure, hostility
+            or antagonism towards someone or something, usually combined with an urge
+            to harm.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Annoyed">
+            <summary>
+            To be disturbed or irritated, especially by continued or repeated acts.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Anxious">
+            <summary>
+            Full of anxiety or disquietude; greatly concerned or solicitous, esp.
+            respecting something future or unknown; being in painful suspense.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Aroused">
+            <summary>
+            To be stimulated in one's feelings, especially to be sexually stimulated.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Ashamed">
+            <summary>
+            Feeling shame or guilt.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Bored">
+            <summary>
+            Suffering from boredom; uninterested, without attention.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Brave">
+            <summary>
+            Strong in the face of fear; courageous.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Calm">
+            <summary>
+            Peaceful, quiet.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Cautious">
+            <summary>
+            Taking care or caution; tentative.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Cold">
+            <summary>
+            Feeling the sensation of coldness, especially to the point of discomfort.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Confident">
+            <summary>
+            Feeling very sure of or positive about something, especially about one's
+            own capabilities.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Confused">
+            <summary>
+            Chaotic, jumbled or muddled.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Contemplative">
+            <summary>
+            Feeling introspective or thoughtful.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Contented">
+            <summary>
+            Pleased at the satisfaction of a want or desire; satisfied.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Cranky">
+            <summary>
+            Grouchy, irritable; easily upset.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Crazy">
+            <summary>
+            Feeling out of control; feeling overly excited or enthusiastic.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Creative">
+            <summary>
+            Feeling original, expressive, or imaginative.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Curious">
+            <summary>
+            Inquisitive; tending to ask questions, investigate, or explore.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Dejected">
+            <summary>
+            Feeling sad and dispirited.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Depressed">
+            <summary>
+            Severely despondent and unhappy.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Disappointed">
+            <summary>
+            Defeated of expectation or hope; let down.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Disgusted">
+            <summary>
+            Filled with disgust; irritated and out of patience.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Dismayed">
+            <summary>
+            Feeling a sudden or complete loss of courage in the face of trouble or danger.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Distracted">
+            <summary>
+            Having one's attention diverted; preoccupied.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Embarrassed">
+            <summary>
+            Having a feeling of shameful discomfort.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Envious">
+            <summary>
+            Feeling pain by the excellence or good fortune of another.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Excited">
+            <summary>
+            Having great enthusiasm.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Flirtatious">
+            <summary>
+            In the mood for flirting.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Frustrated">
+            <summary>
+            Suffering from frustration; dissatisfied, agitated, or discontented because
+            one is unable to perform an action or fulfill a desire.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Grateful">
+            <summary>
+            Feeling appreciation or thanks.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Grieving">
+            <summary>
+            Feeling very sad about something, especially something lost; mournful;
+            sorrowful.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Grumpy">
+            <summary>
+            Unhappy and irritable.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Guilty">
+            <summary>
+            Feeling responsible for wrongdoing; feeling blameworthy.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Happy">
+            <summary>
+            Experiencing the effect of favourable fortune; having the feeling arising
+            from the consciousness of well-being or of enjoyment; enjoying good of
+            any kind, as peace, tranquillity, comfort; contented; joyous.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Hopeful">
+            <summary>
+            Having a positive feeling, belief, or expectation that something wished
+            for can or will happen.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Hot">
+            <summary>
+            Feeling the sensation of heat, especially to the point of discomfort.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Humbled">
+            <summary>
+            Having or showing a modest or low estimate of one's own importance;
+            feeling lowered in dignity or importance.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Humiliated">
+            <summary>
+            Feeling deprived of dignity or self-respect.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Hungry">
+            <summary>
+            Having a physical need for food.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Hurt">
+            <summary>
+            Wounded, injured, or pained, whether physically or emotionally.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Impressed">
+            <summary>
+            Favourably affected by something or someone.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.InAwe">
+            <summary>
+            Feeling amazement at something or someone; or feeling a combination
+            of fear and reverence.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.InLove">
+            <summary>
+            Feeling strong affection, care, liking, or attraction.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Indignant">
+            <summary>
+            Showing anger or indignation, especially at something unjust or wrong.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Interested">
+            <summary>
+            Showing great attention to something or someone; having or showing
+            interest.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Intoxicated">
+            <summary>
+            Under the influence of alcohol; drunk.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Invincible">
+            <summary>
+            Feeling as if one cannot be defeated, overcome or denied.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Jealous">
+            <summary>
+            Fearful of being replaced in position or affection.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Lonely">
+            <summary>
+            Feeling isolated, empty, or abandoned.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Lost">
+            <summary>
+            Unable to find one's way, either physically or emotionally.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Lucky">
+            <summary>
+            Feeling as if one will be favored by luck.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Mean">
+            <summary>
+            Causing or intending to cause intentional harm; bearing ill will
+            towards another; cruel; malicious.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Moody">
+            <summary>
+            Given to sudden or frequent changes of mind or feeling; temperamental.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Nervous">
+            <summary>
+            Easily agitated or alarmed; apprehensive or anxious.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Neutral">
+            <summary>
+            Not having a strong mood or emotional state.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Offended">
+            <summary>
+            Feeling emotionally hurt, displeased, or insulted.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Outraged">
+            <summary>
+            Feeling resentful anger caused by an extremely violent or vicious attack,
+            or by an offensive, immoral, or indecent act.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Playful">
+            <summary>
+            Interested in play; fun, recreational, unserious, lighthearted; joking,
+            silly.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Proud">
+            <summary>
+            Feeling a sense of one's own worth or accomplishment.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Relaxed">
+            <summary>
+            Having an easy-going mood; not stressed; calm.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Relieved">
+            <summary>
+            Feeling uplifted because of the removal of stress or discomfort.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Remorseful">
+            <summary>
+            Feeling regret or sadness for doing something wrong.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Restless">
+            <summary>
+            Without rest; unable to be still or quiet; uneasy; continually moving.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Sad">
+            <summary>
+            Feeling sorrow; sorrowful, mournful.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Sarcastic">
+            <summary>
+            Mocking and ironical.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Satisfied">
+            <summary>
+            Pleased at the fulfillment of a need or desire.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Serious">
+            <summary>
+            Without humor or expression of happiness; grave in manner or disposition;
+            earnest; thoughtful; solemn.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Shocked">
+            <summary>
+            Surprised, startled, confused, or taken aback.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Shy">
+            <summary>
+            Feeling easily frightened or scared; timid; reserved or coy.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Sick">
+            <summary>
+            Feeling in poor health; ill.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Sleepy">
+            <summary>
+            Feeling the need for sleep.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Spontaneous">
+            <summary>
+            Acting without planning; natural; impulsive.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Stressed">
+            <summary>
+            Suffering emotional pressure.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Strong">
+            <summary>
+            Capable of producing great physical force; or, emotionally forceful,
+            able, determined, unyielding.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Surprised">
+            <summary>
+            Experiencing a feeling caused by something unexpected.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Thankful">
+            <summary>
+            Showing appreciation or gratitude.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Thirsty">
+            <summary>
+            Feeling the need to drink.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Tired">
+            <summary>
+            In need of rest or sleep.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Undefined">
+            <summary>
+            [Feeling any emotion not defined here.]
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Weak">
+            <summary>
+            Lacking in force or ability, either physical or emotional.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood.Worried">
+            <summary>
+            Thinking about unpleasant things that have happened or that might
+            happen; feeling afraid and unhappy.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem">
+            <summary>
+            Represents a roster item wrapper.
+            </summary>
+            <remarks>In XMPP jargon, the user's contact list is called a 'roster'.</remarks>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem.groups">
+            <summary>
+            The groups this roster item is part of.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem.Jid">
+            <summary>
+            The JID of the user this item is associated with.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem.Name">
+            <summary>
+            The nickname associated with the JID. This may be null.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem.Groups">
+            <summary>
+            The groups or categories this item is part of.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem.SubscriptionState">
+            <summary>
+            The subscription state of this item.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem.Pending">
+            <summary>
+            Determines whether the user has sent a subscription request and is
+            awaiting approval or refusal from the contact.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid,System.String,System.String[])">
+            <summary>
+            Initializes a new instance of the RosterItem class.
+            </summary>
+            <param name="jid">The JID of the user this item will be associated
+            with.</param>
+            <param name="name">The nickname with which to associate the JID.</param>
+            <param name="groups">An array of groups or categories this roster item
+            will be added to.</param>
+            <exception cref="T:System.ArgumentNullException">The jid parameter is null.</exception>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid,System.String,Quickblox.Sdk.Modules.ChatXmppModule.Models.SubscriptionState,System.Boolean,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Initializes a new instance of the RosterItem class.
+            </summary>
+            <param name="jid">The JID of the user this item will be associated
+            with.</param>
+            <param name="name">The nickname with which to associate the JID.</param>
+            <param name="state">One of the values from the SubscriptionState
+            enumeration.</param>
+            <param name="pending">True if the user has requested subscription but
+            has not received the contact's response.</param>
+            <param name="groups">An enumerable collection of groups to categorize
+            this item in.</param>
+            <exception cref="T:System.ArgumentNullException">The jid parameter is null.</exception>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.Status.Availability">
+            <summary>
+            The contact's availability.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.Status.Message">
+            <summary>
+            A user-provided description of his or her availability status.
+            </summary>
+            <remarks>If the Status instance contains multiple messages, this
+            field returns the value of the first message in the 'Messages'
+            dictionary.</remarks>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.Status.Messages">
+            <summary>
+            A dictionary of user-provided descriptions of his or her availability
+            status.
+            </summary>
+            <remarks>The keys of the dictionary are ISO 2 letter language
+            Codes denoting the language of the respective value.</remarks>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.Status.Priority">
+            <summary>
+            The priority level of the resource.
+            </summary>
+            <remarks>The priority value serves as a hint for the server
+            in stanza routing within instant messaging and presence
+            applications.</remarks>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Status.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.Availability,System.String,System.SByte,System.Globalization.CultureInfo)">
+            <summary>
+            Initializes a new instance of the Status class.
+            </summary>
+            <param name="availability">The availability state.</param>
+            <param name="message">An optional message providing a detailed
+            description of the availability state.</param>
+            <param name="priority">Provides a hint for stanza routing.</param>
+            <param name="language">The language of the description of the
+            availability state.</param>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.Status.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.Availability,System.Collections.Generic.Dictionary{System.String,System.String},System.SByte)">
+            <summary>
+            Initializes a new instance of the Status class.
+            </summary>
+            <param name="availability">The availability state.</param>
+            <param name="messages">A dictionary of messages providing detailed
+            descriptions of the availability state. The dictionary keys denote
+            the languages of the messages and must be valid ISO 2 letter language
+            codes.</param>
+            <param name="priority">Provides a hint for stanza routing.</param>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.Models.SubscriptionState">
+            <summary>
+            Wrap xmmpp subscriptions state
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.SubscriptionState.None">
+            <summary>
+            The user does not have a subscription to the contact's presence information,
+            and the contact does not have a subscription to the user's presence
+            information.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.SubscriptionState.To">
+            <summary>
+            The user has a subscription to the contact's presence information, but the
+            contact does not have a subscription to the user's presence information.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.SubscriptionState.From">
+            <summary>
+            The contact has a subscription to the user's presence information, but the
+            user does not have a subscription to the contact's presence information.
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ChatXmppModule.Models.SubscriptionState.Both">
+            <summary>
+            Both the user and the contact have subscriptions to each other's presence
+            information.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.TuneInformation.Artist">
+            <summary>
+            The artist or performer of the song or piece.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.TuneInformation.Length">
+            <summary>
+            The duration of the song or piece in seconds.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.TuneInformation.Rating">
+            <summary>
+            The user's rating of the song or piece, from 1 (lowest) to
+            10 (highest).
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.TuneInformation.Source">
+            <summary>
+            The collection (e.g., album) or other source (e.g., a band website
+            that hosts streams or audio files).
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.TuneInformation.Title">
+            <summary>
+            The title of the song or piece.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.TuneInformation.Track">
+            <summary>
+            A unique identifier for the tune; e.g., the track number within
+            a collection.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.Models.TuneInformation.Uri">
+            <summary>
+            A URI or URL pointing to information about the song, collection,
+            or artist.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.Models.TuneInformation.#ctor(System.String,System.String,System.String,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the TuneInformation class.
+            </summary>
+            <param name="title">The title of the song or piece.</param>
+            <param name="artist">The artist or performer of the song or piece.</param>
+            <param name="track"> A unique identifier for the tune; e.g., the track
+            number within a collection.</param>
+            <param name="length">The duration of the song or piece in
+            seconds.</param>
+            <param name="rating">The user's rating of the song or piece, from
+            1 (lowest) to 10 (highest).</param>
+            <param name="source">The collection (e.g., album) or other source
+            (e.g., a band website that hosts streams or audio files).</param>
+            <param name="uri">A URI or URL pointing to information about the
+            song, collection, or artist.</param>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.ChatStateChangedEventArgs">
+            <summary>
+            Provides data for the ChatStateChanged event.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.ChatStateChangedEventArgs.Jid">
+            <summary>
+            The JID of the XMPP entity that published the chat state information.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.ChatStateChangedEventArgs.ChatState">
+            <summary>
+            The chat-state of the XMPP entity.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.ChatStateChangedEventArgs.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid,Quickblox.Sdk.Modules.ChatXmppModule.Models.ChatState)">
+            <summary>
+            Initializes a new instance of the ChatStateChangedEventArgs class.
+            </summary>
+            <param name="jid">The JID of the XMPP entity that published the
+            chat-state.</param>
+            <param name="state">The chat-state of the XMPP entity with the specified
+            JID.</param>
+            <exception cref="T:System.ArgumentNullException">The jid parameter is
+            null.</exception>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.ErrorEventArgs.Reason">
+            <summary>
+            The reason why the error event was raised.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.ErrorEventArgs.Exception">
+            <summary>
+            The exception that caused the error event.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.ErrorEventArgs.#ctor(System.Exception)">
+            <summary>
+            Initializes a new instance of the ErrorEventArgs class.
+            </summary>
+            <param name="e">The exception that causes the error event.</param>
+            <exception cref="T:System.ArgumentNullException">The e parameter is null.</exception>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.MessageEventArgs">
+            <summary>
+            Provides data for the Message event.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.MessageEventArgs.Jid">
+            <summary>
+            The JID of the user or resource who sent the message.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.MessageEventArgs.Message">
+            <summary>
+            The received chat message.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.MessageEventArgs.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid,Quickblox.Sdk.Modules.ChatXmppModule.Models.Message)">
+            <summary>
+            Initializes a new instance of the MessageEventArgs class.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">The jid parameter or the message
+            parameter is null.</exception>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.MoodChangedEventArgs.Jid">
+            <summary>
+            The JID of the XMPP entity that published the mood information.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.MoodChangedEventArgs.Mood">
+            <summary>
+            The mood of the XMPP entity.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.MoodChangedEventArgs.Description">
+            <summary>
+            a natural-language description of, or reason for, the mood. This may be
+            null.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.MoodChangedEventArgs.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid,Quickblox.Sdk.Modules.ChatXmppModule.Models.Mood,System.String)">
+            <summary>
+            Initializes a new instance of the MoodChangedEventArgs class.
+            </summary>
+            <param name="jid">The JID of the XMPP entity that published the
+            mood information.</param>
+            <param name="mood">One of the values from the Mood enumeration.</param>
+            <param name="description">A natural-language description of, or
+            reason for, the mood.</param>
+            <exception cref="T:System.ArgumentNullException">The jid parameter is
+            null.</exception>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.RosterUpdatedEventArgs.Item">
+            <summary>
+            The contact that has been added to the user's roster.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.RosterUpdatedEventArgs.Removed">
+            <summary>
+            Determines whether the item has been removed from the roster or
+            added/updated.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.RosterUpdatedEventArgs.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.RosterItem,System.Boolean)">
+            <summary>
+            Initializes a new instance of the RosterUpdatedEventArgs class.
+            </summary>
+            <param name="item">The item the RosterUpdated event is being raised
+            for.</param>
+            <param name="removed">Set to true if the item is being removed from
+            the roster.</param>
+            <exception cref="T:System.ArgumentNullException">The item parameter is null.</exception>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.StatusEventArgs">
+            <summary>
+            Provides data for the Status event.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.StatusEventArgs.Jid">
+            <summary>
+            The JID of the user or resource whose status has changed.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.StatusEventArgs.Status">
+            <summary>
+            The status of the user.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.StatusEventArgs.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid,Quickblox.Sdk.Modules.ChatXmppModule.Models.Status)">
+            <summary>
+            Initializes a new instance of the StatusEventArgs class.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">The jid parameter or the status
+            parameter is null.</exception>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.TuneEventArgs">
+            <summary>
+            Provides data for the Tune event.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.TuneEventArgs.Jid">
+            <summary>
+            The JID of the XMPP entity that published the tune information.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.TuneEventArgs.Stop">
+            <summary>
+            Determines whether the XMPP entity stopped play back.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ChatXmppModule.TuneEventArgs.Information">
+            <summary>
+            Contains information about the music to which a user is listening.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ChatXmppModule.TuneEventArgs.#ctor(Quickblox.Sdk.Modules.ChatXmppModule.Models.Jid,Quickblox.Sdk.Modules.ChatXmppModule.Models.TuneInformation)">
+            <summary>
+            Initializes a new instance of the TuneEventArgs class.
+            </summary>
+            <param name="jid">The JID of the XMPP entity that published the
+            tune information.</param>
+            <param name="information">The tune information to include as part of
+            the event.</param>
+            <exception cref="T:System.ArgumentNullException">The jid parameter is
+            null.</exception>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ChatXmppModule.WebSyncClient">
+            <summary>
+            The signaling in the QuickBox WebRTC module is implemented over the XMPP protocol using QuickBlox Chat Module. 
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Quickblox.Sdk.Modules.ChatXmppModule.WebSyncClient.Call(System.String,System.String,System.String,System.Int32,System.Int32,Quickblox.Sdk.Modules.ChatXmppModule.Models.MessageType)" -->
+        <!-- Badly formed XML comment ignored for member "M:Quickblox.Sdk.Modules.ChatXmppModule.WebSyncClient.Accept(System.String,System.String,System.String,System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:Quickblox.Sdk.Modules.ChatXmppModule.WebSyncClient.Reject(System.String,System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:Quickblox.Sdk.Modules.ChatXmppModule.WebSyncClient.HangUp(System.String,System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:Quickblox.Sdk.Modules.ChatXmppModule.WebSyncClient.IceCandidates(System.String,System.Int32,System.Collections.ObjectModel.Collection{Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters.IceCandidate})" -->
+        <member name="T:Quickblox.Sdk.Modules.ContentModule.ContentClient">
+            <summary>
+            Content module allows to manage app contents and settings.
+            http://quickblox.com/developers/Content
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.ContentModule.ContentClient.quickbloxClient">
+            <summary>
+            QuickbloxClient instance. 
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.#ctor(Quickblox.Sdk.IQuickbloxClient)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Quickblox.Sdk.Modules.ContentModule.ContentClient"/> class.
+            </summary>
+            <param name="client">QuickbloxClient</param>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.CreateFileInfoAsync(Quickblox.Sdk.Modules.ContentModule.Requests.CreateFileRequest)">
+            <summary>
+            Creates an entity which is a file in a system.
+            </summary>
+            <param name="createFileRequest">The file parameter.</param>
+            <returns>Success HTTP Status Code 201</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.GetFilesAsync">
+            <summary>
+            Get list of files for the current user. The ID of the user is taken from the token specified in the request.
+            </summary>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.GetTaggedFilesAsync">
+            <summary>
+            Get list of tagged files for current user. Will be returned files which have the same tags as current user.
+            </summary>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.FileUploadAsync(Quickblox.Sdk.Modules.ContentModule.Requests.UploadFileRequest)">
+            <summary>
+            Upload a file with the params of BlobObjectAccess info to make a possibility to create items with a content.
+            </summary>
+            <param name="uploadFileRequest">The upload file request.</param>
+            <returns>Success HTTP Status Code 201</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.FileUploadCompleteAsync(System.Int32,Quickblox.Sdk.Modules.ContentModule.Requests.BlobUploadCompleteRequest)">
+            <summary>
+            Declaring file uploaded. Set file status to 'Complete'. If the specified file size does not match to the actual, the actual will be set.
+            </summary>
+            <param name="fileId">The file identifier.</param>
+            <param name="blobUploadCompleteRequest">The BLOB upload complete request.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.GetFileInfoByIdAsync(System.Int32)">
+            <summary>
+            Get information about file by ID.
+            </summary>
+            <param name="fileId">The file identifier.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.DownloadFileByUid(System.String,System.Boolean)">
+            <summary>
+            Download File (Get File as a redirect to the S3 object) by uid. 'uid' is a parameter which should be taken from the response of the request for the creating a file. To have a possibility to download a file you should set a status complete to your file firstly.
+            </summary>
+            <param name="fileGuid">The file unique identifier.</param>
+            <param name="isPublic">Is file public</param>
+            <returns>Success HTTP Status Code 301</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.DownloadFileById(System.Int32)">
+            <summary>
+            Download File (Get File as a redirect to the S3 object) by Id.
+            </summary>
+            <param name="uploadId">UploadId</param>
+            <returns>Success HTTP Status Code 301</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.GetReadOnlyFileInfoByIdAsync(System.Int32)">
+            <summary>
+            Get File by ID as BlobObjectAccess with read access. Then we can use info from params element for download file.
+            </summary>
+            <param name="fileId">The file identifier.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.EditFileByIdAsync(System.Int32,Quickblox.Sdk.Modules.ContentModule.Requests.UpdateFileByIdRequest)">
+            <summary>
+            Edit a file by ID.
+            </summary>
+            <param name="fileId">The file identifier.</param>
+            <param name="updateFileByIdRequest">The update file request parameter.</param>
+            <returns>FileInfoResponse</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.ContentClient.DeleteFileAsync(System.Int32)">
+            <summary>
+            Delete file by ID. If there are some referents to the file the number of links will be reduced by 1 after deleting. A file will be deleted in fact when the number of links will be equal to 0.
+            </summary>
+            <param name="fileId">The file identifier.</param>
+            <returns>HttpResponse</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.ContentModule.Models.BlobRequest.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Quickblox.Sdk.Modules.ContentModule.Models.BlobRequest"/> class.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ContentModule.Models.BlobRequest.ContentType">
+            <summary>
+            Mime content type.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ContentModule.Models.BlobRequest.Name">
+            <summary>
+            File name
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ContentModule.Models.BlobRequest.IsPublic">
+            <summary>
+            Blob visibility (by default: false)
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ContentModule.Models.BlobRequest.TagList">
+            <summary>
+            Should be a coma separated string with tags
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.ContentModule.Models.BlobRequest.NewId">
+            <summary>
+            Use it to update blob file.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ContentModule.Requests.CreateFileRequest">
+            <summary>
+            Create an entity which is a file in a system
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.ContentModule.Response.PostResponse">
+            <summary>
+            Parse AWS response after uploading file
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.CustomObjectModule.CustomObjectsClient.quickbloxClient">
+            <summary>
+            The quickblox client
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.CustomObjectModule.CustomObjectsClient.#ctor(Quickblox.Sdk.IQuickbloxClient)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Quickblox.Sdk.Modules.CustomObjectModule.CustomObjectsClient"/> class.
+            </summary>
+            <param name="client">The client.</param>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.CustomObjectModule.CustomObjectsClient.CustomGetRequest``1(System.String)">
+            <summary>
+            Customs get request for private API
+            </summary>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <param name="requestUri">The request URI.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.CustomObjectModule.CustomObjectsClient.CustomPostRequest``2(System.String,``1)">
+            <summary>
+            Customs post request for private API
+            </summary>
+            <typeparam name="TResult">The type of the result.</typeparam>
+            <typeparam name="TSettings">The type of the settings.</typeparam>
+            <param name="requestUri">The request URI.</param>
+            <param name="settings">The settings.</param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.CustomObjectModule.Models.CustomObjectFilter`1.BuildFilter">
+            <summary>
+            Builds the filter.
+            </summary>
+            <returns>Formated string</returns>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.LocationModule.LocationClient">
+            <summary>
+            Client present API for push
+            http://quickblox.com/developers/Location
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.LocationModule.LocationClient.quickbloxClient">
+            <summary>
+            The quickblox client
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.LocationModule.LocationClient.#ctor(Quickblox.Sdk.IQuickbloxClient)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Quickblox.Sdk.Modules.LocationModule.LocationClient"/> class.
+            </summary>
+            <param name="client">The client.</param>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.LocationModule.LocationClient.CreateGeoDataAsync(Quickblox.Sdk.Modules.LocationModule.Requests.CreateGeoDataRequest)">
+            <summary>
+            Create geodata which represent points on the earth
+            </summary>
+            <param name="createGeodataRequest">The create geodata request.</param>
+            <returns>Success HTTP Status Code 201</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.LocationModule.LocationClient.CreatePushGeoDataAsync(Quickblox.Sdk.Modules.LocationModule.Requests.CreateGeoDataWithPushRequest)">
+            <summary>
+            You can create or update geodata with sending a push notification to all users who is located in your radius.
+            </summary>
+            <param name="createGeoDataWithPushRequest">The create geo data with push request.</param>
+            <returns>Success HTTP Status Code 201</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.LocationModule.LocationClient.UpdateGeoDataAsync(System.Int32,Quickblox.Sdk.Modules.LocationModule.Requests.UpdateGeoDataRequest)">
+             <summary>
+            Update geodata
+             </summary>
+             <param name="geoDataId">The geo data identifier.</param>
+             <param name="updateGeoDataRequest">The update geo data with push request.</param>
+             <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.LocationModule.LocationClient.GetGeoDataByIdAsync(System.Int32)">
+            <summary>
+            Retrieve geodata by the identifier
+            </summary>
+            <param name="geoDataId">The geo data identifier.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.LocationModule.LocationClient.FindGeoDataAsync(Quickblox.Sdk.Modules.LocationModule.Requests.FindGeoDataRequest)">
+            <summary>
+            Retrieve all (by default) geodata for current application. The ID of the application is taken from the token which is specified in the request
+            </summary>
+            <param name="findGeoDataRequest">
+            Filters
+            The request can contain all, some or none of these parameters.If this option is set,  its value - the object to validate.
+            Filters require an exact match property values ​​with an instance of the corresponding parameter value.
+            </param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.LocationModule.LocationClient.DeleteGeoDataById(System.Int32)">
+            <summary>
+            Delete geodata by the identifier
+            </summary>
+            <param name="geoDataId">The geo data identifier.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.LocationModule.LocationClient.DeleteGeoDataByDays(System.Int32)">
+            <summary>
+            Maximum age of data that should remain in the database after a query.
+            </summary>
+            <param name="days">The days.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.LocationModule.Models.PushLocation">
+            <summary>
+            Create geodata with the location-push
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.LocationModule.Models.PushLocation.Radius">
+            <summary>
+            The distance in meters around your coordinates
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.LocationModule.Models.PushLocation.PushMessage">
+            <summary>
+            Should be Base64 encoded text.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.LocationModule.Models.PushLocation.PushEnvironment">
+            <summary>
+            Environment of the notification
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.LocationModule.Models.PushEnvironment">
+            <summary>
+            Environment of the notification
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.LocationModule.Requests.FindGeoDataRequest">
+            <summary>
+            http://quickblox.com/developers/Location#Retrieve_geodata_by_the_identifier
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.LocationModule.Requests.FindGeoDataRequest.SortBy">
+            <summary>
+            created_at	Values ​​should be sorted by date.
+            latitude Values ​​should be sorted by latitude.
+            longitude Values ​​should be sorted by longitude.
+            distance Values ​​should be sorted by the distance from the 'current_position' (is a required parameter in the request)
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.LocationModule.Requests.FindGeoDataRequest.CurrentPosition">
+            <summary>
+            The current position of the user. Used only in conjunction with the keys 'radius' (Diapasons) and 'distance' (Sort). 
+            If this option is specified, and it does not set any of these parameters - error validation. 
+            Use '%3B' instead ';'.
+            Sample format:90%3B90 (90;90)
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent"/> class.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.IsActive" -->
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.NotificationType">
+            <summary>
+            push: Push notification
+            email
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.PushType">
+            <summary>
+            Used only if notification_type == push, ignored in other cases
+            If not present - Notification will be delivered to all possible devices for specified users.Each platform will have their own standard format.See Quickblox Standard Push Notifications Formats for more information
+            If specified - Notification will be delivered to specified platform only
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.Environment">
+            <summary>
+            Environment of the notification..
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.User">
+            <summary>
+            Filter by user parameters.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.Message">
+            <summary>
+            Pushes: event[push_type] not present - should be Base64 encoded text.
+                    event[push_type] specified - should be formatted as described in QuickBlox Push Notifications Formats
+            Email:  Base64 encoded tex
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.Date">
+            <summary>
+            The date of the event. If the 'event type'=='fixed_date', the date can not be in the past.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.EndDate">
+            <summary>
+            Date of completion of the event. Can't be less than the 'date'.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.Period">
+            <summary>
+            The period of the event in seconds.
+            Possible values:
+            86400 (1 day)
+            604800 (1 week)
+            2592000 (1 month)
+            31557600 (1 year)
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.EventName">
+            <summary>
+            The name of the event. Service information. Only for the user.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.ExternalUserId">
+            <summary>
+            Should contain a string of external users' ids divided by commas.
+            </summary>
+            <value>
+            The external user identifier.
+            </value>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.CreateEvent.EventType">
+            <summary>
+            one_shot - a one-time event, which causes by an external object (the value is only valid if the 'date' is not specified)
+            fixed_date - a one-time event, which occurs at a specified 'date' (the value is valid only if the 'date' is given)
+            period_date - reusable event that occurs within a given 'period' from the initial 'date' (the value is only valid if the 'period' specified)
+            By default:
+            fixed_date, if 'date' is specified
+            period_date, if 'period' is specified
+            one_shot, if 'date' is not specified
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.EditEvent.IsActive">
+            <summary>
+            Marks event as active/inactive
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.EditEvent.Message">
+            <summary>
+            Buid message in base64 data with reqqired parameters
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.EditEvent.Date">
+            <summary>
+            The date of the event.
+            If the 'event type'=='fixed_date', the date can not be in the past.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.EditEvent.Period">
+            <summary>
+            The period of the event in seconds.
+            Possible values:
+            86400 (1 day)
+            604800 (1 week)
+            2592000 (1 month)
+            31557600 (1 year)
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.EditEvent.EventName">
+            <summary>
+            The name of the event.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.NotificationModule.Models.EventType">
+            <summary>
+            one_shot - a one-time event, which causes by an external object (the value is only valid if the 'date' is not specified)
+            fixed_date - a one-time event, which occurs at a specified 'date' (the value is valid only if the 'date' is given)
+            period_date - reusable event that occurs within a given 'period' from the initial 'date' (the value is only valid if the 'period' specified)
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.NotificationModule.Models.NotificationChannelType">
+            <summary>
+            Declare which notification channels could be used to notify user about events. Allowed values: email, apns, gcm, mpns, bbps.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.PushToken.Environment">
+            <summary>
+            Determine application mode. It allows conveniently separate development and production modes. Allowed values: development, production
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.PushToken.ClientIdentificationSequence">
+            <summary>
+            Identifies client device in 3-rd party service like APNS, GCM, BBPS or MPNS. Initially retrieved from 3-rd service and should be send to QuickBlox to let it send push notifications to the client.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.PushToken.PushTokenId">
+            <summary>
+            Generated push token identifier by quickblox server.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.Tags.TagsAny">
+            <summary>
+            Should contain a string of tags divided by commas. Recipients (users) must have at least one tag that specified in list.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.Tags.TagsAll">
+            <summary>
+            Should contain a string of tags divided by commas. Recipients (users) must exactly have only all tags that specified in list
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.Tags.TagsExclude">
+            <summary>
+            Should contain a string of tags divided by commas. Recipients (users) mustn't have tags that specified in list
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.NotificationModule.Models.TagsAny">
+            <summary>
+            Should contain a string of tags divided by commas. Recipients (users) must have at least one tag that specified in list.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.NotificationModule.Models.User.Ids">
+            <summary>
+            Should contain a string of external users' ids divided by commas.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.NotificationModule.NotificationClient">
+            <summary>
+            Push and email notifications client 
+            http://quickblox.com/developers/Messages
+            </summary>
+        </member>
+        <member name="F:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.quickbloxClient">
+            <summary>
+            The quickblox client
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.#ctor(Quickblox.Sdk.IQuickbloxClient)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Quickblox.Sdk.Modules.NotificationModule.NotificationClient"/> class.
+            </summary>
+            <param name="client">The client.</param>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.CreatePushTokenAsync(Quickblox.Sdk.Modules.NotificationModule.Requests.CreatePushTokenRequest)">
+            <summary>
+            Create push token (Token for iOS, Registration Id for Android, Uri for Windows Phone). Neеd to get the authorization token with the device parameters (platform, udid).
+            </summary>
+            <param name="сreatePushTokenRequest">The сreate push token request.</param>
+            <returns>Success HTTP Status Code 201</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.DeletePushTokenAsync(System.String)">
+            <summary>
+            Delete push token by identifier.
+            </summary>
+            <param name="pushTokenId">The push token identifier.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.CreateSubscriptionsAsync(Quickblox.Sdk.Modules.NotificationModule.Models.NotificationChannelType)">
+            <summary>
+            Сreate device based subscriptions. The authorization token should contain the device parameters. If the subscription is creating for the windows phone pushes make sure that Microsoft Push Notifications have a status "enabled" in the Web Administration Panel.
+            </summary>
+            <param name="type">Notification channel type.</param>
+            <returns>Success HTTP Status Code 201</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.CreateSubscriptionsAsync(Quickblox.Sdk.Modules.NotificationModule.Requests.CreateSubscriptionsRequest)">
+            <summary>
+            Сreate device based subscriptions. The authorization token should contain the device parameters. If the subscription is creating for the windows phone pushes make sure that Microsoft Push Notifications have a status "enabled" in the Web Administration Panel.
+            </summary>
+            <param name="createSubscriptionsRequest">Parameter for subscription request</param>
+            <returns>Success HTTP Status Code 201</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.GetSubscriptionsAsync">
+            <summary>
+            Retrieve subscriptions for the device which is specified in the authorization token.
+            </summary>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.DeleteSubscriptionsAsync(System.Int32)">
+            <summary>
+            Remove a subscription by the identifier.
+            </summary>
+            <param name="subscriptionId">The subscription identifier.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.CreateEventAsync(Quickblox.Sdk.Modules.NotificationModule.Requests.CreateEventRequest)">
+            <summary>
+            Create notification event
+            </summary>
+            <param name="сreateEventRequest">The сreate event parameter.</param>
+            <returns>Success HTTP Status Code 201</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.GetEventsAsync">
+            <summary>
+            Get all events which were created by a user specified in the authorization token.
+            </summary>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.GetEventByIdAsync(System.UInt32)">
+            <summary>
+            Retrieve event by the ID. The event specified in the request should belong to the application for which the authorization token has been received.
+            </summary>
+            <param name="eventId">The event identifier.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.EditEventAsync(System.UInt32,Quickblox.Sdk.Modules.NotificationModule.Requests.EditEventRequest)">
+            <summary>
+            Edit event by ID.
+            </summary>
+            <param name="eventId">The event identifier.</param>
+            <param name="editEventRequest">The edit event parameter.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.NotificationModule.NotificationClient.DeleteEventAsync(System.UInt32)">
+            <summary>
+            Deletes the event.
+            </summary>
+            <param name="eventId">The event identifier.</param>
+            <returns>Success HTTP Status Code 200</returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.Models.RetrieveUserFilter`1.BuildFilter">
+            <summary>
+            Builds the filter.
+            </summary>
+            <returns>Formated string</returns>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.UsersModule.Models.User">
+            <summary>
+            User that is returned in response for user sign up.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest">
+            <summary>
+            User to be used in User sign up request.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.Login">
+            <summary>
+            API User login.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.Password">
+            <summary>
+            API User password.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.Email">
+            <summary>
+            API User e-mail.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.BlobId">
+            <summary>
+            ID of associated blob (for example, API User photo).
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.ExternalUserId">
+            <summary>
+            ID of API User in external system.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.FacebookId">
+            <summary>
+            ID of API User in Facebook.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.TwitterId">
+            <summary>
+            ID of API User in Twitter.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.FullName">
+            <summary>
+            Gets or sets the full name.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.Phone">
+            <summary>
+            Gets or sets the phone.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.Website">
+            <summary>
+            Gets or sets the website.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.TagList">
+            <summary>
+            Gets or sets the tag list.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.Modules.UsersModule.Requests.UserRequest.CustomData">
+            <summary>
+            User's additional info.
+            </summary>
+        </member>
+        <member name="T:Quickblox.Sdk.Modules.UsersModule.UsersClient">
+            <summary>
+            Provide methods to User module API
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.#ctor(Quickblox.Sdk.IQuickbloxClient)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Quickblox.Sdk.Modules.UsersModule.UsersClient"/> class.
+            </summary>
+            <param name="quickbloxClient">The quickblox client.</param>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.RetrieveUsersAsync(Quickblox.Sdk.Modules.UsersModule.Requests.RetrieveUsersRequest)">
+            <summary>
+            Retrieve all Users for current account
+            </summary>
+            <param name="retrieveUsersesRequest">Filter settings</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.RetrieveUsersAsync``1(Quickblox.Sdk.Modules.UsersModule.Requests.RetrieveUsersRequest)">
+            <summary>
+            Retrieve all Users for current account. Return custom User's model that extended UserModule.Models.User class
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="retrieveUsersesRequest">Filter settings</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.SignUpUserAsync(Quickblox.Sdk.Modules.UsersModule.Requests.UserSignUpRequest)">
+            <summary>
+            API User sign up. Use for the identification of the mobile applications users. The request can contain all, some or none of the optional parameters.
+            Login, email, facebook ID, twitter ID and the external user ID should not be taken previously.
+            If you want to create a user with a some content (f.e. with a photo) you have to create a blob firstly.
+            The same tags can be used for any number of users.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.GetUserByIdAsync(System.Int32)">
+            <summary>
+            Show API User by identifier.
+            </summary>
+            <param name="userId">The user identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.GetUserByIdAsync``1(System.Int32)">
+            <summary>
+            Show API User by identifier (generic)
+            </summary>
+            <param name="userId">The user identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.GetUserByLogin(System.String)">
+            <summary>
+            Gets the user by login.
+            </summary>
+            <param name="login">The login.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.GetUserByFullNameAsync(System.String,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.Threading.CancellationToken)">
+            <summary>
+            Gets the full name of the user by.
+            </summary>
+            <param name="fullName">API User full name</param>
+            <param name="page">Page number of the book of the results that you want to get. By default: 1</param>
+            <param name="perPage">The maximum number of results per page. Min: 1. Max: 100. By default: 10</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.GetUserByFacebookIdAsync(System.Int64)">
+            <summary>
+            Search API User by Facebook identifier.
+            </summary>
+            <param name="facebookId">API User Facebook ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.GetUserByTwitterIdAsync(System.Int32)">
+            <summary>
+            Retrieve API User by Twitter identifier
+            </summary>
+            <param name="twitterId">API User Twitter ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.GetUserByEmailAsync(System.String)">
+            <summary>
+            Retrieve API User by email.
+            </summary>
+            <param name="email">API User email</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.GetUserByTagsAsync(System.String[],System.Nullable{System.UInt32},System.UInt32)">
+            <summary>
+            Search API Users by tags
+            </summary>
+            <param name="tags">API User tag(s) The maximum number of tags per user: 5.</param>
+            <param name="page">Page number of the book of the results that you want to get. By default: 1</param>
+            <param name="perPage">The maximum number of results per page. Min: 1. Max: 100. By default: 10</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.GetUserByExeternalUserIdAsync(System.Int32)">
+            <summary>
+            Retrieve API User by external user id
+            </summary>
+            <param name="externalUserId">The external user Id.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.UpdateUserAsync(System.Int32,Quickblox.Sdk.Modules.UsersModule.Requests.UpdateUserRequest)">
+            <summary>
+            Update API User by identifier
+            </summary>
+            <param name="userRequest">Agregate all user parameters</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.UpdateUserAsync``1(System.Int32,Quickblox.Sdk.Modules.UsersModule.Requests.UpdateUserRequest{``0})">
+            <summary>
+            Updates the user by Id (generic).
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="userId">The user identifier.</param>
+            <param name="userRequest">The user request.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.DeleteUserByIdAsync(System.Int32)">
+            <summary>
+            Delete API User by id
+            </summary>
+            <param name="userId">The user id.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.DeleteUserByExternalUserIdAsync(System.Int32)">
+            <summary>
+            Delete API User by external user id
+            </summary>
+            <param name="userId">The user identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Quickblox.Sdk.Modules.UsersModule.UsersClient.ResetUserPasswordByEmailAsync(System.String)">
+            <summary>
+            Reset API User password by e-mail.
+            </summary>
+            <param name="email">API User e-mail.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Quickblox.Sdk.QuickbloxClient">
+            <summary>
+            QuickbloxClient class. Primary class in this SDK.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.QuickbloxClient.#ctor(System.Int32,System.String,System.String,Quickblox.Sdk.Logger.ILogger)">
+            <summary>
+            QuickbloxClient ctor.
+            </summary>
+            <param name="applicationId">Quickblox application ID</param>
+            <param name="authKey">Auth Key</param>
+            <param name="authSecret">Auth Secret</param>
+            <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
+        </member>
+        <member name="M:Quickblox.Sdk.QuickbloxClient.#ctor(System.Int32,System.String,System.String,System.String,System.String,Quickblox.Sdk.Logger.ILogger)">
+            <summary>
+            QuickbloxClient ctor.
+            </summary>
+            <param name="applicationId">Quickblox application ID</param>
+            <param name="authKey">Auth Key</param>
+            <param name="authSecret">Auth Secret</param>
+            <param name="apiEndpoint">API endpoint</param>
+            <param name="chatEndpoint">XMPP chat endpoint</param>
+            <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
+        </member>
+        <member name="M:Quickblox.Sdk.QuickbloxClient.#ctor(System.Int32,System.String,System.String,System.String,System.String,Quickblox.Sdk.Cryptographic.ICryptographicProvider,Quickblox.Sdk.Logger.ILogger)">
+            <summary>
+            QuickbloxClient ctor.
+            </summary>
+            <param name="applicationId">Quickblox application ID</param>
+            <param name="authKey">Auth Key</param>
+            <param name="authSecret">Auth Secret</param>
+            <param name="apiEndpoint">API endpoint</param>
+            <param name="chatEndpoint">XMPP chat endpoint</param>
+            <param name="cryptographicProvider">HMAC SHA1 Cryptographic Provider</param>
+            <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.ContentClient">
+            <summary>
+            Content module allows to manage app contents and settings.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.AuthenticationClient">
+            <summary>
+            Authentication module allows to manage user sessions.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.ChatClient">
+            <summary>
+            Chat module allows to manage user dialogs.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.UsersClient">
+            <summary>
+            User module manages all things related to user accounts handling, authentication, account data, password reminding etc.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.NotificationClient">
+            <summary>
+            Notification module allows to manage push and email notifications to users.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.LocationClient">
+            <summary>
+            Location module allows to work with user locations.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.ChatXmppClient">
+            <summary>
+            ChatXmpp module allows users to chat with each other in private or group dialogs via XMPP protocol.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.CustomObjectsClient">
+            <summary>
+            Custom Objects module provides flexibility to define any data structure(schema) you need.
+            Schema is defined in QuickBlox Administration Panel. The schema is called Class and contains field names and their type.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.ApplicationId">
+            <summary>
+            Quickblox aplication ID.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.AuthKey">
+            <summary>
+            Authorization Key
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.AuthSecret">
+            <summary>
+            Authorization Secret
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.ApiEndPoint">
+            <summary>
+            API endpoint
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.ChatEndpoint">
+            <summary>
+            XMPP Chat endpoint
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.MucChatEndpoint">
+            <summary>
+            Group chats XMPP endpoint.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.Token">
+            <summary>
+            Quickblox token. Must be set before calling any methods that require authentication.
+            </summary>
+        </member>
+        <member name="P:Quickblox.Sdk.QuickbloxClient.LastRequest">
+            <summary>
+            UTC DateTime of the last request to the server.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.QuickbloxClient.GetAccountSettingsAsync(System.String)">
+            <summary>
+            Returns account settings (account ID, endpoints, etc.)
+            </summary>
+            <param name="accountKey">Account key from admin panel</param>
+            <returns>AccountResponse</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Quickblox.Sdk.Core.QuickbloxMethods.CreateRelationMethod" -->
+        <member name="T:Quickblox.Sdk.QuickbloxSdkException">
+            <summary>
+            Base Quickblox SDK exception.
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.QuickbloxSdkException.#ctor">
+            <summary>
+            Ctor
+            </summary>
+        </member>
+        <member name="M:Quickblox.Sdk.QuickbloxSdkException.#ctor(System.String)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="message">Exception message</param>
+        </member>
+        <member name="M:Quickblox.Sdk.QuickbloxSdkException.#ctor(System.String,System.Exception)">
+            <summary>
+            Ctor
+            </summary>
+            <param name="message">Exception message</param>
+            <param name="inner">Inner exception</param>
+        </member>
+        <member name="T:Quickblox.Sdk.Serializer.JsonSerializer">
+            <summary>
+            Serializer class.
+            </summary>
+        </member>
+    </members>
+</doc>
