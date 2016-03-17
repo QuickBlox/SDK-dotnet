@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
 using Quickblox.Sdk.Modules.ChatXmppModule.Models;
@@ -206,7 +207,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <returns>Is operation successful</returns>
         public bool DeleteFromFriends(bool createChatMessage)
         {
-            if (createChatMessage)
+            if (createChatMessage && quickbloxClient.ChatXmppClient.Contacts.Any(c => c.UserId == otherUserId))
             {
                 SendFriendsNotification("Contact removed", NotificationTypes.FriendsRemove);
             }
