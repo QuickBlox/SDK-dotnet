@@ -351,7 +351,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             var messageId = MongoObjectIdGenerator.GetNewObjectIdString();
             var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
-            var message = xmppClient.SendMessage(messageId, jid, body, extraParams, subject, dialogId, wrappedMessageType);
+            var message = xmppClient.SendMessage(jid, messageId, body, extraParams, subject, dialogId, wrappedMessageType);
 
             LoggerHolder.Log(LogLevel.Debug, "XMPP: SentMessage ====> " + message.DataString);
         }

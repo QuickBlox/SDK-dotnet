@@ -156,7 +156,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
 
             var userJid = ChatXmppClient.BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
-            quickbloxClient.ChatXmppClient.SendMessage(groupJid, SystemMessage.SystemMessageModuleIdentifier, extraParams.ToString(), dialogId, null, MessageType.Groupchat);
+            quickbloxClient.ChatXmppClient.SendMessage(groupJid, SystemMessage.SystemMessageModuleIdentifier, extraParams.ToString(), dialogId, null, MessageType.Headline);
         }
 
         private void NotifyAbountGroupOccupantsOnCreation(IList<int> addedOccupantsIds, DateTime groupCreationDate)
