@@ -287,8 +287,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private async void OnMessageReceivedCallback(object sender, Sharp.Xmpp.Im.MessageEventArgs messageEventArgs)
         {
-            
-
             var receivedMessage = new Message();
             receivedMessage.Id = messageEventArgs.Message.Id;
             receivedMessage.From = messageEventArgs.Message.From.ToString();
@@ -297,8 +295,18 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             //receivedMessage.Subject = messageEventArgs.Message.Subject;
             receivedMessage.ChatDialogId = messageEventArgs.Message.Thread;
             //receivedMessage.DateSent = messageEventArgs.Message.Timestamp.Ticks / 1000;
+            var extraParams = XElement.Parse(messageEventArgs.Message.ExtraParameter);
 
-            var extraParams = XElement.Parse(messageEventArgs.Message.ExtraParameter); 
+			var notificationType = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.notification_type));
+			if (notificationType != null)
+			{
+				int intValue;
+				if (int.TryParse(notificationType.Value, out intValue))
+				{
+					receivedMessage.NotificationType = (NotificationTypes)intValue;
+				}
+			}
+
             var dateSent = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.date_sent));
             if (dateSent != null)
             {
@@ -461,6 +469,12 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             string fullJid = string.Format("{0}/{1}", groupJid, nickName);
             xmppClient.JoinToGroup(new Sharp.Xmpp.Jid(fullJid), new Sharp.Xmpp.Jid(quickbloxClient.ChatXmppClient.MyJid.ToString()));
         }
+
+		public void LeaveGroup(string groupJid, string nickName)
+		{
+			string fullJid = string.Format("{0}/{1}", groupJid, nickName);
+			xmppClient.LeaveGroup(new Sharp.Xmpp.Jid(fullJid), new Sharp.Xmpp.Jid(quickbloxClient.ChatXmppClient.MyJid.ToString()));
+		}
 
         #endregion
 

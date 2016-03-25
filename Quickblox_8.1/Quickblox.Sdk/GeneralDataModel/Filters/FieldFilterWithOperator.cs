@@ -42,7 +42,7 @@ namespace Quickblox.Sdk.GeneralDataModel.Filters
                 {
                     list.Add(item);
                 }
-                var stringValue = String.Join(",", list);
+				var stringValue = String.Join("%2C", list);
                 var jsonPropertyAttribute = propertyInfo.GetCustomAttribute<JsonPropertyAttribute>();
                 return String.Format(this.FormatString, jsonPropertyAttribute.PropertyName, this._searchOperators.ToString().ToLower(), stringValue);
             }

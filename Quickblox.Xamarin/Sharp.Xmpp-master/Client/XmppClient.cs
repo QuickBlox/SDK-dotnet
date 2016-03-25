@@ -624,6 +624,19 @@ namespace Sharp.Xmpp.Client {
             im.JoinToGroup(to, from);
         }
 
+		/// <summary>
+		/// Joins to group.
+		/// </summary>
+		/// <param name="to">To.</param>
+		/// <param name="from">From.</param>
+		public void LeaveGroup(Jid to, Jid from)
+		{
+			AssertValid();
+			to.ThrowIfNull("to");
+			from.ThrowIfNull("from");
+			im.LeaveGroup(to, from);
+		}
+
         /// <summary>
         /// Sets the availability status. 
         /// </summary>
