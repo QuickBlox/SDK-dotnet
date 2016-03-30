@@ -22,6 +22,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         public string MessageText { get; set; }
 
         public NotificationTypes NotificationType { get; set; }
+
+        public string ExtraParameter { get; set; }
     }
 
     

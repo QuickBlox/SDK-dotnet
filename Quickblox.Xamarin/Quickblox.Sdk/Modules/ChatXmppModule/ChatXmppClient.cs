@@ -422,6 +422,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 FillSystemMessageFields(message, systemMessage);
             }
 
+            systemMessage.ExtraParameter = message.ExtraParameter;
+
             await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
                            " From: " + systemMessage.SenderId +
                            " Body: " + systemMessage.MessageText +
