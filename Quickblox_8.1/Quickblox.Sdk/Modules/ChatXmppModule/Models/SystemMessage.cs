@@ -7,11 +7,21 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
     /// <summary>
     /// System messages (type = headline) that are not to be saved to history
     /// </summary>
-    public abstract class SystemMessage
+    public class SystemMessage
     {
         public const string SystemMessageModuleIdentifier = "SystemNotifications";
 
+        public string Id { get; set; }
+
+        public string From { get; set; }
+
+        public string To { get; set; }
+
+        public int SenderId { get; set; }
+
         public DateTime DateSent { get; set; }
+
+        public string MessageText { get; set; }
 
         public NotificationTypes NotificationType { get; set; }
     }

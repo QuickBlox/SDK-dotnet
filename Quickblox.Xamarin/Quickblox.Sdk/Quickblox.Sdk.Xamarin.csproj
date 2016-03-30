@@ -226,6 +226,12 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\JidType.cs">
       <Link>Modules\ChatXmppModule\Models\JidType.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\MessageCarbonsEnable.cs">
+      <Link>Modules\ChatXmppModule\Models\MessageCarbonsEnable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\MessageCarbonsMessageSent.cs">
+      <Link>Modules\ChatXmppModule\Models\MessageCarbonsMessageSent.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\SystemMessage.cs">
       <Link>Modules\ChatXmppModule\Models\SystemMessage.cs</Link>
     </Compile>
@@ -519,6 +525,7 @@
     <Compile Include="ICryptographicProvider.cs" />
     <Compile Include="Modules\ChatXmppModule\ChatXmppClient.cs" />
     <Compile Include="Modules\ChatXmppModule\EventHandlers\ActivityChangedEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\SystemMessageEventHandler.cs" />
     <Compile Include="Modules\ChatXmppModule\GroupChatManager.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\AttachmentExtraParamValue.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\Availability.cs" />

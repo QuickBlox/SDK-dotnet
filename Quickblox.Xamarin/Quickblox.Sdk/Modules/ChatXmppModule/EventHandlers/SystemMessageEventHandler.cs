@@ -1,20 +1,19 @@
-﻿using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.ChatXmppModule.Models;
+﻿using Quickblox.Sdk.Modules.ChatXmppModule.Models;
 using System;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
     /// <summary>
-    /// Provide infromation about chat message
+    /// Provide infromation about system message
     /// </summary>
     /// <param name="sender">The sender.</param>
-    /// <param name="messageEventArgs">The <see cref="MessageEventArgs"/> instance containing the event data.</param>
-    public delegate void MessageEventHandler(object sender, MessageEventArgs messageEventArgs);
+    /// <param name="messageEventArgs">The <see cref="SystemMessageEventArgs"/> instance containing the event data.</param>
+    public delegate void SystemMessageEventHandler(object sender, SystemMessageEventArgs messageEventArgs);
 
     /// <summary>
 	/// Provides data for the Message event.
 	/// </summary>
-	public class MessageEventArgs : EventArgs
+	public class SystemMessageEventArgs : EventArgs
     {
         /// <summary>
         /// The JID of the user or resource who sent the message.
@@ -28,7 +27,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <summary>
         /// The received chat message.
         /// </summary>
-        public Message Message
+        public SystemMessage Message
         {
             get;
             private set;
@@ -48,7 +47,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         /// <exception cref="ArgumentNullException">The jid parameter or the message
         /// parameter is null.</exception>
-        public MessageEventArgs(Jid jid, Message message, MessageType messageType)
+        public SystemMessageEventArgs(Jid jid, SystemMessage message, MessageType messageType)
         {
             Jid = jid;
             Message = message;
