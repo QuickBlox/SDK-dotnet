@@ -425,7 +425,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
                            " From: " + systemMessage.SenderId +
                            " Body: " + systemMessage.MessageText +
-                           " DateSent " + systemMessage.DateSent +
                            " FullXmlMessage: " + message.DataString);
 
             var handler = SystemMessageReceived;
