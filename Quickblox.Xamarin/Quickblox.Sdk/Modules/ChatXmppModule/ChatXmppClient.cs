@@ -396,6 +396,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                             " DateSent " + receivedMessage.DateSent +
                             " FullXmlMessage: " + message.DataString);
 
+            receivedMessage.ExtraParameters = extraParams;
+
             var handler = MessageReceived;
             if(handler != null)
             {
@@ -422,7 +424,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 FillSystemMessageFields(message, systemMessage);
             }
 
-            systemMessage.ExtraParameter = message.ExtraParameter;
+            systemMessage.ExtraParameters = extraParams;
 
             await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
                            " From: " + systemMessage.SenderId +

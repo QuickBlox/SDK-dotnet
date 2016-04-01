@@ -1,6 +1,7 @@
 ﻿using System;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
+using System.Xml.Linq;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 {
@@ -23,7 +24,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 
         public NotificationTypes NotificationType { get; set; }
 
-        public string ExtraParameter { get; set; }
+        public XElement ExtraParameters { get; set; }
     }
 
     
