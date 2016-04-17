@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BAB0816F-0E30-4AD0-B760-90F15156CDA5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Quickblox.Sdk</RootNamespace>
+    <AssemblyName>Quickblox.Sdk</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="Diagrams\ChatClient.dgml" />
+    <None Include="Diagrams\ContentClient.dgml" />
+    <None Include="Diagrams\CoreClient.dgml" />
+    <None Include="Diagrams\HttpService.dgml" />
+    <None Include="Diagrams\LocationClient.dgml" />
+    <None Include="Diagrams\MessagesModule.cd" />
+    <None Include="Diagrams\NotificationModule%28push%29.dgml" />
+    <None Include="Diagrams\QuickbloxClient.dgml" />
+    <None Include="Diagrams\UserClient.dgml" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AsyncLock\AsyncLock.cs" />
+    <Compile Include="Builder\DateTimeBuilder.cs" />
+    <Compile Include="Builder\RequestHeadersBuilder.cs" />
+    <Compile Include="Builder\UrlBuilder.cs" />
+    <Compile Include="Converters\StringIntListConverter.cs" />
+    <Compile Include="Cryptographic\ICryptographicProvider.cs" />
+    <Compile Include="GeneralDataModel\Filters\FieldFilter.cs" />
+    <Compile Include="GeneralDataModel\Filters\FieldFilterWithOperator.cs" />
+    <Compile Include="GeneralDataModel\Filters\Filter.cs" />
+    <Compile Include="GeneralDataModel\Filters\FilterAggregator.cs" />
+    <Compile Include="GeneralDataModel\Filters\SearchOperators.cs" />
+    <Compile Include="GeneralDataModel\Filters\SortFilter.cs" />
+    <Compile Include="GeneralDataModel\Filters\SortOperator.cs" />
+    <Compile Include="GeneralDataModel\Models\Attachment.cs" />
+    <Compile Include="GeneralDataModel\Models\Device.cs" />
+    <Compile Include="GeneralDataModel\Models\DialogUpdateInfos.cs" />
+    <Compile Include="GeneralDataModel\Models\Message.cs" />
+    <Compile Include="GeneralDataModel\Models\NotificationTypes.cs" />
+    <Compile Include="GeneralDataModel\Request\BaseRequestSettings.cs" />
+    <Compile Include="GeneralDataModel\Request\ListRequest.cs" />
+    <Compile Include="GeneralDataModel\Request\PagedRequestSettings.cs" />
+    <Compile Include="GeneralDataModel\Response\Error.cs" />
+    <Compile Include="GeneralDataModel\Response\ErrorResponse.cs" />
+    <Compile Include="GeneralDataModel\Response\HttpResponse.cs" />
+    <Compile Include="GeneralDataModel\Response\ListResponse.cs" />
+    <Compile Include="GeneralDataModel\Response\PagedResponse.cs" />
+    <Compile Include="Http\BytesContent.cs" />
+    <Compile Include="Http\HttpBase.cs" />
+    <Compile Include="Http\HttpHeadersExtensions.cs" />
+    <Compile Include="Http\HttpService.cs" />
+    <Compile Include="IQuickbloxClient.cs" />
+    <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\LoggerHolder.cs" />
+    <Compile Include="Modules\AuthModule\AuthenticationClient.cs" />
+    <Compile Include="Modules\AuthModule\Models\FullUser.cs" />
+    <Compile Include="Modules\AuthModule\Models\Session.cs" />
+    <Compile Include="Modules\AuthModule\Models\SocialNetworkKey.cs" />
+    <Compile Include="Modules\AuthModule\Models\SocialScope.cs" />
+    <Compile Include="Modules\AuthModule\Models\User.cs" />
+    <Compile Include="Modules\AuthModule\Requests\LoginRequest.cs" />
+    <Compile Include="Modules\AuthModule\Requests\SessionRequest.cs" />
+    <Compile Include="Modules\AuthModule\Response\AccountResponse.cs" />
+    <Compile Include="Modules\AuthModule\Response\LoginResponse.cs" />
+    <Compile Include="Modules\AuthModule\Response\SessionResponse.cs" />
+    <Compile Include="Modules\ChatModule\ChatClient.cs" />
+    <Compile Include="Modules\ChatModule\Models\Dialog.cs" />
+    <Compile Include="Modules\ChatModule\Models\DialogType.cs" />
+    <Compile Include="Modules\ChatModule\Requests\CreateDialogRequest.cs" />
+    <Compile Include="Modules\ChatModule\Requests\CreateMessageRequest.cs" />
+    <Compile Include="Modules\ChatModule\Requests\RetrieveDialogsRequest.cs" />
+    <Compile Include="Modules\ChatModule\Requests\RetrieveMessagesRequest.cs" />
+    <Compile Include="Modules\ChatModule\Requests\UpdateDialogRequest.cs" />
+    <Compile Include="Modules\ChatModule\Requests\UpdateMessageRequest.cs" />
+    <Compile Include="Modules\ChatModule\Responses\CreateMessageResponse.cs" />
+    <Compile Include="Modules\ChatModule\Responses\DialogResponse.cs" />
+    <Compile Include="Modules\ChatModule\Responses\RetrieveDialogsResponse.cs" />
+    <Compile Include="Modules\ChatModule\Responses\RetrieveMessagesResponse.cs" />
+    <Compile Include="Modules\ChatModule\Responses\UpdateDialogResponse.cs" />
+    <Compile Include="Modules\ContentModule\BlobUploadInfo.cs" />
+    <Compile Include="Modules\ContentModule\ContentClient.cs" />
+    <Compile Include="Modules\ContentModule\ContentClientHelper.cs" />
+    <Compile Include="Modules\ContentModule\ImageUploadResult.cs" />
+    <Compile Include="Modules\ContentModule\Models\Blob.cs" />
+    <Compile Include="Modules\ContentModule\Models\BlobObjectAccess.cs" />
+    <Compile Include="Modules\ContentModule\Models\BlobRequest.cs" />
+    <Compile Include="Modules\ContentModule\Models\BlobUploadSize.cs" />
+    <Compile Include="Modules\ContentModule\Requests\BlobUploadCompleteRequest.cs" />
+    <Compile Include="Modules\ContentModule\Requests\CreateFileRequest.cs" />
+    <Compile Include="Modules\ContentModule\Requests\GetBlobObjectByIdRequest.cs" />
+    <Compile Include="Modules\ContentModule\Requests\UpdateFileByIdRequest.cs" />
+    <Compile Include="Modules\ContentModule\Requests\UploadFileRequest.cs" />
+    <Compile Include="Modules\ContentModule\Response\FileInfoResponse.cs" />
+    <Compile Include="Modules\ContentModule\Response\FilesPagedResponse.cs" />
+    <Compile Include="Modules\ContentModule\Response\PostResponse.cs" />
+    <Compile Include="Modules\ContentModule\Response\ReadOnlyAccessResponse.cs" />
+    <Compile Include="Modules\CustomObjectModule\CustomObjectsClient.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\BaseCustomObject.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\CustomObjectFilter.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\CustomObjectOperator.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\NotFoundsItems.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\Permissions.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\RetriveCustomObjectsWithFilter.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\SuccessfullyDeleted.cs" />
+    <Compile Include="Modules\CustomObjectModule\Models\WrongPermissions.cs" />
+    <Compile Include="Modules\CustomObjectModule\Requests\CreateCustomObjectRequest.cs" />
+    <Compile Include="Modules\CustomObjectModule\Requests\UpdateCustomObjectRequest.cs" />
+    <Compile Include="Modules\CustomObjectModule\Responses\MultipleDeletesResponse.cs" />
+    <Compile Include="Modules\CustomObjectModule\Responses\RetriveCustomObjectsResponce.cs" />
+    <Compile Include="Modules\LocationModule\LocationClient.cs" />
+    <Compile Include="Modules\LocationModule\Models\GeoRect.cs" />
+    <Compile Include="Modules\LocationModule\Models\InfoLocation.cs" />
+    <Compile Include="Modules\LocationModule\Models\Location.cs" />
+    <Compile Include="Modules\LocationModule\Models\PushLocation.cs" />
+    <Compile Include="Modules\LocationModule\Models\UserInfoLocation.cs" />
+    <Compile Include="Modules\LocationModule\Requests\CreateGeodataRequest.cs" />
+    <Compile Include="Modules\LocationModule\Requests\CreateGeoDataWithPushRequest.cs" />
+    <Compile Include="Modules\LocationModule\Requests\FindGeoDataRequest.cs" />
+    <Compile Include="Modules\LocationModule\Requests\UpdateGeoDataRequest.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDataListResponse.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDataResponse.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDataWithUserResponse.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDatumResponse.cs" />
+    <Compile Include="Modules\LocationModule\Responses\GeoDatumWithUserResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Models\CreateEvent.cs" />
+    <Compile Include="Modules\NotificationModule\Models\EditEvent.cs" />
+    <Compile Include="Modules\NotificationModule\Models\Event.cs" />
+    <Compile Include="Modules\NotificationModule\Models\EventItem.cs" />
+    <Compile Include="Modules\NotificationModule\Models\EventType.cs" />
+    <Compile Include="Modules\NotificationModule\Models\IMessage.cs" />
+    <Compile Include="Modules\NotificationModule\Models\MessageConverter.cs" />
+    <Compile Include="Modules\NotificationModule\Models\NotificationChannel.cs" />
+    <Compile Include="Modules\NotificationModule\Models\NotificationChannelType.cs" />
+    <Compile Include="Modules\NotificationModule\Models\NotificationType.cs" />
+    <Compile Include="Modules\NotificationModule\Models\PushMessage.cs" />
+    <Compile Include="Modules\NotificationModule\Models\PushToken.cs" />
+    <Compile Include="Modules\NotificationModule\Models\PushType.cs" />
+    <Compile Include="Modules\NotificationModule\Models\SimplePushMessage.cs" />
+    <Compile Include="Modules\NotificationModule\Models\SubscribersSelector.cs" />
+    <Compile Include="Modules\NotificationModule\Models\Subscription.cs" />
+    <Compile Include="Modules\NotificationModule\Models\Tags.cs" />
+    <Compile Include="Modules\NotificationModule\Models\TagsAny.cs" />
+    <Compile Include="Modules\NotificationModule\Models\User.cs" />
+    <Compile Include="Modules\NotificationModule\Models\UserWithTags.cs" />
+    <Compile Include="Modules\NotificationModule\NotificationClient.cs" />
+    <Compile Include="Modules\NotificationModule\Requests\CreateEventRequest.cs" />
+    <Compile Include="Modules\NotificationModule\Requests\CreatePushTokenRequest.cs" />
+    <Compile Include="Modules\NotificationModule\Requests\CreateSubscriptionsRequest.cs" />
+    <Compile Include="Modules\NotificationModule\Requests\EditEventRequest.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\CreatePushTokenResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\CreateSubscriptionResponseItem.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\EventResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\GetSubscriptionResponse.cs" />
+    <Compile Include="Modules\NotificationModule\Responses\GetSubscriptionsResponse.cs" />
+    <Compile Include="Modules\UsersModule\Models\CustomData.cs" />
+    <Compile Include="Modules\UsersModule\Models\RetrieveUserFilter.cs" />
+    <Compile Include="Modules\UsersModule\Models\User.cs" />
+    <Compile Include="Modules\UsersModule\Models\UserOperator.cs" />
+    <Compile Include="Modules\UsersModule\Models\UserSortFilter.cs" />
+    <Compile Include="Modules\UsersModule\Requests\RetrieveUsersRequest.cs" />
+    <Compile Include="Modules\UsersModule\Requests\UpdateUserRequest.cs" />
+    <Compile Include="Modules\UsersModule\Requests\UserRequest.cs" />
+    <Compile Include="Modules\UsersModule\Requests\UserRequestWithTag.cs" />
+    <Compile Include="Modules\UsersModule\Requests\UserSignUpRequest.cs" />
+    <Compile Include="Modules\UsersModule\Responses\RetrieveUsersResponse.cs" />
+    <Compile Include="Modules\UsersModule\Responses\UserResponse.cs" />
+    <Compile Include="Modules\UsersModule\UsersClient.cs" />
+    <Compile Include="NamespaceDoc.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuickbloxClient.cs" />
+    <Compile Include="QuickbloxMethods.cs" />
+    <Compile Include="QuickbloxSdkException.cs" />
+    <Compile Include="Serializer\FactorySerializer.cs" />
+    <Compile Include="Serializer\IFactorySerializer.cs" />
+    <Compile Include="Serializer\ISerializer.cs" />
+    <Compile Include="Serializer\JsonSerializer.cs" />
+    <Compile Include="Serializer\NewtonsoftJsonSerializer.cs" />
+    <Compile Include="Serializer\XmlSerializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
