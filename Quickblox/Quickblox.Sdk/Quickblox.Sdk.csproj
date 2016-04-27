@@ -105,6 +105,20 @@
     <Compile Include="Modules\ChatModule\Responses\RetrieveDialogsResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\RetrieveMessagesResponse.cs" />
     <Compile Include="Modules\ChatModule\Responses\UpdateDialogResponse.cs" />
+    <Compile Include="Modules\ChatXmppModule\Interfaces\IChatXmppClient.cs" />
+    <Compile Include="Modules\ChatXmppModule\Interfaces\IGroupChatManager.cs" />
+    <Compile Include="Modules\ChatXmppModule\Interfaces\IPrivateChatManager.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\AttachmentTag.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\Contact.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\ExtraParams.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\JidType.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\MessageCarbonsEnable.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\MessageCarbonsMessageSent.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\Presence.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\PresenceType.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\SystemMessage.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\Tag.cs" />
+    <Compile Include="Modules\ChatXmppModule\Models\X.cs" />
     <Compile Include="Modules\ContentModule\BlobUploadInfo.cs" />
     <Compile Include="Modules\ContentModule\ContentClient.cs" />
     <Compile Include="Modules\ContentModule\ContentClientHelper.cs" />
@@ -210,6 +224,12 @@
       <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xmpp\Xmpp.csproj">
+      <Project>{4614a99c-9800-4f59-acaf-b4d8106c937c}</Project>
+      <Name>Xmpp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
