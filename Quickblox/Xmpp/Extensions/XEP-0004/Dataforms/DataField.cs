@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp.Extensions.Dataforms
+namespace Xmpp.Extensions.Dataforms
 {
     /// <summary>
     /// The base class from which all implementations of data-fields must derive.

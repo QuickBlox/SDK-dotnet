@@ -1,10 +1,10 @@
-﻿using Sharp.Xmpp.Core;
-using Sharp.Xmpp.Im;
+﻿using Xmpp.Core;
+using Xmpp.Im;
 using System;
 using System.Collections.Generic;
 using System.Net;
 
-namespace Sharp.Xmpp.Extensions
+namespace Xmpp.Extensions
 {
     /// <summary>
     /// Implements the 'Server IP Check' extension as defined in XEP-0279.
@@ -60,7 +60,7 @@ namespace Sharp.Xmpp.Extensions
         /// error condition.</exception>
         /// <exception cref="XmppException">The server returned invalid data or another
         /// unspecified XMPP error occurred.</exception>
-        public IPAddress GetExternalAddress()
+        public string GetExternalAddress()
         {
             if (!ecapa.Supports(im.Jid.Domain, Extension.ServerIpCheck))
             {
@@ -75,16 +75,7 @@ namespace Sharp.Xmpp.Extensions
             var address = iq.Data.Element("address");
             if (address == null || address.Element("ip") == null)
                 throw new XmppException("Erroneous IQ response.");
-            string ip = address.Element("ip").Value;
-            try
-            {
-                return IPAddress.Parse(ip);
-            }
-            catch (Exception e)
-            {
-                throw new XmppException("The returned address is not a valid IP " +
-                    "address.", e);
-            }
+            return address.Element("ip").Value;
         }
 
         /// <summary>

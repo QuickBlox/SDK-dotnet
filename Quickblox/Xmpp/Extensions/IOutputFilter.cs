@@ -1,6 +1,6 @@
-﻿using Sharp.Xmpp.Core;
+﻿using Xmpp.Core;
 
-namespace Sharp.Xmpp.Extensions
+namespace Xmpp.Extensions
 {
     /// <summary>
     /// Represents an extension that filters outgoing stanzas.

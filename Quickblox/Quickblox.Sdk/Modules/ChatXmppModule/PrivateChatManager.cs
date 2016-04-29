@@ -1,22 +1,19 @@
-﻿using System;
-using System.Linq;
-using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
+﻿using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatXmppModule.Models;
-using XMPP.tags.jabber.client;
-using XMPP.tags.jabber.protocol.chatstates;
+using Sharp.Xmpp.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
-    /// <summary>
-    /// Manager for one-to-one private chats.
-    /// </summary>
-    public class PrivateChatManager : IPrivateChatManager
+    public class PrivateChatManager
     {
         #region Fields
 
         private IQuickbloxClient quickbloxClient;
-        private XMPP.Client xmppClient;
         private readonly int otherUserId;
         private readonly string otherUserJid;
         private readonly string dialogId;
@@ -24,60 +21,35 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         #endregion
 
         /// <summary>
-        /// Event when other user is typing.
-        /// </summary>
-        public event EventHandler OpponentStartedTyping;
-
-        /// <summary>
-        /// Event when other user has stopped typing.
-        /// </summary>
-        public event EventHandler OpponentPausedTyping;
-
-        /// <summary>
         /// Event when a new message is received.
         /// </summary>
-        public event EventHandler<Message> MessageReceived;
+        public event MessageEventHandler MessageReceived;
 
         #region Ctor
 
-        internal PrivateChatManager(IQuickbloxClient quickbloxClient, XMPP.Client xmppClient, int otherUserId, string dialogId)
+        internal PrivateChatManager(IQuickbloxClient quickbloxClient, int otherUserId, string dialogId)
         {
             this.otherUserId = otherUserId;
-            this.otherUserJid = string.Format("{0}-{1}@{2}", otherUserId, quickbloxClient.ChatXmppClient.ApplicationId, quickbloxClient.ChatXmppClient.ChatEndpoint);
+            this.otherUserJid = ChatXmppClient.BuildJid(otherUserId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
             this.dialogId = dialogId;
             this.quickbloxClient = quickbloxClient;
-            this.xmppClient = xmppClient;
             quickbloxClient.ChatXmppClient.MessageReceived += MessagesClientOnOnMessageReceived;
         }
 
         #endregion
-
-        #region IPrivateChatManager members
 
         /// <summary>
         /// Sends a message to other user.
         /// </summary>
         /// <param name="message">Message text</param>
         /// <returns>Is operation successful</returns>
-        public bool SendMessage(string message)
+        public void SendMessage(string message)
         {
-            var msg = CreateNewMessage();
-
-            var body = new body {Value = message};
-            
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
-            
-            msg.Add(body, extraParams);
-            if (!xmppClient.Connected)
-            {
-                xmppClient.Connect();
-                return false;
-            }
 
-            xmppClient.Send(msg);
-            return true;
+            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, message, extraParams.ToString(), dialogId, null);
         }
 
         /// <summary>
@@ -85,102 +57,99 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         /// <param name="attachment">Attachment</param>
         /// <returns></returns>
-        public bool SendAttachemnt(AttachmentTag attachment)
+        public void SendAttachemnt(AttachmentTag attachment)
         {
-            var msg = CreateNewMessage();
-
-            var body = new body { Value = "Attachment" };
-
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.Add(attachment);
 
-            msg.Add(body, extraParams);
-
-            if (!xmppClient.Connected)
-            {
-                xmppClient.Connect();
-                return false;
-            }
-
-            xmppClient.Send(msg);
-
-            return true;
+            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, "Attachment", extraParams.ToString(), dialogId, null);
         }
 
+        #region Notify ChatState
+
         /// <summary>
-        /// Notifies other user that you are typing a message.
+        /// Notifies other user that you are composing a message.
         /// </summary>
         public void NotifyIsTyping()
         {
-            var msg = CreateNewMessage();
-            var composing = new composing();
-            msg.Add(composing);
-
-            xmppClient.Send(msg);
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Composing);
         }
 
         /// <summary>
-        /// Notifies other user that you've stopped typing a message.
+        /// Notifies other user that you are paused a message.
         /// </summary>
         public void NotifyPausedTyping()
         {
-            var msg = CreateNewMessage();
-            var paused = new paused();
-            msg.Add(paused);
-
-            xmppClient.Send(msg);
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Paused);
         }
+
+        /// <summary>
+        /// Notifies other user that you are active a message.
+        /// </summary>
+        public void NotifyActiveInChat()
+        {
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Active);
+        }
+
+        /// <summary>
+        /// Notifies other user that you are inactive a message.
+        /// </summary>
+        public void NotifyInactiveInChat()
+        {
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Inactive);
+        }
+
+        /// <summary>
+        /// Notifies the gone in chat.
+        /// </summary>
+        public void NotifyGoneInChat()
+        {
+            quickbloxClient.ChatXmppClient.SetChatState(otherUserJid, ChatState.Gone);
+        }
+
+        #endregion
 
         #region Friends
 
         /// <summary>
         /// Adds other user to your roster, subsribes for his presence, and sends FriendRequest notification message.
         /// </summary>
-        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <param name="contactName">Opponents name in your contact list</param>
+        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <returns>Is operation successful</returns>
-        public bool AddToFriends(bool createChatMessage, string contactName = null)
+        public void AddToFriends(string contactName = null, bool createChatMessage = false)
         {
-            var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
-            rosterManager?.AddContact(new Contact() { Name = contactName ?? otherUserId.ToString(), UserId = otherUserId });
+            var rosterItem = new RosterItem(new Jid(otherUserJid), contactName ?? otherUserId.ToString());
+            quickbloxClient.ChatXmppClient.AddContact(rosterItem);
 
             SubsribeForPresence();
-            ApproveSubscribtionRequest();
 
             if (createChatMessage)
             {
-                return SendFriendsNotification("Contact request", NotificationTypes.FriendsRequest);
+                SendFriendsNotification("Contact request", NotificationTypes.FriendsRequest);
             }
-
-            return true;
         }
 
         /// <summary>
         /// Adds other user to your roster, accepts presence subscription request, and sends FriendAccepted notification message.
         /// </summary>
-        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <param name="contactName">Opponents name in your contact list</param>
+        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <returns>Is operation successful</returns>
-        public bool AcceptFriend(bool createChatMessage, string contactName = null)
+        public void AcceptFriend(string contactName = null, bool createChatMessage = false)
         {
-            var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
-            rosterManager?.AddContact(new Contact()
-            {
-                Name = contactName ?? otherUserId.ToString(),
-                UserId = otherUserId
-            });
+            var rosterItem = new RosterItem(new Jid(otherUserJid), contactName ?? otherUserId.ToString());
+            quickbloxClient.ChatXmppClient.AddContact(rosterItem);
 
-            SubsribeForPresence();
             ApproveSubscribtionRequest();
+            SubsribeForPresence();
 
             if (createChatMessage)
             {
-                return SendFriendsNotification("Request accepted", NotificationTypes.FriendsAccept);
+                SendFriendsNotification("Request accepted", NotificationTypes.FriendsAccept);
             }
-
-            return true;
         }
 
         /// <summary>
@@ -188,16 +157,14 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <returns>Is operation successful</returns>
-        public bool RejectFriend(bool createChatMessage)
+        public void RejectFriend(bool createChatMessage)
         {
             RejectSubscribtionRequest();
 
             if (createChatMessage)
             {
-                return SendFriendsNotification("Request rejected", NotificationTypes.FriendsReject);
+                SendFriendsNotification("Request rejected", NotificationTypes.FriendsReject);
             }
-
-            return true;
         }
 
         /// <summary>
@@ -205,107 +172,64 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// </summary>
         /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
         /// <returns>Is operation successful</returns>
-        public bool DeleteFromFriends(bool createChatMessage)
+        public void DeleteFromFriends(bool createChatMessage)
         {
-            if (createChatMessage && quickbloxClient.ChatXmppClient.Contacts.Any(c => c.UserId == otherUserId))
+            quickbloxClient.ChatXmppClient.RemoveContact(otherUserId);
+
+            if (createChatMessage)
             {
                 SendFriendsNotification("Contact removed", NotificationTypes.FriendsRemove);
             }
 
-            var rosterManager = quickbloxClient.ChatXmppClient as IRosterManager;
-            rosterManager?.DeleteContact(otherUserId);
-
             Unsubscribe();
-            SendPresenceInformation(presence.typeEnum.unsubscribed);
-            
-            return true;
         }
+
 
         #endregion
 
-        #endregion
-
-        #region Private methods
-
-        private message CreateNewMessage()
+        
+        private void SendFriendsNotification(string messageText, NotificationTypes notificationType)
         {
-            return new message
-            {
-                to = otherUserJid,
-                type = message.typeEnum.chat,
-                id = MongoObjectIdGenerator.GetNewObjectIdString()
-            };
-        }
-
-        private bool SendFriendsNotification(string messageText, NotificationTypes notificationType)
-        {
-            var msg = CreateNewMessage();
-            var body = new body { Value = messageText };
             var extraParams = new ExtraParams();
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.AddNew(ExtraParamsList.notification_type, ((int)notificationType).ToString());
 
-            msg.Add(body, extraParams);
-            if (!xmppClient.Connected)
-            {
-                xmppClient.Connect();
-                return false;
-            }
-
-            xmppClient.Send(msg);
-            return true;
+            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, messageText, extraParams.ToString(), dialogId, null);
         }
 
 
-        private void MessagesClientOnOnMessageReceived(object sender, Message message1)
+        private void MessagesClientOnOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
-            if (message1.IsTyping)
-            {
-                OpponentStartedTyping?.Invoke(this, new EventArgs());
-            }
+            if (string.IsNullOrEmpty(messageEventArgs.Message.MessageText)) return;
 
-            if (message1.IsPausedTyping)
+            if (messageEventArgs.Jid.ToString().Contains(otherUserJid) && messageEventArgs.Message.NotificationType != NotificationTypes.GroupCreate)
             {
-                OpponentPausedTyping?.Invoke(this, new EventArgs());
-            }
-
-            if (string.IsNullOrEmpty(message1.MessageText)) return;
-
-            if (message1.From.Contains(otherUserJid) && message1.NotificationType != NotificationTypes.GroupCreate)
-            {
-                MessageReceived?.Invoke(this, message1);
+                MessageReceived?.Invoke(this, messageEventArgs);
             }
         }
 
         #region Presence
 
-        private void SubsribeForPresence()
+        public void SubsribeForPresence()
         {
-            SendPresenceInformation(presence.typeEnum.subscribe);
+            quickbloxClient.ChatXmppClient.SetSubscribtionStatus(otherUserJid, SubscriptionMessageType.RequestSubscription);
         }
 
-        private void ApproveSubscribtionRequest()
+        public void ApproveSubscribtionRequest()
         {
-            SendPresenceInformation(presence.typeEnum.subscribed);
+            quickbloxClient.ChatXmppClient.SetSubscribtionStatus(otherUserJid, SubscriptionMessageType.ApproveSubscription);
         }
 
-        private void RejectSubscribtionRequest()
+        public void RejectSubscribtionRequest()
         {
-            SendPresenceInformation(presence.typeEnum.unsubscribed);
+            quickbloxClient.ChatXmppClient.SetSubscribtionStatus(otherUserJid, SubscriptionMessageType.RefuseSubscription);
         }
 
-        private void Unsubscribe()
+        public void Unsubscribe()
         {
-            SendPresenceInformation(presence.typeEnum.unsubscribe);
+            quickbloxClient.ChatXmppClient.SetSubscribtionStatus(otherUserJid, SubscriptionMessageType.RevokeSubscription);
         }
-
-        private void SendPresenceInformation(presence.typeEnum type)
-        {
-            xmppClient.Send(new presence { type = type, to = otherUserJid });
-        }
-
-        #endregion
 
         #endregion
     }

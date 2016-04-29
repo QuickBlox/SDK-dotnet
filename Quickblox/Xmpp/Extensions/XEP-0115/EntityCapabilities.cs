@@ -1,11 +1,11 @@
-﻿using Sharp.Xmpp.Im;
+﻿using Xmpp.Im;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
+using Xmpp.Cryptography;
 
-namespace Sharp.Xmpp.Extensions
+namespace Xmpp.Extensions
 {
     /// <summary>
     /// Implements the 'Entity Capabilities' extension as defined in XEP-0092.
@@ -38,7 +38,7 @@ namespace Sharp.Xmpp.Extensions
             get
             {
                 // FIXME: Move this to a resource file or to assembly metadata?
-                return "Sharp.Xmpp";
+                return "Xmpp";
             }
         }
 

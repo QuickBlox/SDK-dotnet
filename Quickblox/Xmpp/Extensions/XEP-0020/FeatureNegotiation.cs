@@ -1,11 +1,11 @@
-﻿using Sharp.Xmpp.Extensions.Dataforms;
-using Sharp.Xmpp.Im;
+﻿using Xmpp.Extensions.Dataforms;
+using Xmpp.Im;
 using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp.Extensions
+namespace Xmpp.Extensions
 {
     /// <summary>
     /// Implements the 'Feature Negotiation' extension as defined in XEP-0020.

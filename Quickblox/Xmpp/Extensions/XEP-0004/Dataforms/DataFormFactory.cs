@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp.Extensions.Dataforms
+namespace Xmpp.Extensions.Dataforms
 {
     /// <summary>
     /// A factory for creating data-form instances.

@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp
+namespace Xmpp
 {
     /// <summary>
     /// Provides a factory method for creating XElement instances and adds

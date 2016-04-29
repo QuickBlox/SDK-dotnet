@@ -1,7 +1,8 @@
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace System.Security.Cryptography
+namespace Xmpp.Cryptography
 {
     [ComVisible(true)]
     public abstract class HashAlgorithm : ICryptoTransform
@@ -84,7 +85,7 @@ namespace System.Security.Cryptography
 
         public static HashAlgorithm Create()
         {
-            return new System.Security.Cryptography.SHA1CryptoServiceProvider ();
+            return new SHA1CryptoServiceProvider ();
         }
 
         public virtual byte[] Hash

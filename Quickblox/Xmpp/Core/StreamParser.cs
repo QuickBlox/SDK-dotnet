@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
 
-namespace Sharp.Xmpp.Core
+namespace Xmpp.Core
 {
     /// <summary>
     /// Implements a parser for parsing XMPP XML-streams as defined per XMPP:Core

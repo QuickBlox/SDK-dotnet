@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
-using System.Xml;
-using System.Xml.Linq;
-using System.Linq;
-using Sharp.Xmpp.Extensions;
-using Sharp.Xmpp.Core;
-using Sharp.Xmpp;
-using Sharp.Xmpp.Im;
+using Xmpp.Extensions;
+using Xmpp.Core;
+using Xmpp;
+using Xmpp.Im;
+using Xmpp.Cryptography;
 
-namespace S22.Xmpp.Extensions
+namespace Xmpp.Extensions
 {
-       
-	/// <summary>
-	/// Implements the 'vCard based Avatars' extension as defined in XEP-0153.
-	/// </summary>
-	internal class vCardAvatars : XmppExtension, IInputFilter<Iq> {
+
+    /// <summary>
+    /// Implements the 'vCard based Avatars' extension as defined in XEP-0153.
+    /// </summary>
+    internal class vCardAvatars : XmppExtension, IInputFilter<Iq> {
 		/// <summary>
 		/// A reference to the 'Entity Capabilities' extension instance.
 		/// </summary>
@@ -101,7 +98,7 @@ namespace S22.Xmpp.Extensions
 
 				if (iq.Type == IqType.Result) {
 					// Result must contain a 'feature' element.
-                    im.SendPresence(new Sharp.Xmpp.Im.Presence(null, null, PresenceType.Available, null, null, Xml.Element("x", "vcard-temp:x:update").Child(Xml.Element("photo").Text(hash))));
+                    im.SendPresence(new Im.Presence(null, null, PresenceType.Available, null, null, Xml.Element("x", "vcard-temp:x:update").Child(Xml.Element("photo").Text(hash))));
 				}
 	
 			});

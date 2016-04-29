@@ -1,11 +1,11 @@
-﻿using Sharp.Xmpp.Core;
-using Sharp.Xmpp.Im;
+﻿using Xmpp.Core;
+using Xmpp.Im;
 using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp.Extensions
+namespace Xmpp.Extensions
 {
     /// <summary>
     /// Implements Mechanism for providing Custom IQ Extensions

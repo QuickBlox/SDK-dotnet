@@ -1,6 +1,7 @@
+using System;
 using System.Runtime.InteropServices;
 
-namespace System.Security.Cryptography
+namespace Xmpp.Cryptography
 {
     [ComVisible(true)]
     public interface ICryptoTransform : IDisposable

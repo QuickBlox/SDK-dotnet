@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace System.Security.Cryptography
+namespace Xmpp.Cryptography
 {
     [ComVisible(true)]
     public class SHA1Managed : SHA1

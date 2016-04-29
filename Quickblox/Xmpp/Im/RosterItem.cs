@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sharp.Xmpp.Im
+namespace Xmpp.Im
 {
     /// <summary>
     /// Represents a roster item.

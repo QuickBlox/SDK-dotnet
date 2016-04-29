@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp.Im
+namespace Xmpp.Im
 {
     /// <summary>
     /// An XML-backed dictionary.

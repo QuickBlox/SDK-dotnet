@@ -1,4 +1,4 @@
-﻿namespace Sharp.Xmpp.Im
+﻿namespace Xmpp.Im
 {
     /// <summary>
     /// Represents a request for subscription.

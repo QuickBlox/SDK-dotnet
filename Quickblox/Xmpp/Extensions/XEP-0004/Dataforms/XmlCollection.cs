@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp.Extensions.Dataforms
+namespace Xmpp.Extensions.Dataforms
 {
     /// <summary>
     /// Represents an XML-backed generic collection.

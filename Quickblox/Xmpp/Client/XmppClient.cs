@@ -1,11 +1,12 @@
-﻿using Sharp.Xmpp.Extensions;
-using Sharp.Xmpp.Im;
+﻿using Xmpp.Extensions;
+using Xmpp.Im;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Threading.Tasks;
 
-namespace Sharp.Xmpp.Client
+namespace Xmpp.Client
 {
     /// <summary>
     /// Implements an XMPP client providing basic instant messaging (IM) and
@@ -79,13 +80,6 @@ namespace Sharp.Xmpp.Client
         /// </summary>
         private UserTune userTune;
 
-#if WINDOWSPLATFORM
-		/// <summary>
-		/// Provides access to the 'User Avatar' XMPP extension functionality.
-		/// </summary>
-		UserAvatar userAvatar;
-#endif
-
         /// <summary>
         /// Provides access to the 'User Mood' XMPP extension functionality.
         /// </summary>
@@ -107,24 +101,9 @@ namespace Sharp.Xmpp.Client
         private StreamInitiation streamInitiation;
 
         /// <summary>
-        /// Provides access to the 'SI File Transfer' XMPP extension.
-        /// </summary>
-        private SIFileTransfer siFileTransfer;
-
-        /// <summary>
-        /// Provides access to the 'In-Band Bytestreams' XMPP extension.
-        /// </summary>
-        private InBandBytestreams inBandBytestreams;
-
-        /// <summary>
         /// Provides access to the 'User Activity' XMPP extension.
         /// </summary>
         private UserActivity userActivity;
-
-        /// <summary>
-        /// Provides access to the 'Socks5 Bytestreams' XMPP extension.
-        /// </summary>
-        private Socks5Bytestreams socks5Bytestreams;
 
         /// <summary>
         /// Provides access to the 'Server IP Check' XMPP extension.
@@ -307,15 +286,6 @@ namespace Sharp.Xmpp.Client
         }
 
         /// <summary>
-        /// Contains settings for configuring file-transfer options.
-        /// </summary>
-        public FileTransferSettings FileTransferSettings
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// The underlying XmppIm instance.
         /// </summary>
         public XmppIm Im
@@ -389,19 +359,19 @@ namespace Sharp.Xmpp.Client
             }
         }
 
-#if WINDOWSPLATFORM
-		/// <summary>
-		/// The event that is raised when a contact has updated his or her avatar.
-		/// </summary>
-		public event EventHandler<AvatarChangedEventArgs> AvatarChanged {
-			add {
-				userAvatar.AvatarChanged += value;
-			}
-			remove {
-				userAvatar.AvatarChanged -= value;
-			}
-		}
-#endif
+//#if WINDOWSPLATFORM
+//		/// <summary>
+//		/// The event that is raised when a contact has updated his or her avatar.
+//		/// </summary>
+//		public event EventHandler<AvatarChangedEventArgs> AvatarChanged {
+//			add {
+//				userAvatar.AvatarChanged += value;
+//			}
+//			remove {
+//				userAvatar.AvatarChanged -= value;
+//			}
+//		}
+//#endif
 
         /// <summary>
         /// The event that is raised when a contact has published tune information.
@@ -430,38 +400,6 @@ namespace Sharp.Xmpp.Client
             remove
             {
                 im.Message -= value;
-            }
-        }
-
-        /// <summary>
-        /// The event that is raised periodically for every file-transfer operation to
-        /// inform subscribers of the progress of the operation.
-        /// </summary>
-        public event EventHandler<FileTransferProgressEventArgs> FileTransferProgress
-        {
-            add
-            {
-                siFileTransfer.FileTransferProgress += value;
-            }
-            remove
-            {
-                siFileTransfer.FileTransferProgress -= value;
-            }
-        }
-
-        /// <summary>
-        /// The event that is raised when an on-going file-transfer has been aborted
-        /// prematurely, either due to cancellation or error.
-        /// </summary>
-        public event EventHandler<FileTransferAbortedEventArgs> FileTransferAborted
-        {
-            add
-            {
-                siFileTransfer.FileTransferAborted += value;
-            }
-            remove
-            {
-                siFileTransfer.FileTransferAborted -= value;
             }
         }
 
@@ -630,9 +568,9 @@ namespace Sharp.Xmpp.Client
         /// <exception cref="XmppException">An XMPP error occurred while negotiating the
         /// XML stream with the server, or resource binding failed, or the initialization
         /// of an XMPP extension failed.</exception>
-        public void Connect(string resource = null)
+        public async Task Connect(string resource = null)
         {
-            im.Connect(resource);
+            await im.Connect(resource);
         }
 
         /// <summary>
@@ -655,9 +593,9 @@ namespace Sharp.Xmpp.Client
         /// <exception cref="XmppException">An XMPP error occurred while negotiating the
         /// XML stream with the server, or resource binding failed, or the initialization
         /// of an XMPP extension failed.</exception>
-        public void Authenticate(string username, string password)
+        public async Task Authenticate(string username, string password)
         {
-            im.Autenticate(username, password);
+            await im.Autenticate(username, password);
         }
 
         /// <summary>
@@ -934,74 +872,74 @@ namespace Sharp.Xmpp.Client
             im.RemoveFromRoster(item);
         }
 
-#if WINDOWSPLATFORM
-        /// <summary>
-        /// Publishes the image located at the specified path as the user's avatar.
-        /// </summary>
-        /// <param name="filePath">The path to the image to publish as the user's
-        /// avatar.</param>
-        /// <exception cref="ArgumentNullException">The filePath parameter is
-        /// null.</exception>
-        /// <exception cref="ArgumentException">filePath is a zero-length string,
-        /// contains only white space, or contains one or more invalid
-        /// characters.</exception>
-        /// <exception cref="PathTooLongException">The specified path, file name,
-        /// or both exceed the system-defined maximum length. For example, on
-        /// Windows-based platforms, paths must be less than 248 characters, and
-        /// file names must be less than 260 characters.</exception>
-        /// <exception cref="DirectoryNotFoundException">The specified path is
-        /// invalid, (for example, it is on an unmapped drive).</exception>
-        /// <exception cref="UnauthorizedAccessException">The path specified is
-        /// a directory, or the caller does not have the required
-        /// permission.</exception>
-        /// <exception cref="FileNotFoundException">The file specified in
-        /// filePath was not found.</exception>
-        /// <exception cref="NotSupportedException">filePath is in an invalid
-        /// format, or the server does not support the 'Personal Eventing
-        /// Protocol' extension.</exception>
-        /// <exception cref="XmppErrorException">The server returned an XMPP error code.
-        /// Use the Error property of the XmppErrorException to obtain the specific
-        /// error condition.</exception>
-        /// <exception cref="XmppException">The server returned invalid data or another
-        /// unspecified XMPP error occurred.</exception>
-        /// <exception cref="InvalidOperationException">The XmppClient instance is not
-        /// connected to a remote host, or the XmppClient instance has not authenticated with
-        /// the XMPP server.</exception>
-        /// <exception cref="ObjectDisposedException">The XmppClient object has been
-        /// disposed.</exception>
-        /// <remarks>
-        /// The following file types are supported:
-        ///  BMP, GIF, JPEG, PNG and TIFF.
-        /// </remarks>
-		public void SetAvatar(string filePath) {
-			AssertValid();
-			filePath.ThrowIfNull("filePath");
-			userAvatar.Publish(filePath);
-		}
-#endif
+//#if WINDOWSPLATFORM
+//        /// <summary>
+//        /// Publishes the image located at the specified path as the user's avatar.
+//        /// </summary>
+//        /// <param name="filePath">The path to the image to publish as the user's
+//        /// avatar.</param>
+//        /// <exception cref="ArgumentNullException">The filePath parameter is
+//        /// null.</exception>
+//        /// <exception cref="ArgumentException">filePath is a zero-length string,
+//        /// contains only white space, or contains one or more invalid
+//        /// characters.</exception>
+//        /// <exception cref="PathTooLongException">The specified path, file name,
+//        /// or both exceed the system-defined maximum length. For example, on
+//        /// Windows-based platforms, paths must be less than 248 characters, and
+//        /// file names must be less than 260 characters.</exception>
+//        /// <exception cref="DirectoryNotFoundException">The specified path is
+//        /// invalid, (for example, it is on an unmapped drive).</exception>
+//        /// <exception cref="UnauthorizedAccessException">The path specified is
+//        /// a directory, or the caller does not have the required
+//        /// permission.</exception>
+//        /// <exception cref="FileNotFoundException">The file specified in
+//        /// filePath was not found.</exception>
+//        /// <exception cref="NotSupportedException">filePath is in an invalid
+//        /// format, or the server does not support the 'Personal Eventing
+//        /// Protocol' extension.</exception>
+//        /// <exception cref="XmppErrorException">The server returned an XMPP error code.
+//        /// Use the Error property of the XmppErrorException to obtain the specific
+//        /// error condition.</exception>
+//        /// <exception cref="XmppException">The server returned invalid data or another
+//        /// unspecified XMPP error occurred.</exception>
+//        /// <exception cref="InvalidOperationException">The XmppClient instance is not
+//        /// connected to a remote host, or the XmppClient instance has not authenticated with
+//        /// the XMPP server.</exception>
+//        /// <exception cref="ObjectDisposedException">The XmppClient object has been
+//        /// disposed.</exception>
+//        /// <remarks>
+//        /// The following file types are supported:
+//        ///  BMP, GIF, JPEG, PNG and TIFF.
+//        /// </remarks>
+//		public void SetAvatar(string filePath) {
+//			AssertValid();
+//			filePath.ThrowIfNull("filePath");
+//			userAvatar.Publish(filePath);
+//		}
+//#endif
 
-        /// <summary>
-        /// Publishes the image located at the specified path as the user's avatar using vcard based Avatars
-        /// </summary>
-        /// <param name="filePath">The path to the image to publish as the user's avatar.</param>
-        public void SetvCardAvatar(string filePath)
-        {
-            AssertValid();
-            filePath.ThrowIfNull("filePath");
+//        /// <summary>
+//        /// Publishes the image located at the specified path as the user's avatar using vcard based Avatars
+//        /// </summary>
+//        /// <param name="filePath">The path to the image to publish as the user's avatar.</param>
+//        public void SetvCardAvatar(string filePath)
+//        {
+//            AssertValid();
+//            filePath.ThrowIfNull("filePath");
 
-            try
-            {
-                using (Stream s = File.OpenRead(filePath))
-                {
-                    vcardAvatars.SetAvatar(s);
-                }
-            }
-            catch (IOException copyError)
-            {
-                System.Diagnostics.Debug.WriteLine(copyError.Message);
-                //Fix??? Should throw a network exception
-            }
-        }
+//            try
+//            {
+//                using (Stream s = File.OpenRead(filePath))
+//                {
+//                    vcardAvatars.SetAvatar(s);
+//                }
+//            }
+//            catch (IOException copyError)
+//            {
+//                System.Diagnostics.Debug.WriteLine(copyError.Message);
+//                //Fix??? Should throw a network exception
+//            }
+//        }
 
         /// <summary>
         /// Get the vcard based Avatar of user with Jid
@@ -1009,11 +947,11 @@ namespace Sharp.Xmpp.Client
         /// <param name="jid">The string jid of the user</param>
         /// <param name="filepath">The filepath where the avatar will be stored</param>
         /// <param name="callback">The action that will be executed after the file has been downloaded</param>
-        public void GetvCardAvatar(string jid, string filepath, Action callback)
-        {
-            AssertValid();
-            vcardAvatars.RequestAvatar(new Jid(jid), filepath, callback);
-        }
+        //public void GetvCardAvatar(string jid, string filepath, Action callback)
+        //{
+        //    AssertValid();
+        //    vcardAvatars.RequestAvatar(new Jid(jid), filepath, callback);
+        //}
 
         /// <summary>
         /// Requests a Custom Iq from the XMPP entinty Jid
@@ -1134,23 +1072,6 @@ namespace Sharp.Xmpp.Client
         }
 
         /// <summary>
-        /// A callback method to invoke when a request for a file-transfer is received
-        /// from another XMPP user.
-        /// </summary>
-        public FileTransferRequest FileTransferRequest
-        {
-            get
-            {
-                return siFileTransfer.TransferRequest;
-            }
-
-            set
-            {
-                siFileTransfer.TransferRequest = value;
-            }
-        }
-
-        /// <summary>
         /// A callback method to invoke when a Custom Iq Request is received
         /// from another XMPP user.
         /// </summary>
@@ -1166,142 +1087,7 @@ namespace Sharp.Xmpp.Client
                 im.CustomIqDelegate = value;
             }
         }
-
-        /// <summary>
-        /// Offers the specified file to the XMPP user with the specified JID and, if
-        /// accepted by the user, transfers the file.
-        /// </summary>
-        /// <param name="to">The JID of the XMPP user to offer the file to.</param>
-        /// <param name="path">The path of the file to transfer.</param>
-        /// <param name="cb">a callback method invoked once the other site has
-        /// accepted or rejected the file-transfer request.</param>
-        /// <param name="description">A description of the file so the receiver can
-        /// better understand what is being sent.</param>
-        /// <returns>Sid of the file transfer</returns>
-        /// <exception cref="ArgumentNullException">The to parameter or the path
-        /// parameter is null.</exception>
-        /// <exception cref="ArgumentException">path is a zero-length string,
-        /// contains only white space, or contains one or more invalid
-        /// characters.</exception>
-        /// <exception cref="PathTooLongException">The specified path, file name,
-        /// or both exceed the system-defined maximum length.</exception>
-        /// <exception cref="DirectoryNotFoundException">The specified path is
-        /// invalid, (for example, it is on an unmapped drive).</exception>
-        /// <exception cref="UnauthorizedAccessException">path specified a
-        /// directory, or the caller does not have the required
-        /// permission.</exception>
-        /// <exception cref="FileNotFoundException">The file specified in path
-        /// was not found.</exception>
-        /// <exception cref="NotSupportedException">path is in an invalid
-        /// format, or the XMPP entity with the specified JID does not support
-        /// the 'SI File Transfer' XMPP extension.</exception>
-        /// <exception cref="XmppErrorException">The server or the XMPP entity
-        /// with the specified JID returned an XMPP error code. Use the Error
-        /// property of the XmppErrorException to obtain the specific error
-        /// condition.</exception>
-        /// <exception cref="XmppException">The server returned invalid data or
-        /// another unspecified XMPP error occurred.</exception>
-        /// <exception cref="InvalidOperationException">The XmppClient instance is not
-        /// connected to a remote host, or the XmppClient instance has not authenticated with
-        /// the XMPP server.</exception>
-        /// <exception cref="ObjectDisposedException">The XmppClient object has been
-        /// disposed.</exception>
-        public string InitiateFileTransfer(Jid to, string path,
-            string description = null, Action<bool, FileTransfer> cb = null)
-        {
-            AssertValid();
-            return siFileTransfer.InitiateFileTransfer(to, path, description, cb);
-        }
-
-        /// <summary>
-        /// Offers the XMPP user with the specified JID the file with the specified
-        /// name and, if accepted by the user, transfers the file using the supplied
-        /// stream.
-        /// </summary>
-        /// <param name="to">The JID of the XMPP user to offer the file to.</param>
-        /// <param name="stream">The stream to read the file-data from.</param>
-        /// <param name="name">The name of the file, as offered to the XMPP user
-        /// with the specified JID.</param>
-        /// <param name="size">The number of bytes to transfer.</param>
-        /// <param name="cb">A callback method invoked once the other site has
-        /// accepted or rejected the file-transfer request.</param>
-        /// <param name="description">A description of the file so the receiver can
-        /// better understand what is being sent.</param>
-        /// <returns>The Sid of the file transfer</returns>
-        /// <exception cref="ArgumentNullException">The to parameter or the stream
-        /// parameter or the name parameter is null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The value of the size
-        /// parameter is negative.</exception>
-        /// <exception cref="NotSupportedException">The XMPP entity with the
-        /// specified JID does not support the 'SI File Transfer' XMPP
-        /// extension.</exception>
-        /// <exception cref="XmppErrorException">The server or the XMPP entity
-        /// with the specified JID returned an XMPP error code. Use the Error
-        /// property of the XmppErrorException to obtain the specific error
-        /// condition.</exception>
-        /// <exception cref="XmppException">The server returned invalid data or
-        /// another unspecified XMPP error occurred.</exception>
-        /// <exception cref="InvalidOperationException">The XmppClient instance is not
-        /// connected to a remote host, or the XmppClient instance has not authenticated with
-        /// the XMPP server.</exception>
-        /// <exception cref="ObjectDisposedException">The XmppClient object has been
-        /// disposed.</exception>
-        public string InitiateFileTransfer(Jid to, Stream stream, string name, long size,
-            string description = null, Action<bool, FileTransfer> cb = null)
-        {
-            AssertValid();
-            return siFileTransfer.InitiateFileTransfer(to, stream, name, size, description, cb);
-        }
-
-        /// <summary>
-        /// Cancels the specified file-transfer.
-        /// </summary>
-        /// <param name="transfer">The file-transfer to cancel.</param>
-        /// <exception cref="ArgumentNullException">The transfer parameter is
-        /// null.</exception>
-        /// <exception cref="ArgumentException">The specified transfer instance does
-        /// not represent an active data-transfer operation.</exception>
-        /// <exception cref="InvalidOperationException">The XmppClient instance is not
-        /// connected to a remote host, or the XmppClient instance has not authenticated with
-        /// the XMPP server.</exception>
-        /// <exception cref="ObjectDisposedException">The XmppClient object has been
-        /// disposed.</exception>
-        public void CancelFileTransfer(FileTransfer transfer)
-        {
-            AssertValid();
-            transfer.ThrowIfNull("transfer");
-            siFileTransfer.CancelFileTransfer(transfer);
-        }
-
-        /// <summary>
-        /// Cancels the specified file-transfer.
-        /// </summary>
-        /// <param name="from">From Jid</param>
-        /// <param name="sid">Sid</param>
-        /// <param name="to">To Jid</param>
-        /// <exception cref="ArgumentNullException">The transfer parameter is
-        /// null.</exception>
-        /// <exception cref="ArgumentException">The specified transfer instance does
-        /// not represent an active data-transfer operation.</exception>
-        /// <exception cref="InvalidOperationException">The XmppClient instance is not
-        /// connected to a remote host, or the XmppClient instance has not authenticated with
-        /// the XMPP server.</exception>
-        /// <exception cref="ObjectDisposedException">The XmppClient object has been
-        /// disposed.</exception>
-        public void CancelFileTransfer(string sid, Jid from, Jid to)
-        {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("XmppClient CancelFileTransfer, sid {0}, from {1}, to {2}", sid, from.ToString(), to.ToString());
-#endif
-
-            AssertValid();
-            sid.ThrowIfNullOrEmpty("sid");
-            from.ThrowIfNull("from");
-            to.ThrowIfNull("to");
-
-            siFileTransfer.CancelFileTransfer(sid, from, to);
-        }
-
+        
         /// <summary>
         /// Initiates in-band registration with the XMPP server in order to register
         /// a new XMPP account.
@@ -1723,12 +1509,7 @@ namespace Sharp.Xmpp.Client
             dataForms = im.LoadExtension<DataForms>();
             featureNegotiation = im.LoadExtension<FeatureNegotiation>();
             streamInitiation = im.LoadExtension<StreamInitiation>();
-            siFileTransfer = im.LoadExtension<SIFileTransfer>();
-            inBandBytestreams = im.LoadExtension<InBandBytestreams>();
             userActivity = im.LoadExtension<UserActivity>();
-            socks5Bytestreams = im.LoadExtension<Socks5Bytestreams>();
-            FileTransferSettings = new FileTransferSettings(socks5Bytestreams,
-                siFileTransfer);
             serverIpCheck = im.LoadExtension<ServerIpCheck>();
             messageCarbons = im.LoadExtension<MessageCarbons>();
             inBandRegistration = im.LoadExtension<InBandRegistration>();

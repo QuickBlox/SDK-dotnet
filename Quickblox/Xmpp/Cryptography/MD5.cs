@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace System.Security.Cryptography
+namespace Xmpp.Cryptography
 {
 
     [ComVisible(true)]
@@ -15,7 +15,7 @@ namespace System.Security.Cryptography
 
         public static new MD5 Create()
         {
-			return new System.Security.Cryptography.MD5CryptoServiceProvider ();
+			return new MD5CryptoServiceProvider ();
         }
     }
 }

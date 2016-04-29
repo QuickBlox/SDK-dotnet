@@ -1,4 +1,4 @@
-namespace System.Security.Cryptography
+namespace Xmpp.Cryptography
 {
     internal class SHA1Internal
     {

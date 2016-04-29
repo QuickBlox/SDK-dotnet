@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace System.Security.Cryptography
+namespace Xmpp.Cryptography
 {
     public class NameValueCollection : Dictionary<String, String>
     {

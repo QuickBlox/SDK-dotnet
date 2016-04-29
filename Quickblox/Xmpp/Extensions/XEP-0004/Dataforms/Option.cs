@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp.Extensions.Dataforms
+namespace Xmpp.Extensions.Dataforms
 {
     /// <summary>
     /// Represents an option of a list data-field.

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.Security.Cryptography;
 using System.Text;
+using Xmpp.Cryptography;
 
-namespace Sharp.Xmpp.Core.Sasl.Mechanisms
+namespace Xmpp.Core.Sasl.Mechanisms
 {
     /// <summary>
     /// Implements the Sasl Digest-Md5 authentication method as described in
@@ -299,7 +298,7 @@ namespace Sharp.Xmpp.Core.Sasl.Mechanisms
         /// Add an additional backslash, if any backslashes are found in the username
         /// For XEP106 jid nodes, Openfire seems that it needs to escape the backslash
         /// within the user name. See discussion at https://community.igniterealtime.org/message/254096#254096
-        /// It is not clear if this is an Openfire bug or a Sharp.Xmpp issue, so please treat this
+        /// It is not clear if this is an Openfire bug or a Xmpp issue, so please treat this
         /// as experimental
         /// </summary>
         /// <param name="s">String to escape in order to resolve https://community.igniterealtime.org/message/254096#254096 issue</param>

@@ -1,13 +1,14 @@
-﻿using Sharp.Xmpp.Core;
-using Sharp.Xmpp.Extensions;
+﻿using Xmpp.Core;
+using Xmpp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp.Im
+namespace Xmpp.Im
 {
     /// <summary>
     /// Implements the basic instant messaging (IM) and presence functionality.
@@ -325,7 +326,7 @@ namespace Sharp.Xmpp.Im
         /// <exception cref="XmppException">An XMPP error occurred while negotiating the
         /// XML stream with the server, or resource binding failed, or the initialization
         /// of an XMPP extension failed.</exception>
-        public Roster Connect(string resource = null)
+        public async Task<Roster> Connect(string resource = null)
         {
             if (disposed)
                 throw new ObjectDisposedException(GetType().FullName);
@@ -343,7 +344,7 @@ namespace Sharp.Xmpp.Im
             }
             try
             {
-                core.Connect(resource);
+                await core.Connect(resource);
                 // If no username has been providd, don't establish a session.
                 if (Username == null)
                     return null;
@@ -381,11 +382,11 @@ namespace Sharp.Xmpp.Im
         /// <exception cref="XmppException">An XMPP error occurred while negotiating the
         /// XML stream with the server, or resource binding failed, or the initialization
         /// of an XMPP extension failed.</exception>
-        public void Autenticate(string username, string password)
+        public async Task Autenticate(string username, string password)
         {
             username.ThrowIfNull("username");
             password.ThrowIfNull("password");
-            core.Authenticate(username, password);
+            await core.Authenticate(username, password);
             // Establish a session (Refer to RFC 3921, Section 3. Session Establishment).
             EstablishSession();
             // Retrieve user's roster as recommended (Refer to RFC 3921, Section 7.3).

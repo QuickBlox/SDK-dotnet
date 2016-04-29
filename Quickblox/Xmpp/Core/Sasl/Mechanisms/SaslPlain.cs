@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Sharp.Xmpp.Core.Sasl.Mechanisms
+namespace Xmpp.Core.Sasl.Mechanisms
 {
     /// <summary>
     /// Implements the Sasl Plain authentication method as described in

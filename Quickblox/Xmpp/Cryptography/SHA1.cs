@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace System.Security.Cryptography
+namespace Xmpp.Cryptography
 {
     [ComVisible(true)]
     public abstract class SHA1 : HashAlgorithm
@@ -13,7 +13,7 @@ namespace System.Security.Cryptography
 
         public static new SHA1 Create()
         {
-			return new System.Security.Cryptography.SHA1CryptoServiceProvider ();
+			return new SHA1CryptoServiceProvider ();
         }
     }
 }

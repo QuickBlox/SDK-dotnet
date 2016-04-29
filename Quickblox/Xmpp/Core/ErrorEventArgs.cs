@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sharp.Xmpp.Core
+namespace Xmpp.Core
 {
     /// <summary>
     /// Provides data for the Error event.

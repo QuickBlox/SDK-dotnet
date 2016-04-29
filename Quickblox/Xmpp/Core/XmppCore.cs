@@ -1,5 +1,4 @@
-﻿using ARSoft.Tools.Net.Dns;
-using Sharp.Xmpp.Core.Sasl;
+﻿using Xmpp.Core.Sasl;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,7 +13,7 @@ using System.Xml.Linq;
 using Sockets.Plugin;
 using Sockets.Plugin.Abstractions;
 
-namespace Sharp.Xmpp.Core
+namespace Xmpp.Core
 {
     /// <summary>
     /// Implements the core features of the XMPP protocol.
@@ -497,7 +496,7 @@ namespace Sharp.Xmpp.Core
         /// server.</exception>
         /// <exception cref="ObjectDisposedException">The XmppCore object has been
         /// disposed.</exception>
-        public void Authenticate(string username, string password)
+        public async Task Authenticate(string username, string password)
         {
             AssertValid();
             username.ThrowIfNull("username");
@@ -510,7 +509,7 @@ namespace Sharp.Xmpp.Core
             Username = username;
             Password = password;
             Disconnect();
-            Connect(this.resource);
+            await Connect(this.resource);
         }
 
         /// <summary>
@@ -996,9 +995,10 @@ namespace Sharp.Xmpp.Core
             SendAndReceive(Xml.Element("starttls",
                 "urn:ietf:params:xml:ns:xmpp-tls"), "proceed");
             // Complete TLS negotiation and switch to secure stream.
-            SslStream sslStream = new SslStream(stream, false, ((sender, cert, chain, err) => true));
-            sslStream.AuthenticateAsClient(hostname);
-            stream = sslStream;
+            
+            //SslStream sslStream = new SslStream(stream, false, ((sender, cert, chain, err) => true));
+            //sslStream.AuthenticateAsClient(hostname);
+            //stream = sslStream;
             IsEncrypted = true;
             // Initiate a new stream to server.
             return InitiateStream(hostname);

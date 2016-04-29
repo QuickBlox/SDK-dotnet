@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp.Extensions.Dataforms
+namespace Xmpp.Extensions.Dataforms
 {
     /// <summary>
     /// Represents a result form containing returned data or a generic data set.

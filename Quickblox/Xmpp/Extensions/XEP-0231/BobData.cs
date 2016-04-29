@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using Xmpp.Cryptography;
 
-namespace Sharp.Xmpp.Extensions
+namespace Xmpp.Extensions
 {
     /// <summary>
     /// Represents a piece of binary data in the context of the 'Bits of Binary'

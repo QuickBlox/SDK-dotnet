@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Sharp.Xmpp
+namespace Xmpp
 {
     /// <summary>
     /// Represents an XMPP error.

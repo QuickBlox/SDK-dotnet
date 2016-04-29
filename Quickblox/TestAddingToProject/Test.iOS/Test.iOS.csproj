@@ -105,5 +105,35 @@
   <ItemGroup>
     <Content Include="Entitlements.plist" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Quickblox.Sdk.Platform.iOS\Quickblox.Sdk.Platform.iOS.csproj">
+      <Project>{be955ab0-e555-4170-bf90-8e9cc03ef5a8}</Project>
+      <Name>Quickblox.Sdk.Platform.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Quickblox.Sdk\Quickblox.Sdk.csproj">
+      <Project>{bab0816f-0e30-4ad0-b760-90f15156cda5}</Project>
+      <Name>Quickblox.Sdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sockets\Sockets.Plugin.Abstractions\Sockets.Plugin.Abstractions.csproj">
+      <Project>{6edb0588-ffc5-4ef5-8a99-9e241d0f878d}</Project>
+      <Name>Sockets.Plugin.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sockets\Sockets.Plugin.iOS\Sockets.Plugin.iOS.csproj">
+      <Project>{d7f3aa16-8ef1-4924-9e0a-dad4ab46b2eb}</Project>
+      <Name>Sockets.Plugin.iOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sockets\Sockets.Plugin\Sockets.Plugin.csproj">
+      <Project>{a6fcef44-d2ba-42c7-b3cb-13667bcd7b54}</Project>
+      <Name>Sockets.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Xmpp\Xmpp.csproj">
+      <Project>{4614a99c-9800-4f59-acaf-b4d8106c937c}</Project>
+      <Name>Xmpp</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

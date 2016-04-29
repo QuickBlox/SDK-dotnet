@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 #endif
 
-namespace Sharp.Xmpp.Extensions
+namespace Xmpp.Extensions
 {
 #if WINDOWSPLATFORM
 

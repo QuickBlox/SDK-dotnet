@@ -1,417 +1,472 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
+using Quickblox.Sdk.Modules.ChatXmppModule.Models;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using Sharp.Xmpp.Client;
+using Quickblox.Sdk.GeneralDataModel.Models;
+using System.Threading;
 using System.Xml.Linq;
-using Windows.UI.Xaml.Documents;
+using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Converters;
-using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Modules.ChatModule.Models;
-using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
-using Quickblox.Sdk.Modules.ChatXmppModule.Models;
-using XMPP;
-using XMPP.common;
-using XMPP.tags.jabber.client;
-using XMPP.tags.jabber.iq.roster;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
-    //TODO: use conditions if something was different
-#if Xamarin
-#endif
-
-
-
-    /// <summary>
-    /// ChatXmpp module allows users to chat with each other in private or group dialogs via XMPP protocol.
-    /// </summary>
-    //TODO: refactor this. Move contacts functionality to some ContactManager, Presences to some PresenceManager
-    public class ChatXmppClient : IChatXmppClient, IRosterManager
+    public class ChatXmppClient
     {
         #region Fields
 
-        private readonly QuickbloxClient quickbloxClient;
-        private XMPP.Client xmppClient;
-        readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
-        private bool isReady;
-        private bool isUserDisconnected;
-        private List<item> unsubscribedRosterItems = new List<item>(); //roster items (contacts) that are not subscribed to us yet
+        private IQuickbloxClient quickbloxClient;
+        private XmppClient xmppClient;
+        private static readonly Regex qbJidRegex = new Regex(@"(\d+)\-(\d+)\@.+");
+        private const string JidPattern = "{0}-{1}@{2}";
+        private const string SmallJidPattern = "{0}-{1}";
+        private int userId;
+
+        #endregion
+        
+        #region Ctor
+
+        public ChatXmppClient(IQuickbloxClient quickbloxClient)
+        {
+            this.quickbloxClient = quickbloxClient;
+            Contacts = new List<RosterItem>();
+            Presences = new List<Jid>();
+        }
+
+        #endregion
+
+        #region Properties
+        
+        public bool IsConnected
+        {
+            get
+            {
+                return xmppClient != null && xmppClient.Connected;
+            }
+        }
+
+        public Jid MyJid {
+            get
+            {
+                if (quickbloxClient == null)
+                {
+                    throw new ArgumentNullException("quickbloxClient");
+                }
+                return BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
+            }
+        }
+
+        public Jid MySmallJid
+        {
+            get
+            {
+                if (quickbloxClient == null)
+                {
+                    throw new ArgumentNullException("quickbloxClient");
+                }
+                return BuildSmallJid(userId, quickbloxClient.ApplicationId);
+            }
+        }
+
+        public List<RosterItem> Contacts { get; private set; }
+
+        public List<Jid> Presences { get; private set; }
 
         #endregion
 
         #region Events
 
         /// <summary>
-        /// Event occuring when a new message is received.
+        /// Occurs when a new message is received.
         /// </summary>
-        public event EventHandler<Message> MessageReceived;
-
-        /// <summary>
-        /// Event occuring when a new message is received.
-        /// </summary>
-        public event EventHandler<SystemMessage> SystemMessageReceived;
+        public event MessageEventHandler MessageReceived;
 
         /// <summary>
         /// Event occuring when a new message has been sent by the current user but from a different device (Message carbons)
         /// </summary>
-        public event EventHandler<Message> MessageSent;
+        //public event MessageEventHandler MessageSent;
+
+        /// <summary>
+        /// Occurs when a new system message is received.
+        /// </summary>
+        public event SystemMessageEventHandler SystemMessageReceived;
 
         /// <summary>
         /// Event occuring when a new message has been sent by the current user but from a different device (Message carbons)
         /// </summary>
-        public event EventHandler<SystemMessage> SystemMessageSent;
+        //public event SystemMessageEventHandler SystemMessageSent;
 
         /// <summary>
-        /// Event occuring  when a presence is received.
+        /// Occurs when a new error is received.
         /// </summary>
-        public event EventHandler<Presence> PresenceReceived;
+        public event ErrorsEventHandler ErrorReceived;
 
         /// <summary>
-        /// Event occuring  when your contacts in roster have changed.
+        /// Occurs when a activity is changed.
         /// </summary>
-        public event EventHandler ContactsChanged;
+        public event ActivityChangedEventHandler ActivityChanged;
 
         /// <summary>
-        /// Event occuring when a contact is added to contact list.
+        /// Occurs when a new chatState is changed.
         /// </summary>
-        public event EventHandler<Contact> ContactAdded;
+        public event ChatStateChangedEventHandler ChatStateChanged;
 
         /// <summary>
-        /// Event occuring when a contact is removed from contact list.
+        /// Occurs when a moodState is changed.
         /// </summary>
-        public event EventHandler<Contact> ContactRemoved;
+        public event MoodChangedEventHandler MoodStateChanged;
 
         /// <summary>
-        /// Event occuring when xmpp connection is lost.
+        /// Occurs when a roster is changed.
         /// </summary>
-        public event EventHandler Disconnected;
+        public event RosterUpdatedEventHandler RosterUpdated;
 
-        #endregion
+        /// <summary>
+        /// Occurs when a status is changed.
+        /// </summary>
+        public event StatusEventHandler StatusChanged;
 
-        #region Ctor
+        /// <summary>
+        /// Occurs when a subscriptions is changed.
+        /// </summary>
+        public event SubscriptionsEventHandler SubscriptionsChanged;
 
-        internal ChatXmppClient(QuickbloxClient quickbloxClient)
+        /// <summary>
+        /// Occurs when a new message is received.
+        /// </summary>
+        public event TuneEventHandler Tune;
+
+        private void UnSubcribeEvents(XmppClient xmppClient)
         {
-            this.quickbloxClient = quickbloxClient;
-            Contacts = new List<Contact>();
-            Presences = new List<Presence>();
+            xmppClient.Error -= OnClientErrorCallback;
+            xmppClient.Message -= OnMessageReceivedCallback;
+            xmppClient.ActivityChanged -= OnActivityChangedCallback;
+            xmppClient.ChatStateChanged -= OnChatStateChangedCallback;
+            xmppClient.MoodChanged -= OnMoodChangedCallback;
+            xmppClient.RosterUpdated -= OnRosterUpdatedCallback;
+            xmppClient.StatusChanged -= OnStatusChangedCallback;
+            xmppClient.SubscriptionApproved -= OnSubscriptionApprovedCallback;
+            xmppClient.SubscriptionRefused -= OnSubscriptionRefusedCallback;
+            xmppClient.Unsubscribed -= OnUnsubscribedCallback;
+            xmppClient.Tune -= OnTuneCallback;
+        }
+
+        private void SubscribeEvents(XmppClient xmppClient)
+        {
+            xmppClient.Error += OnClientErrorCallback;
+            xmppClient.Message += OnMessageReceivedCallback;
+            xmppClient.ActivityChanged += OnActivityChangedCallback;
+            xmppClient.ChatStateChanged += OnChatStateChangedCallback;
+            xmppClient.MoodChanged += OnMoodChangedCallback;
+            xmppClient.RosterUpdated += OnRosterUpdatedCallback;
+            xmppClient.StatusChanged += OnStatusChangedCallback;
+            xmppClient.SubscriptionApproved += OnSubscriptionApprovedCallback;
+            xmppClient.SubscriptionRefused += OnSubscriptionRefusedCallback;
+            xmppClient.Unsubscribed += OnUnsubscribedCallback;
+            xmppClient.Tune += OnTuneCallback;
         }
 
         #endregion
 
-        #region Properties
+        #region Callbacks
 
-        /// <summary>
-        /// Contacts list in roster.
-        /// </summary>
-        public List<Contact> Contacts { get; private set; }
-
-        /// <summary>
-        /// Presences list.
-        /// </summary>
-        public List<Presence> Presences { get; private set; }
-
-        /// <summary>
-        /// Is XMPP connection open
-        /// </summary>
-        public bool IsConnected { get { return xmppClient != null && xmppClient.Connected && isReady; } }
-
-        /// <summary>
-        /// XMPP chat endpoint.
-        /// </summary>
-        public string ChatEndpoint { get; private set; }
-
-        /// <summary>
-        /// Quickblox Application ID.
-        /// </summary>
-        public int ApplicationId { get; private set; }
-
-
-#if DEBUG || TEST_RELEASE
-        public string DebugClientName { get; set; }
-#endif
-
-        #endregion
-
-        #region Public methods
-
-        /// <summary>
-        /// Connects to XMPP server.
-        /// </summary>
-        /// <param name="userId">User ID</param>
-        /// <param name="password">User password</param>
-        /// <returns>Async operation result</returns>
-        public async Task Connect(int userId, string password)
-        {
-            var timeout = new TimeSpan(0, 0, 60);
-            var tcs = new TaskCompletionSource<object>();
-            XMPP.Client xmppClient = new XMPP.Client();
-            xmppClient.OnReady += (sender, args) =>
+        private async void OnTuneCallback (object sender, Sharp.Xmpp.Extensions.TuneEventArgs e)
+		{
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnTune:");
+            var handler = Tune;
+            if (handler != null)
             {
-                if (tcs.Task.Status == TaskStatus.WaitingForActivation)
-                    tcs.TrySetResult(null);
-            };
-
-            var timer = new Timer(state =>
-            {
-                var myTcs = (TaskCompletionSource<object>)state;
-                if (myTcs.Task.Status == TaskStatus.WaitingForActivation)
-                    myTcs.TrySetException(new QuickbloxSdkException("Failed to fully initialize xmpp connection because of timeout."));
-            },
-            tcs, timeout, new TimeSpan(0, 0, 0, 0, -1));
-
-            OpenConnection(xmppClient, quickbloxClient.ChatEndpoint, userId, quickbloxClient.ApplicationId, password);
-
-            await tcs.Task;
-        }
-
-        /// <summary>
-        /// Disconnects from XMPP server.
-        /// </summary>
-        public void Disconnect()
-        {
-            isUserDisconnected = true;
-            Contacts.Clear();
-            unsubscribedRosterItems.Clear();
-            xmppClient.Send(new presence { type = presence.typeEnum.unavailable });
-            xmppClient.Disconnect();
-            isReady = false;
-        }
-
-        /// <summary>
-        /// Creates a private one-to-one chat manager.
-        /// </summary>
-        /// <param name="otherUserId">Another user ID</param>
-        /// <param name="dialogId">Dialog ID with another user</param>
-        /// <returns>PrivateChatManager instance.</returns>
-        public IPrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId)
-        {
-            return new PrivateChatManager(quickbloxClient, xmppClient, otherUserId, dialogId);
-        }
-
-        /// <summary>
-        /// Creates a group chat manager.
-        /// </summary>
-        /// <param name="groupJid">Group XMPP room JID.</param>
-        /// <param name="dialogId">Group dialog ID.</param>
-        /// <returns>GroupChatManager</returns>
-        public IGroupChatManager GetGroupChatManager(string groupJid, string dialogId)
-        {
-            return new GroupChatManager(quickbloxClient, xmppClient, groupJid, dialogId);
-        }
-
-        /// <summary>
-        /// Requests roster contact list from server.
-        /// </summary>
-        public void ReloadContacts()
-        {
-            iq iq = new iq { type = iq.typeEnum.get };
-            iq.Add(new query());
-            xmppClient.Send(iq);
-        }
-
-        /// <summary>
-        /// Adds a new contact to roster.
-        /// </summary>
-        /// <param name="contact"></param>
-        public void AddContact(Contact contact)
-        {
-            string jid = BuildJid(contact.UserId);
-
-            var rosterItem = new item { jid = jid, name = contact.Name };
-            var rosterQuery = new query();
-            rosterQuery.Add(rosterItem);
-            iq iq = new iq { type = iq.typeEnum.set };
-            iq.Add(rosterQuery);
-
-            xmppClient.Send(iq);
-        }
-
-        /// <summary>
-        /// Deletes a contact from roster.
-        /// </summary>
-        /// <param name="userId"></param>
-        public void DeleteContact(int userId)
-        {
-            string jid = BuildJid(userId);
-
-            var rosterItem = new item { jid = jid, subscription = item.subscriptionEnum.remove };
-            var rosterQuery = new query();
-            rosterQuery.Add(rosterItem);
-            iq iq = new iq { type = iq.typeEnum.set };
-            iq.Add(rosterQuery);
-
-            xmppClient.Send(iq);
-        }
-
-        /// <summary>
-        /// Enables Message Carbons which allows to have sync conversations in case a user has several devices.
-        /// </summary>
-        public void EnableMessageCarbons()
-        {
-            var carbonsEnable = new MessageCarbonsEnable();
-            iq iq = new iq { type = iq.typeEnum.set, id = "enable1" };
-            iq.Add(carbonsEnable);
-
-            xmppClient.Send(iq);
-        }
-
-        #endregion
-
-        #region Private methods
-
-        private void OpenConnection(Client client, string chatEndpointUrl, int userId, int applicationId,
-            string password)
-        {
-            Contacts = new List<Contact>();
-            Presences = new List<Presence>();
-
-            ChatEndpoint = chatEndpointUrl;
-            ApplicationId = applicationId;
-            isUserDisconnected = false;
-
-            client.Settings.Hostname = chatEndpointUrl;
-            client.Settings.SSL = false;
-            client.Settings.OldSSL = false;
-            client.Settings.Port = 5222;
-            client.Settings.AuthenticationTypes = MechanismType.Plain;
-            client.Settings.Id = BuildJid(userId);
-            client.Settings.Password = password;
-
-            client.OnReceive += ClientOnOnReceive;
-            client.OnReady += (sender, args) => isReady = true;
-            client.OnError +=
-                (sender, args) =>
+                var jid = new Jid(e.Jid.ToString());
+                TuneInformation information = null;
+                if (e.Information != null)
                 {
-                    throw new QuickbloxSdkException(string.Format("XMPP connection exception. Message: {0}. Type: {1}",
-                        args.message, args.type));
-                };
+                    information = new TuneInformation(e.Information.Title, e.Information.Artist, e.Information.Track, e.Information.Length, e.Information.Rating, e.Information.Source, e.Information.Uri);
+                }
 
-            client.OnDisconnected += (sender, args) =>
-            {
-                if (!isUserDisconnected)
-                    client.Connect();
+                handler.Invoke(this, new TuneEventArgs(jid, information));
+            }
 
-                var handler = Disconnected;
-                if (handler != null)
-                    handler(this, new EventArgs());
-            };
-
-
-            string debugClientName = "";
-#if DEBUG || TEST_RELEASE
-           debugClientName = DebugClientName;
-#endif
-            client.OnLogMessage += async (sender, args) => await LoggerHolder.Log(LogLevel.Debug, string.Format("XMPP {0} LOG: {1} {2}", debugClientName, args.type, args.message));
-
-            xmppClient = client;
-            isReady = false;
-            client.Connect();
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> ============///////////////////////==============");
         }
 
-        private void ClientOnOnReceive(object sender, TagEventArgs tagEventArgs)
-        {
-            var message = tagEventArgs.tag as message;
-            if (message != null)
+        private async void OnUnsubscribedCallback (object sender, Sharp.Xmpp.Im.UnsubscribedEventArgs e)
+		{
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnUnsubscribed:" + e.Jid.ToString());
+            var handler = SubscriptionsChanged;
+            if (handler != null)
             {
-                OnMessage(message);
-                return;
-            }
-
-            var presence = tagEventArgs.tag as presence;
-            if (presence != null)
-            {
-                OnPresence(presence);
-                return;
-            }
-
-            var iq = tagEventArgs.tag as iq;
-            if (iq != null)
-            {
-                OnIq(iq);
-                return;
+                handler.Invoke(this, new SubscriptionsEventArgs(new Jid(e.Jid.ToString()), PresenceType.Unsubscribed));
             }
         }
 
-        private void OnMessage(message msg)
-        {
-            var messageCarbonMessageSent = msg.Element(MessageCarbonsMessageSent.XName);
-            var forwardedMessage = messageCarbonMessageSent?.Element(ForwardedMessage.XName);
-            var messageSent = forwardedMessage?.Element(XMPP.tags.jabber.client.Namespace.message);
-
-            if (messageSent != null) // message sent from this account but on a different device
+        private async void OnSubscriptionRefusedCallback (object sender, Sharp.Xmpp.Im.SubscriptionRefusedEventArgs e)
+		{
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnSubscriptionRefused:" + e.Jid.ToString());
+            var handler = SubscriptionsChanged;
+            if (handler != null)
             {
-                if (CheckIsSystemMessage(messageSent))
+                handler.Invoke(this, new SubscriptionsEventArgs(new Jid(e.Jid.ToString()), PresenceType.Refused));
+            }
+        }
+
+        private async void OnSubscriptionApprovedCallback (object sender, Sharp.Xmpp.Im.SubscriptionApprovedEventArgs e)
+		{
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnSubscriptionApproved:" + e.Jid.ToString());
+            var handler = SubscriptionsChanged;
+            if (handler != null)
+            {
+                handler.Invoke(this, new SubscriptionsEventArgs(new Jid(e.Jid.ToString()), PresenceType.Subscribed));
+            }
+        }
+
+        private async void OnStatusChangedCallback (object sender, Sharp.Xmpp.Im.StatusEventArgs e)
+		{
+            if (MyJid == null)
+                return;
+
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnStatusChanged:" + e.Jid.ToString() + " Status: " + e.Status.Availability);
+            
+            if (e.Jid != new Sharp.Xmpp.Jid(MyJid.ToString()))
+            {
+                var jid = e.Jid.ToString();
+                if (e.Status.Availability == Sharp.Xmpp.Im.Availability.Online)
                 {
-                    OnSystemMessageSent(messageSent);
+                    if (!this.Presences.Contains(jid))
+                    {
+                        await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> Added to Presences. Jid: " + e.Jid);
+                        this.Presences.Add(jid);
+                    }
                 }
                 else
                 {
-                    OnUsualMessageSent(messageSent);
+                    await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> Removed from Presences. Jid: " + e.Jid);
+                    this.Presences.Remove(jid);
                 }
+            }
+
+            var handler = StatusChanged;
+            if (handler != null)
+            {
+                var availability = (Availability)Enum.Parse(typeof(Availability), e.Status.Availability.ToString());
+                var status = new Status(availability, e.Status.Messages, e.Status.Priority);
+                handler.Invoke(this, new StatusEventArgs(new Jid(e.Jid.ToString()), status));
+            }
+        }
+
+        private async void OnRosterUpdatedCallback (object sender, Sharp.Xmpp.Im.RosterUpdatedEventArgs e)
+		{
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnRosterUpdated:" +
+                                                    " IsRemoved: " + e.Removed +
+                                                     " Jid: " + e.Item.Jid + 
+                                                     " Name: " + e.Item.Name + 
+                                                     " SubscriptionState: " + e.Item.SubscriptionState);
+
+            var handler = RosterUpdated;
+            if (handler != null)
+            {
+                var subscriptionWrappedState = (SubscriptionState)Enum.Parse(typeof(SubscriptionState), e.Item.SubscriptionState.ToString());
+                RosterItem wrapper = new RosterItem(e.Item.Jid.Node, e.Item.Name, subscriptionWrappedState, e.Item.Pending, e.Item.Groups);
+                handler.Invoke(this, new RosterUpdatedEventArgs(wrapper, e.Removed));
+            }
+        }
+
+        private async void OnMoodChangedCallback (object sender, Sharp.Xmpp.Extensions.MoodChangedEventArgs e)
+		{
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnMoodChanged:" +
+                                                    " Description: " + e.Description +
+                                                     " Jid: " + e.Jid + " Mood state: " + e.Mood);
+
+            var handler = MoodStateChanged;
+            if (handler != null)
+            {
+                var moodeState = (Mood)Enum.Parse(typeof(Mood), e.Mood.ToString());
+                handler.Invoke(this, new MoodChangedEventArgs(new Jid(e.Jid.ToString()), moodeState, e.Description));
+            }
+        }
+
+        private async void OnChatStateChangedCallback (object sender, Sharp.Xmpp.Extensions.ChatStateChangedEventArgs e)
+		{
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnChatStateChanged:" +
+                                                    " Jid: " + e.Jid +
+                                                    " ChatState: " + e.ChatState.ToString());
+            var handler = ChatStateChanged;
+            if (handler != null)
+            {
+                var chatState = (ChatState)Enum.Parse(typeof(ChatState), e.ChatState.ToString());
+                handler.Invoke(this, new ChatStateChangedEventArgs(new Jid(e.Jid.ToString()), chatState));
+            }
+        }
+
+        private async void OnActivityChangedCallback (object sender, Sharp.Xmpp.Extensions.ActivityChangedEventArgs e)
+		{
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnActivityChanged:" +
+                                                    " Jid: " + e.Jid +
+                                                    " ChatState: " + e.Activity.ToString());
+
+            Debug.WriteLine("XMPP: ====>  OnActivityChanged:");
+            var handler = ActivityChanged;
+            if (handler != null)
+            {
+                handler.Invoke(this, new ActivityChangedEventArgs(e.Jid.ToString(), e.Activity.ToString(), e.Specific.ToString(), e.Description));
+            }
+
+        }
+
+        private async void OnClientErrorCallback(object sender, Sharp.Xmpp.Im.ErrorEventArgs args)
+        {
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: ====> OnClientError:" +
+                                                    " Exception: " + args.ToString());
+            
+            var handler = ErrorReceived;
+            if (handler != null)
+            {
+                handler.Invoke(sender, new ErrorEventArgs(args.Exception));
+            }
+        }
+
+        private async void OnMessageReceivedCallback(object sender, Sharp.Xmpp.Im.MessageEventArgs messageEventArgs)
+        {
+            //var element = XElement.Parse(messageEventArgs.Message.DataString);
+            //var mesageCardbonMessageSent = element.Element(MessageCarbonsMessageSent.XName);
+            //XElement forwardedMessage = null;
+            //if (mesageCardbonMessageSent != null)
+            //{
+            //    forwardedMessage = mesageCardbonMessageSent.Element(ForwardedMessage.XName);
+            //}
+
+            //if (forwardedMessage != null)
+            //{
+            //    if (CheckIsSystemMessage(messageEventArgs.Message))
+            //    {
+
+            //    }
+            //    else
+            //    {
+
+            //    }
+            //}
+            //else
+            {
+                if (CheckIsSystemMessage(messageEventArgs.Message))
+                {
+                    OnSystemMessage(messageEventArgs.Message);
+                }
+                else
+                {
+                    OnUsualMessage(messageEventArgs.Message);
+                }
+            }
+        }
+
+        private bool CheckIsSystemMessage(Sharp.Xmpp.Im.Message message)
+        {
+            if (message.Type != Sharp.Xmpp.Im.MessageType.Headline)
+                return false;
+
+            var extraParams = XElement.Parse(message.ExtraParameter);
+            if (extraParams != null)
+            {
+                var moduleIdentifier = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.moduleIdentifier));
+                if (moduleIdentifier == null || moduleIdentifier.Value != SystemMessage.SystemMessageModuleIdentifier)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private async void OnUsualMessage(Sharp.Xmpp.Im.Message message)
+        {
+            var receivedMessage = new Message();
+            FillUsualMessageFields(message, receivedMessage);
+
+            var extraParams = XElement.Parse(message.ExtraParameter);
+            FillUsualMessageExtraParamsFields(extraParams, receivedMessage);
+            FillAttachments(extraParams, receivedMessage);
+
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
+                            " From: " + receivedMessage.SenderId +
+                            " To: " + receivedMessage.RecipientId +
+                            " Body: " + receivedMessage.MessageText +
+                            " DateSent " + receivedMessage.DateSent +
+                            " FullXmlMessage: " + message.DataString);
+
+            receivedMessage.ExtraParameters = extraParams;
+
+            var handler = MessageReceived;
+            if(handler != null)
+            {
+                var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), message.Type.ToString());
+                var messageEventArgs = new MessageEventArgs(new Jid(message.From.ToString()), receivedMessage, wappedMessageType);
+                handler.Invoke(this, messageEventArgs);
+            }
+        }
+        
+        private async void OnSystemMessage(Sharp.Xmpp.Im.Message message)
+        {
+            var extraParams = XElement.Parse(message.ExtraParameter);
+            var notificationType = GetNotificationType(extraParams);
+            SystemMessage systemMessage = null;
+            if (notificationType == NotificationTypes.GroupCreate || notificationType == NotificationTypes.GroupUpdate)
+            {
+                systemMessage = new GroupInfoMessage();
+                FillSystemMessageFields(message, systemMessage);
+                FillGroupInfoMessageFields(extraParams, (GroupInfoMessage)systemMessage);
             }
             else
             {
-                if (CheckIsSystemMessage(msg))
-                {
-                    OnSystemMessage(msg);
-                }
-                else
-                {
-                    OnUsualMessage(msg);
-                }
+                systemMessage = new SystemMessage();
+                FillSystemMessageFields(message, systemMessage);
+            }
+
+            systemMessage.ExtraParameters = extraParams;
+
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
+                           " From: " + systemMessage.SenderId +
+                           " Body: " + systemMessage.MessageText +
+                           " FullXmlMessage: " + message.DataString);
+
+            var handler = SystemMessageReceived;
+            if (handler != null)
+            {
+                var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), message.Type.ToString());
+                var systemMessageEventArgs = new SystemMessageEventArgs(new Jid(message.From.ToString()), systemMessage, wappedMessageType);
+                handler.Invoke(this, systemMessageEventArgs);
             }
         }
 
-        #region Usual messages
-
-        private void OnUsualMessage(message msg)
+        private void FillSystemMessageFields(Sharp.Xmpp.Im.Message message, SystemMessage result)
         {
-            var receivedMessage = new Message();
-
-            FillUsualMessageFields(msg, receivedMessage);
-            FillUsualMessageExtraParamsFields(msg, receivedMessage);
-            FillAttachments(msg, receivedMessage);
-
-            MessageReceived?.Invoke(this, receivedMessage);
-        }
-
-        /// <summary>
-        /// Method is called when a message (not system message) was sent from this account but on a different device.
-        /// </summary>
-        /// <param name="msg">Message</param>
-        private void OnUsualMessageSent(XMPP.tags.Tag msg)
-        {
-            var receivedMessage = new Message();
-
-            FillUsualMessageFields(msg, receivedMessage);
-            FillUsualMessageExtraParamsFields(msg, receivedMessage);
-
-            MessageSent?.Invoke(this, receivedMessage);
-        }
-
-        private void FillUsualMessageFields(XMPP.tags.Tag source, Message result)
-        {
-            string from = source.GetAttributeValue(XName.Get("from")).ToString();
-            string to = source.GetAttributeValue(XName.Get("to")).ToString();
-            string type = source.GetAttributeValue(XName.Get("type")).ToString();
+            string from = message.From.ToString();
+            string to = message.To.ToString();
 
             result.From = from;
             result.To = to;
-            result.MessageText = source.Element(XName.Get("body", "jabber:client"))?.Value;
+            result.MessageText = message.Body;
 
-            result.SenderId = type == message.typeEnum.groupchat.ToString() ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
-            result.IsTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.composing) != null;
-            result.IsPausedTyping = source.Element(XMPP.tags.jabber.protocol.chatstates.Namespace.paused) != null;
+            result.SenderId = message.Type == Sharp.Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
         }
 
-        private void FillUsualMessageExtraParamsFields(XMPP.tags.Tag source, Message result)
+        private void FillUsualMessageFields(Sharp.Xmpp.Im.Message message, Message result)
         {
-            var extraParams = source.Element(ExtraParams.XName);
+            string from = message.From.ToString();
+            string to = message.To.ToString();
+            var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), message.Type.ToString());
+
+            result.From = from;
+            result.To = to;
+            result.MessageText = message.Body;
+
+            result.SenderId = message.Type == Sharp.Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
+        }
+
+        private void FillUsualMessageExtraParamsFields(XElement extraParams, Message result)
+        {
             if (extraParams != null)
             {
                 result.ChatDialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id);
@@ -453,64 +508,15 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
         }
 
-        #endregion
-
-        #region System messages
-
-        private bool CheckIsSystemMessage(XMPP.tags.Tag msg)
+        private void FillGroupInfoMessageFields(XElement extraParams, GroupInfoMessage groupInfoMessage)
         {
-            var msgType = msg.GetAttributeValue(XName.Get("type"));
-
-            if (msgType == null || msgType.ToString() != message.typeEnum.headline.ToString())
-                return false;
-
-            var extraParams = msg.Element(ExtraParams.XName);
-            var moduleIdentifier = extraParams?.Element(ExtraParams.GetXNameFor(ExtraParamsList.moduleIdentifier));
-
-            if (moduleIdentifier == null || moduleIdentifier.Value != SystemMessage.SystemMessageModuleIdentifier)
-                return false;
-
-            return true;
-        }
-
-        private void OnSystemMessage(XMPP.tags.Tag msg)
-        {
-            var extraParams = msg.Element(ExtraParams.XName);
-            var notificationType = GetNotificationType(extraParams);
-            if (notificationType == NotificationTypes.GroupCreate || notificationType == NotificationTypes.GroupUpdate)
-            {
-                var groupInfoMessage = new GroupInfoMessage();
-                FillGroupInfoMessageFields(msg, groupInfoMessage);
-                SystemMessageReceived?.Invoke(this, groupInfoMessage);
-            }
-        }
-
-        /// <summary>
-        /// Method is called when a system message was sent from this account but on a different device.
-        /// </summary>
-        /// <param name="msg">Message</param>
-        private void OnSystemMessageSent(XMPP.tags.Tag msg)
-        {
-            var extraParams = msg.Element(ExtraParams.XName);
-            var notificationType = GetNotificationType(extraParams);
-            if (notificationType == NotificationTypes.GroupCreate || notificationType == NotificationTypes.GroupUpdate)
-            {
-                var groupInfoMessage = new GroupInfoMessage();
-                FillGroupInfoMessageFields(msg, groupInfoMessage);
-                SystemMessageSent?.Invoke(this, groupInfoMessage);
-            }
-        }
-
-        private void FillGroupInfoMessageFields(XMPP.tags.Tag source, GroupInfoMessage groupInfoMessage)
-        {
-            var extraParams = source.Element(ExtraParams.XName);
-            var stringIntListConverter = new StringIntListConverter();
-
             groupInfoMessage.DialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id);
             groupInfoMessage.RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name);
             groupInfoMessage.RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo);
             groupInfoMessage.DateSent = GetDateTimeExtraParam(extraParams, ExtraParamsList.date_sent);
             groupInfoMessage.RoomUpdatedDate = GetDateTimeExtraParam(extraParams, ExtraParamsList.room_updated_date);
+
+            StringIntListConverter stringIntListConverter = new StringIntListConverter();
             groupInfoMessage.CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids)).ToArray();
 
             var dialogType = GetExtraParam(extraParams, ExtraParamsList.type);
@@ -524,9 +530,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
         }
 
-        private void FillAttachments(message source, Message result)
+        private void FillAttachments(XElement extraParams, Message result)
         {
-            var extraParams = source.Element(ExtraParams.XName);
             if (extraParams != null)
             {
                 var attachmentParam = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.attachment));
@@ -534,10 +539,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 {
                     var attachemnt = new Attachment
                     {
-                        Name = attachmentParam.GetAttributeValue(XName.Get("name"))?.ToString(),
-                        Id = attachmentParam.GetAttributeValue(XName.Get("id"))?.ToString(),
-                        Type = attachmentParam.GetAttributeValue(XName.Get("type"))?.ToString(),
-                        Url = attachmentParam.GetAttributeValue(XName.Get("url"))?.ToString()
+                        Name = GetAttributeValue(attachmentParam, XName.Get("name")),
+                        Id = GetAttributeValue(attachmentParam, XName.Get("id")),
+                        Type = GetAttributeValue(attachmentParam, XName.Get("type")),
+                        Url = GetAttributeValue(attachmentParam, XName.Get("url"))
                     };
 
                     result.Attachments = new Attachment[] { attachemnt };
@@ -545,9 +550,287 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
         }
 
+   //     private async void OnMessageReceivedCallback2(object sender, Sharp.Xmpp.Im.MessageEventArgs messageEventArgs)
+   //     {
+   //         var receivedMessage = new Message();
+   //         receivedMessage.Id = messageEventArgs.Message.Id;
+   //         receivedMessage.From = messageEventArgs.Message.From.ToString();
+   //         receivedMessage.To = messageEventArgs.Message.To.ToString();
+   //         receivedMessage.MessageText = messageEventArgs.Message.Body;
+   //         //receivedMessage.Subject = messageEventArgs.Message.Subject;
+   //         receivedMessage.ChatDialogId = messageEventArgs.Message.Thread;
+   //         //receivedMessage.DateSent = messageEventArgs.Message.Timestamp.Ticks / 1000;
+   //         var extraParams = XElement.Parse(messageEventArgs.Message.ExtraParameter);
+
+			//var notificationType = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.notification_type));
+			//if (notificationType != null)
+			//{
+			//	int intValue;
+			//	if (int.TryParse(notificationType.Value, out intValue))
+			//	{
+			//		receivedMessage.NotificationType = (NotificationTypes)intValue;
+			//	}
+			//}
+
+   //         var dateSent = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.date_sent));
+   //         if (dateSent != null)
+   //         {
+   //             long longValue;
+
+   //             if (long.TryParse(dateSent.Value, out longValue))
+   //             {
+   //                 receivedMessage.DateSent = longValue;
+   //             }
+   //         }
+
+   //         receivedMessage.ExtraParameters = XElement.Parse(messageEventArgs.Message.ExtraParameter);
+
+   //         var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
+   //         //receivedMessage.MessageType = wappedMessageTyp;
+   //         //receivedMessage.XmlMessage = messageEventArgs.Message.ToString();
+
+   //         receivedMessage.SenderId = wappedMessageType == MessageType.Groupchat ? GetQbUserIdFromGroupJid(messageEventArgs.Message.From.ToString()) : 
+   //                                                                                GetQbUserIdFromJid(messageEventArgs.Message.From.ToString());
+
+   //         await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
+   //                         " From: " + receivedMessage.SenderId +
+   //                         " To: " + receivedMessage.RecipientId +
+   //                         " Body: " + receivedMessage.MessageText +
+   //                         " DateSent " + receivedMessage.DateSent +
+   //                         " FullXmlMessage: " + messageEventArgs.Message.DataString);
+
+   //         var handler = MessageReceived;
+   //         if (handler != null)
+   //         {
+   //             handler.Invoke(this, new MessageEventArgs(new Jid(messageEventArgs.Jid.ToString()), receivedMessage, wappedMessageType));
+   //         }
+   //     }
+
         #endregion
 
-        #region Working with ExtraParams
+        #region Public methods
+
+        public void SendMessage(int userId, string body, string extraParams, string dialogId, string subject = null, MessageType messageType = MessageType.Chat)
+        {
+            var messageId = MongoObjectIdGenerator.GetNewObjectIdString();
+            var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
+            var jidString = BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
+            var jid = new Sharp.Xmpp.Jid(jidString);
+            var message = xmppClient.SendMessage(jid, messageId, body, extraParams, subject, dialogId, wrappedMessageType);
+
+            LoggerHolder.Log(LogLevel.Debug, "XMPP: SentMessage ====> " + message.DataString);
+        }
+
+        public void SendMessage(string jid, string body, string extraParams, string dialogId, string subject = null, MessageType messageType = MessageType.Chat)
+        {
+            var messageId = MongoObjectIdGenerator.GetNewObjectIdString();
+            var wrappedMessageType = (Sharp.Xmpp.Im.MessageType)Enum.Parse(typeof(Sharp.Xmpp.Im.MessageType), messageType.ToString());
+            var message = xmppClient.SendMessage(jid, messageId, body, extraParams, subject, dialogId, wrappedMessageType);
+
+            LoggerHolder.Log(LogLevel.Debug, "XMPP: SentMessage ====> " + message.DataString);
+        }
+
+        public void ReloadContacts()
+        {
+            this.Contacts.Clear();
+            var roster = xmppClient.GetRoster();
+            foreach (var item in roster)
+            {
+                var subscriptionWrappedState = (SubscriptionState)Enum.Parse(typeof(SubscriptionState), item.SubscriptionState.ToString());
+                RosterItem wrapper = new RosterItem(item.Jid.Node, item.Name, subscriptionWrappedState, item.Pending, item.Groups);
+                this.Contacts.Add(wrapper);
+            }
+        }
+
+        public void SetChatState(string otherUserJid, ChatState chatState)
+        {
+            var wrappedChatState = (Sharp.Xmpp.Extensions.ChatState)Enum.Parse(typeof(Sharp.Xmpp.Extensions.ChatState), chatState.ToString());
+            xmppClient.SetChatState(new Sharp.Xmpp.Jid(otherUserJid), wrappedChatState);
+        }
+
+        public void SetSubscribtionStatus(string otherUserJid, SubscriptionMessageType chatState)
+        {
+            switch (chatState)
+            {
+                case SubscriptionMessageType.RequestSubscription:
+                    xmppClient.RequestSubscription(new Sharp.Xmpp.Jid(otherUserJid));
+                    break;
+                case SubscriptionMessageType.ApproveSubscription:
+                    xmppClient.ApproveSubscriptionRequest(new Sharp.Xmpp.Jid(otherUserJid));
+                    break;
+                case SubscriptionMessageType.RefuseSubscription:
+                    xmppClient.RefuseSubscriptionRequest(new Sharp.Xmpp.Jid(otherUserJid));
+                    break;
+                case SubscriptionMessageType.RevokeSubscription:
+                    xmppClient.RevokeSubscription(new Sharp.Xmpp.Jid(otherUserJid));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void SetActivity(GeneralActivity activity, String description)
+        {
+            var activityWrappedState = (Sharp.Xmpp.Extensions.GeneralActivity)Enum.Parse(typeof(Sharp.Xmpp.Extensions.GeneralActivity), activity.ToString());
+            xmppClient.SetActivity(activityWrappedState, description: description);
+        }
+
+        public void SetvCardAvatar(Stream stream)
+        {
+            xmppClient.SetvCardAvatar(stream);
+        }
+
+        public Task<string> GetvCardAvatar(RosterItem user)
+        {
+            TaskCompletionSource<string> getBase64Avatar = new TaskCompletionSource<string>();
+
+            try
+            {
+                xmppClient.GetvCardAvatar(new Sharp.Xmpp.Jid(user.Jid.ToString()), (base64) =>
+                {
+                    getBase64Avatar.SetResult(base64);
+                });
+            }
+            catch
+            {
+                getBase64Avatar.SetResult(null);
+            }
+
+            return getBase64Avatar.Task;
+        }
+
+        public void Unblock(int userId)
+        {
+            xmppClient.Unblock(new Sharp.Xmpp.Jid(BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint)));
+        }
+
+        public IEnumerable<Jid> GetBlocklist()
+        {
+            return xmppClient.GetBlocklist().Select(baseJid => new Jid(baseJid.ToString()));
+        }
+
+        public void Buzz(int userId)
+        {
+            xmppClient.Buzz(new Sharp.Xmpp.Jid(BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint)));
+        }
+
+        public void BlockUser(int userId)
+        {
+            xmppClient.Block(new Sharp.Xmpp.Jid(BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint)));
+        }
+
+
+        public void AddContact(RosterItem user)
+        {
+			xmppClient.AddContact(new Sharp.Xmpp.Jid(user.Jid.ToString()), user.Name, user.Groups != null ? user.Groups.ToArray() : null);
+        }
+
+        public void RemoveContact(int userId)
+        {
+            xmppClient.RemoveContact(new Sharp.Xmpp.Jid(BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint)));
+        }
+
+        public void JoinToGroup(string groupJid, string nickName)
+        {
+            string fullJid = string.Format("{0}/{1}", groupJid, nickName);
+            xmppClient.JoinToGroup(new Sharp.Xmpp.Jid(fullJid), new Sharp.Xmpp.Jid(quickbloxClient.ChatXmppClient.MyJid.ToString()));
+        }
+
+		public void LeaveGroup(string groupJid, string nickName)
+		{
+			string fullJid = string.Format("{0}/{1}", groupJid, nickName);
+			xmppClient.LeaveGroup(new Sharp.Xmpp.Jid(fullJid), new Sharp.Xmpp.Jid(quickbloxClient.ChatXmppClient.MyJid.ToString()));
+		}
+
+        #endregion
+
+        #region Completed
+
+        public async Task ConnectAsync(int userId, string password)
+        {
+            var timeout = new TimeSpan(0, 0, 60);
+            var tcs = new TaskCompletionSource<object>();
+            Contacts = new List<RosterItem>();
+            Presences = new List<Jid>();
+
+            xmppClient = new XmppClient(quickbloxClient.ChatEndpoint, MySmallJid.ToString(), password);
+            xmppClient.StatusChanged += (sender, args) =>
+            {
+                if (tcs.Task.Status == TaskStatus.WaitingForActivation)
+                    tcs.TrySetResult(null);
+            };
+
+            this.userId = userId;
+
+            xmppClient.Tls = false;
+            xmppClient.Port = 5222;
+            xmppClient.Password = password;
+
+            SubscribeEvents(xmppClient);
+            xmppClient.Connect();
+
+            var timer = new Timer(state =>
+            {
+                var myTcs = (TaskCompletionSource<object>)state;
+                if (myTcs.Task.Status == TaskStatus.WaitingForActivation)
+                    myTcs.TrySetException(new QuickbloxSdkException("Failed to fully initialize xmpp connection because of timeout."));
+            },
+            tcs, timeout, new TimeSpan(0, 0, 0, 0, -1));
+
+            await tcs.Task;
+        }
+
+        public void Connect(int userId, string password)
+        {
+            Contacts = new List<RosterItem>();
+            Presences = new List<Jid>();
+            this.userId = userId;
+
+            xmppClient = new XmppClient(quickbloxClient.ChatEndpoint, MySmallJid.ToString(), password);
+            xmppClient.Tls = false;
+            xmppClient.Port = 5222;
+            xmppClient.Password = password;
+
+            SubscribeEvents(xmppClient);
+            xmppClient.Connect();
+        }
+
+        public void Close()
+        {
+            UnSubcribeEvents(xmppClient);
+
+            Contacts.Clear();
+            Presences.Clear();
+            userId = 0;
+
+            xmppClient.Close();
+        }
+
+        /// <summary>
+        /// Creates a private one-to-one chat manager.
+        /// </summary>
+        /// <param name="otherUserId">Another user ID</param>
+        /// <param name="dialogId">Dialog ID with another user</param>
+        /// <returns>PrivateChatManager instance.</returns>
+        public PrivateChatManager GetPrivateChatManager(int otherUserId, string dialogId)
+        {
+            return new PrivateChatManager(quickbloxClient, otherUserId, dialogId);
+        }
+
+        /// <summary>
+        /// Creates a group chat manager.
+        /// </summary>
+        /// <param name="groupJid">Group XMPP room JID.</param>
+        /// <param name="dialogId">Group dialog ID.</param>
+        /// <returns>GroupChatManager</returns>
+        public GroupChatManager GetGroupChatManager(string groupJid, string dialogId)
+        {
+            return new GroupChatManager(quickbloxClient, groupJid, dialogId);
+        }
+
+        #endregion
+
+        #region Helpers
 
         private NotificationTypes GetNotificationType(XElement extraParams)
         {
@@ -563,6 +846,15 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
 
             return default(NotificationTypes);
+        }
+
+        public string GetAttributeValue(XElement element, XName name)
+        {
+            XAttribute attr = element.Attribute(name);
+            if (attr != null)
+                return attr.Value;
+            else
+                return null;
         }
 
         private string GetExtraParam(XElement extraParams, ExtraParamsList neededExtraParam)
@@ -586,104 +878,19 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return default(DateTime);
         }
 
-        #endregion
-
-        #region Presences and IQ
-
-        private void OnPresence(presence presence)
+        public static string BuildJid(int userId, int appId, string chatEndpoint)
         {
-            var fromJidType = DetermineJidType(presence.from);
-
-            if (fromJidType == JidType.Private)
-            {
-                OnPrivatePresence(presence);
-            }
+            var jid = string.Format(JidPattern, userId, appId, chatEndpoint);
+            return jid;
         }
 
-        private void OnPrivatePresence(presence presence)
+        public static string BuildSmallJid(int userId, int appId)
         {
-            AutorespondToSubscribe(presence);
-
-            var receivedPresence = new Presence
-            {
-                UserId = GetQbUserIdFromJid(presence.@from),
-                PresenceType = (PresenceType)presence.type
-            };
-
-            Presences.RemoveAll(p => p.UserId == receivedPresence.UserId);
-            Presences.Add(receivedPresence);
-
-            PresenceReceived?.Invoke(this, receivedPresence);
+            var jid = string.Format(SmallJidPattern, userId, appId);
+            return jid;
         }
 
-        private void AutorespondToSubscribe(presence presence)
-        {
-            if (presence.type == presence.typeEnum.subscribe && unsubscribedRosterItems.Any(it => it.jid == presence.from))
-            {
-                xmppClient.Send(new presence { type = presence.typeEnum.subscribed, to = presence.from });
-            }
-        }
-
-        private void OnIq(iq iq)
-        {
-            if (iq.type == iq.typeEnum.result || iq.type == iq.typeEnum.set)
-            {
-                var query = iq.Element<query>(XMPP.tags.jabber.iq.roster.Namespace.query);
-                if (query != null)
-                {
-                    if (iq.type == iq.typeEnum.result || Contacts == null)
-                    {
-                        Contacts = new List<Contact>();
-                        unsubscribedRosterItems = new List<item>();
-                    }
-
-                    foreach (var item in query.itemElements)
-                    {
-                        int userId = GetQbUserIdFromJid(item.jid);
-                        if (userId == 0) continue;
-
-                        Contacts.RemoveAll(c => c.UserId == userId);
-
-                        var contact = new Contact { Name = item.name, UserId = userId };
-
-                        if (item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.both
-                            || item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.from
-                            || item.subscription == XMPP.tags.jabber.iq.roster.item.subscriptionEnum.to)
-                        {
-                            Contacts.Add(contact);
-
-                            if (iq.type == iq.typeEnum.set)
-                            {
-                                ContactAdded?.Invoke(this, contact);
-                            }
-                        }
-
-                        if (item.subscription == item.subscriptionEnum.remove && iq.type == iq.typeEnum.set)
-                        {
-                            ContactRemoved?.Invoke(this, contact);
-                        }
-
-                        if (item.subscription == item.subscriptionEnum.to || item.subscription == item.subscriptionEnum.none)
-                        {
-                            unsubscribedRosterItems.Add(item);
-                        }
-                    }
-
-                    ContactsChanged?.Invoke(this, new EventArgs());
-                }
-            }
-        }
-
-        #endregion
-
-        #region Working with JIDs
-
-        private string BuildJid(int userId)
-        {
-            return $"{userId}-{ApplicationId}@{ChatEndpoint}";
-        }
-
-        private int GetQbUserIdFromJid(string jid)
+        public static int GetQbUserIdFromJid(string jid)
         {
             var match = qbJidRegex.Match(jid);
 
@@ -693,7 +900,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return userId;
         }
 
-        private int GetQbUserIdFromGroupJid(string groupJid)
+        private static int GetQbUserIdFromGroupJid(string groupJid)
         {
             int senderId;
             var jidParts = groupJid.Split('/');
@@ -725,9 +932,5 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         #endregion
-
-        #endregion
-
     }
-
 }

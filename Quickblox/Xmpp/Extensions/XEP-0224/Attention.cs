@@ -1,8 +1,8 @@
-﻿using Sharp.Xmpp.Im;
+﻿using Xmpp.Im;
 using System;
 using System.Collections.Generic;
 
-namespace Sharp.Xmpp.Extensions
+namespace Xmpp.Extensions
 {
     /// <summary>
     /// Implements the 'Attention' extension as defined in XEP-0224.

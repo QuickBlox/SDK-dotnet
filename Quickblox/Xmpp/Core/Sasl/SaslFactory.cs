@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Sharp.Xmpp.Core.Sasl
+namespace Xmpp.Core.Sasl
 {
     /// <summary>
     /// A factory class for producing instances of Sasl mechanisms.
@@ -86,7 +86,7 @@ namespace Sharp.Xmpp.Core.Sasl
             var list = new Dictionary<string, Type>() {
 				{ "PLAIN", typeof(Sasl.Mechanisms.SaslPlain) },
 				{ "DIGEST-MD5", typeof(Sasl.Mechanisms.SaslDigestMd5) },
-				{ "SCRAM-SHA-1", typeof(Sasl.Mechanisms.SaslScramSha1) },
+				//{ "SCRAM-SHA-1", typeof(Sasl.Mechanisms.SaslScramSha1) },
 			};
             foreach (string key in list.Keys)
                 Mechanisms.Add(key, list[key]);
