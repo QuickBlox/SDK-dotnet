@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Quickblox.Sdk.GeneralDataModel.Response;
 using System.Net;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Xamarin.Forms;
 using System.Collections.Generic;
 using Quickblox.Sdk.GeneralDataModel.Filter;
 using Quickblox.Sdk.Modules.UsersModule.Requests;
@@ -21,6 +20,7 @@ using Quickblox.Sdk.Modules.ContentModule.Models;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.NotificationModule.Requests;
 using Quickblox.Sdk.Modules.NotificationModule.Models;
+using Quickblox.Sdk.Modules.ChatXmppModule;
 
 namespace Test.Shared
 {
@@ -40,10 +40,10 @@ namespace Test.Shared
 
         }
 
-        public ChatXmppClient GetXmppClient()
-        {
-            return client.ChatXmppClient;
-        }
+        //public ChatXmppClient GetXmppClient()
+        //{
+        //    return client.ChatXmppClient;
+        //}
 
         public async Task<bool> GetBaseSession()
         {

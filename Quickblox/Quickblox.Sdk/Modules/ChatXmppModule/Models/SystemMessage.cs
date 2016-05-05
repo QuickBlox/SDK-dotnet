@@ -29,7 +29,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 
     
     /// <summary>
-    /// GroupInfo message is sent when a user was added to a new or already existing group dialog.
+    /// GroupInfo XmppMessage is sent when a user was added to a new or already existing group dialog.
     /// </summary>
     public class GroupInfoMessage : SystemMessage
     {

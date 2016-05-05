@@ -14,18 +14,14 @@ using System;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Modules.LocationModule;
-//using Quickblox.Sdk.Modules.ChatXmppModule;
-#if !Xamarin
-//using Quickblox.Sdk.Modules.ChatXmppModule.Interfaces;
-#else
-#endif
+using Quickblox.Sdk.Modules.ChatXmppModule;
 
 namespace Quickblox.Sdk
 {
     /// <summary>
     /// QuickbloxClient class. Primary class in this SDK.
     /// </summary>
-    public class QuickbloxClient : IQuickbloxClient
+    public class QuickbloxClient
     {
         private const string defaultApiEndpoint = "https://api.quickblox.com";
         private const string defaultChatEndpoint = "chat.quickblox.com";
@@ -94,10 +90,8 @@ namespace Quickblox.Sdk
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
             this.LocationClient = new LocationClient(this);
-//            this.ChatXmppClient = new ChatXmppClient(this);
-//#if Xamarin
-//            this.WebSyncClient = new WebSyncClient(this);
-//#endif
+            this.ChatXmppClient = new ChatXmppClient(this);
+            this.WebSyncClient = new WebSyncClient(this);
             this.ContentClient = new ContentClient(this);      
             this.CustomObjectsClient = new CustomObjectsClient(this);
         }
@@ -141,13 +135,10 @@ namespace Quickblox.Sdk
         /// <summary>
         /// ChatXmpp module allows users to chat with each other in private or group dialogs via XMPP protocol.
         /// </summary>
-//#if !Xamarin
-//        public IChatXmppClient ChatXmppClient { get; private set; }
-//#else
-//        public ChatXmppClient ChatXmppClient { get; private set; }
+        public ChatXmppClient ChatXmppClient { get; private set; }
 
-//        public WebSyncClient WebSyncClient { get; private set; }
-//#endif
+        public WebSyncClient WebSyncClient { get; private set; }
+
         /// <summary>
         /// Custom Objects module provides flexibility to define any data structure(schema) you need.
         /// Schema is defined in QuickBlox Administration Panel. The schema is called Class and contains field names and their type.

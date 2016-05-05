@@ -11,7 +11,7 @@ namespace Quickblox.Sdk.GeneralDataModel.Response
         [JsonProperty("code")]
         public string Code { get; set; }
 
-        [JsonProperty("message")]
+        [JsonProperty("XmppMessage")]
         public string Message { get; set; }
     }
 }

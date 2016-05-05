@@ -4,7 +4,6 @@ using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
 using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.GeneralDataModel.Request;
 using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.ChatModule.Models;
@@ -22,13 +21,13 @@ namespace Quickblox.Sdk.Modules.ChatModule
     {
         #region Fields
 
-        private readonly IQuickbloxClient quickbloxClient;
+        private readonly QuickbloxClient quickbloxClient;
 
         #endregion
 
         #region Ctor
 
-        internal ChatClient(IQuickbloxClient quickbloxClient)
+        internal ChatClient(QuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
         }
@@ -106,9 +105,9 @@ namespace Quickblox.Sdk.Modules.ChatModule
         #region Messages
 
         /// <summary>
-        /// Creates a chat message. It’s possible to inject a new chat message to the chat history. In this case this new message won't be delivered to the recipient(s) by XMPP real time transport, it will be just added to the history. If you wont to initiates a real 'send to chat' - pass send_to_chat=1 parameter.
+        /// Creates a chat XmppMessage. It’s possible to inject a new chat XmppMessage to the chat history. In this case this new XmppMessage won't be delivered to the recipient(s) by XMPP real time transport, it will be just added to the history. If you wont to initiates a real 'send to chat' - pass send_to_chat=1 parameter.
         /// </summary>
-        /// <param name="createMessageRequest">Create message request info</param>
+        /// <param name="createMessageRequest">Create XmppMessage request info</param>
         /// <returns></returns>
         public async Task<HttpResponse<CreateMessageResponse>> CreateMessageAsync(CreateMessageRequest createMessageRequest)
         {
@@ -191,8 +190,8 @@ namespace Quickblox.Sdk.Modules.ChatModule
         }
 
         /// <summary>
-        /// Updates a chat message.
-        /// It's possible to mark all messages as read/delivered - just don't pass a message id.
+        /// Updates a chat XmppMessage.
+        /// It's possible to mark all messages as read/delivered - just don't pass a XmppMessage id.
         /// </summary>
         /// <param name="updateMessageRequest"></param>
         /// <returns></returns>
@@ -207,7 +206,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
         }
 
         /// <summary>
-        /// Any user in the dialog’s occupant_ids is able to remove a message from the dialog. The message will only be removed for the current user - the message will still be viewable and in the chat history for all other users in the dialog.
+        /// Any user in the dialog’s occupant_ids is able to remove a XmppMessage from the dialog. The XmppMessage will only be removed for the current user - the XmppMessage will still be viewable and in the chat history for all other users in the dialog.
         /// </summary>
         /// <param name="occupantIds"></param>
         /// <returns></returns>

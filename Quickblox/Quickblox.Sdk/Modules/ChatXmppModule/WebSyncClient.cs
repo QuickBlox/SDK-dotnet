@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Collections.ObjectModel;
 using Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters;
-using Quickblox.Sdk.Modules.ChatXmppModule.Models;
+using Xmpp.Im;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
@@ -23,9 +23,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
     {
 		const string webRTCVideoChat = "WebRTCVideoChat";
 		public event EventHandler<VideoChatMessage> VideoChatMessage;
-        IQuickbloxClient client;
+        QuickbloxClient client;
 
-        public WebSyncClient(IQuickbloxClient client)
+        public WebSyncClient(QuickbloxClient client)
         {
             this.client = client;
             this.client.ChatXmppClient.MessageReceived += OnMessageReceived;
@@ -33,7 +33,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         /// <summary>
         /// Calls the specified session identifier.
-        /// <message to="..."  type="headline" id="...">
+        /// <XmppMessage to="..."  type="headline" id="...">
         /// <extraParams xmlns = "jabber:client" >
         ///  < moduleIdentifier > WebRTCVideoChat </ moduleIdentifier >
         /// < signalType > call </ signalType >
@@ -47,7 +47,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         ///  < opponentID >...</ opponentID >
         /// </ opponentsIDs >
         /// </ extraParams >
-        /// </ message >
+        /// </ XmppMessage >
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="sdp">The SDP.</param>
@@ -64,7 +64,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         /// <summary>
         /// Accepts the specified session identifier.
-        /// <message to="..."  type="headline" id="...">
+        /// <XmppMessage to="..."  type="headline" id="...">
         /// <extraParams xmlns = "jabber:client" >
         ///  < moduleIdentifier > WebRTCVideoChat </ moduleIdentifier >
         /// < signalType > accept </ signalType >
@@ -73,7 +73,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// < sdp >...</ sdp >
         /// < platform >...</ platform >
         /// </ extraParams >
-        /// </ message >
+        /// </ XmppMessage >
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="sdp">The SDP.</param>
@@ -90,13 +90,13 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         /// <summary>
         /// Rejects the specified session identifier.
-        /// <message to="..."  type="headline" id="...">
+        /// <XmppMessage to="..."  type="headline" id="...">
         /// <extraParams xmlns = "jabber:client" >
         ///  < moduleIdentifier > WebRTCVideoChat </ moduleIdentifier >
         /// < signalType > reject </ signalType >
         /// < sessionID >...</ sessionID >
         /// </ extraParams >
-        /// </ message >
+        /// </ XmppMessage >
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="caller">The caller.</param>
@@ -111,13 +111,13 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         /// <summary>
         /// Hangs up.
-        /// <message to="..."  type="headline" id="...">
+        /// <XmppMessage to="..."  type="headline" id="...">
         /// <extraParams xmlns = "jabber:client" >
         ///  < moduleIdentifier > WebRTCVideoChat </ moduleIdentifier >
         /// < signalType > hangUp </ signalType >
         /// < sessionID >...</ sessionID >
         /// </ extraParams >
-        /// </ message >
+        /// </ XmppMessage >
         /// </summary>
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
@@ -133,7 +133,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         /// <summary>
         /// Ices the candidates.
-        /// <message to="..."  type="headline" id="...">
+        /// <XmppMessage to="..."  type="headline" id="...">
         ///<extraParams xmlns = "jabber:client" >
         ///< moduleIdentifier > WebRTCVideoChat </ moduleIdentifier >
         /// < signalType > iceCandidates </ signalType >
@@ -151,7 +151,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         ///     </ iceCandidate >
         /// </ iceCandidates >
         /// </ extraParams >
-        /// </ message >
+        /// </ XmppMessage >
         /// </summary>
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="iceCandidates">The ice candidates.</param>
@@ -169,7 +169,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             if (e.MessageType == MessageType.Headline)
             {
-                //var extraParameters = e.Message.ExtraParameter;
+                //var extraParameters = e.XmppMessage.ExtraParameters;
                 //var elements = XElement.Parse(extraParameters);
 
                 var elements = e.Message.ExtraParameters;
@@ -208,7 +208,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 					videoChatMessage.IceCandidates = iceCandidatesList;
 				}
 
-                //Parse message and raise event
+                //Parse XmppMessage and raise event
                 var handler = VideoChatMessage;
                 if (handler != null)
                 {

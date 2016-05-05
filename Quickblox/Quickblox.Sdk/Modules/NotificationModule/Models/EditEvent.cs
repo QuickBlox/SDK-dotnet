@@ -12,7 +12,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule.Models
         public Boolean? IsActive { get; set; }
 
         /// <summary>
-        /// Buid message in base64 data with reqqired parameters
+        /// Buid XmppMessage in base64 data with reqqired parameters
         /// </summary>
         [JsonProperty(PropertyName = "message")]
         [JsonConverter(typeof(MessageConverter))]

@@ -19,13 +19,13 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         /// <summary>
         /// The quickblox client
         /// </summary>
-        private readonly IQuickbloxClient quickbloxClient;
+        private readonly QuickbloxClient quickbloxClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NotificationClient"/> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        internal NotificationClient(IQuickbloxClient client)
+        internal NotificationClient(QuickbloxClient client)
         {
             this.quickbloxClient = client;
         }

@@ -19,7 +19,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
     {
         #region Fields
 
-        private readonly IQuickbloxClient quickbloxClient;
+        private readonly QuickbloxClient quickbloxClient;
 
         #endregion
 
@@ -29,7 +29,7 @@ namespace Quickblox.Sdk.Modules.UsersModule
         /// Initializes a new instance of the <see cref="UsersClient"/> class.
         /// </summary>
         /// <param name="quickbloxClient">The quickblox client.</param>
-        internal UsersClient(IQuickbloxClient quickbloxClient)
+        internal UsersClient(QuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
         }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
@@ -9,8 +6,6 @@ using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.LocationModule.Requests;
 using Quickblox.Sdk.Modules.LocationModule.Responses;
-using Quickblox.Sdk.Modules.NotificationModule.Requests;
-using Quickblox.Sdk.Modules.NotificationModule.Responses;
 
 namespace Quickblox.Sdk.Modules.LocationModule
 {
@@ -23,13 +18,13 @@ namespace Quickblox.Sdk.Modules.LocationModule
         /// <summary>
         /// The quickblox client
         /// </summary>
-        private readonly IQuickbloxClient quickbloxClient;
+        private readonly QuickbloxClient quickbloxClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocationClient"/> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        internal LocationClient(IQuickbloxClient client)
+        internal LocationClient(QuickbloxClient client)
         {
             this.quickbloxClient = client;
         }

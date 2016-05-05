@@ -17,13 +17,13 @@ namespace Quickblox.Sdk.Modules.ContentModule
     {
         #region Fields
 
-        private readonly IQuickbloxClient quickbloxClient;
+        private readonly QuickbloxClient quickbloxClient;
 
         #endregion
 
         #region Ctor
 
-        public ContentClientHelper(IQuickbloxClient quickbloxClient)
+        public ContentClientHelper(QuickbloxClient quickbloxClient)
         {
             this.quickbloxClient = quickbloxClient;
         }

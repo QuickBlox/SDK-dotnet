@@ -23,13 +23,13 @@ namespace Quickblox.Sdk.Modules.CustomObjectModule
         /// <summary>
         /// The quickblox client
         /// </summary>
-        private readonly IQuickbloxClient quickbloxClient;
+        private readonly QuickbloxClient quickbloxClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomObjectsClient"/> class.
         /// </summary>
         /// <param name="client">The client.</param>
-        internal CustomObjectsClient(IQuickbloxClient client)
+        internal CustomObjectsClient(QuickbloxClient client)
         {
             this.quickbloxClient = client;
         }

@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace Quickblox.Sdk.GeneralDataModel.Models
 {
     /// <summary>
-    /// Message class representing message from REST API and message from XMPP.
+    /// XmppMessage class representing XmppMessage from REST API and XmppMessage from XMPP.
     /// </summary>
     public class Message
     {

@@ -986,6 +986,12 @@ namespace Xmpp.Client
             userMood.SetMood(mood, description);
         }
 
+        public void SetChatState(Jid jid, ChatState chatState)
+        {
+            AssertValid();
+            chatStateNotifications.SetChatState(jid, chatState);
+        }
+
         /// <summary>
         /// Sets the user's activity to the specified activity value(s).
         /// </summary>

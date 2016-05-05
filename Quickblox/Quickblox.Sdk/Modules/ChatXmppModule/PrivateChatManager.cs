@@ -1,11 +1,14 @@
 ﻿using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatXmppModule.Models;
-using Sharp.Xmpp.Client;
+using Xmpp.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xmpp.Extensions;
+using Xmpp.Im;
+using Xmpp;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
@@ -13,7 +16,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
     {
         #region Fields
 
-        private IQuickbloxClient quickbloxClient;
+        private QuickbloxClient quickbloxClient;
         private readonly int otherUserId;
         private readonly string otherUserJid;
         private readonly string dialogId;
@@ -21,13 +24,13 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         #endregion
 
         /// <summary>
-        /// Event when a new message is received.
+        /// Event when a new XmppMessage is received.
         /// </summary>
         public event MessageEventHandler MessageReceived;
 
         #region Ctor
 
-        internal PrivateChatManager(IQuickbloxClient quickbloxClient, int otherUserId, string dialogId)
+        internal PrivateChatManager(QuickbloxClient quickbloxClient, int otherUserId, string dialogId)
         {
             this.otherUserId = otherUserId;
             this.otherUserJid = ChatXmppClient.BuildJid(otherUserId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
@@ -39,9 +42,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         #endregion
 
         /// <summary>
-        /// Sends a message to other user.
+        /// Sends a XmppMessage to other user.
         /// </summary>
-        /// <param name="message">Message text</param>
+        /// <param name="message">XmppMessage text</param>
         /// <returns>Is operation successful</returns>
         public void SendMessage(string message)
         {
@@ -70,7 +73,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         #region Notify ChatState
 
         /// <summary>
-        /// Notifies other user that you are composing a message.
+        /// Notifies other user that you are composing a XmppMessage.
         /// </summary>
         public void NotifyIsTyping()
         {
@@ -78,7 +81,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         /// <summary>
-        /// Notifies other user that you are paused a message.
+        /// Notifies other user that you are paused a XmppMessage.
         /// </summary>
         public void NotifyPausedTyping()
         {
@@ -86,7 +89,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         /// <summary>
-        /// Notifies other user that you are active a message.
+        /// Notifies other user that you are active a XmppMessage.
         /// </summary>
         public void NotifyActiveInChat()
         {
@@ -94,7 +97,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         /// <summary>
-        /// Notifies other user that you are inactive a message.
+        /// Notifies other user that you are inactive a XmppMessage.
         /// </summary>
         public void NotifyInactiveInChat()
         {
@@ -114,10 +117,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         #region Friends
 
         /// <summary>
-        /// Adds other user to your roster, subsribes for his presence, and sends FriendRequest notification message.
+        /// Adds other user to your roster, subsribes for his presence, and sends FriendRequest notification XmppMessage.
         /// </summary>
         /// <param name="contactName">Opponents name in your contact list</param>
-        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
+        /// <param name="createChatMessage">Notify an opponent with a chat XmppMessage and add this XmppMessage to the chat history.</param>
         /// <returns>Is operation successful</returns>
         public void AddToFriends(string contactName = null, bool createChatMessage = false)
         {
@@ -133,10 +136,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         /// <summary>
-        /// Adds other user to your roster, accepts presence subscription request, and sends FriendAccepted notification message.
+        /// Adds other user to your roster, accepts presence subscription request, and sends FriendAccepted notification XmppMessage.
         /// </summary>
         /// <param name="contactName">Opponents name in your contact list</param>
-        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
+        /// <param name="createChatMessage">Notify an opponent with a chat XmppMessage and add this XmppMessage to the chat history.</param>
         /// <returns>Is operation successful</returns>
         public void AcceptFriend(string contactName = null, bool createChatMessage = false)
         {
@@ -153,9 +156,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         }
 
         /// <summary>
-        /// Rejects subsription requests and sends FriendRejected notification message.
+        /// Rejects subsription requests and sends FriendRejected notification XmppMessage.
         /// </summary>
-        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
+        /// <param name="createChatMessage">Notify an opponent with a chat XmppMessage and add this XmppMessage to the chat history.</param>
         /// <returns>Is operation successful</returns>
         public void RejectFriend(bool createChatMessage)
         {
@@ -170,7 +173,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <summary>
         /// Sends FriendRemoved notification messages, removes other user from your roster and unsubscribes from presence.
         /// </summary>
-        /// <param name="createChatMessage">Notify an opponent with a chat message and add this message to the chat history.</param>
+        /// <param name="createChatMessage">Notify an opponent with a chat XmppMessage and add this XmppMessage to the chat history.</param>
         /// <returns>Is operation successful</returns>
         public void DeleteFromFriends(bool createChatMessage)
         {

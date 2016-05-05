@@ -22,13 +22,13 @@ namespace Quickblox.Sdk.Modules.ContentModule
         /// <summary>
         /// QuickbloxClient instance. 
         /// </summary>
-        private readonly IQuickbloxClient quickbloxClient;
+        private readonly QuickbloxClient quickbloxClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentClient"/> class.
         /// </summary>
         /// <param name="client">QuickbloxClient</param>
-        internal ContentClient(IQuickbloxClient client)
+        internal ContentClient(QuickbloxClient client)
         {
             this.quickbloxClient = client;
         }

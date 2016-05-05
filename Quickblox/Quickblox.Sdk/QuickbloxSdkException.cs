@@ -21,7 +21,7 @@ namespace Quickblox.Sdk
         /// <summary>
         /// Ctor
         /// </summary>
-        /// <param name="message">Exception message</param>
+        /// <param name="message">Exception XmppMessage</param>
         public QuickbloxSdkException(string message)
             : base(message)
         {
@@ -30,7 +30,7 @@ namespace Quickblox.Sdk
         /// <summary>
         /// Ctor
         /// </summary>
-        /// <param name="message">Exception message</param>
+        /// <param name="message">Exception XmppMessage</param>
         /// <param name="inner">Inner exception</param>
         public QuickbloxSdkException(string message, Exception inner)
             : base(message, inner)
