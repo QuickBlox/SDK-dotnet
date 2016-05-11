@@ -105,9 +105,9 @@ namespace Quickblox.Sdk.Modules.ChatModule
         #region Messages
 
         /// <summary>
-        /// Creates a chat XmppMessage. It’s possible to inject a new chat XmppMessage to the chat history. In this case this new XmppMessage won't be delivered to the recipient(s) by XMPP real time transport, it will be just added to the history. If you wont to initiates a real 'send to chat' - pass send_to_chat=1 parameter.
+        /// Creates a chat Message. It’s possible to inject a new chat Message to the chat history. In this case this new Message won't be delivered to the recipient(s) by XMPP real time transport, it will be just added to the history. If you wont to initiates a real 'send to chat' - pass send_to_chat=1 parameter.
         /// </summary>
-        /// <param name="createMessageRequest">Create XmppMessage request info</param>
+        /// <param name="createMessageRequest">Create Message request info</param>
         /// <returns></returns>
         public async Task<HttpResponse<CreateMessageResponse>> CreateMessageAsync(CreateMessageRequest createMessageRequest)
         {
@@ -190,8 +190,8 @@ namespace Quickblox.Sdk.Modules.ChatModule
         }
 
         /// <summary>
-        /// Updates a chat XmppMessage.
-        /// It's possible to mark all messages as read/delivered - just don't pass a XmppMessage id.
+        /// Updates a chat Message.
+        /// It's possible to mark all messages as read/delivered - just don't pass a Message id.
         /// </summary>
         /// <param name="updateMessageRequest"></param>
         /// <returns></returns>
@@ -206,7 +206,7 @@ namespace Quickblox.Sdk.Modules.ChatModule
         }
 
         /// <summary>
-        /// Any user in the dialog’s occupant_ids is able to remove a XmppMessage from the dialog. The XmppMessage will only be removed for the current user - the XmppMessage will still be viewable and in the chat history for all other users in the dialog.
+        /// Any user in the dialog’s occupant_ids is able to remove a Message from the dialog. The Message will only be removed for the current user - the Message will still be viewable and in the chat history for all other users in the dialog.
         /// </summary>
         /// <param name="occupantIds"></param>
         /// <returns></returns>

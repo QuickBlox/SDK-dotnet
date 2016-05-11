@@ -10,7 +10,7 @@ namespace Xmpp.Extensions
     /// <summary>
     /// Implements the 'Personal Eventing Protocol' extension as defined in XEP-0163.
     /// </summary>
-    internal class Pep : XmppExtension, IInputFilter<Im.XmppMessage>
+    internal class Pep : XmppExtension, IInputFilter<Im.Message>
     {
         /// <summary>
         /// A reference to the 'Entity Capabilities' extension instance.
@@ -80,12 +80,12 @@ namespace Xmpp.Extensions
         }
 
         /// <summary>
-        /// Invoked when a XmppMessage stanza is being received.
+        /// Invoked when a Message stanza is being received.
         /// </summary>
         /// <param name="stanza">The stanza which is being received.</param>
         /// <returns>true to intercept the stanza or false to pass the stanza
         /// on to the next handler.</returns>
-        public bool Input(Im.XmppMessage stanza)
+        public bool Input(Im.Message stanza)
         {
             var ev = stanza.Data.Element("event");
             if (ev == null || ev.GetDefaultNamespace().NamespaceName != "http://jabber.org/protocol/pubsub#event")
@@ -96,7 +96,7 @@ namespace Xmpp.Extensions
             string nodeId = items.GetAttribute("node");
             if (String.IsNullOrEmpty(nodeId))
                 return false;
-            // FIXME: Should we let the callback decide whether the XmppMessage stanza
+            // FIXME: Should we let the callback decide whether the Message stanza
             // should be swallowed or passed on?
             if (callbacks.ContainsKey(nodeId))
             {

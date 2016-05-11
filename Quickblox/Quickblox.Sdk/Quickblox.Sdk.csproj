@@ -238,7 +238,7 @@
     <Compile Include="Modules\ChatXmppModule\Xmpp\Im\ErrorEventArgs.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Im\GroupPrivacyRule.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Im\JidPrivacyRule.cs" />
-    <Compile Include="Modules\ChatXmppModule\Xmpp\Im\XmppMessage.cs" />
+    <Compile Include="Modules\ChatXmppModule\Xmpp\Im\Message.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Im\MessageEventArgs.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Im\MessageType.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Im\Presence.cs" />

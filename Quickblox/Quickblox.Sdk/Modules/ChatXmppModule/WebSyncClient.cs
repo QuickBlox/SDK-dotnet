@@ -169,7 +169,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             if (e.MessageType == MessageType.Headline)
             {
-                //var extraParameters = e.XmppMessage.ExtraParameters;
+                //var extraParameters = e.Message.ExtraParameters;
                 //var elements = XElement.Parse(extraParameters);
 
                 var elements = e.Message.ExtraParameters;
@@ -208,7 +208,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 					videoChatMessage.IceCandidates = iceCandidatesList;
 				}
 
-                //Parse XmppMessage and raise event
+                //Parse Message and raise event
                 var handler = VideoChatMessage;
                 if (handler != null)
                 {

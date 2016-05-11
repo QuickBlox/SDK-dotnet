@@ -3,12 +3,12 @@
 namespace Xmpp.Core
 {
     /// <summary>
-    /// Provides data for the XmppMessage event.
+    /// Provides data for the Message event.
     /// </summary>
     public class MessageEventArgs : EventArgs
     {
         /// <summary>
-        /// The XmppMessage stanza.
+        /// The Message stanza.
         /// </summary>
         public Message Stanza
         {
@@ -19,7 +19,7 @@ namespace Xmpp.Core
         /// <summary>
         /// Initializes a new instance of the MessageEventArgs class.
         /// </summary>
-        /// <param name="stanza">The XmppMessage stanza on whose behalf the event is
+        /// <param name="stanza">The Message stanza on whose behalf the event is
         /// raised.</param>
         /// <exception cref="ArgumentNullException">The stanza parameter
         /// is null.</exception>

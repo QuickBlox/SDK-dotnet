@@ -3,12 +3,12 @@
 namespace Xmpp.Im
 {
     /// <summary>
-    /// Provides data for the XmppMessage event.
+    /// Provides data for the Message event.
     /// </summary>
     internal class MessageEventArgs : EventArgs
     {
         /// <summary>
-        /// The JID of the user or resource who sent the XmppMessage.
+        /// The JID of the user or resource who sent the Message.
         /// </summary>
         public Jid Jid
         {
@@ -17,9 +17,9 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// The received chat XmppMessage.
+        /// The received chat Message.
         /// </summary>
-        public XmppMessage xmppMessage
+        public Message xmppMessage
         {
             get;
             private set;
@@ -28,9 +28,9 @@ namespace Xmpp.Im
         /// <summary>
         /// Initializes a new instance of the MessageEventArgs class.
         /// </summary>
-        /// <exception cref="ArgumentNullException">The jid parameter or the XmppMessage
+        /// <exception cref="ArgumentNullException">The jid parameter or the Message
         /// parameter is null.</exception>
-        public MessageEventArgs(Jid jid, XmppMessage xmppXmppMessage)
+        public MessageEventArgs(Jid jid, Message xmppXmppMessage)
         {
             jid.ThrowIfNull("jid");
             xmppXmppMessage.ThrowIfNull("message");

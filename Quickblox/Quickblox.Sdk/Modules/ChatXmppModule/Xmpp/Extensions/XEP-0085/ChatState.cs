@@ -25,7 +25,7 @@
         Gone,
 
         /// <summary>
-        /// The user is composing a XmppMessage.
+        /// The user is composing a Message.
         /// </summary>
         Composing,
 

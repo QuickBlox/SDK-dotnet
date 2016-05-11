@@ -132,7 +132,7 @@ namespace Xmpp.Client
         private VCardAvatars vcardAvatars;
 
         /// <summary>
-        /// Provides the XmppMessage Carbons extension
+        /// Provides the Message Carbons extension
         /// </summary>
         private MessageCarbons messageCarbons;
 
@@ -390,7 +390,7 @@ namespace Xmpp.Client
         }
 
         /// <summary>
-        /// The event that is raised when a chat XmppMessage is received.
+        /// The event that is raised when a chat Message is received.
         /// </summary>
         internal event EventHandler<MessageEventArgs> Message
         {
@@ -600,13 +600,13 @@ namespace Xmpp.Client
         }
 
         /// <summary>
-		/// Sends a chat XmppMessage with the specified content to the specified JID.
+		/// Sends a chat Message with the specified content to the specified JID.
 		/// </summary>
 		/// <param name="to">The JID of the intended recipient.</param>
-		/// <param name="body">The content of the XmppMessage.</param>
-		/// <param name="subject">The subject of the XmppMessage.</param>
-		/// <param name="thread">The conversation thread the XmppMessage belongs to.</param>
-		/// <param name="type">The type of the XmppMessage. Can be one of the values from
+		/// <param name="body">The content of the Message.</param>
+		/// <param name="subject">The subject of the Message.</param>
+		/// <param name="thread">The conversation thread the Message belongs to.</param>
+		/// <param name="type">The type of the Message. Can be one of the values from
 		/// the MessagType enumeration.</param>
 		/// <param name="language">The language of the XML character data of
 		/// the stanza.</param>
@@ -621,7 +621,7 @@ namespace Xmpp.Client
 		/// the XMPP server.</exception>
 		/// <exception cref="ObjectDisposedException">The XmppClient object has been
 		/// disposed.</exception>
-		public XmppMessage SendMessage(Jid to, 
+		public Message SendMessage(Jid to, 
                                         string messageId, 
                                         string body, 
                                         string subject = null,
@@ -636,10 +636,10 @@ namespace Xmpp.Client
         }
 
         /// <summary>
-        /// Sends the specified chat XmppMessage.
+        /// Sends the specified chat Message.
         /// </summary>
-        /// <param name="xmppMessage">The chat XmppMessage to send.</param>
-        /// <exception cref="ArgumentNullException">The XmppMessage parameter is null.</exception>
+        /// <param name="xmppMessage">The chat Message to send.</param>
+        /// <exception cref="ArgumentNullException">The Message parameter is null.</exception>
         /// <exception cref="IOException">There was a failure while writing to or reading
         /// from the network.</exception>
         /// <exception cref="InvalidOperationException">The XmppClient instance is not
@@ -647,7 +647,7 @@ namespace Xmpp.Client
         /// the XMPP server.</exception>
         /// <exception cref="ObjectDisposedException">The XmppClient object has been
         /// disposed.</exception>
-        public XmppMessage SendMessage(XmppMessage xmppMessage)
+        public Message SendMessage(Message xmppMessage)
         {
             AssertValid();
             xmppMessage.ThrowIfNull("message");
@@ -660,7 +660,7 @@ namespace Xmpp.Client
         /// <param name="availability">The availability state. Can be one of the
         /// values from the Availability enumeration, however not
         /// Availability.Offline.</param>
-        /// <param name="message">An optional XmppMessage providing a detailed
+        /// <param name="message">An optional Message providing a detailed
         /// description of the availability state.</param>
         /// <param name="priority">Provides a hint for stanza routing.</param>
         /// <param name="language">The language of the description of the
@@ -966,7 +966,7 @@ namespace Xmpp.Client
 //            }
 //            catch (IOException copyError)
 //            {
-//                System.Diagnostics.Debug.WriteLine(copyError.XmppMessage);
+//                System.Diagnostics.Debug.WriteLine(copyError.Message);
 //                //Fix??? Should throw a network exception
 //            }
 //        }
@@ -1244,7 +1244,7 @@ namespace Xmpp.Client
         /// Buzzes the user with the specified JID in order to get his or her attention.
         /// </summary>
         /// <param name="jid">The JID of the user to buzz.</param>
-        /// <param name="message">An optional XmppMessage to send along with the buzz
+        /// <param name="message">An optional Message to send along with the buzz
         /// notification.</param>
         /// <exception cref="ArgumentNullException">The jid parameter is null.</exception>
         /// <exception cref="InvalidOperationException">The XmppClient instance is

@@ -134,7 +134,7 @@
         /// <summary>
         /// An extension for communicating the status of a user in a chat session,
         /// thus indicating whether a chat partner is actively engaged in the chat,
-        /// composing a XmppMessage, temporarily paused, inactive, or gone.
+        /// composing a Message, temporarily paused, inactive, or gone.
         /// </summary>
         ChatStateNotifications,
 

@@ -31,11 +31,11 @@ namespace Xmpp
         }
 
         /// <summary>
-        /// Initializes a new instance of the XmppErrorException class with its XmppMessage
+        /// Initializes a new instance of the XmppErrorException class with its Message
         /// string set to <paramref name="message"/>.
         /// </summary>
         /// <param name="error">The XMPP error that is the reason for the exception.</param>
-        /// <param name="message">A description of the error. The content of XmppMessage is intended
+        /// <param name="message">A description of the error. The content of Message is intended
         /// to be understood by humans.</param>
         /// <exception cref="ArgumentNullException">The error parameter is null.</exception>
         public XmppErrorException(XmppError error, string message)
@@ -46,12 +46,12 @@ namespace Xmpp
         }
 
         /// <summary>
-        /// Initializes a new instance of the XmppErrorException class with its XmppMessage
+        /// Initializes a new instance of the XmppErrorException class with its Message
         /// string set to <paramref name="message"/> and a reference to the inner exception that
         /// is the cause of this exception.
         /// </summary>
         /// <param name="error">The XMPP error that is the reason for the exception.</param>
-        /// <param name="message">A description of the error. The content of XmppMessage is intended
+        /// <param name="message">A description of the error. The content of Message is intended
         /// to be understood by humans.</param>
         /// <param name="inner">The exception that is the cause of the current exception.</param>
         /// <exception cref="ArgumentNullException">The error parameter is null.</exception>

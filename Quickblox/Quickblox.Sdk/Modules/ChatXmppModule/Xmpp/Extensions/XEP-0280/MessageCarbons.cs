@@ -30,12 +30,12 @@ namespace Xmpp.Extensions
             if (!ecapa.Supports(im.Jid.Domain, Extension.MessageCarbons))
             {
                 throw new NotSupportedException("The XMPP server does not support " +
-                    "the 'XmppMessage Carbons' extension.");
+                    "the 'Message Carbons' extension.");
             }
             var iq = im.IqRequest(IqType.Set, null, im.Jid,
                 Xml.Element(enable ? "enable" : "disable", _namespaces[0]));
             if (iq.Type == IqType.Error)
-                throw Util.ExceptionFromError(iq, "XmppMessage Carbons could not " +
+                throw Util.ExceptionFromError(iq, "Message Carbons could not " +
                     "be enabled.");
         }
 

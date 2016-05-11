@@ -61,7 +61,7 @@ namespace Xmpp.Extensions
         /// Gets the attention of the XMPP user with the specified JID.
         /// </summary>
         /// <param name="jid">The JID of the user to grab the attention of.</param>
-        /// <param name="message">A XmppMessage to sent along.</param>
+        /// <param name="message">A Message to sent along.</param>
         /// <exception cref="ArgumentNullException">The jid parameter
         /// is null.</exception>
         /// <exception cref="NotSupportedException">The XMPP entity with
@@ -75,8 +75,8 @@ namespace Xmpp.Extensions
                 throw new NotSupportedException("The XMPP entity does not support the " +
                     "'Attention' extension.");
             }
-            Im.XmppMessage m = new Im.XmppMessage(jid, message);
-            // Add the 'attention' element to the XmppMessage.
+            Im.Message m = new Im.Message(jid, message);
+            // Add the 'attention' element to the Message.
             m.Data.Child(Xml.Element("attention", "urn:xmpp:attention:0"));
             im.SendMessage(m);
         }

@@ -10,7 +10,7 @@ namespace Xmpp.Im
     public enum PrivacyGranularity
     {
         /// <summary>
-        /// Blocks incoming XmppMessage stanzas.
+        /// Blocks incoming Message stanzas.
         /// </summary>
         Message = 0x01,
 

@@ -14,19 +14,19 @@ namespace Xmpp
         public XmppException() : base() { }
 
         /// <summary>
-        /// Initializes a new instance of the XmppException class with its XmppMessage
+        /// Initializes a new instance of the XmppException class with its Message
         /// string set to <paramref name="message"/>.
         /// </summary>
-        /// <param name="message">A description of the error. The content of XmppMessage is intended
+        /// <param name="message">A description of the error. The content of Message is intended
         /// to be understood by humans.</param>
         public XmppException(string message) : base(message) { }
 
         /// <summary>
-        /// Initializes a new instance of the XmppException class with its XmppMessage
+        /// Initializes a new instance of the XmppException class with its Message
         /// string set to <paramref name="message"/> and a reference to the inner exception that
         /// is the cause of this exception.
         /// </summary>
-        /// <param name="message">A description of the error. The content of XmppMessage is intended
+        /// <param name="message">A description of the error. The content of Message is intended
         /// to be understood by humans.</param>
         /// <param name="inner">The exception that is the cause of the current exception.</param>
         public XmppException(string message, Exception inner) : base(message, inner) { }

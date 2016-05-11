@@ -227,7 +227,7 @@ namespace Xmpp.Im
         internal event EventHandler<StatusEventArgs> Status;
 
         /// <summary>
-        /// The event that is raised when a chat XmppMessage is received.
+        /// The event that is raised when a chat Message is received.
         /// </summary>
         internal event EventHandler<MessageEventArgs> Message;
 
@@ -397,13 +397,13 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// Sends a chat XmppMessage with the specified content to the specified JID.
+        /// Sends a chat Message with the specified content to the specified JID.
         /// </summary>
         /// <param name="to">The JID of the intended recipient.</param>
-        /// <param name="body">The content of the XmppMessage.</param>
-        /// <param name="subject">The subject of the XmppMessage.</param>
-        /// <param name="thread">The conversation thread the XmppMessage belongs to.</param>
-        /// <param name="type">The type of the XmppMessage. Can be one of the values from
+        /// <param name="body">The content of the Message.</param>
+        /// <param name="subject">The subject of the Message.</param>
+        /// <param name="thread">The conversation thread the Message belongs to.</param>
+        /// <param name="type">The type of the Message. Can be one of the values from
         /// the MessagType enumeration.</param>
         /// <param name="language">The language of the XML character data of
         /// the stanza.</param>
@@ -418,22 +418,22 @@ namespace Xmpp.Im
         /// the XMPP server.</exception>
         /// <exception cref="ObjectDisposedException">The XmppIm object has been
         /// disposed.</exception>
-        public XmppMessage SendMessage(Jid to, string messageId, string body, XElement extraParams = null, string subject = null,
+        public Message SendMessage(Jid to, string messageId, string body, XElement extraParams = null, string subject = null,
             string thread = null, MessageType type = MessageType.Normal,
             CultureInfo language = null)
         {
             AssertValid();
             to.ThrowIfNull("to");
-            var m = new XmppMessage(to, messageId, body, subject, thread, extraParams, type, language);
+            var m = new Message(to, messageId, body, subject, thread, extraParams, type, language);
             SendMessage(m);
             return m;
         }
 
         /// <summary>
-        /// Sends the specified chat XmppMessage.
+        /// Sends the specified chat Message.
         /// </summary>
-        /// <param name="xmppMessage">The chat XmppMessage to send.</param>
-        /// <exception cref="ArgumentNullException">The XmppMessage parameter is null.</exception>
+        /// <param name="xmppMessage">The chat Message to send.</param>
+        /// <exception cref="ArgumentNullException">The Message parameter is null.</exception>
         /// <exception cref="IOException">There was a failure while writing to or reading
         /// from the network.</exception>
         /// <exception cref="InvalidOperationException">The XmppIm instance is not
@@ -441,11 +441,11 @@ namespace Xmpp.Im
         /// the XMPP server.</exception>
         /// <exception cref="ObjectDisposedException">The XmppIm object has been
         /// disposed.</exception>
-        public XmppMessage SendMessage(XmppMessage xmppMessage)
+        public Message SendMessage(Message xmppMessage)
         {
             AssertValid();
             xmppMessage.ThrowIfNull("message");
-            // "Stamp" the sender's JID onto the XmppMessage. 
+            // "Stamp" the sender's JID onto the Message. 
             xmppMessage.From = Jid;
             // Invoke IOutput<Message> Plugins.
             foreach (var ext in extensions)
@@ -598,7 +598,7 @@ namespace Xmpp.Im
         /// <param name="availability">The availability state. Can be one of the
         /// values from the Availability enumeration, however not
         /// Availability.Offline.</param>
-        /// <param name="message">An optional XmppMessage providing a detailed
+        /// <param name="message">An optional Message providing a detailed
         /// description of the availability state.</param>
         /// <param name="priority">Provides a hint for stanza routing.</param>
         /// <param name="language">The language of the description of the
@@ -1445,7 +1445,7 @@ namespace Xmpp.Im
         /// from the ErrorType enumeration.</param>
         /// <param name="condition">The XMPP error condition. Can be one of the
         /// values from the ErrorCondition enumeration.</param>
-        /// <param name="text">The text XmppMessage to include in the error.</param>
+        /// <param name="text">The text Message to include in the error.</param>
         /// <param name="data">Additional XML elements to include as part of
         /// the error element of the response.</param>
         /// <exception cref="ArgumentNullException">The iq parameter is
@@ -1516,7 +1516,7 @@ namespace Xmpp.Im
             };
             core.Message += (sender, e) =>
             {
-                OnMessage(new XmppMessage(e.Stanza));
+                OnMessage(new Message(e.Stanza));
             };
             core.Error += (sender, e) =>
             {
@@ -1616,26 +1616,26 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// Callback invoked when a XmppMessage stanza has been received.
+        /// Callback invoked when a Message stanza has been received.
         /// </summary>
-        /// <param name="xmppXmppMessage">The received XmppMessage stanza.</param>
-        private void OnMessage(XmppMessage xmppXmppMessage)
+        /// <param name="xmppXmppMessage">The received Message stanza.</param>
+        private void OnMessage(Message xmppXmppMessage)
         {
-            // Invoke IInput<XmppMessage> Plugins.
+            // Invoke IInput<Message> Plugins.
             foreach (var ext in extensions)
             {
-                var filter = ext as IInputFilter<XmppMessage>;
+                var filter = ext as IInputFilter<Message>;
                 if (filter != null)
                 {
-                    // Swallow XmppMessage?
+                    // Swallow Message?
                     if (filter.Input(xmppXmppMessage))
                         return;
                 }
             }
 
-            // Only raise the XmppMessage event, if the XmppMessage stanza actually contains
+            // Only raise the Message event, if the Message stanza actually contains
             // a body.
-            //if (XmppMessage.Data.Element("body") != null)
+            //if (Message.Data.Element("body") != null)
                 Message.Raise(this, new MessageEventArgs(xmppXmppMessage.From, xmppXmppMessage));
         }
 

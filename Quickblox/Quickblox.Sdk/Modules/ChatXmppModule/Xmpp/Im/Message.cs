@@ -7,22 +7,22 @@ using System.Xml.Linq;
 namespace Xmpp.Im
 {
     /// <summary>
-    /// Represents a XmppMessage stanza as defined in XMPP:IM.
+    /// Represents a Message stanza as defined in XMPP:IM.
     /// </summary>
-    public class XmppMessage : Core.Message
+    public class Message : Core.Message
     {
         /// <summary>
-        /// The type of the XmppMessage stanza.
+        /// The type of the Message stanza.
         /// </summary>
         private MessageType type;
 
         /// <summary>
-        /// The time at which the XmppMessage was originally sent.
+        /// The time at which the Message was originally sent.
         /// </summary>
         private DateTime timestamp = DateTime.Now;
 
         /// <summary>
-        /// The type of the XmppMessage stanza.
+        /// The type of the Message stanza.
         /// </summary>
         public MessageType Type
         {
@@ -40,7 +40,7 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// The time at which the XmppMessage was originally sent.
+        /// The time at which the Message was originally sent.
         /// </summary>
         public DateTime Timestamp
         {
@@ -59,7 +59,7 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// The conversation thread this XmppMessage belongs to.
+        /// The conversation thread this Message belongs to.
         /// </summary>
         public string Thread
         {
@@ -89,7 +89,7 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// The subject of the XmppMessage.
+        /// The subject of the Message.
         /// </summary>
         public string Subject
         {
@@ -121,7 +121,7 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// The body of the XmppMessage.
+        /// The body of the Message.
         /// </summary>
         public string Body
         {
@@ -181,7 +181,7 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// A dictionary of alternate forms of the XmppMessage subjects. The keys of the
+        /// A dictionary of alternate forms of the Message subjects. The keys of the
         /// dictionary denote ISO 2 language codes.
         /// </summary>
         public IDictionary<string, string> AlternateSubjects
@@ -191,7 +191,7 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// A dictionary of alternate forms of the XmppMessage bodies. The keys of the
+        /// A dictionary of alternate forms of the Message bodies. The keys of the
         /// dictionary denote ISO 2 language codes.
         /// </summary>
         public IDictionary<string, string> AlternateBodies
@@ -201,19 +201,19 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// Initializes a new instance of the XmppMessage class.
+        /// Initializes a new instance of the Message class.
         /// </summary>
         /// <param name="to">The JID of the intended recipient.</param>
-        /// <param name="body">The content of the XmppMessage.</param>
-        /// <param name="subject">The subject of the XmppMessage.</param>
-        /// <param name="thread">The conversation thread this XmppMessage belongs to.</param>
-        /// <param name="type">The type of the XmppMessage. Can be one of the values from
+        /// <param name="body">The content of the Message.</param>
+        /// <param name="subject">The subject of the Message.</param>
+        /// <param name="thread">The conversation thread this Message belongs to.</param>
+        /// <param name="type">The type of the Message. Can be one of the values from
         /// the MessagType enumeration.</param>
         /// <param name="language">The language of the XML character data of
         /// the stanza.</param>
         /// <exception cref="ArgumentNullException">The to parameter is null.</exception>
         /// <exception cref="ArgumentException">The body parameter is the empty string.</exception>
-        public XmppMessage(Jid to, string id = null,string body = null, string subject = null, string thread = null, XElement extraParams = null,
+        public Message(Jid to, string id = null,string body = null, string subject = null, string thread = null, XElement extraParams = null,
             MessageType type = MessageType.Normal, CultureInfo language = null)
             : base(to, null, null, null, language)
         {
@@ -229,23 +229,23 @@ namespace Xmpp.Im
         }
 
         ///// <summary>
-        ///// Initializes a new instance of the XmppMessage class.
+        ///// Initializes a new instance of the Message class.
         ///// </summary>
         ///// <param name="to">The JID of the intended recipient.</param>
-        ///// <param name="bodies">A dictionary of XmppMessage bodies. The dictionary
-        ///// keys denote the languages of the XmppMessage bodies and must be valid
+        ///// <param name="bodies">A dictionary of Message bodies. The dictionary
+        ///// keys denote the languages of the Message bodies and must be valid
         ///// ISO 2 letter language codes.</param>
-        ///// <param name="subjects">A dictionary of XmppMessage subjects. The dictionary
-        ///// keys denote the languages of the XmppMessage subjects and must be valid
+        ///// <param name="subjects">A dictionary of Message subjects. The dictionary
+        ///// keys denote the languages of the Message subjects and must be valid
         ///// ISO 2 letter language codes.</param>
-        ///// <param name="thread">The conversation thread this XmppMessage belongs to.</param>
-        ///// <param name="type">The type of the XmppMessage. Can be one of the values from
+        ///// <param name="thread">The conversation thread this Message belongs to.</param>
+        ///// <param name="type">The type of the Message. Can be one of the values from
         ///// the MessagType enumeration.</param>
         ///// <param name="language">The language of the XML character data of
         ///// the stanza.</param>
         ///// <exception cref="ArgumentNullException">The to parametr or the bodies
         ///// parameter is null.</exception>
-        //public XmppMessage(Jid to, IDictionary<string, string> bodies,
+        //public Message(Jid to, IDictionary<string, string> bodies,
         //    IDictionary<string, string> subjects = null, string thread = null, string extraParams = null,
         //    MessageType type = MessageType.Normal, CultureInfo language = null)
         //    : base(to, null, null, null, language)
@@ -267,15 +267,15 @@ namespace Xmpp.Im
         //}
 
         /// <summary>
-        /// Initializes a new instance of the XmppMessage class from the specified
+        /// Initializes a new instance of the Message class from the specified
         /// instance.
         /// </summary>
-        /// <param name="message">An instance of the Core.XmppMessage class to
+        /// <param name="message">An instance of the Core.Message class to
         /// initialize this instance with.</param>
-        /// <exception cref="ArgumentNullException">The XmppMessage parameter is null.</exception>
+        /// <exception cref="ArgumentNullException">The Message parameter is null.</exception>
         /// <exception cref="ArgumentException">The 'type' attribute of
-        /// the specified XmppMessage stanza is invalid.</exception>
-        internal XmppMessage(Core.Message message)
+        /// the specified Message stanza is invalid.</exception>
+        internal Message(Core.Message message)
         {
             message.ThrowIfNull("message");
             type = ParseType(message.Data.GetAttribute("type"));
@@ -285,7 +285,7 @@ namespace Xmpp.Im
         }
 
         /// <summary>
-        /// Parses the XmppMessage type from the specified string.
+        /// Parses the Message type from the specified string.
         /// </summary>
         /// <param name="value">The string to parse.</param>
         /// <returns>The MessageType value parsed from the string.</returns>
@@ -293,7 +293,7 @@ namespace Xmpp.Im
         /// type is invalid.</exception>
         private MessageType ParseType(string value)
         {
-            // The 'type' attribute of XmppMessage-stanzas is optional and if absent
+            // The 'type' attribute of Message-stanzas is optional and if absent
             // a type of 'normal' is assumed.
             if (String.IsNullOrEmpty(value))
                 return MessageType.Normal;

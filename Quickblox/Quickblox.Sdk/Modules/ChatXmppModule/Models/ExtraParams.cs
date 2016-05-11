@@ -32,7 +32,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         /// </summary>
         dialog_update_info,
         /// <summary>
-        /// XmppMessage attachment
+        /// Message attachment
         /// </summary>
         attachment
     }

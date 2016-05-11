@@ -23,7 +23,7 @@ namespace Xmpp.Im
         /// A user-provided description of his or her availability status.
         /// </summary>
         /// <remarks>If the Status instance contains multiple messages, this
-        /// field returns the value of the first XmppMessage in the 'Messages'
+        /// field returns the value of the first Message in the 'Messages'
         /// dictionary.</remarks>
         public string Message
         {
@@ -61,7 +61,7 @@ namespace Xmpp.Im
         /// Initializes a new instance of the Status class.
         /// </summary>
         /// <param name="availability">The availability state.</param>
-        /// <param name="message">An optional XmppMessage providing a detailed
+        /// <param name="message">An optional Message providing a detailed
         /// description of the availability state.</param>
         /// <param name="priority">Provides a hint for stanza routing.</param>
         /// <param name="language">The language of the description of the

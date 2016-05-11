@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 {
     /// <summary>
-    /// A XmppMessage that contains a forwarded XmppMessage sent by the current user, but from a different device.
+    /// A Message that contains a forwarded Message sent by the current user, but from a different device.
     /// </summary>
     public class MessageCarbonsMessageSent : XElement
     {
@@ -20,7 +20,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
     }
 
     /// <summary>
-    /// Element that contains the XmppMessage sent by the current user, but from a different device.
+    /// Element that contains the Message sent by the current user, but from a different device.
     /// </summary>
     public class ForwardedMessage : XElement
     {
@@ -31,12 +31,12 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         }
     }
 
-    // XmppMessage example:
+    // Message example:
     //    <message from = "5719149-13318@chat.quickblox.com" id="56a795eb23cbdf790d002f53" to="5719149-13318@chat.quickblox.com/1220770403-quickblox-3567" type="chat" xmlns="jabber:client">
     //	<sent xmlns = "urn:xmpp:carbons:2" >
     //        < forwarded xmlns="urn:xmpp:forward:0">
     //			<message from = "5719149-13318@chat.quickblox.com/1220770403-quickblox-3557" id="56a795eb23cbdf790d002f53" to="5513419-13318@chat.quickblox.com" type="chat" xmlns="jabber:client">
-    //				<body>Test XmppMessage</body>
+    //				<body>Test Message</body>
     //				<extraParams>
     //					<save_to_history>1</save_to_history>
     //					<dialog_id>560ba81da28f9ac8c2000657</dialog_id>

@@ -7,7 +7,7 @@ namespace Xmpp.Extensions
     /// <summary>
     /// Implements the 'Chat States Notifications' extension as defined in XEP-0085.
     /// </summary>
-    internal class ChatStateNotifications : XmppExtension, IInputFilter<XmppMessage>
+    internal class ChatStateNotifications : XmppExtension, IInputFilter<Message>
     {
         /// <summary>
         /// An enumerable collection of XMPP namespaces the extension implements.
@@ -41,12 +41,12 @@ namespace Xmpp.Extensions
         public event EventHandler<ChatStateChangedEventArgs> ChatStateChanged;
 
         /// <summary>
-        /// Invoked when a XmppMessage stanza has been received.
+        /// Invoked when a Message stanza has been received.
         /// </summary>
         /// <param name="stanza">The stanza which has been received.</param>
         /// <returns>true to intercept the stanza or false to pass the stanza
         /// on to the next handler.</returns>
-        public bool Input(XmppMessage stanza)
+        public bool Input(Message stanza)
         {
             // Look for chat-state elements.
             foreach (ChatState state in Enum.GetValues(typeof(ChatState)))
@@ -59,7 +59,7 @@ namespace Xmpp.Extensions
                         new ChatStateChangedEventArgs(stanza.From, state));
                 }
             }
-            // Pass the XmppMessage on to the next handler.
+            // Pass the Message on to the next handler.
             return false;
         }
 
@@ -75,7 +75,7 @@ namespace Xmpp.Extensions
         public void SetChatState(Jid jid, ChatState state)
         {
             jid.ThrowIfNull("jid");
-            XmppMessage m = new XmppMessage(jid);
+            Message m = new Message(jid);
             m.Type = MessageType.Chat;
             m.Data.Child(Xml.Element(state.ToString().ToLowerInvariant(),
                 "http://jabber.org/protocol/chatstates"));

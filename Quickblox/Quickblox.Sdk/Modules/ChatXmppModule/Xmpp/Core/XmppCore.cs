@@ -218,7 +218,7 @@ namespace Xmpp.Core
         }
 
         /// <summary>
-        /// The Default IQ Set /Request XmppMessage timeout
+        /// The Default IQ Set /Request Message timeout
         /// </summary>
         public int MillisecondsDefaultTimeout
         {
@@ -300,7 +300,7 @@ namespace Xmpp.Core
         public event EventHandler<IqEventArgs> Iq;
 
         /// <summary>
-        /// The event that is raised when a XmppMessage stanza has been received.
+        /// The event that is raised when a Message stanza has been received.
         /// </summary>
         public event EventHandler<MessageEventArgs> Message;
 
@@ -559,7 +559,7 @@ namespace Xmpp.Core
         }
 
         /// <summary>
-        /// Sends a XmppMessage stanza with the specified attributes and content to the
+        /// Sends a Message stanza with the specified attributes and content to the
         /// server.
         /// </summary>
         /// <param name="to">The JID of the intended recipient for the stanza.</param>
@@ -582,10 +582,10 @@ namespace Xmpp.Core
         }
 
         /// <summary>
-        /// Sends the specified XmppMessage stanza to the server.
+        /// Sends the specified Message stanza to the server.
         /// </summary>
-        /// <param name="message">The XmppMessage stanza to send to the server.</param>
-        /// <exception cref="ArgumentNullException">The XmppMessage parameter is
+        /// <param name="message">The Message stanza to send to the server.</param>
+        /// <exception cref="ArgumentNullException">The Message parameter is
         /// null.</exception>
         /// <exception cref="ObjectDisposedException">The XmppCore object has been
         /// disposed.</exception>

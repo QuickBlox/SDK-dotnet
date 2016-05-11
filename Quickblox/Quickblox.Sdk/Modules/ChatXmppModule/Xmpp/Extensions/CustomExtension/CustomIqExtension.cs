@@ -71,7 +71,7 @@ namespace Xmpp.Extensions
             if (customIqStanza == null || customIqStanza.GetDefaultNamespace().NamespaceName != "urn:sharp.xmpp:customiq")
                 return false;
             //Result indicates that the request has been received.
-            //It has not to do with the semantics of the XmppMessage
+            //It has not to do with the semantics of the Message
             XElement query = stanza.Data.Element("customiq");
 
             // TODO: check this huck
@@ -154,7 +154,7 @@ namespace Xmpp.Extensions
                 {
                     try
                     {
-                        //An empty response means the XmppMessage was received
+                        //An empty response means the Message was received
                         if (callback != null)
                         {
                             callback.Invoke();

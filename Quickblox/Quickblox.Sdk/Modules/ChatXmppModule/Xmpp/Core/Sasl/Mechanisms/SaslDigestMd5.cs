@@ -35,7 +35,7 @@ namespace Xmpp.Core.Sasl.Mechanisms
         }
 
         /// <summary>
-        /// The server sends the first XmppMessage in the authentication exchange.
+        /// The server sends the first Message in the authentication exchange.
         /// </summary>
         public override bool HasInitial
         {
@@ -297,11 +297,11 @@ namespace Xmpp.Core.Sasl.Mechanisms
         /// <summary>
         /// Add an additional backslash, if any backslashes are found in the username
         /// For XEP106 jid nodes, Openfire seems that it needs to escape the backslash
-        /// within the user name. See discussion at https://community.igniterealtime.org/XmppMessage/254096#254096
+        /// within the user name. See discussion at https://community.igniterealtime.org/Message/254096#254096
         /// It is not clear if this is an Openfire bug or a Xmpp issue, so please treat this
         /// as experimental
         /// </summary>
-        /// <param name="s">String to escape in order to resolve https://community.igniterealtime.org/XmppMessage/254096#254096 issue</param>
+        /// <param name="s">String to escape in order to resolve https://community.igniterealtime.org/Message/254096#254096 issue</param>
         /// <returns>String with backslashes escaped</returns>
         private static string UsernameBackslashEscapeXep106(string s)
         {

@@ -16,7 +16,7 @@ namespace Xmpp
         /// </summary>
         /// <param name="errorIq">The Iq stanza to create the exception from. The
         /// stanza must be of type IqType.Error.</param>
-        /// <param name="message">A description of the error. The content of XmppMessage
+        /// <param name="message">A description of the error. The content of Message
         /// is intended to be understood by humans.</param>
         /// <returns>An exception of type XmppErrorException if an XmppError instance
         /// could be created from the specified Iq stanza, or an exception of type
@@ -39,7 +39,7 @@ namespace Xmpp
         /// Creates an exception from the specified XML error element.
         /// </summary>
         /// <param name="error">An XML XMPP error element.</param>
-        /// <param name="message">A description of the error. The content of XmppMessage
+        /// <param name="message">A description of the error. The content of Message
         /// is intended to be understood by humans.</param>
         /// <returns>An exception of type XmppErrorException if an XmppError instance
         /// could be created from the specified Iq stanza, or an exception of type

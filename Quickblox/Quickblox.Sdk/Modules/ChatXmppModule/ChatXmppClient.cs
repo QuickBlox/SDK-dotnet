@@ -83,22 +83,22 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         #region Events
 
         /// <summary>
-        /// Occurs when a new XmppMessage is received.
+        /// Occurs when a new Message is received.
         /// </summary>
         public event MessageEventHandler MessageReceived;
 
         /// <summary>
-        /// Event occuring when a new XmppMessage has been sent by the current user but from a different device (XmppMessage carbons)
+        /// Event occuring when a new Message has been sent by the current user but from a different device (Message carbons)
         /// </summary>
         //public event MessageEventHandler MessageSent;
 
         /// <summary>
-        /// Occurs when a new system XmppMessage is received.
+        /// Occurs when a new system Message is received.
         /// </summary>
         public event SystemMessageEventHandler SystemMessageReceived;
 
         /// <summary>
-        /// Event occuring when a new XmppMessage has been sent by the current user but from a different device (XmppMessage carbons)
+        /// Event occuring when a new Message has been sent by the current user but from a different device (Message carbons)
         /// </summary>
         //public event SystemMessageEventHandler SystemMessageSent;
 
@@ -138,7 +138,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         public event SubscriptionsEventHandler SubscriptionsChanged;
 
         /// <summary>
-        /// Occurs when a new XmppMessage is received.
+        /// Occurs when a new Message is received.
         /// </summary>
         public event TuneEventHandler Tune;
 
@@ -327,7 +327,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private async void OnMessageReceivedCallback(object sender, Xmpp.Im.MessageEventArgs messageEventArgs)
         {
-            //var element = XElement.Parse(messageEventArgs.XmppMessage.DataString);
+            //var element = XElement.Parse(messageEventArgs.Message.DataString);
             //var mesageCardbonMessageSent = element.Element(MessageCarbonsMessageSent.XName);
             //XElement forwardedMessage = null;
             //if (mesageCardbonMessageSent != null)
@@ -337,7 +337,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
             //if (forwardedMessage != null)
             //{
-            //    if (CheckIsSystemMessage(messageEventArgs.XmppMessage))
+            //    if (CheckIsSystemMessage(messageEventArgs.Message))
             //    {
 
             //    }
@@ -359,7 +359,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
         }
 
-        private bool CheckIsSystemMessage(Xmpp.Im.XmppMessage xmppXmppMessage)
+        private bool CheckIsSystemMessage(Xmpp.Im.Message xmppXmppMessage)
         {
             if (xmppXmppMessage.Type != Xmpp.Im.MessageType.Headline)
                 return false;
@@ -374,9 +374,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return true;
         }
 
-        private async void OnUsualMessage(Xmpp.Im.XmppMessage xmppXmppMessage)
+        private async void OnUsualMessage(Xmpp.Im.Message xmppXmppMessage)
         {
-            var receivedMessage = new Message();
+            var receivedMessage = new GeneralDataModel.Models.Message();
             FillUsualMessageFields(xmppXmppMessage, receivedMessage);
 
             FillUsualMessageExtraParamsFields(xmppXmppMessage.ExtraParameters, receivedMessage);
@@ -399,7 +399,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
         }
         
-        private async void OnSystemMessage(Xmpp.Im.XmppMessage xmppXmppMessage)
+        private async void OnSystemMessage(Xmpp.Im.Message xmppXmppMessage)
         {
             var notificationType = GetNotificationType(xmppXmppMessage.ExtraParameters);
             SystemMessage systemMessage = null;
@@ -431,7 +431,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
         }
 
-        private void FillSystemMessageFields(Xmpp.Im.XmppMessage xmppXmppMessage, SystemMessage result)
+        private void FillSystemMessageFields(Xmpp.Im.Message xmppXmppMessage, SystemMessage result)
         {
             string from = xmppXmppMessage.From.ToString();
             string to = xmppXmppMessage.To.ToString();
@@ -443,7 +443,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             result.SenderId = xmppXmppMessage.Type == Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
         }
 
-        private void FillUsualMessageFields(Xmpp.Im.XmppMessage xmppXmppMessage, Message result)
+        private void FillUsualMessageFields(Xmpp.Im.Message xmppXmppMessage, GeneralDataModel.Models.Message result)
         {
             string from = xmppXmppMessage.From.ToString();
             string to = xmppXmppMessage.To.ToString();
@@ -456,7 +456,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             result.SenderId = xmppXmppMessage.Type == Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
         }
 
-        private void FillUsualMessageExtraParamsFields(XElement extraParams, Message result)
+        private void FillUsualMessageExtraParamsFields(XElement extraParams, GeneralDataModel.Models.Message result)
         {
             if (extraParams != null)
             {
@@ -521,7 +521,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
         }
 
-        private void FillAttachments(XElement extraParams, Message result)
+        private void FillAttachments(XElement extraParams, GeneralDataModel.Models.Message result)
         {
             if (extraParams != null)
             {
@@ -543,15 +543,15 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
    //     private async void OnMessageReceivedCallback2(object sender, Xmpp.Im.MessageEventArgs messageEventArgs)
    //     {
-   //         var receivedMessage = new XmppMessage();
-   //         receivedMessage.Id = messageEventArgs.XmppMessage.Id;
-   //         receivedMessage.From = messageEventArgs.XmppMessage.From.ToString();
-   //         receivedMessage.To = messageEventArgs.XmppMessage.To.ToString();
-   //         receivedMessage.MessageText = messageEventArgs.XmppMessage.Body;
-   //         //receivedMessage.Subject = messageEventArgs.XmppMessage.Subject;
-   //         receivedMessage.ChatDialogId = messageEventArgs.XmppMessage.Thread;
-   //         //receivedMessage.DateSent = messageEventArgs.XmppMessage.Timestamp.Ticks / 1000;
-   //         var extraParams = XElement.Parse(messageEventArgs.XmppMessage.ExtraParameters);
+   //         var receivedMessage = new Message();
+   //         receivedMessage.Id = messageEventArgs.Message.Id;
+   //         receivedMessage.From = messageEventArgs.Message.From.ToString();
+   //         receivedMessage.To = messageEventArgs.Message.To.ToString();
+   //         receivedMessage.MessageText = messageEventArgs.Message.Body;
+   //         //receivedMessage.Subject = messageEventArgs.Message.Subject;
+   //         receivedMessage.ChatDialogId = messageEventArgs.Message.Thread;
+   //         //receivedMessage.DateSent = messageEventArgs.Message.Timestamp.Ticks / 1000;
+   //         var extraParams = XElement.Parse(messageEventArgs.Message.ExtraParameters);
 
 			//var notificationType = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.notification_type));
 			//if (notificationType != null)
@@ -574,21 +574,21 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
    //             }
    //         }
 
-   //         receivedMessage.ExtraParameters = XElement.Parse(messageEventArgs.XmppMessage.ExtraParameters);
+   //         receivedMessage.ExtraParameters = XElement.Parse(messageEventArgs.Message.ExtraParameters);
 
-   //         var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.XmppMessage.Type.ToString());
+   //         var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
    //         //receivedMessage.MessageType = wappedMessageTyp;
-   //         //receivedMessage.XmlMessage = messageEventArgs.XmppMessage.ToString();
+   //         //receivedMessage.XmlMessage = messageEventArgs.Message.ToString();
 
-   //         receivedMessage.SenderId = wappedMessageType == MessageType.Groupchat ? GetQbUserIdFromGroupJid(messageEventArgs.XmppMessage.From.ToString()) : 
-   //                                                                                GetQbUserIdFromJid(messageEventArgs.XmppMessage.From.ToString());
+   //         receivedMessage.SenderId = wappedMessageType == MessageType.Groupchat ? GetQbUserIdFromGroupJid(messageEventArgs.Message.From.ToString()) : 
+   //                                                                                GetQbUserIdFromJid(messageEventArgs.Message.From.ToString());
 
    //         await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
    //                         " From: " + receivedMessage.SenderId +
    //                         " To: " + receivedMessage.RecipientId +
    //                         " Body: " + receivedMessage.MessageText +
    //                         " DateSent " + receivedMessage.DateSent +
-   //                         " FullXmlMessage: " + messageEventArgs.XmppMessage.DataString);
+   //                         " FullXmlMessage: " + messageEventArgs.Message.DataString);
 
    //         var handler = MessageReceived;
    //         if (handler != null)
