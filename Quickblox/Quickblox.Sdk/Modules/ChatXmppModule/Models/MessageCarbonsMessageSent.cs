@@ -32,18 +32,18 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
     }
 
     // XmppMessage example:
-    //    <XmppMessage from = "5719149-13318@chat.quickblox.com" id="56a795eb23cbdf790d002f53" to="5719149-13318@chat.quickblox.com/1220770403-quickblox-3567" type="chat" xmlns="jabber:client">
+    //    <message from = "5719149-13318@chat.quickblox.com" id="56a795eb23cbdf790d002f53" to="5719149-13318@chat.quickblox.com/1220770403-quickblox-3567" type="chat" xmlns="jabber:client">
     //	<sent xmlns = "urn:xmpp:carbons:2" >
     //        < forwarded xmlns="urn:xmpp:forward:0">
-    //			<XmppMessage from = "5719149-13318@chat.quickblox.com/1220770403-quickblox-3557" id="56a795eb23cbdf790d002f53" to="5513419-13318@chat.quickblox.com" type="chat" xmlns="jabber:client">
+    //			<message from = "5719149-13318@chat.quickblox.com/1220770403-quickblox-3557" id="56a795eb23cbdf790d002f53" to="5513419-13318@chat.quickblox.com" type="chat" xmlns="jabber:client">
     //				<body>Test XmppMessage</body>
     //				<extraParams>
     //					<save_to_history>1</save_to_history>
     //					<dialog_id>560ba81da28f9ac8c2000657</dialog_id>
     //				</extraParams>
-    //			</XmppMessage>
+    //			</message>
     //		</forwarded>
     //	</sent>
-    // </XmppMessage>
+    // </message>
 
 }

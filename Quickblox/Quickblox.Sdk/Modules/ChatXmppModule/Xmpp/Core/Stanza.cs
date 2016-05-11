@@ -85,16 +85,21 @@ namespace Xmpp.Core
         {
             get
             {
-                string v = element.GetAttribute("xml:lang");
+                var xname = XName.Get("lang", XNamespace.Xml.NamespaceName);
+                string v = element.GetAttribute(xname);
                 return String.IsNullOrEmpty(v) ? null : new CultureInfo(v);
             }
 
             set
             {
+
                 if (value == null)
-                    element.RemoveAttribute("xml:lang");
+                    element.RemoveAttribute("lang", XNamespace.Xml.NamespaceName);
                 else
-                    element.SetAttribute("xml:lang", value.Name);
+                {
+                    XAttribute xmlLang = new XAttribute(XNamespace.Xml + "lang", value.Name);
+                    this.element.Add(xmlLang);
+                }
             }
         }
 
@@ -145,7 +150,7 @@ namespace Xmpp.Core
             Jid from = null, string id = null, CultureInfo language = null,
             params XElement[] data)
         {
-            string name = GetType().Name.ToLowerInvariant();
+            var name = GetType().Name.ToLowerInvariant();
             element = Xml.Element(name, @namespace);
             To = to;
             From = from;

@@ -24,13 +24,13 @@ namespace Quickblox.Sdk.Core
 
         public const string DeleteDialogMethod = "/chat/Dialog/{0}.json";
 
-        public const string GetMessagesMethod = "/chat/XmppMessage.json";
+        public const string GetMessagesMethod = "/chat/Message.json";
 
-        public const string CreateMessageMethod = "/chat/XmppMessage.json";
+        public const string CreateMessageMethod = "/chat/Message.json";
 
-        public const string UpdateMessageMethod = "/chat/XmppMessage/{0}.json";
+        public const string UpdateMessageMethod = "/chat/Message/{0}.json";
 
-        public const string DeleteMessageMethod = "/chat/XmppMessage/{0}.json";
+        public const string DeleteMessageMethod = "/chat/Message/{0}.json";
 
         #endregion
 

@@ -148,6 +148,7 @@
     <Compile Include="Modules\ChatXmppModule\Xmpp\Core\MessageEventArgs.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Core\Presence.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Core\PresenceEventArgs.cs" />
+    <Compile Include="Modules\ChatXmppModule\Xmpp\Core\RemoveNamespaces.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Core\Sasl\Mechanisms\SaslDigestMd5.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Core\Sasl\Mechanisms\SaslPlain.cs" />
     <Compile Include="Modules\ChatXmppModule\Xmpp\Core\Sasl\SaslException.cs" />

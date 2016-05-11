@@ -16,7 +16,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
             IceCandidates = iceCandidates;
         }
 
-        public string Build()
+        public XElement Build()
         {
             var extraParams = new XElement("extraParams",
                     new XElement("moduleIdentifier", "WebRTCVideoChat"),
@@ -34,7 +34,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
             extraParams.Add(iceCandidates);
 
             XDocument srcTree = new XDocument(extraParams);    
-            return srcTree.ToString();
+            return srcTree.Root;
         }
     }
 }

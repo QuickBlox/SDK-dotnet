@@ -39,7 +39,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
 
-            quickbloxClient.ChatXmppClient.SendMessage(groupJid, message, extraParams.ToString(), dialogId, null, MessageType.Groupchat);
+            quickbloxClient.ChatXmppClient.SendMessage(groupJid, message, extraParams, dialogId, null, MessageType.Groupchat);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.Add(attachment);
 
-            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Attachment", extraParams.ToString(), dialogId, null, MessageType.Groupchat);
+            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Attachment", extraParams, dialogId, null, MessageType.Groupchat);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
             extraParams.AddNew(ExtraParamsList.dialog_update_info, DialogUpdateInfos.UpdatedDialogPhoto.ToIntString());
 
-            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Notification XmppMessage", extraParams.ToString(), dialogId, null, MessageType.Groupchat);
+            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Notification XmppMessage", extraParams, dialogId, null, MessageType.Groupchat);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.room_updated_date, updatedAt.ToUnixEpoch().ToString());
             extraParams.AddNew(ExtraParamsList.dialog_update_info, DialogUpdateInfos.UpdatedDialogName.ToIntString());
 
-            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Notification XmppMessage", extraParams.ToString(), dialogId, null, MessageType.Groupchat);
+            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Notification XmppMessage", extraParams, dialogId, null, MessageType.Groupchat);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
 
             var userJid = ChatXmppClient.BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
-			quickbloxClient.ChatXmppClient.SendMessage(userJid, "Notification XmppMessage", extraParams.ToString(), dialogId, null, MessageType.Headline);
+			quickbloxClient.ChatXmppClient.SendMessage(userJid, "Notification XmppMessage", extraParams, dialogId, null, MessageType.Headline);
         }
 
         private void NotifyAbountGroupOccupantsOnCreation(IList<int> addedOccupantsIds, DateTime groupCreationDate)
@@ -180,7 +180,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.dialog_update_info, DialogUpdateInfos.ModifiedOccupantsList.ToIntString());
             extraParams.AddNew(ExtraParamsList.room_updated_date, groupCreationDate.ToUnixEpoch().ToString());
 
-            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Notification XmppMessage", extraParams.ToString(), dialogId, null, MessageType.Groupchat);
+            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Notification XmppMessage", extraParams, dialogId, null, MessageType.Groupchat);
         }
 
         private void NotifyAbountGroupOccupantsOnUpdate(IList<int> currentOccupantsIds, IList<int> addedOccupantsIds, IList<int> deletedOccupantsIds, DateTime updatedAt)
@@ -210,7 +210,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 extraParams.AddNew(ExtraParamsList.deleted_occupant_ids, deletedOccupants);
             }
 
-            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Notification XmppMessage", extraParams.ToString(), dialogId, null, MessageType.Groupchat);
+            quickbloxClient.ChatXmppClient.SendMessage(groupJid, "Notification XmppMessage", extraParams, dialogId, null, MessageType.Groupchat);
         }
 
         private void MessagesClientOnOnMessageReceived(object sender, MessageEventArgs messageEventArgs)

@@ -52,7 +52,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.save_to_history, "1");
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
 
-            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, message, extraParams.ToString(), dialogId, null);
+            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, message, extraParams, dialogId, null);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.Add(attachment);
 
-            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, "Attachment", extraParams.ToString(), dialogId, null);
+            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, "Attachment", extraParams, dialogId, null);
         }
 
         #region Notify ChatState
@@ -198,7 +198,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             extraParams.AddNew(ExtraParamsList.dialog_id, dialogId);
             extraParams.AddNew(ExtraParamsList.notification_type, ((int)notificationType).ToString());
 
-            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, messageText, extraParams.ToString(), dialogId, null);
+            quickbloxClient.ChatXmppClient.SendMessage(otherUserJid, messageText, extraParams, dialogId, null);
         }
 
 

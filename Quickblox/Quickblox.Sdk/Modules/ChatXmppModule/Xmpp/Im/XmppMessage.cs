@@ -152,15 +152,11 @@ namespace Xmpp.Im
             }
         }
 
-        public string ExtraParameters
+        public XElement ExtraParameters
         {
             get
             {
-                XElement bare = GetBare("extraParams");
-                if (bare != null)
-                    return bare.ToXmlString();
-                string k = AlternateBodies.Keys.FirstOrDefault();
-                return k != null ? AlternateBodies[k] : null;
+                return GetBare("extraParams");
             }
             set
             {
@@ -171,16 +167,14 @@ namespace Xmpp.Im
                         element.RemoveChild(bare);
                     else
                     {
-                        var elem = Xml.Element(value);
-                        element.Child(elem);
+                        element.Child(value);
                     }
                 }
                 else
                 {
                     if (value != null)
                     {
-                        var elem = Xml.Element(value);
-                        element.Child(elem);
+                        element.Child(value);
                     }
                 }
             }
@@ -219,7 +213,7 @@ namespace Xmpp.Im
         /// the stanza.</param>
         /// <exception cref="ArgumentNullException">The to parameter is null.</exception>
         /// <exception cref="ArgumentException">The body parameter is the empty string.</exception>
-        public XmppMessage(Jid to, string id = null,string body = null, string subject = null, string thread = null, string extraParams = null,
+        public XmppMessage(Jid to, string id = null,string body = null, string subject = null, string thread = null, XElement extraParams = null,
             MessageType type = MessageType.Normal, CultureInfo language = null)
             : base(to, null, null, null, language)
         {
@@ -317,7 +311,7 @@ namespace Xmpp.Im
         {
             foreach (XElement e in element.Descendants(tag))
             {
-                string k = e.GetAttribute("xml:lang");
+                string k = e.GetAttribute(XName.Get("lang", XNamespace.Xml.NamespaceName));
                 if (String.IsNullOrEmpty(k))
                     return e;
             }

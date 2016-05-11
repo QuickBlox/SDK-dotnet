@@ -19,7 +19,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
             ReceiverId = receiverId;
         }
 
-        public string Build()
+        public XElement Build()
         {
             var srcTree = new XDocument(
                 new XElement("extraParams",
@@ -35,7 +35,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
                 )
             );
 
-            return srcTree.ToString();
+            return srcTree.Root;
         }
     }
 }

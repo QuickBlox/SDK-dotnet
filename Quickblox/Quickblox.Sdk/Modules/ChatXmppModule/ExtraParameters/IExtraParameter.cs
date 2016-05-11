@@ -1,7 +1,9 @@
-﻿namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
+﻿using System.Xml.Linq;
+
+namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
 {
     public interface IExtraParameter
     {
-        string Build();
+        XElement Build();
     }
 }

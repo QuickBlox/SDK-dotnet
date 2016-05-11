@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Xmpp.Client
 {
@@ -620,10 +621,12 @@ namespace Xmpp.Client
 		/// the XMPP server.</exception>
 		/// <exception cref="ObjectDisposedException">The XmppClient object has been
 		/// disposed.</exception>
-		public XmppMessage SendMessage(Jid to, string messageId, string body, 
-                                        string extraParamets = null, 
+		public XmppMessage SendMessage(Jid to, 
+                                        string messageId, 
+                                        string body, 
                                         string subject = null,
-                                        string thread = null, 
+                                        string thread = null,
+                                        XElement extraParamets = null,
                                         MessageType type = MessageType.Normal,
                                         CultureInfo language = null)
         {

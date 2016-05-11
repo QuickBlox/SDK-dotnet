@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -35,13 +36,13 @@ namespace Xmpp
             //Debug.WriteLine(example);
 
             name.ThrowIfNullOrEmpty("name");
-            return new XDocument().Element(XName.Get(name, @namespace));
-        }
+            if (string.IsNullOrEmpty(@namespace))
+            {
+                return new XElement(XName.Get(name));
+            }
 
-        public static XElement ElementWithNamespace(string name, string @namespace = null)
-        {
-            name.ThrowIfNullOrEmpty("name");
-            return new XDocument().Element(XName.Get(name, @namespace));
+            return new XElement(XName.Get(name, @namespace));
+            //return new XDocument().Element(XName.Get(name, @namespace));
         }
 
         /// <summary>
@@ -64,9 +65,26 @@ namespace Xmpp
         /// <param name="name">The name of the attribute to create or alter.</param>
         /// <param name="value">The value to set for the attribute.</param>
         /// <returns>A reference to the XElement instance.</returns>
-        public static XElement SetAttribute(this XElement e, string name, string value)
+        public static XElement SetAttribute(this XElement e, string name, string value, string @namespace = null)
         {
-            e.SetAttributeValue(XName.Get(name), value);
+            XName xName = null;
+
+            if (!string.IsNullOrEmpty(@namespace))
+            {
+                xName = XName.Get(name, @namespace);
+            }
+            else
+            {
+                xName = XName.Get(name);
+            }
+
+            e.SetAttributeValue(xName, value);
+            return e;
+        }
+
+        public static XElement SetAttribute(this XElement e, XName xName, string value)
+        {
+            e.SetAttributeValue(xName, value);
             return e;
         }
 
@@ -89,15 +107,51 @@ namespace Xmpp
             return e;
         }
 
-        public static void RemoveAttribute(this XElement e, string name)
+        public static void RemoveAttribute(this XElement e, string name, string @namespace = null)
         {
-            var att = e.Attribute(XName.Get(name));
-            att.Remove();
+            try
+            {
+                XName xName = null;
+
+                if (!string.IsNullOrEmpty(@namespace))
+                {
+                    xName = XName.Get(name, @namespace);
+                }
+                else
+                {
+                    xName = XName.Get(name);
+                }
+
+                var att = e.Attribute(XName.Get(name));
+                if (att != null)
+                    att.Remove();
+            }
+            catch (Exception ex)
+            {
+            }
+           
         }
 
-        public static string GetAttribute(this XElement e, string name)
+        public static string GetAttribute(this XElement e, string name, string @namespace = null)
         {
-            var att = e.Attribute(name);
+            XName xName = null;
+
+            if (!string.IsNullOrEmpty(@namespace))
+            {
+                xName = XName.Get(name, @namespace);
+            }
+            else
+            {
+                xName = XName.Get(name);
+            }
+
+            var att = e.Attribute(xName);
+            return att != null ? att.Value : null;
+        }
+
+        public static string GetAttribute(this XElement e, XName xName)
+        {
+            var att = e.Attribute(xName);
             return att != null ? att.Value : null;
         }
 
@@ -116,36 +170,43 @@ namespace Xmpp
             // Can't use e.OuterXml because it "messes up" namespaces for elements with
             // a prefix, i.e. stream:stream (What it does is probably correct, but just
             // not what we need for XMPP).
-            StringBuilder b = new StringBuilder("<" + e.Name);
-            if (!String.IsNullOrEmpty(e.GetDefaultNamespace().NamespaceName))
-                b.Append(" xmlns='" + e.GetDefaultNamespace().NamespaceName + "'");
-            foreach (XAttribute a in e.Attributes())
-            {
-                if (a.Name == "xmlns")
-                    continue;
-                if (a.Value != null)
-                    b.Append(" " + a.Name + "='" + a.Value.ToString()
-                        + "'");
-            }
-            if (e.IsEmpty)
-                b.Append("/>");
-            else
-            {
-                b.Append(">");
-                foreach (var child in e.Nodes())
-                {
-                    if (child is XElement)
-                        b.Append(((XElement)child).ToXmlString());
-                    else if (child is XText)
-                        b.Append(((XText)child).Value);
-                }
-                b.Append("</" + e.Name + ">");
-            }
-            string xml = b.ToString();
+            //StringBuilder b = new StringBuilder("<" + e.Name.LocalName);
+            //if (!String.IsNullOrEmpty(e.GetDefaultNamespace().NamespaceName))
+            //    b.Append(" xmlns='" + e.GetDefaultNamespace().NamespaceName + "'");
+            //foreach (XAttribute a in e.Attributes())
+            //{
+            //    if (a.Name.LocalName == "xmlns")
+            //        continue;
+            //    if (a.Value != null)
+            //        b.Append(" " + a.Name.LocalName + "='" + a.Value.ToString()
+            //            + "'");
+            //}
+            //if (!e.Descendants().Any())
+            //    b.Append("/>");
+            //else
+            //{
+            //    b.Append(">");
+            //    foreach (var child in e.Nodes())
+            //    {
+            //        if (child is XElement)
+            //            b.Append(((XElement)child).ToXmlString());
+            //        else if (child is XText)
+            //            b.Append(((XText)child).Value);
+            //    }
+            //    b.Append("</" + e.Name.LocalName + ">");
+            //}
+
+
+            //string xml = b.ToString();
+            string xml = e.ToString();
             if (xmlDeclaration)
                 xml = "<?xml version='1.0' encoding='UTF-8'?>" + xml;
             if (leaveOpen)
-                return Regex.Replace(xml, "/>$", ">");
+            {
+                //var returnResult = Regex.Replace(xml, "/>$", ">");
+                var returnResult = Regex.Replace(xml, @"\<\/.+\>", "");
+                return returnResult;
+            }
             return xml;
         }
     }

@@ -19,7 +19,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
             Attachment = attachment;
         }
 
-        public string Build()
+        public XElement Build()
         {
             XDocument srcTree = new XDocument(
                 new XElement("extraParams",
@@ -37,7 +37,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
                 extraParams.Add(attachmentElement);
             }
 
-            return srcTree.ToString();
+            return srcTree.Root;
         }
     }
 }

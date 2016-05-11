@@ -345,7 +345,6 @@ namespace Xmpp.Im
             try
             {
                 await core.Connect(resource);
-                return null;
 
                 // If no username has been providd, don't establish a session.
                 if (Username == null)
@@ -419,25 +418,13 @@ namespace Xmpp.Im
         /// the XMPP server.</exception>
         /// <exception cref="ObjectDisposedException">The XmppIm object has been
         /// disposed.</exception>
-        public XmppMessage SendMessage(Jid to, string messageId, string body, string extraParams = null, string subject = null,
+        public XmppMessage SendMessage(Jid to, string messageId, string body, XElement extraParams = null, string subject = null,
             string thread = null, MessageType type = MessageType.Normal,
             CultureInfo language = null)
         {
             AssertValid();
             to.ThrowIfNull("to");
-            var m = new XmppMessage(to, messageId, body, extraParams, subject, thread, type, language);
-            SendMessage(m);
-            return m;
-        }
-
-        public XmppMessage SendMessage(Jid to, string messageId, string extraParams, string subject = null,
-            string thread = null, MessageType type = MessageType.Normal,
-            CultureInfo language = null)
-        {
-            AssertValid();
-            to.ThrowIfNull("to");
-            extraParams.ThrowIfNullOrEmpty("extraParams");
-            var m = new XmppMessage(to, messageId, null, extraParams, subject, thread, type, language);
+            var m = new XmppMessage(to, messageId, body, subject, thread, extraParams, type, language);
             SendMessage(m);
             return m;
         }
@@ -693,7 +680,7 @@ namespace Xmpp.Im
             if (messages != null)
             {
                 foreach (KeyValuePair<string, string> pair in messages)
-                    elems.Add(Xml.Element("status").SetAttribute("xml:lang", pair.Key)
+                    elems.Add(Xml.Element("status").SetAttribute("lang",pair.Key, XNamespace.Xml.NamespaceName)
                         .Text(pair.Value));
             }
             Presence p = new Presence(null, null, PresenceType.Available, null,
@@ -747,7 +734,7 @@ namespace Xmpp.Im
                 Xml.Element("query", "jabber:iq:roster"));
             if (iq.Type == IqType.Error)
                 throw Util.ExceptionFromError(iq, "The roster could not be retrieved.");
-            var query = iq.Data.Element("query");
+            var query = iq.Data.Element(XName.Get("query", "jabber:iq:roster"));
             if (query == null || query.GetDefaultNamespace().NamespaceName != "jabber:iq:roster")
                 throw new XmppException("Erroneous server response.");
             return ParseRoster(iq.Data);
@@ -1682,7 +1669,7 @@ namespace Xmpp.Im
             if (e != null && !String.IsNullOrEmpty(e.Value))
                 prio = sbyte.Parse(e.Value);
             // Parse optional 'status' element(s).
-            string lang = presence.Data.GetAttribute("xml:lang");
+            string lang = presence.Data.GetAttribute(XName.Get("lang", XNamespace.Xml.NamespaceName));
             var dict = new Dictionary<string, string>();
             if (String.IsNullOrEmpty(lang))
                 lang = core.Language.Name;
@@ -1690,7 +1677,7 @@ namespace Xmpp.Im
             {
                 if (element == null)
                     continue;
-                string l = element.GetAttribute("xml:lang");
+                string l = element.GetAttribute(XName.Get("lang", XNamespace.Xml.NamespaceName));
                 if (String.IsNullOrEmpty(l))
                     l = lang;
                 dict.Add(l, element.Value);

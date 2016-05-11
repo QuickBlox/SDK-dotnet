@@ -108,7 +108,7 @@ namespace Xmpp.Core
                 //  doc.Load(xtr);
                 XElement elem = (XElement)doc.FirstNode;
                 // Handle unrecoverable stream errors.
-                if (elem.Name == "stream:error")
+                if (elem.Name.LocalName == "error")
                 {
                     string condition = elem.FirstNode != null ?
                         elem.FirstNode.Document.Root.Name.LocalName : "undefined";

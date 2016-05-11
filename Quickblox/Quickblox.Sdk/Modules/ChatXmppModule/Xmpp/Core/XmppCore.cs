@@ -51,7 +51,7 @@ namespace Xmpp.Core
         /// The parser instance used for parsing incoming XMPP XML-stream data.
         /// </summary>
         private StreamParser parser;
-
+        
         /// <summary>
         /// True if the instance has been disposed of.
         /// </summary>
@@ -469,9 +469,8 @@ namespace Xmpp.Core
         /// disposed.</exception>
         /// <remarks>If a username has been supplied, this method automatically performs
         /// authentication.</remarks>
-        public async Task<bool> Connect(string resource = null)
+        public async Task Connect(string resource = null)
         {
-            TaskCompletionSource<bool> taskCompletionSource = new TaskCompletionSource<bool>();
             if (disposed)
                 throw new ObjectDisposedException(GetType().FullName);
             this.resource = resource;
@@ -481,108 +480,31 @@ namespace Xmpp.Core
                 await client.ConnectAsync(Hostname, Port);
                 stream = client.GetStream();
 
-                var xws = new XmlWriterSettings
-                {
-                    Async = true,
-                    OmitXmlDeclaration = true,
-                    Indent = true,
-                    NewLineHandling = NewLineHandling.None,
-                    Encoding = new UTF8Encoding(false),
-                    CloseOutput = false,
-                };
+                //var string1 = "<iq type='result' id='reg1'>" +
+                //              "<query xmlns='jabber:iq:register'>" +
+                //              "<username/>" +
+                //              "<password/>" +
+                //              "</query>" +
+                //              "</iq>";
 
-                XmlWriter xml;
-                xml = XmlWriter.Create(stream, xws);
+                //var doc = XDocument.Parse(string1);
+                //foreach (var descendant in doc.Descendants())
+                //{
+                //    foreach (var xElement in descendant.Descendants())
+                //    {
+                //        Debug.WriteLine("Elem Name: " + xElement.Name);
+                //        Debug.WriteLine("Elem value: " + xElement.Value);
+                //        Debug.WriteLine("Elem ToString: " + xElement.ToString());
 
-                //Write initial stream:stream element
-                xml.WriteStartElement(STREAM_PREFIX, STREAM_ELEMENT_NAME, STREAM_NAMESPACE);
-                xml.WriteAttributeString(string.Empty, "to", string.Empty, Hostname);
-                xml.WriteAttributeString("version", "1.0");
-                xml.WriteAttributeString("xmlns", JABBER_NAMESPACE);
-                xml.WriteWhitespace("\n");
-                xml.Flush();
+                //        foreach (var xAttribute in xElement.Attributes())
+                //        {
+                //            Debug.WriteLine("Att Name: " + xAttribute.Name );
+                //            Debug.WriteLine("Att value: " + xAttribute.Value );
+                //            Debug.WriteLine("Att ToString: " + xAttribute.ToString() );
+                //        }
+                //    }
+                //}
 
-
-                Task.Factory.StartNew(() =>
-                {
-                    try
-                    {
-                        var xrs = new XmlReaderSettings
-                        {
-                            //Async = true,
-                            CloseInput = false,
-                            ConformanceLevel = ConformanceLevel.Fragment,
-                            //IgnoreComments = true,
-                            //IgnoreWhitespace = true,
-                            //                XmlResolver = null,
-                        };
-                        using (var xmlReader = XmlReader.Create(stream, xrs))
-                        {
-                            while (xmlReader.Read()) //await xmlReader.ReadAsync ().ConfigureAwait (false))
-                            {
-                                if (xmlReader.NodeType == XmlNodeType.Element)
-                                {
-                                    if (xmlReader.Name == STREAM_PREFIX + ":" + STREAM_ELEMENT_NAME)
-                                    {
-                                    }
-                                    else {
-                                        var elem = XElement.Load(xmlReader.ReadSubtree());
-                                        Debug.WriteLine(elem.ToString());
-                                        switch (elem.Name.LocalName)
-                                        {
-                                            case "success":
-                                                break;
-                                            case "failed":
-                                                break;
-                                            case "error":
-
-                                                //TODO: Check for stanza error GCM
-                                                break;
-                                            case "features":
-                                                var bytes = Encoding.UTF8.GetBytes("\0" + Username + "\0" + Password);
-                                                var saslAuthToken = Convert.ToBase64String(bytes);
-
-                                                XNamespace ns = SASL_NAMESPACE;
-                                                var element = new XElement(ns + SASL_AUTH_ELEMENT_NAME, new XAttribute("mechanism", "PLAIN"), saslAuthToken);
-                                                element.WriteTo(xml);
-                                                xml.Flush();
-
-                                                //Authenticate(new List<string>() {"PLAIN"}, Username, Password, Hostname);
-                                                break;
-                                            case "message":
-                                                //TODO: Received a message, let's parse it!
-                                                var gcm = elem.Element(GCM_NS + "gcm");
-                                                var err = elem.Element("error");
-                                                if (err != null)
-                                                {
-                                                    //TODO: Handle stanza error
-                                                }
-                                                else {
-                                                }
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                    }
-
-                                }
-                                else if (xmlReader.NodeType == XmlNodeType.EndElement && xmlReader.Name == STREAM_PREFIX + ":" + STREAM_ELEMENT_NAME)
-                                {
-                                    Close();
-                                    break;
-                                }
-                                else {
-                                }
-
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                });
-
-                return await taskCompletionSource.Task;
 
                 // Sets up the connection which includes TLS and possibly SASL negotiation.
                 SetupConnection(this.resource);
@@ -1026,36 +948,37 @@ namespace Xmpp.Core
             // Request the initial stream.
             XElement feats = InitiateStream(Hostname);
             // Server supports TLS/SSL via STARTTLS.
-            if (feats.Element("starttls") != null)
+            
+            var startTlsElement = feats.Descendants(XName.Get("starttls", "urn:ietf:params:xml:ns:xmpp-tls")).FirstOrDefault();
+            if (startTlsElement != null)
             {
                 // TLS is mandatory and user opted out of it.
-                if (feats.Element("starttls").Element("required") != null && Tls == false)
+                if (startTlsElement.Element("required") != null && Tls == false)
                     throw new ArgumentException("The server requires TLS/SSL.");
                 if (Tls)
-                    feats = StartTls(Hostname);
+                    SendAndReceive(Xml.Element("starttls", "urn:ietf:params:xml:ns:xmpp-tls"), "proceed");
+               // feats = StartTls(Hostname);
             }
             // If no Username has been provided, don't perform authentication.
             if (Username == null)
                 return;
             // Construct a list of SASL mechanisms supported by the server.
-            var m = feats.Element("mechanisms");
+            var m = feats.Descendants(XName.Get("mechanisms", "urn:ietf:params:xml:ns:xmpp-sasl"));
             if (m == null || !m.Nodes().Any())
                 throw new ArgumentException("No SASL mechanisms advertised.");
-            var mech = m.FirstNode;
-            var list = new HashSet<string>();
-            while (mech != null)
-            {
-                list.Add(mech.Document.Root.Value);
-                mech = mech.NextNode;
-            }
+            //var mech = m.FirstNode;
+            //var list = new HashSet<string>();
+            //while (mech != null)
+            //{
+            //    list.Add(mech.Document.Root.Value);
+            //    mech = mech.NextNode;
+            //}
             // Continue with SASL authentication.
             try
             {
-                feats = Authenticate(list, Username, Password, Hostname);
-                // FIXME: How is the client's JID constructed if the server does not support
-                // resource binding?
-                if (feats.Element("bind") != null)
-                    Jid = BindResource(resource);
+                var mex = m.Descendants(XName.Get("mechanism", "urn:ietf:params:xml:ns:xmpp-sasl")).Select(m1 => m1.Value).ToList();
+                Authenticate(mex, Username, Password, Hostname);
+                Jid = BindResource(resource);
             }
             catch (SaslException e)
             {
@@ -1078,26 +1001,47 @@ namespace Xmpp.Core
         /// network, or there was a failure while reading from the network.</exception>
         private XElement InitiateStream(string hostname)
         {
+            // if (this.streamWriterWripper != null)
+            //     this.streamWriterWripper.Close();
+
+            //this.streamWriterWripper = new StreamWriterWripper(stream, true);
+
+            // //Write initial stream:stream element
+            // streamWriterWripper.Writer.WriteStartElement(STREAM_PREFIX, STREAM_ELEMENT_NAME, STREAM_NAMESPACE);
+            // streamWriterWripper.Writer.WriteAttributeString(string.Empty, "to", string.Empty, Hostname);
+            // streamWriterWripper.Writer.WriteAttributeString("version", "1.0");
+            // streamWriterWripper.Writer.WriteAttributeString("xmlns", JABBER_NAMESPACE);
+            // streamWriterWripper.Writer.WriteWhitespace("\n");
+            // streamWriterWripper.Writer.Flush();
+
+            //var xml = Xml.Element("stream", "jabber:client")
+            //    .SetAttribute("to", hostname)
+            //    .SetAttribute("version", "1.0")
+            //    .SetAttribute("stream", "stream", "http://etherx.jabber.org/streams")
+            //    .SetAttribute("lang", CultureInfo.CurrentCulture.Name, XNamespace.Xml.NamespaceName);
+            //Send(xml.ToXmlString(xmlDeclaration: true, leaveOpen: true));
+
             XNamespace streamNamespace = "http://etherx.jabber.org/streams";
-            var xml = new XElement(streamNamespace + "stream",
+            var xml = new XElement(XName.Get("stream", "http://etherx.jabber.org/streams"),
                                 new XAttribute("to", hostname),
                                 new XAttribute(XNamespace.Xmlns + "stream", streamNamespace),
                                 new XAttribute("version", "1.0"),
                                 new XAttribute(XNamespace.Xml + "lang", "en"),
                                 String.Empty);
-            
-            //Send(xml.ToXmlString(xmlDeclaration: true, leaveOpen: true));
-            Send(xml.ToString());
+            Send(xml.ToXmlString(xmlDeclaration: true, leaveOpen: true));
+           // Send(xml.ToString());
+
             // Create a new parser instance.
             if (parser != null)
                 parser.Close();
             
             parser = new StreamParser(stream, true);
+            
             // Remember the default language of the stream. The server is required to
             // include this, but we make sure nonetheless.
             Language = parser.Language ?? new CultureInfo("en");
             // The first element of the stream must be <stream:features>.
-            return parser.NextElement("stream:features");
+            return parser.NextElement("features");
         }
 
         /// <summary>
@@ -1151,7 +1095,7 @@ namespace Xmpp.Core
         /// XML-stream in it's 'xml:lang' attribute could not be found.</exception>
         /// <exception cref="IOException">There was a failure while writing to the
         /// network, or there was a failure while reading from the network.</exception>
-        private XElement Authenticate(IEnumerable<string> mechanisms, string username,
+        private void Authenticate(IEnumerable<string> mechanisms, string username,
             string password, string hostname)
         {
             string name = SelectMechanism(mechanisms);
@@ -1162,18 +1106,35 @@ namespace Xmpp.Core
             //var xml = Xml.Element("auth", "urn:ietf:params:xml:ns:xmpp-sasl")
             //    .SetAttribute("mechanism", name)
             //    .Text(m.HasInitial ? m.GetResponse(String.Empty) : String.Empty);
+            //var bytes = Encoding.UTF8.GetBytes("\0" + Username + "\0" + Password);
+            //var plain = Convert.ToBase64String(bytes);
+
+            //streamWriterWripper.Writer.WriteStartElement("auth", "urn:ietf:params:xml:ns:xmpp-sasl");
+            //streamWriterWripper.Writer.WriteAttributeString("mechanism", name);
+            //streamWriterWripper.Writer.WriteString(plain);
+            //streamWriterWripper.Writer.WriteEndElement();
+            //streamWriterWripper.Writer.Flush();
+
             var bytes = Encoding.UTF8.GetBytes("\0" + Username + "\0" + Password);
-            var plain = Convert.ToBase64String(bytes);
+
             var xml = Xml.Element("auth", "urn:ietf:params:xml:ns:xmpp-sasl")
-               .SetAttribute("mechanism", name)
-               .Text(plain);
+                .SetAttribute("mechanism", "PLAIN")
+                .Text(Convert.ToBase64String(bytes));
             Send(xml);
+
+            //var element = Xml.Element("auth", "urn:ietf:params:xml:ns:xmpp-sasl");
+            //element.SetAttribute("mechanism", name);
+            //element.Text(plain);
+            //var xml = Xml.Element("auth", "urn:ietf:params:xml:ns:xmpp-sasl")
+            //   .SetAttribute("mechanism", name)
+            //   .Text(plain);
+            //Send(element);
             while (true)
             {
                 XElement ret = parser.NextElement("challenge", "success", "failure");
-                if (ret.Name == "failure")
+                if (ret.Name.LocalName == "failure")
                     throw new SaslException("SASL authentication failed.");
-                if (ret.Name == "success")
+                if (ret.Name.LocalName == "success")
                     //&& m.IsCompleted)
                     break;
                 // Server has successfully authenticated us, but mechanism still needs
@@ -1197,7 +1158,7 @@ namespace Xmpp.Core
             // The instance is now authenticated.
             Authenticated = true;
             // Finally, initiate a new XML-stream.
-            return InitiateStream(hostname);
+            //return InitiateStream(hostname);
         }
 
         /// <summary>
@@ -1237,6 +1198,25 @@ namespace Xmpp.Core
         /// network, or there was a failure while reading from the network.</exception>
         private Jid BindResource(string resourceName = null)
         {
+            //streamWriterWripper.Writer.WriteStartElement("iq");
+            //streamWriterWripper.Writer.WriteAttributeString("type", "set");
+            //streamWriterWripper.Writer.WriteAttributeString("id", "bind-0");
+
+            //streamWriterWripper.Writer.WriteStartElement("bind", "urn:ietf:params:xml:ns:xmpp-bind");
+
+            //if (resourceName != null)
+            //{
+            //    streamWriterWripper.Writer.WriteStartElement("resource");
+            //    streamWriterWripper.Writer.WriteValue(resourceName);
+            //    streamWriterWripper.Writer.WriteEndElement();
+
+            //}
+
+            //streamWriterWripper.Writer.WriteEndElement();
+            //streamWriterWripper.Writer.WriteEndElement();
+            //streamWriterWripper.Writer.Flush();
+            //var res = this.parser.NextElement("iq");
+
             var xml = Xml.Element("iq")
                 .SetAttribute("type", "set")
                 .SetAttribute("id", "bind-0");
@@ -1245,9 +1225,26 @@ namespace Xmpp.Core
                 bind.Child(Xml.Element("resource").Text(resourceName));
             xml.Child(bind);
             XElement res = SendAndReceive(xml, "iq");
-            if (res.Element("bind") == null || res.Element("bind").Element("jid") == null)
+
+            //var xml = Xml.Element("iq")
+            //    .SetAttribute("type", "set")
+            //    .SetAttribute("id", "bind-0");
+            //var bind = Xml.Element("bind", "urn:ietf:params:xml:ns:xmpp-bind");
+            //if (resourceName != null)
+            //    bind.Child(Xml.Element("resource").Text(resourceName));
+            //xml.Child(bind);
+            //XElement res = SendAndReceive(xml, "iq");
+
+            if (res.Descendants(XName.Get("bind", "urn:ietf:params:xml:ns:xmpp-bind")) == null || res.Descendants(XName.Get("bind", "urn:ietf:params:xml:ns:xmpp-bind")).Descendants("jid") == null)
                 throw new XmppException("Erroneous server response.");
-            return new Jid(res.Element("bind").Element("jid").Value);
+
+            var jid = res.Descendants(XName.Get("bind", "urn:ietf:params:xml:ns:xmpp-bind")).Descendants(XName.Get("jid", "urn:ietf:params:xml:ns:xmpp-bind")).FirstOrDefault();
+            if (jid != null)
+            {
+                return new Jid(jid.Value);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -1284,6 +1281,7 @@ namespace Xmpp.Core
                 try
                 {
                     stream.Write(buf, 0, buf.Length);
+                    //this.stream.Flush();
                     if (debugStanzas) System.Diagnostics.Debug.WriteLine(xml);
                 }
                 catch (IOException e)
@@ -1401,9 +1399,10 @@ namespace Xmpp.Core
         {
             while (true)
             {
+                Stanza stanza = null;
                 try
                 {
-                    Stanza stanza = stanzaQueue.Take(cancelDispatch.Token);
+                    stanza = stanzaQueue.Take(cancelDispatch.Token);
                     if (debugStanzas) System.Diagnostics.Debug.WriteLine(stanza.ToString());
                     if (stanza is Iq)
                         Iq.Raise(this, new IqEventArgs(stanza as Iq));

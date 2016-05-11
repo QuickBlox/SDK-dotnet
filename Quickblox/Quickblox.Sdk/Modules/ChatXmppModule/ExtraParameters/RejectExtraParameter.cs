@@ -11,7 +11,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
             SessionId = sessionId;
         }
 
-        public string Build()
+        public XElement Build()
         {
             XDocument srcTree = new XDocument(
                 new XElement("extraParams",
@@ -21,7 +21,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
                 )
             );
 
-            return srcTree.ToString();
+            return srcTree.Root;
         }
     }
 }
