@@ -1,19 +1,30 @@
 ﻿using System;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Modules.ChatModule.Models;
+using System.Xml.Linq;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
 {
     /// <summary>
     /// System messages (type = headline) that are not to be saved to history
     /// </summary>
-    public abstract class SystemMessage
+    public class SystemMessage
     {
         public const string SystemMessageModuleIdentifier = "SystemNotifications";
 
-        public DateTime DateSent { get; set; }
+        public string Id { get; set; }
+
+        public string From { get; set; }
+
+        public string To { get; set; }
+
+        public int SenderId { get; set; }
+        
+        public string MessageText { get; set; }
 
         public NotificationTypes NotificationType { get; set; }
+
+        public XElement ExtraParameters { get; set; }
     }
 
     
@@ -35,6 +46,8 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.Models
         public int[] CurrentOccupantsIds { get; set; }
 
         public DialogType DialogType { get; set; }
+
+        public DateTime DateSent { get; set; }
     }
 
 

@@ -11,6 +11,9 @@ using Quickblox.Sdk.GeneralDataModel.Models;
 using System.Threading;
 using System.Xml.Linq;
 using Quickblox.Sdk.Logger;
+using Quickblox.Sdk.Builder;
+using Quickblox.Sdk.Converters;
+using Quickblox.Sdk.Modules.ChatModule.Models;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
@@ -79,22 +82,64 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region Events
 
-        public event ErrorsEventHandler ErrorReceived;
-
+        /// <summary>
+        /// Occurs when a new message is received.
+        /// </summary>
         public event MessageEventHandler MessageReceived;
 
+        /// <summary>
+        /// Event occuring when a new message has been sent by the current user but from a different device (Message carbons)
+        /// </summary>
+        //public event MessageEventHandler MessageSent;
+
+        /// <summary>
+        /// Occurs when a new system message is received.
+        /// </summary>
+        public event SystemMessageEventHandler SystemMessageReceived;
+
+        /// <summary>
+        /// Event occuring when a new message has been sent by the current user but from a different device (Message carbons)
+        /// </summary>
+        //public event SystemMessageEventHandler SystemMessageSent;
+
+        /// <summary>
+        /// Occurs when a new error is received.
+        /// </summary>
+        public event ErrorsEventHandler ErrorReceived;
+
+        /// <summary>
+        /// Occurs when a activity is changed.
+        /// </summary>
         public event ActivityChangedEventHandler ActivityChanged;
 
+        /// <summary>
+        /// Occurs when a new chatState is changed.
+        /// </summary>
         public event ChatStateChangedEventHandler ChatStateChanged;
 
+        /// <summary>
+        /// Occurs when a moodState is changed.
+        /// </summary>
         public event MoodChangedEventHandler MoodStateChanged;
 
+        /// <summary>
+        /// Occurs when a roster is changed.
+        /// </summary>
         public event RosterUpdatedEventHandler RosterUpdated;
 
+        /// <summary>
+        /// Occurs when a status is changed.
+        /// </summary>
         public event StatusEventHandler StatusChanged;
-        
+
+        /// <summary>
+        /// Occurs when a subscriptions is changed.
+        /// </summary>
         public event SubscriptionsEventHandler SubscriptionsChanged;
 
+        /// <summary>
+        /// Occurs when a new message is received.
+        /// </summary>
         public event TuneEventHandler Tune;
 
         private void UnSubcribeEvents(XmppClient xmppClient)
@@ -287,50 +332,279 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         private async void OnMessageReceivedCallback(object sender, Sharp.Xmpp.Im.MessageEventArgs messageEventArgs)
         {
-            
+            //var element = XElement.Parse(messageEventArgs.Message.DataString);
+            //var mesageCardbonMessageSent = element.Element(MessageCarbonsMessageSent.XName);
+            //XElement forwardedMessage = null;
+            //if (mesageCardbonMessageSent != null)
+            //{
+            //    forwardedMessage = mesageCardbonMessageSent.Element(ForwardedMessage.XName);
+            //}
 
-            var receivedMessage = new Message();
-            receivedMessage.Id = messageEventArgs.Message.Id;
-            receivedMessage.From = messageEventArgs.Message.From.ToString();
-            receivedMessage.To = messageEventArgs.Message.To.ToString();
-            receivedMessage.MessageText = messageEventArgs.Message.Body;
-            //receivedMessage.Subject = messageEventArgs.Message.Subject;
-            receivedMessage.ChatDialogId = messageEventArgs.Message.Thread;
-            //receivedMessage.DateSent = messageEventArgs.Message.Timestamp.Ticks / 1000;
+            //if (forwardedMessage != null)
+            //{
+            //    if (CheckIsSystemMessage(messageEventArgs.Message))
+            //    {
 
-            var extraParams = XElement.Parse(messageEventArgs.Message.ExtraParameter); 
-            var dateSent = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.date_sent));
-            if (dateSent != null)
+            //    }
+            //    else
+            //    {
+
+            //    }
+            //}
+            //else
             {
-                long longValue;
-                if (long.TryParse(dateSent.Value, out longValue))
+                if (CheckIsSystemMessage(messageEventArgs.Message))
                 {
-                    receivedMessage.DateSent = longValue;
+                    OnSystemMessage(messageEventArgs.Message);
+                }
+                else
+                {
+                    OnUsualMessage(messageEventArgs.Message);
                 }
             }
+        }
 
-            receivedMessage.ExtraParameters = XElement.Parse(messageEventArgs.Message.ExtraParameter);
+        private bool CheckIsSystemMessage(Sharp.Xmpp.Im.Message message)
+        {
+            if (message.Type != Sharp.Xmpp.Im.MessageType.Headline)
+                return false;
 
-            var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
-            //receivedMessage.MessageType = wappedMessageTyp;
-            //receivedMessage.XmlMessage = messageEventArgs.Message.ToString();
+            var extraParams = XElement.Parse(message.ExtraParameter);
+            if (extraParams != null)
+            {
+                var moduleIdentifier = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.moduleIdentifier));
+                if (moduleIdentifier == null || moduleIdentifier.Value != SystemMessage.SystemMessageModuleIdentifier)
+                    return false;
+            }
 
-            receivedMessage.SenderId = wappedMessageType == MessageType.Groupchat ? GetQbUserIdFromGroupJid(messageEventArgs.Message.From.ToString()) : 
-                                                                                   GetQbUserIdFromJid(messageEventArgs.Message.From.ToString());
+            return true;
+        }
+
+        private async void OnUsualMessage(Sharp.Xmpp.Im.Message message)
+        {
+            var receivedMessage = new Message();
+            FillUsualMessageFields(message, receivedMessage);
+
+            var extraParams = XElement.Parse(message.ExtraParameter);
+            FillUsualMessageExtraParamsFields(extraParams, receivedMessage);
+            FillAttachments(extraParams, receivedMessage);
 
             await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
                             " From: " + receivedMessage.SenderId +
                             " To: " + receivedMessage.RecipientId +
                             " Body: " + receivedMessage.MessageText +
                             " DateSent " + receivedMessage.DateSent +
-                            " FullXmlMessage: " + messageEventArgs.Message.DataString);
+                            " FullXmlMessage: " + message.DataString);
+
+            receivedMessage.ExtraParameters = extraParams;
 
             var handler = MessageReceived;
-            if (handler != null)
+            if(handler != null)
             {
-                handler.Invoke(this, new MessageEventArgs(new Jid(messageEventArgs.Jid.ToString()), receivedMessage, wappedMessageType));
+                var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), message.Type.ToString());
+                var messageEventArgs = new MessageEventArgs(new Jid(message.From.ToString()), receivedMessage, wappedMessageType);
+                handler.Invoke(this, messageEventArgs);
             }
         }
+        
+        private async void OnSystemMessage(Sharp.Xmpp.Im.Message message)
+        {
+            var extraParams = XElement.Parse(message.ExtraParameter);
+            var notificationType = GetNotificationType(extraParams);
+            SystemMessage systemMessage = null;
+            if (notificationType == NotificationTypes.GroupCreate || notificationType == NotificationTypes.GroupUpdate)
+            {
+                systemMessage = new GroupInfoMessage();
+                FillSystemMessageFields(message, systemMessage);
+                FillGroupInfoMessageFields(extraParams, (GroupInfoMessage)systemMessage);
+            }
+            else
+            {
+                systemMessage = new SystemMessage();
+                FillSystemMessageFields(message, systemMessage);
+            }
+
+            systemMessage.ExtraParameters = extraParams;
+
+            await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
+                           " From: " + systemMessage.SenderId +
+                           " Body: " + systemMessage.MessageText +
+                           " FullXmlMessage: " + message.DataString);
+
+            var handler = SystemMessageReceived;
+            if (handler != null)
+            {
+                var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), message.Type.ToString());
+                var systemMessageEventArgs = new SystemMessageEventArgs(new Jid(message.From.ToString()), systemMessage, wappedMessageType);
+                handler.Invoke(this, systemMessageEventArgs);
+            }
+        }
+
+        private void FillSystemMessageFields(Sharp.Xmpp.Im.Message message, SystemMessage result)
+        {
+            string from = message.From.ToString();
+            string to = message.To.ToString();
+
+            result.From = from;
+            result.To = to;
+            result.MessageText = message.Body;
+
+            result.SenderId = message.Type == Sharp.Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
+        }
+
+        private void FillUsualMessageFields(Sharp.Xmpp.Im.Message message, Message result)
+        {
+            string from = message.From.ToString();
+            string to = message.To.ToString();
+            var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), message.Type.ToString());
+
+            result.From = from;
+            result.To = to;
+            result.MessageText = message.Body;
+
+            result.SenderId = message.Type == Sharp.Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
+        }
+
+        private void FillUsualMessageExtraParamsFields(XElement extraParams, Message result)
+        {
+            if (extraParams != null)
+            {
+                result.ChatDialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id);
+
+                var dateSent = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.date_sent));
+                if (dateSent != null)
+                {
+                    long longValue;
+                    if (long.TryParse(dateSent.Value, out longValue))
+                    {
+                        result.DateSent = longValue;
+                    }
+                }
+
+                var stringIntListConverter = new StringIntListConverter();
+
+                result.NotificationType = GetNotificationType(extraParams);
+
+                result.RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo);
+                result.RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name);
+                result.OccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.occupants_ids));
+                result.CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids));
+                result.AddedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids));
+                result.DeletedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids));
+
+                double roomUpdateDate;
+                if (Double.TryParse(GetExtraParam(extraParams, ExtraParamsList.room_updated_date), out roomUpdateDate))
+                {
+                    result.RoomUpdateDate = roomUpdateDate;
+                }
+
+                var deletedId = GetExtraParam(extraParams, ExtraParamsList.deleted_id);
+                if (deletedId != null)
+                {
+                    int deletedIdInt;
+                    if (int.TryParse(deletedId, out deletedIdInt))
+                        result.DeletedId = deletedIdInt;
+                }
+            }
+        }
+
+        private void FillGroupInfoMessageFields(XElement extraParams, GroupInfoMessage groupInfoMessage)
+        {
+            groupInfoMessage.DialogId = GetExtraParam(extraParams, ExtraParamsList.dialog_id);
+            groupInfoMessage.RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name);
+            groupInfoMessage.RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo);
+            groupInfoMessage.DateSent = GetDateTimeExtraParam(extraParams, ExtraParamsList.date_sent);
+            groupInfoMessage.RoomUpdatedDate = GetDateTimeExtraParam(extraParams, ExtraParamsList.room_updated_date);
+
+            StringIntListConverter stringIntListConverter = new StringIntListConverter();
+            groupInfoMessage.CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids)).ToArray();
+
+            var dialogType = GetExtraParam(extraParams, ExtraParamsList.type);
+            if (dialogType != null)
+            {
+                int intValue;
+                if (int.TryParse(dialogType, out intValue) && Enum.IsDefined(typeof(DialogType), intValue))
+                {
+                    groupInfoMessage.DialogType = (DialogType)intValue;
+                }
+            }
+        }
+
+        private void FillAttachments(XElement extraParams, Message result)
+        {
+            if (extraParams != null)
+            {
+                var attachmentParam = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.attachment));
+                if (attachmentParam != null)
+                {
+                    var attachemnt = new Attachment
+                    {
+                        Name = GetAttributeValue(attachmentParam, XName.Get("name")),
+                        Id = GetAttributeValue(attachmentParam, XName.Get("id")),
+                        Type = GetAttributeValue(attachmentParam, XName.Get("type")),
+                        Url = GetAttributeValue(attachmentParam, XName.Get("url"))
+                    };
+
+                    result.Attachments = new Attachment[] { attachemnt };
+                }
+            }
+        }
+
+   //     private async void OnMessageReceivedCallback2(object sender, Sharp.Xmpp.Im.MessageEventArgs messageEventArgs)
+   //     {
+   //         var receivedMessage = new Message();
+   //         receivedMessage.Id = messageEventArgs.Message.Id;
+   //         receivedMessage.From = messageEventArgs.Message.From.ToString();
+   //         receivedMessage.To = messageEventArgs.Message.To.ToString();
+   //         receivedMessage.MessageText = messageEventArgs.Message.Body;
+   //         //receivedMessage.Subject = messageEventArgs.Message.Subject;
+   //         receivedMessage.ChatDialogId = messageEventArgs.Message.Thread;
+   //         //receivedMessage.DateSent = messageEventArgs.Message.Timestamp.Ticks / 1000;
+   //         var extraParams = XElement.Parse(messageEventArgs.Message.ExtraParameter);
+
+			//var notificationType = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.notification_type));
+			//if (notificationType != null)
+			//{
+			//	int intValue;
+			//	if (int.TryParse(notificationType.Value, out intValue))
+			//	{
+			//		receivedMessage.NotificationType = (NotificationTypes)intValue;
+			//	}
+			//}
+
+   //         var dateSent = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.date_sent));
+   //         if (dateSent != null)
+   //         {
+   //             long longValue;
+
+   //             if (long.TryParse(dateSent.Value, out longValue))
+   //             {
+   //                 receivedMessage.DateSent = longValue;
+   //             }
+   //         }
+
+   //         receivedMessage.ExtraParameters = XElement.Parse(messageEventArgs.Message.ExtraParameter);
+
+   //         var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
+   //         //receivedMessage.MessageType = wappedMessageTyp;
+   //         //receivedMessage.XmlMessage = messageEventArgs.Message.ToString();
+
+   //         receivedMessage.SenderId = wappedMessageType == MessageType.Groupchat ? GetQbUserIdFromGroupJid(messageEventArgs.Message.From.ToString()) : 
+   //                                                                                GetQbUserIdFromJid(messageEventArgs.Message.From.ToString());
+
+   //         await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
+   //                         " From: " + receivedMessage.SenderId +
+   //                         " To: " + receivedMessage.RecipientId +
+   //                         " Body: " + receivedMessage.MessageText +
+   //                         " DateSent " + receivedMessage.DateSent +
+   //                         " FullXmlMessage: " + messageEventArgs.Message.DataString);
+
+   //         var handler = MessageReceived;
+   //         if (handler != null)
+   //         {
+   //             handler.Invoke(this, new MessageEventArgs(new Jid(messageEventArgs.Jid.ToString()), receivedMessage, wappedMessageType));
+   //         }
+   //     }
 
         #endregion
 
@@ -462,6 +736,12 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.JoinToGroup(new Sharp.Xmpp.Jid(fullJid), new Sharp.Xmpp.Jid(quickbloxClient.ChatXmppClient.MyJid.ToString()));
         }
 
+		public void LeaveGroup(string groupJid, string nickName)
+		{
+			string fullJid = string.Format("{0}/{1}", groupJid, nickName);
+			xmppClient.LeaveGroup(new Sharp.Xmpp.Jid(fullJid), new Sharp.Xmpp.Jid(quickbloxClient.ChatXmppClient.MyJid.ToString()));
+		}
+
         #endregion
 
         #region Completed
@@ -526,15 +806,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.Close();
         }
 
-  //      public void Disconnect()
-  //      {
-  //          xmppClient.Disconnect();
-  //      }
-
-		//public void Reconnect(){
-		//	xmppClient.Reconnect ();
-		//}
-
         /// <summary>
         /// Creates a private one-to-one chat manager.
         /// </summary>
@@ -560,6 +831,52 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         #endregion
 
         #region Helpers
+
+        private NotificationTypes GetNotificationType(XElement extraParams)
+        {
+            var notificationType = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.notification_type));
+            if (notificationType != null)
+            {
+                int intValue;
+                if (int.TryParse(notificationType.Value, out intValue))
+                {
+                    if (Enum.IsDefined(typeof(NotificationTypes), intValue))
+                        return (NotificationTypes)intValue;
+                }
+            }
+
+            return default(NotificationTypes);
+        }
+
+        public string GetAttributeValue(XElement element, XName name)
+        {
+            XAttribute attr = element.Attribute(name);
+            if (attr != null)
+                return attr.Value;
+            else
+                return null;
+        }
+
+        private string GetExtraParam(XElement extraParams, ExtraParamsList neededExtraParam)
+        {
+            var extraParam = extraParams.Element(ExtraParams.GetXNameFor(neededExtraParam));
+            return extraParam?.Value;
+        }
+
+        private DateTime GetDateTimeExtraParam(XElement extraParams, ExtraParamsList neededExtraParam)
+        {
+            var dateTimeExtraParam = GetExtraParam(extraParams, neededExtraParam);
+            if (dateTimeExtraParam != null)
+            {
+                long longValue;
+                if (long.TryParse(dateTimeExtraParam, out longValue))
+                {
+                    return longValue.ToDateTime();
+                }
+            }
+
+            return default(DateTime);
+        }
 
         public static string BuildJid(int userId, int appId, string chatEndpoint)
         {

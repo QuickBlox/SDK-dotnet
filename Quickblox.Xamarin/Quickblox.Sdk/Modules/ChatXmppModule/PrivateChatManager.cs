@@ -203,7 +203,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             if (string.IsNullOrEmpty(messageEventArgs.Message.MessageText)) return;
 
-            if (string.Equals(messageEventArgs.Jid.ToString() , otherUserJid) && messageEventArgs.Message.NotificationType != NotificationTypes.GroupCreate)
+            if (messageEventArgs.Jid.ToString().Contains(otherUserJid) && messageEventArgs.Message.NotificationType != NotificationTypes.GroupCreate)
             {
                 MessageReceived?.Invoke(this, messageEventArgs);
             }

@@ -138,6 +138,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             quickbloxClient.ChatXmppClient.JoinToGroup(groupJid, nickName);
         }
 
+		public void LeaveGroup(string nickName)
+		{
+			quickbloxClient.ChatXmppClient.LeaveGroup(groupJid, nickName);
+		}
+
         private void SendGroupInfoSystemMessage(int userId, Dialog dialogInfo)
         {            
             var extraParams = new ExtraParams();
@@ -156,7 +161,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             }
 
             var userJid = ChatXmppClient.BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
-            quickbloxClient.ChatXmppClient.SendMessage(groupJid, SystemMessage.SystemMessageModuleIdentifier, extraParams.ToString(), dialogId, null, MessageType.Headline);
+			quickbloxClient.ChatXmppClient.SendMessage(userJid, "Notification message", extraParams.ToString(), dialogId, null, MessageType.Headline);
         }
 
         private void NotifyAbountGroupOccupantsOnCreation(IList<int> addedOccupantsIds, DateTime groupCreationDate)

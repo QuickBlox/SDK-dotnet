@@ -111,7 +111,7 @@ namespace Quickblox.Sdk.Test.Modules.ChatModule
             aggregator.Filters.Add(new FieldFilter<string>(() => new Message().ChatDialogId, testDialog.Id));
             retrieveMessagesRequest.Filter = aggregator;
 
-            var responseMessages = await this.client.ChatClient.GetMessagesAsync((RetrieveMessagesRequest)null);
+            var responseMessages = await this.client.ChatClient.GetMessagesAsync((RetrieveMessagesRequest)retrieveMessagesRequest);
             Assert.AreEqual(responseMessages.StatusCode, HttpStatusCode.OK);
         }
 

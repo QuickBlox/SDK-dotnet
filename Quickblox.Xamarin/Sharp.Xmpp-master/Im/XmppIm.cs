@@ -463,6 +463,20 @@ namespace Sharp.Xmpp.Im {
             SendPresence(p);
         }
 
+		public void LeaveGroup(Jid to, Jid from)
+		{
+			AssertValid();
+			to.ThrowIfNull("to");
+			from.ThrowIfNull("from");
+
+			var x = Xml.Element("x", "http://jabber.org/protocol/muc");
+			var history = Xml.Element("history", "http://jabber.org/protocol/muc");
+			history.Attr("maxstanzas", "0");
+			x.Child(history);
+			Presence p = new Presence(to, from, PresenceType.Unavailable, data: x);
+			SendPresence(p);
+		}
+
 		/// <summary>
 		/// Sends a request to subscribe to the presence of the contact with the
 		/// specified JID.

@@ -226,6 +226,12 @@
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\JidType.cs">
       <Link>Modules\ChatXmppModule\Models\JidType.cs</Link>
     </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\MessageCarbonsEnable.cs">
+      <Link>Modules\ChatXmppModule\Models\MessageCarbonsEnable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\MessageCarbonsMessageSent.cs">
+      <Link>Modules\ChatXmppModule\Models\MessageCarbonsMessageSent.cs</Link>
+    </Compile>
     <Compile Include="..\..\Quickblox_8.1\Quickblox.Sdk\Modules\ChatXmppModule\Models\SystemMessage.cs">
       <Link>Modules\ChatXmppModule\Models\SystemMessage.cs</Link>
     </Compile>
@@ -519,6 +525,7 @@
     <Compile Include="ICryptographicProvider.cs" />
     <Compile Include="Modules\ChatXmppModule\ChatXmppClient.cs" />
     <Compile Include="Modules\ChatXmppModule\EventHandlers\ActivityChangedEventHandler.cs" />
+    <Compile Include="Modules\ChatXmppModule\EventHandlers\SystemMessageEventHandler.cs" />
     <Compile Include="Modules\ChatXmppModule\GroupChatManager.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\AttachmentExtraParamValue.cs" />
     <Compile Include="Modules\ChatXmppModule\Models\Availability.cs" />
@@ -558,16 +565,17 @@
     <Reference Include="bouncy_castle_hmac_sha_pcl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\BouncyCastle-PCL.1.0.0.6\lib\bouncy_castle_hmac_sha_pcl.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\portable-net45+wp80+win8+wpa81+dnxcore50\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Sharp.Xmpp">
       <HintPath>..\Sharp.Xmpp-master\bin\Release\Sharp.Xmpp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
