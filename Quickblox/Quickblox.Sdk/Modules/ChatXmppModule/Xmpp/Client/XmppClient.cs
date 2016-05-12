@@ -18,7 +18,7 @@ namespace Xmpp.Client
     /// simplifies some of the more complicated aspects such as privacy lists and
     /// roster management. It also implements various XMPP protocol extensions.
     /// </remarks>
-    public class XmppClient : IDisposable
+    internal class XmppClient : IDisposable
     {
         /// <summary>
         /// True if the instance has been disposed of.
@@ -289,7 +289,7 @@ namespace Xmpp.Client
         /// <summary>
         /// The underlying XmppIm instance.
         /// </summary>
-        public XmppIm Im
+        internal XmppIm Im
         {
             get
             {
@@ -621,7 +621,7 @@ namespace Xmpp.Client
 		/// the XMPP server.</exception>
 		/// <exception cref="ObjectDisposedException">The XmppClient object has been
 		/// disposed.</exception>
-		public Message SendMessage(Jid to, 
+		internal Message SendMessage(Jid to, 
                                         string messageId, 
                                         string body, 
                                         string subject = null,
@@ -647,7 +647,7 @@ namespace Xmpp.Client
         /// the XMPP server.</exception>
         /// <exception cref="ObjectDisposedException">The XmppClient object has been
         /// disposed.</exception>
-        public Message SendMessage(Message xmppMessage)
+        internal Message SendMessage(Message xmppMessage)
         {
             AssertValid();
             xmppMessage.ThrowIfNull("message");

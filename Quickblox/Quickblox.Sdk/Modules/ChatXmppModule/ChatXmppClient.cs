@@ -425,8 +425,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var handler = SystemMessageReceived;
             if (handler != null)
             {
-                var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), xmppXmppMessage.Type.ToString());
-                var systemMessageEventArgs = new SystemMessageEventArgs(new Jid(xmppXmppMessage.From.ToString()), systemMessage, wappedMessageType);
+                var systemMessageEventArgs = new SystemMessageEventArgs(new Jid(xmppXmppMessage.From.ToString()), systemMessage, xmppXmppMessage.Type);
                 handler.Invoke(this, systemMessageEventArgs);
             }
         }
@@ -447,12 +446,12 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         {
             string from = xmppXmppMessage.From.ToString();
             string to = xmppXmppMessage.To.ToString();
-            var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), xmppXmppMessage.Type.ToString());
 
             result.From = from;
             result.To = to;
             result.MessageText = xmppXmppMessage.Body;
 
+            result.RecipientId = xmppXmppMessage.Type == Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(to) : GetQbUserIdFromJid(to);
             result.SenderId = xmppXmppMessage.Type == Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
         }
 
@@ -482,6 +481,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 result.CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids));
                 result.AddedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids));
                 result.DeletedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids));
+                result.ExtraParameters = extraParams;
 
                 double roomUpdateDate;
                 if (Double.TryParse(GetExtraParam(extraParams, ExtraParamsList.room_updated_date), out roomUpdateDate))
@@ -706,10 +706,15 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 			xmppClient.LeaveGroup(new Xmpp.Jid(fullJid), new Xmpp.Jid(quickbloxClient.ChatXmppClient.MyJid.ToString()));
 		}
 
+        public TimeSpan Ping(string jid)
+        {
+			return xmppClient.Ping(new Jid(jid));
+        }
+
         #endregion
 
         #region Completed
-        
+
         public async void Connect(int userId, string password)
         {
             Contacts = new List<RosterItem>();

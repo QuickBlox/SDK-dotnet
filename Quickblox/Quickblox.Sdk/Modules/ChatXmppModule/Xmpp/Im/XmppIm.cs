@@ -14,7 +14,7 @@ namespace Xmpp.Im
     /// Implements the basic instant messaging (IM) and presence functionality.
     /// </summary>
     /// <remarks>For implementation details, refer to RFC 3921.</remarks>
-    public class XmppIm : IDisposable
+    internal class XmppIm : IDisposable
     {
         /// <summary>
         /// Provides access to the core facilities of XMPP.
@@ -418,7 +418,7 @@ namespace Xmpp.Im
         /// the XMPP server.</exception>
         /// <exception cref="ObjectDisposedException">The XmppIm object has been
         /// disposed.</exception>
-        public Message SendMessage(Jid to, string messageId, string body, XElement extraParams = null, string subject = null,
+        internal Message SendMessage(Jid to, string messageId, string body, XElement extraParams = null, string subject = null,
             string thread = null, MessageType type = MessageType.Normal,
             CultureInfo language = null)
         {
@@ -441,7 +441,7 @@ namespace Xmpp.Im
         /// the XMPP server.</exception>
         /// <exception cref="ObjectDisposedException">The XmppIm object has been
         /// disposed.</exception>
-        public Message SendMessage(Message xmppMessage)
+        internal Message SendMessage(Message xmppMessage)
         {
             AssertValid();
             xmppMessage.ThrowIfNull("message");

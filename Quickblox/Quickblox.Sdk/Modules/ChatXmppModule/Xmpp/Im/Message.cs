@@ -9,7 +9,7 @@ namespace Xmpp.Im
     /// <summary>
     /// Represents a Message stanza as defined in XMPP:IM.
     /// </summary>
-    public class Message : Core.Message
+    internal class Message : Core.Message
     {
         /// <summary>
         /// The type of the Message stanza.
@@ -47,7 +47,7 @@ namespace Xmpp.Im
             get
             {
                 // Refer to XEP-0203.
-                var delay = element.Element("delay");
+                var delay = element.Element(XName.Get("delay", "jabber:client"));
                 if (delay != null && delay.GetDefaultNamespace().NamespaceName == "urn:xmpp:delay")
                 {
                     DateTime result;
@@ -65,14 +65,14 @@ namespace Xmpp.Im
         {
             get
             {
-                if (element.Element("thread") != null)
-                    return element.Element("thread").Value;
+                if (element.Element(XName.Get("thread", "jabber:client")) != null)
+                    return element.Element(XName.Get("thread", "jabber:client")).Value;
                 return null;
             }
 
             set
             {
-                var e = element.Element("thread");
+                var e = element.Element(XName.Get("thread", "jabber:client"));
                 if (e != null)
                 {
                     if (value == null)
@@ -83,7 +83,7 @@ namespace Xmpp.Im
                 else
                 {
                     if (value != null)
-                        element.Child(Xml.Element("thread").Text(value));
+                        element.Child(Xml.Element("thread", "jabber:client").Text(value));
                 }
             }
         }
@@ -309,7 +309,7 @@ namespace Xmpp.Im
         /// <returns>The located element or null if no such element exists.</returns>
         private XElement GetBare(string tag)
         {
-            foreach (XElement e in element.Descendants(tag))
+            foreach (XElement e in element.Descendants(XName.Get(tag, "jabber:client")))
             {
                 string k = e.GetAttribute(XName.Get("lang", XNamespace.Xml.NamespaceName));
                 if (String.IsNullOrEmpty(k))
