@@ -11,10 +11,10 @@ using Quickblox.Sdk.Modules.AuthModule.Models;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json;
-using Quickblox.Sdk.Cryptographic;
 using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Serializer;
+using Quickblox.Sdk.Platform;
 
 namespace Quickblox.Sdk.Modules.AuthModule
 {

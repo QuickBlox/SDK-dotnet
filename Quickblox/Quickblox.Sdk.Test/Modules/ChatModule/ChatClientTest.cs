@@ -10,7 +10,7 @@ using Quickblox.Sdk.Modules.ChatModule.Responses;
 using QMunicate.Logger;
 using Quickblox.Sdk.GeneralDataModel.Filters;
 using Quickblox.Sdk.GeneralDataModel.Models;
-using Quickblox.Sdk.Cryptographic;
+using Quickblox.Sdk.Platform;
 
 namespace Quickblox.Sdk.Test.Modules.ChatModule
 {

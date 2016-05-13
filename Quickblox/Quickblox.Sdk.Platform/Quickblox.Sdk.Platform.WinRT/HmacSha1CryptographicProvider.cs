@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage.Streams;
 
-namespace Quickblox.Sdk.Cryptographic
+namespace Quickblox.Sdk.Platform
 {
-    internal class HmacSha1CryptographicProvider : ICryptographicProvider
+    public class HmacSha1CryptographicProvider : ICryptographicProvider
     {
         public string Encrypt(string baseString, string keyString)
         {

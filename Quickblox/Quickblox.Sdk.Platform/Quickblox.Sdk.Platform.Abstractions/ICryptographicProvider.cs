@@ -1,4 +1,4 @@
-﻿namespace Quickblox.Sdk.Cryptographic
+﻿namespace Quickblox.Sdk.Platform
 {
     public interface ICryptographicProvider
     {

@@ -1,7 +1,6 @@
 ﻿using Quickblox.Sdk.GeneralDataModel.Response;
 using Quickblox.Sdk.Builder;
 using Quickblox.Sdk.Core;
-using Quickblox.Sdk.Cryptographic;
 using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.AuthModule;
 using Quickblox.Sdk.Modules.AuthModule.Response;
@@ -15,6 +14,7 @@ using System.Threading.Tasks;
 using Quickblox.Sdk.Logger;
 using Quickblox.Sdk.Modules.LocationModule;
 using Quickblox.Sdk.Modules.ChatXmppModule;
+using Quickblox.Sdk.Platform;
 
 namespace Quickblox.Sdk
 {
@@ -27,7 +27,7 @@ namespace Quickblox.Sdk
         private const string defaultChatEndpoint = "chat.quickblox.com";
 
         #region Ctor
-        
+
         ///// <summary>
         ///// QuickbloxClient ctor.
         ///// </summary>
@@ -50,11 +50,11 @@ namespace Quickblox.Sdk
         ///// <param name="apiEndpoint">API endpoint</param>
         ///// <param name="chatEndpoint">XMPP chat endpoint</param>
         ///// <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
-        //public QuickbloxClient(int applicationId, string authKey, string authSecret, string apiEndpoint, string chatEndpoint, ILogger logger = null)
-        //    : this(applicationId, authKey, authSecret, apiEndpoint, chatEndpoint, new HmacSha1CryptographicProvider(), logger)
-        //{
-            
-        //}
+        public QuickbloxClient(int applicationId, string authKey, string authSecret, string apiEndpoint, string chatEndpoint, ILogger logger = null)
+            : this(applicationId, authKey, authSecret, apiEndpoint, chatEndpoint, new HmacSha1CryptographicProvider(), logger)
+        {
+
+        }
 
         /// <summary>
         /// QuickbloxClient ctor.

@@ -52,7 +52,6 @@
     <Compile Include="Builder\RequestHeadersBuilder.cs" />
     <Compile Include="Builder\UrlBuilder.cs" />
     <Compile Include="Converters\StringIntListConverter.cs" />
-    <Compile Include="Cryptographic\ICryptographicProvider.cs" />
     <Compile Include="GeneralDataModel\Filters\FieldFilter.cs" />
     <Compile Include="GeneralDataModel\Filters\FieldFilterWithOperator.cs" />
     <Compile Include="GeneralDataModel\Filters\Filter.cs" />
@@ -372,6 +371,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Quickblox.Sdk.Platform\Quickblox.Sdk.Platform.Abstractions\Quickblox.Sdk.Platform.Abstractions.csproj">
+      <Project>{78fe9b84-eed4-4013-9c4b-e91e475c534a}</Project>
+      <Name>Quickblox.Sdk.Platform.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Quickblox.Sdk.Platform\Quickblox.Sdk.Platform\Quickblox.Sdk.Platform.csproj">
+      <Project>{67f9d3a8-f71e-4428-913f-c37ae82cdb24}</Project>
+      <Name>Quickblox.Sdk.Platform</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sockets\Sockets.Plugin.Abstractions\Sockets.Plugin.Abstractions.csproj">
       <Project>{6edb0588-ffc5-4ef5-8a99-9e241d0f878d}</Project>
       <Name>Sockets.Plugin.Abstractions</Name>
@@ -384,6 +391,7 @@
   <ItemGroup>
     <Content Include="Xmpp\Client\Examples.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

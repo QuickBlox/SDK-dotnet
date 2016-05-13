@@ -13,7 +13,7 @@ using Quickblox.Sdk.GeneralDataModel.Models;
 using Quickblox.Sdk.Test.Helper;
 using Environment = Quickblox.Sdk.Modules.NotificationModule.Models.Environment;
 using Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform;
-using Quickblox.Sdk.Cryptographic;
+using Quickblox.Sdk.Platform;
 
 namespace Quickblox.Sdk.Test.Modules.NotificationModule
 {
@@ -26,7 +26,7 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
         public async Task TestInitialize()
         {
             this.client = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
-            var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithLoginAsync("Test654321", "Test12345", deviceRequestRequest: new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() });
+            var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithLoginAsync("Test654321", "Test12345", deviceRequestRequest: new DeviceRequest() { Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform.windows_phone, Udid = Helpers.GetHardwareId() });
             client.Token = sessionResponse.Result.Session.Token;
         }
         
@@ -37,7 +37,7 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
             var pushChannel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
             var settings = new CreatePushTokenRequest()
             {
-                DeviceRequest = new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() },
+                DeviceRequest = new DeviceRequest() { Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform.windows_phone, Udid = Helpers.GetHardwareId() },
                 PushToken = new PushToken() { Environment = Environment.production, ClientIdentificationSequence = pushChannel.Uri }
             };
             var createPushTokenResponse = await this.client.NotificationClient.CreatePushTokenAsync(settings);
@@ -50,7 +50,7 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
             var pushChannel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
             var settings = new CreatePushTokenRequest()
             {
-                DeviceRequest = new DeviceRequest() { Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId() },
+                DeviceRequest = new DeviceRequest() { Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform.windows_phone, Udid = Helpers.GetHardwareId() },
                 PushToken = new PushToken() { Environment = Environment.production, ClientIdentificationSequence = pushChannel.Uri }
             };
             var createPushTokenResponse = await this.client.NotificationClient.CreatePushTokenAsync(settings);

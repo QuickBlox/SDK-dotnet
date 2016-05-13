@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Quickblox.Sdk.Modules.CustomObjectModule.Requests;
-using Quickblox.Sdk.Modules.CustomObjectModule.Responses;
-using Quickblox.Sdk.Cryptographic;
+using Quickblox.Sdk.Platform;
 
 namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
 {

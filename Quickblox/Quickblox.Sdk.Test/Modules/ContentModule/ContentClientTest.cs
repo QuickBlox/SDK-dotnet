@@ -11,7 +11,7 @@ using Quickblox.Sdk.Modules.ContentModule;
 using Quickblox.Sdk.Modules.ContentModule.Models;
 using Quickblox.Sdk.Modules.ContentModule.Requests;
 using Quickblox.Sdk.Test.Helper;
-using Quickblox.Sdk.Cryptographic;
+using Quickblox.Sdk.Platform;
 
 namespace Quickblox.Sdk.Test.Modules.ContentModule
 {
@@ -26,7 +26,7 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
             this.client = new QuickbloxClient((int)GlobalConstant.ApplicationId, GlobalConstant.AuthorizationKey, GlobalConstant.AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
             var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithLoginAsync("Test654321", "Test12345",
                     deviceRequestRequest:
-                        new DeviceRequest() {Platform = Platform.windows_phone, Udid = Helpers.GetHardwareId()});
+                        new DeviceRequest() {Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform.windows_phone, Udid = Helpers.GetHardwareId()});
             client.Token = sessionResponse.Result.Session.Token;
         }
 

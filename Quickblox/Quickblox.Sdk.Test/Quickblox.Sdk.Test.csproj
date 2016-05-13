@@ -111,7 +111,6 @@
     <Compile Include="AssertEx.cs" />
     <Compile Include="FileLogger.cs" />
     <Compile Include="Helper\Helpers.cs" />
-    <Compile Include="Helper\HmacSha1CryptographicProvider.cs" />
     <Compile Include="Http\HttpServiceTest.cs" />
     <Compile Include="Logger\DebugLogger.cs" />
     <Compile Include="Modules\AuthModule\AuthorizationClientTest.cs" />
@@ -166,9 +165,25 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Quickblox.Sdk.Platform\Quickblox.Sdk.Platform.Abstractions\Quickblox.Sdk.Platform.Abstractions.csproj">
+      <Project>{78fe9b84-eed4-4013-9c4b-e91e475c534a}</Project>
+      <Name>Quickblox.Sdk.Platform.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Quickblox.Sdk.Platform\Quickblox.Sdk.Platform.WinRT\Quickblox.Sdk.Platform.WinRT.csproj">
+      <Project>{549fb619-2d4a-4018-9be9-9d3a7b2ec7f2}</Project>
+      <Name>Quickblox.Sdk.Platform.WinRT</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Quickblox.Sdk\Quickblox.Sdk.csproj">
       <Project>{bab0816f-0e30-4ad0-b760-90f15156cda5}</Project>
       <Name>Quickblox.Sdk</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sockets\Sockets.Plugin.Abstractions\Sockets.Plugin.Abstractions.csproj">
+      <Project>{6edb0588-ffc5-4ef5-8a99-9e241d0f878d}</Project>
+      <Name>Sockets.Plugin.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sockets\Sockets.Plugin.WindowsStore\Sockets.Plugin.WindowsStore.csproj">
+      <Project>{ed9a4ca1-c04c-457d-9a2e-7995ccf12356}</Project>
+      <Name>Sockets.Plugin.WindowsStore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

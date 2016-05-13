@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Quickblox.Sdk.Cryptographic;
+using Quickblox.Sdk.Platform;
 
 namespace Quickblox.Sdk.Test.Modules.AuthModule
 {
