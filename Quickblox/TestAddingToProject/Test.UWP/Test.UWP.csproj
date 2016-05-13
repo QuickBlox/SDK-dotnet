@@ -130,17 +130,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Quickblox.Sdk.Platform.UWP\Quickblox.Sdk.Platform.UWP.csproj">
-      <Project>{9a2927b5-c1c5-46a2-9802-c5fe9c9a110f}</Project>
-      <Name>Quickblox.Sdk.Platform.UWP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Quickblox.Sdk\Quickblox.Sdk.csproj">
       <Project>{bab0816f-0e30-4ad0-b760-90f15156cda5}</Project>
       <Name>Quickblox.Sdk</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\UbietyXmpp\UbietyXmpp.csproj">
-      <Project>{608a7290-7737-4b7a-87df-55b329e9d36b}</Project>
-      <Name>UbietyXmpp</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

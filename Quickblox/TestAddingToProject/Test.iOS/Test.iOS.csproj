@@ -106,12 +106,6 @@
     <Content Include="Entitlements.plist" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Quickblox.Sdk.Platform.iOS\Quickblox.Sdk.Platform.iOS.csproj">
-      <Project>{be955ab0-e555-4170-bf90-8e9cc03ef5a8}</Project>
-      <Name>Quickblox.Sdk.Platform.iOS</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
-    </ProjectReference>
     <ProjectReference Include="..\..\Quickblox.Sdk\Quickblox.Sdk.csproj">
       <Project>{bab0816f-0e30-4ad0-b760-90f15156cda5}</Project>
       <Name>Quickblox.Sdk</Name>

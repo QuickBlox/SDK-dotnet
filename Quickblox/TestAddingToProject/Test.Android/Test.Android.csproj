@@ -71,10 +71,6 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Quickblox.Sdk.Platform.Android\Quickblox.Sdk.Platform.Android.csproj">
-      <Project>{eb5873c4-dbfc-4981-bf3e-4c460c6270fa}</Project>
-      <Name>Quickblox.Sdk.Platform.Android</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Quickblox.Sdk\Quickblox.Sdk.csproj">
       <Project>{bab0816f-0e30-4ad0-b760-90f15156cda5}</Project>
       <Name>Quickblox.Sdk</Name>
@@ -90,10 +86,6 @@
     <ProjectReference Include="..\..\Sockets\Sockets.Plugin\Sockets.Plugin.csproj">
       <Project>{a6fcef44-d2ba-42c7-b3cb-13667bcd7b54}</Project>
       <Name>Sockets.Plugin</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Xmpp\Xmpp.csproj">
-      <Project>{4614a99c-9800-4f59-acaf-b4d8106c937c}</Project>
-      <Name>Xmpp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\Test.Shared\Test.Shared\Test.Shared.projitems" Label="Shared" />
