@@ -29,41 +29,23 @@ namespace Quickblox.Sdk.Test.Modules.NotificationModule
             var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithLoginAsync("Test654321", "Test12345", deviceRequestRequest: new DeviceRequest() { Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform.windows_phone, Udid = Helpers.GetHardwareId() });
             client.Token = sessionResponse.Result.Session.Token;
         }
-        
-
-        [TestMethod]
-        public async Task CreatePushTokenSuccessTest()
-        {
-            var pushChannel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-            var settings = new CreatePushTokenRequest()
-            {
-                DeviceRequest = new DeviceRequest() { Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform.windows_phone, Udid = Helpers.GetHardwareId() },
-                PushToken = new PushToken() { Environment = Environment.production, ClientIdentificationSequence = pushChannel.Uri }
-            };
-            var createPushTokenResponse = await this.client.NotificationClient.CreatePushTokenAsync(settings);
-            Assert.AreEqual(createPushTokenResponse.StatusCode, HttpStatusCode.Created);
-        }
-
-        [TestMethod]
-        public async Task DeletePushTokenSuccessTest()
-        {
-            var pushChannel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-            var settings = new CreatePushTokenRequest()
-            {
-                DeviceRequest = new DeviceRequest() { Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform.windows_phone, Udid = Helpers.GetHardwareId() },
-                PushToken = new PushToken() { Environment = Environment.production, ClientIdentificationSequence = pushChannel.Uri }
-            };
-            var createPushTokenResponse = await this.client.NotificationClient.CreatePushTokenAsync(settings);
-            Assert.AreEqual(createPushTokenResponse.StatusCode, HttpStatusCode.Created);
-
-            var response = await this.client.NotificationClient.DeletePushTokenAsync(createPushTokenResponse.Result.PushToken.PushTokenId);
-            Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
-        }
 
         [TestMethod]
         public async Task CreateSubscriptionsSuccessTest()
         {
-            var createSubscriptionsResponse = await this.client.NotificationClient.CreateSubscriptionsAsync(NotificationChannelType.mpns);
+            var pushChannel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+            var createSubscriptionRequest = new CreateSubscriptionsRequest()
+            {
+                DeviceRequest = new DeviceRequest() { Platform = Quickblox.Sdk.GeneralDataModel.Models.Platform.windows_phone, Udid = Helpers.GetHardwareId() },
+                PushToken = new PushToken()
+                {
+                    ClientIdentificationSequence = pushChannel.Uri,
+                    Environment = Environment.development,
+                    
+                },
+                Name = NotificationChannelType.mpns
+            };
+            var createSubscriptionsResponse = await this.client.NotificationClient.CreateSubscriptionsAsync(createSubscriptionRequest);
             Assert.AreEqual(createSubscriptionsResponse.StatusCode, HttpStatusCode.Created);
         }
 

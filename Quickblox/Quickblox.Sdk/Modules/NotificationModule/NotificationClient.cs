@@ -29,60 +29,7 @@ namespace Quickblox.Sdk.Modules.NotificationModule
         {
             this.quickbloxClient = client;
         }
-
-        /// <summary>
-        /// Create push token (Token for iOS, Registration Id for Android, Uri for Windows Phone). Neеd to get the authorization token with the device parameters (platform, udid).
-        /// </summary>
-        /// <param name="сreatePushTokenRequest">The сreate push token request.</param>
-        /// <returns>Success HTTP Status Code 201</returns>
-        [Obsolete]
-        public async Task<HttpResponse<CreatePushTokenResponse>> CreatePushTokenAsync(CreatePushTokenRequest сreatePushTokenRequest)
-        {
-            
-            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var resultPushTokenResponse = await HttpService.PostAsync<CreatePushTokenResponse, CreatePushTokenRequest>(this.quickbloxClient.ApiEndPoint,
-                                                                                                        QuickbloxMethods.PushTokenMethod,
-                                                                                                        сreatePushTokenRequest,
-                                                                                                        headers);
-
-            return resultPushTokenResponse;
-        }
-
-        /// <summary>
-        /// Delete push token by identifier.
-        /// </summary>
-        /// <param name="pushTokenId">The push token identifier.</param>
-        /// <returns>Success HTTP Status Code 200</returns>
-        [Obsolete]
-        public async Task<HttpResponse> DeletePushTokenAsync(String pushTokenId)
-        {
-            
-            var methodUrl = String.Format(QuickbloxMethods.DeletePushTokenMethod, pushTokenId);
-            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var resultPushTokenResponse = await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, methodUrl, 
-                                                                                headers);
-
-            return resultPushTokenResponse;
-        }
-
-        /// <summary>
-        /// Сreate device based subscriptions. The authorization token should contain the device parameters. If the subscription is creating for the windows phone pushes make sure that Microsoft Push Notifications have a status "enabled" in the Web Administration Panel.
-        /// </summary>
-        /// <param name="type">Notification channel type.</param>
-        /// <returns>Success HTTP Status Code 201</returns>
-        [Obsolete]
-        public async Task<HttpResponse<CreateSubscriptionResponseItem[]>> CreateSubscriptionsAsync(NotificationChannelType type)
-        {
-            
-            var createSubscriptions = new CreateSubscriptionsRequest {Name = type};
-            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var resultSubscriptionResponse = await HttpService.PostAsync<CreateSubscriptionResponseItem[], CreateSubscriptionsRequest>(this.quickbloxClient.ApiEndPoint,
-                                                                                                        QuickbloxMethods.SubscriptionsMethod,
-                                                                                                        createSubscriptions,
-                                                                                                        headers);
-            return resultSubscriptionResponse;
-        }
-
+        
         /// <summary>
         /// Сreate device based subscriptions. The authorization token should contain the device parameters. If the subscription is creating for the windows phone pushes make sure that Microsoft Push Notifications have a status "enabled" in the Web Administration Panel.
         /// </summary>

@@ -90,8 +90,6 @@ namespace Quickblox.Sdk.Core
 
         public const string GetFilesMethod = "/blobs.json";
 
-        public const string GetTaggedFilesMethod = "/blobs/tagged.json";
-
         public const string UploadMethod = "{0}.json";
 
         public const string CompleteUploadByFileIdMethod = "/blobs/{0}/complete.json";
@@ -101,9 +99,7 @@ namespace Quickblox.Sdk.Core
         public const string DownloadFileByUIdMethod = "/blobs/{0}";
 
         public const string DownloadFileByIdMethod = "/blobs/{0}/download.json";
-
-        public const string GetFileByIdReadOnlyMethod = "/blobs/{0}/getblobobjectbyid";
-
+        
         public const string EditFileMethod = "/blobs/{0}";
 
         public const string DeleteFileMethod = "/blobs/{0}";
@@ -130,12 +126,12 @@ namespace Quickblox.Sdk.Core
 
         #region Location
 
-        public const string CreateGeoDataMethod = "/geodata.json";
-        public const string UpdateByIdGeoDataMethod = "/geodata/{0}.json";
-        public const string GetByIdGeoDataMethod = "/geodata/{0}.json";
-        public const string FindGeoDataMethod = "/geodata/find.json";
-        public const string DeleteByIdGeoDataMethod = "/geodata/{0}.json";
-        public const string DeleteGeoWithDaysDataMethod = "/geodata.json?days={0}";
+        //public const string CreateGeoDataMethod = "/geodata.json";
+        //public const string UpdateByIdGeoDataMethod = "/geodata/{0}.json";
+        //public const string GetByIdGeoDataMethod = "/geodata/{0}.json";
+        //public const string FindGeoDataMethod = "/geodata/find.json";
+        //public const string DeleteByIdGeoDataMethod = "/geodata/{0}.json";
+        //public const string DeleteGeoWithDaysDataMethod = "/geodata.json?days={0}";
 
         #endregion
     }

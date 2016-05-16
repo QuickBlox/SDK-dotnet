@@ -53,13 +53,6 @@ namespace Quickblox.Sdk.Test.Modules.ContentModule
         }
 
         [TestMethod]
-        public async Task GetTaggedFilesInfoSuccessTest()
-        {
-            var getFilesResponse = await this.client.ContentClient.GetTaggedFilesAsync();
-            Assert.AreEqual(getFilesResponse.StatusCode, HttpStatusCode.OK);
-        }
-
-        [TestMethod]
         public async Task FileUploadSuccessTest()
         {
             var settings = new CreateFileRequest()

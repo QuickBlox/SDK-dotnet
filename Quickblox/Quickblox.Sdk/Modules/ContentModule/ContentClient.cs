@@ -65,20 +65,6 @@ namespace Quickblox.Sdk.Modules.ContentModule
         }
 
         /// <summary>
-        /// Get list of tagged files for current user. Will be returned files which have the same tags as current user.
-        /// </summary>
-        /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<FilesPagedResponse>> GetTaggedFilesAsync()
-        {
-            
-            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var getTaggedFilesResponse = await HttpService.GetAsync<FilesPagedResponse>(this.quickbloxClient.ApiEndPoint,
-                                                                                         QuickbloxMethods.GetTaggedFilesMethod,
-                                                                                         headers);
-            return getTaggedFilesResponse;
-        }
-
-        /// <summary>
         /// Upload a file with the params of BlobObjectAccess info to make a possibility to create items with a content.
         /// </summary>
         /// <param name="uploadFileRequest">The upload file request.</param>
@@ -171,23 +157,6 @@ namespace Quickblox.Sdk.Modules.ContentModule
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             var downloadFileResponse = await HttpService.GetBytesAsync(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
             return downloadFileResponse;
-        }
-
-        /// <summary>
-        /// Get File by ID as BlobObjectAccess with read access. Then we can use info from params element for download file.
-        /// </summary>
-        /// <param name="fileId">The file identifier.</param>
-        /// <returns>Success HTTP Status Code 200</returns>
-        public async Task<HttpResponse<ReadOnlyAccessResponse>> GetReadOnlyFileInfoByIdAsync(Int32 fileId)
-        {
-            
-            var uriMethod = String.Format(QuickbloxMethods.GetFileByIdReadOnlyMethod, fileId);
-            var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
-            var boaResponse = await HttpService.PostAsync<ReadOnlyAccessResponse, GetBlobObjectByIdRequest>(this.quickbloxClient.ApiEndPoint,
-                                                                                            uriMethod,
-                                                                                            new GetBlobObjectByIdRequest(),
-                                                                                            headers);
-            return boaResponse;
         }
 
         /// <summary>

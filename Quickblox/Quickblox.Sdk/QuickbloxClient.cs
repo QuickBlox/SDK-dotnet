@@ -12,7 +12,7 @@ using Quickblox.Sdk.Modules.UsersModule;
 using System;
 using System.Threading.Tasks;
 using Quickblox.Sdk.Logger;
-using Quickblox.Sdk.Modules.LocationModule;
+//using Quickblox.Sdk.Modules.LocationModule;
 using Quickblox.Sdk.Modules.ChatXmppModule;
 using Quickblox.Sdk.Platform;
 
@@ -89,7 +89,7 @@ namespace Quickblox.Sdk
             this.ChatClient = new ChatClient(this);
             this.UsersClient = new UsersClient(this);
             this.NotificationClient = new NotificationClient(this);
-            this.LocationClient = new LocationClient(this);
+            //this.LocationClient = new LocationClient(this);
             this.ChatXmppClient = new ChatXmppClient(this);
             this.WebSyncClient = new WebSyncClient(this);
             this.ContentClient = new ContentClient(this);      
@@ -130,7 +130,7 @@ namespace Quickblox.Sdk
         /// <summary>
         /// Location module allows to work with user locations.
         /// </summary>
-        public LocationClient LocationClient { get; private set; }
+        //public LocationClient LocationClient { get; private set; }
 
         /// <summary>
         /// ChatXmpp module allows users to chat with each other in private or group dialogs via XMPP protocol.

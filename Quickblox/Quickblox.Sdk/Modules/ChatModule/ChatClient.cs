@@ -208,14 +208,14 @@ namespace Quickblox.Sdk.Modules.ChatModule
         /// <summary>
         /// Any user in the dialog’s occupant_ids is able to remove a Message from the dialog. The Message will only be removed for the current user - the Message will still be viewable and in the chat history for all other users in the dialog.
         /// </summary>
-        /// <param name="occupantIds"></param>
+        /// <param name="messageIds"></param>
         /// <returns></returns>
-        public async Task<HttpResponse<Object>> DeleteMessageAsync(String[] occupantIds)
+        public async Task<HttpResponse<Object>> DeleteMessageAsync(String[] messageIds)
         {
-            if (occupantIds == null)
+            if (messageIds == null)
                 throw new ArgumentNullException("occupantIds");
 
-            var uriMethod = String.Format(QuickbloxMethods.DeleteMessageMethod, String.Join(",", occupantIds));
+            var uriMethod = String.Format(QuickbloxMethods.DeleteMessageMethod, String.Join(",", messageIds));
             var headers = RequestHeadersBuilder.GetDefaultHeaders().GetHeaderWithQbToken(this.quickbloxClient.Token);
             return await HttpService.DeleteAsync<Object>(this.quickbloxClient.ApiEndPoint, uriMethod, headers);
         }
