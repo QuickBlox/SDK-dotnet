@@ -147,12 +147,17 @@
     <Content Include="Modules\ContentModule\Assets\1.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Quickblox.Sdk.Test_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Sockets.Plugin, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\rda.SocketsForPCL.1.2.2\lib\win8\Sockets.Plugin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sockets.Plugin.Abstractions, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\rda.SocketsForPCL.1.2.2\lib\win8\Sockets.Plugin.Abstractions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +167,9 @@
     <SDKReference Include="TestPlatform, Version=11.0">
       <Name>Microsoft Visual Studio Test Core</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\MessagesModule\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Quickblox.Sdk.Platform\Quickblox.Sdk.Platform.Abstractions\Quickblox.Sdk.Platform.Abstractions.csproj">
@@ -176,17 +184,6 @@
       <Project>{bab0816f-0e30-4ad0-b760-90f15156cda5}</Project>
       <Name>Quickblox.Sdk</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sockets\Sockets.Plugin.Abstractions\Sockets.Plugin.Abstractions.csproj">
-      <Project>{6edb0588-ffc5-4ef5-8a99-9e241d0f878d}</Project>
-      <Name>Sockets.Plugin.Abstractions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sockets\Sockets.Plugin.WindowsStore\Sockets.Plugin.WindowsStore.csproj">
-      <Project>{ed9a4ca1-c04c-457d-9a2e-7995ccf12356}</Project>
-      <Name>Sockets.Plugin.WindowsStore</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Modules\MessagesModule\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

@@ -21,17 +21,22 @@ using Quickblox.Sdk.Http;
 using Quickblox.Sdk.Modules.NotificationModule.Requests;
 using Quickblox.Sdk.Modules.NotificationModule.Models;
 using Quickblox.Sdk.Modules.ChatXmppModule;
+using Quickblox.Sdk.Platform;
 
 namespace Test.Shared
 {
     public class QbProviderWrapper
     {
+        static QbProviderWrapper()
+        {
+            QuickbloxPlatform.Init();
+        }
+
         QuickbloxClient client = new QuickbloxClient(AppConstant.ApplicationId, 
                                                     AppConstant.AuthorizationKey, 
                                                     AppConstant.AuthorizationSecret, 
                                                     AppConstant.ApiBaseEndpoint, 
-                                                    AppConstant.ChatEndpoint,
-                                                    new HMACSHA1Provider());
+                                                    AppConstant.ChatEndpoint);
 
         public int UserId { get; set; }
 

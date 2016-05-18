@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="ICryptographicProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

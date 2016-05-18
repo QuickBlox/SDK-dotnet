@@ -26,7 +26,7 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient((int)ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider(), new DebugLogger());
+            this.client = new QuickbloxClient((int)ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, logger:new DebugLogger());
             var sessionResponse = await this.client.AuthenticationClient.CreateSessionBaseAsync();
             client.Token = sessionResponse.Result.Session.Token;
         }
@@ -174,7 +174,7 @@ namespace Quickblox.Sdk.Test.Modules.UsersModule
         [TestMethod]
         public async Task RetrieveUsersUnauthorizedTest()
         {
-            QuickbloxClient client2 = new QuickbloxClient((int)ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
+            QuickbloxClient client2 = new QuickbloxClient((int)ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
             var response = await client2.UsersClient.RetrieveUsersAsync();
 
             Assert.IsTrue(response.StatusCode == HttpStatusCode.Unauthorized);

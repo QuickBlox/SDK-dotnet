@@ -25,7 +25,7 @@ namespace Quickblox.Sdk.Test.Modules.CustomObjectModule
         [TestInitialize]
         public async Task TestInitialize()
         {
-            this.client = new QuickbloxClient(ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint, new HmacSha1CryptographicProvider());
+            this.client = new QuickbloxClient(ApplicationId, AuthorizationKey, AuthorizationSecret, GlobalConstant.ApiBaseEndPoint, GlobalConstant.ChatEndpoint);
             var sessionResponse = await this.client.AuthenticationClient.CreateSessionWithLoginAsync(Login, Password);
 
             client.Token = sessionResponse.Result.Session.Token;

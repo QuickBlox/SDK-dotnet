@@ -129,12 +129,6 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Quickblox.Sdk\Quickblox.Sdk.csproj">
-      <Project>{bab0816f-0e30-4ad0-b760-90f15156cda5}</Project>
-      <Name>Quickblox.Sdk</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

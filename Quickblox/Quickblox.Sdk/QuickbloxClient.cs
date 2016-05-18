@@ -27,35 +27,7 @@ namespace Quickblox.Sdk
         private const string defaultChatEndpoint = "chat.quickblox.com";
 
         #region Ctor
-
-        ///// <summary>
-        ///// QuickbloxClient ctor.
-        ///// </summary>
-        ///// <param name="applicationId">Quickblox application ID</param>
-        ///// <param name="authKey">Auth Key</param>
-        ///// <param name="authSecret">Auth Secret</param>
-        ///// <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
-        //public QuickbloxClient(int applicationId, string authKey, string authSecret, ILogger logger = null)
-        //    : this(applicationId, authKey, authSecret, defaultApiEndpoint, defaultChatEndpoint, logger)
-        //{
-
-        //}
-
-        ///// <summary>
-        ///// QuickbloxClient ctor.
-        ///// </summary>
-        ///// <param name="applicationId">Quickblox application ID</param>
-        ///// <param name="authKey">Auth Key</param>
-        ///// <param name="authSecret">Auth Secret</param>
-        ///// <param name="apiEndpoint">API endpoint</param>
-        ///// <param name="chatEndpoint">XMPP chat endpoint</param>
-        ///// <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
-        public QuickbloxClient(int applicationId, string authKey, string authSecret, string apiEndpoint, string chatEndpoint, ILogger logger = null)
-            : this(applicationId, authKey, authSecret, apiEndpoint, chatEndpoint, new HmacSha1CryptographicProvider(), logger)
-        {
-
-        }
-
+                
         /// <summary>
         /// QuickbloxClient ctor.
         /// </summary>
@@ -66,13 +38,16 @@ namespace Quickblox.Sdk
         /// <param name="chatEndpoint">XMPP chat endpoint</param>
         /// <param name="cryptographicProvider">HMAC SHA1 Cryptographic Provider</param>
         /// <param name="logger">Logger instance. Allows to log API calls, xmpp messages etc.</param>
-        public QuickbloxClient(int applicationId, string authKey, string authSecret, string apiEndpoint, string chatEndpoint, ICryptographicProvider cryptographicProvider, ILogger logger = null)
+        public QuickbloxClient(int applicationId, string authKey, string authSecret, string apiEndpoint, string chatEndpoint, ICryptographicProvider cryptographicProvider = null, ILogger logger = null)
         {
             if (apiEndpoint == null) throw new ArgumentNullException(nameof(apiEndpoint));
             if (chatEndpoint == null) throw new ArgumentNullException(nameof(chatEndpoint));
             if (authKey == null) throw new ArgumentNullException(nameof(authKey));
             if (authSecret == null) throw new ArgumentNullException(nameof(authSecret));
-            if (cryptographicProvider == null) throw new ArgumentNullException(nameof(cryptographicProvider));
+            if (cryptographicProvider == null)
+            {
+                cryptographicProvider = Resolver.Resolve<ICryptographicProvider>();
+            }
 
             if (logger != null)
             {

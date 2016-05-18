@@ -40,7 +40,7 @@ namespace Xmpp.Core
         /// <summary>
         /// The TCP connection to the XMPP server.
         /// </summary>
-        private TcpSocketClient client;
+        private ITcpSocketClient client;
 
         /// <summary>
         /// The (network) stream used for sending and receiving XML data.

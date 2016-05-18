@@ -10,7 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)AppConstant.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)HMACSHA1Provider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QbProviderWrapper.cs" />
   </ItemGroup>
 </Project>

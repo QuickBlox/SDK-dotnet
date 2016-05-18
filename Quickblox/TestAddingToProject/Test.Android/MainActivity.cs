@@ -28,6 +28,9 @@ namespace Test.Android
             // and attach an event to it
             Button button = FindViewById<Button>(Resource.Id.MyButton);
 
+
+            var wbWrapper = new QbProviderWrapper();
+
             button.Click += delegate
             {
 
