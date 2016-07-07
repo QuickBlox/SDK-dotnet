@@ -386,17 +386,31 @@ namespace Xmpp.Im
         /// <exception cref="XmppException">An XMPP error occurred while negotiating the
         /// XML stream with the server, or resource binding failed, or the initialization
         /// of an XMPP extension failed.</exception>
-        public async Task Autenticate(string username, string password)
+        public async Task<Roster> Autenticate(string username, string password)
         {
             username.ThrowIfNull("username");
             password.ThrowIfNull("password");
-            await core.Authenticate(username, password);
-            // Establish a session (Refer to RFC 3921, Section 3. Session Establishment).
-            EstablishSession();
-            // Retrieve user's roster as recommended (Refer to RFC 3921, Section 7.3).
-            Roster roster = GetRoster();
-            // Send initial presence.
-            SendPresence(new Presence());
+
+            try
+            {
+                await core.Authenticate(username, password);
+                
+                // Establish a session (Refer to RFC 3921, Section 3. Session Establishment).
+                EstablishSession();
+                // Retrieve user's roster as recommended (Refer to RFC 3921, Section 7.3).
+                Roster roster = GetRoster();
+                // Send initial presence.
+                SendPresence(new Presence());
+
+                return roster;
+            }
+            catch (Exception e)
+            {
+                Error.Raise(core, new ErrorEventArgs(e));
+                //throw new IOException("Could not connect to the server", e);
+            }
+
+            return null;
         }
 
         /// <summary>

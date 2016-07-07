@@ -569,9 +569,9 @@ namespace Xmpp.Client
         /// <exception cref="XmppException">An XMPP error occurred while negotiating the
         /// XML stream with the server, or resource binding failed, or the initialization
         /// of an XMPP extension failed.</exception>
-        public async Task Connect(string resource = null)
+        public async Task<Roster> Connect(string resource = null)
         {
-            await im.Connect(resource);
+            return await im.Connect(resource);
         }
 
         /// <summary>
@@ -594,9 +594,9 @@ namespace Xmpp.Client
         /// <exception cref="XmppException">An XMPP error occurred while negotiating the
         /// XML stream with the server, or resource binding failed, or the initialization
         /// of an XMPP extension failed.</exception>
-        public async Task Authenticate(string username, string password)
+        public async Task<Roster> Authenticate(string username, string password)
         {
-            await im.Autenticate(username, password);
+            return await im.Autenticate(username, password);
         }
 
         /// <summary>

@@ -571,9 +571,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var roster = xmppClient.GetRoster();
             foreach (var item in roster)
             {
-                var subscriptionWrappedState = (SubscriptionState)Enum.Parse(typeof(SubscriptionState), item.SubscriptionState.ToString());
-                RosterItem wrapper = new RosterItem(item.Jid.Node, item.Name, subscriptionWrappedState, item.Pending, item.Groups);
-                this.Contacts.Add(wrapper);
+                this.Contacts.Add(item);
             }
         }
 
@@ -660,7 +658,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region Completed
 
-        public async Task Connect(int userId, string password)
+        public async Task<Roster> Connect(int userId, string password)
         {
             Contacts = new List<RosterItem>();
             Presences = new List<Jid>();
@@ -672,7 +670,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             xmppClient.Password = password;
 
             SubscribeEvents(xmppClient);
-            await xmppClient.Connect();
+            return await xmppClient.Connect();
         }
 
         public void Close()
