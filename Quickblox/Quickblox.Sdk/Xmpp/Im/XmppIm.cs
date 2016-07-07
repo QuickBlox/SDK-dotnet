@@ -339,7 +339,7 @@ namespace Xmpp.Im
                 }
                 catch (Exception e)
                 {
-                    throw new XmppException("Initialization of " + ext.Xep + " failed.", e);
+                    Error.Raise(core, new ErrorEventArgs(e));
                 }
             }
             try
@@ -359,8 +359,11 @@ namespace Xmpp.Im
             }
             catch (Exception e)
             {
-                throw new IOException("Could not connect to the server", e);
+                Error.Raise(core, new ErrorEventArgs(e));
+                //throw new IOException("Could not connect to the server", e);
             }
+
+            return null;
         }
 
         /// <summary>

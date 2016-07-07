@@ -479,33 +479,7 @@ namespace Xmpp.Core
                 client = new TcpSocketClient();
                 await client.ConnectAsync(Hostname, Port);
                 stream = client.GetStream();
-
-                //var string1 = "<iq type='result' id='reg1'>" +
-                //              "<query xmlns='jabber:iq:register'>" +
-                //              "<username/>" +
-                //              "<password/>" +
-                //              "</query>" +
-                //              "</iq>";
-
-                //var doc = XDocument.Parse(string1);
-                //foreach (var descendant in doc.Descendants())
-                //{
-                //    foreach (var xElement in descendant.Descendants())
-                //    {
-                //        Debug.WriteLine("Elem Name: " + xElement.Name);
-                //        Debug.WriteLine("Elem value: " + xElement.Value);
-                //        Debug.WriteLine("Elem ToString: " + xElement.ToString());
-
-                //        foreach (var xAttribute in xElement.Attributes())
-                //        {
-                //            Debug.WriteLine("Att Name: " + xAttribute.Name );
-                //            Debug.WriteLine("Att value: " + xAttribute.Value );
-                //            Debug.WriteLine("Att ToString: " + xAttribute.ToString() );
-                //        }
-                //    }
-                //}
-
-
+                
                 // Sets up the connection which includes TLS and possibly SASL negotiation.
                 SetupConnection(this.resource);
                 // We are connected.
@@ -516,7 +490,8 @@ namespace Xmpp.Core
             }
             catch (XmlException e)
             {
-                throw new XmppException("The XML stream could not be negotiated.", e);
+                this.Error.Raise(this, new ErrorEventArgs(e));
+                //throw new XmppException("The XML stream could not be negotiated.", e);
             }
         }
 
@@ -548,7 +523,10 @@ namespace Xmpp.Core
             username.ThrowIfNull("username");
             password.ThrowIfNull("password");
             if (Authenticated)
-                throw new XmppException("Authentication has already been performed.");
+            {
+                this.Error.Raise(this, new ErrorEventArgs(new XmppException("Authentication has already been performed.")));
+                return;
+            }
             // Unfortunately, SASL authentication does not follow the standard XMPP
             // IQ-semantics. At this stage it really is easier to simply perform a
             // reconnect.

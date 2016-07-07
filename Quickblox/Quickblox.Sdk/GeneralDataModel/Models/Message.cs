@@ -14,7 +14,6 @@ namespace Quickblox.Sdk.GeneralDataModel.Models
     {
         public Message()
         {
-            OccupantsIds = new List<int>();
             CurrentOccupantsIds = new List<int>();
             AddedOccupantsIds = new List<int>();
             DeletedOccupantsIds = new List<int>();
@@ -54,11 +53,7 @@ namespace Quickblox.Sdk.GeneralDataModel.Models
 
         [JsonProperty("room_name")]
         public string RoomName { get; set; }
-
-        [JsonProperty("occupants_ids")]
-        [JsonConverter(typeof(StringIntListConverter))]
-        public IList<int> OccupantsIds { get; set; }
-
+        
         [JsonProperty("current_occupant_ids")]
         [JsonConverter(typeof(StringIntListConverter))]
         public IList<int> CurrentOccupantsIds { get; set; }

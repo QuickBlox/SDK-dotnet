@@ -14,6 +14,7 @@ using Quickblox.Sdk.Modules.ChatModule.Models;
 using Xmpp.Im;
 using Xmpp;
 using Xmpp.Extensions;
+using System.Threading.Tasks;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
@@ -451,6 +452,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             result.To = to;
             result.MessageText = xmppXmppMessage.Body;
 
+            result.Id = xmppXmppMessage.Id;
             result.RecipientId = xmppXmppMessage.Type == Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(to) : GetQbUserIdFromJid(to);
             result.SenderId = xmppXmppMessage.Type == Xmpp.Im.MessageType.Groupchat ? GetQbUserIdFromGroupJid(from) : GetQbUserIdFromJid(from);
         }
@@ -477,7 +479,6 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
                 result.RoomPhoto = GetExtraParam(extraParams, ExtraParamsList.room_photo);
                 result.RoomName = GetExtraParam(extraParams, ExtraParamsList.room_name);
-                result.OccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.occupants_ids));
                 result.CurrentOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.current_occupant_ids));
                 result.AddedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.added_occupant_ids));
                 result.DeletedOccupantsIds = stringIntListConverter.ConvertToIntList(GetExtraParam(extraParams, ExtraParamsList.deleted_occupant_ids));
@@ -540,63 +541,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
                 }
             }
         }
-
-   //     private async void OnMessageReceivedCallback2(object sender, Xmpp.Im.MessageEventArgs messageEventArgs)
-   //     {
-   //         var receivedMessage = new Message();
-   //         receivedMessage.Id = messageEventArgs.Message.Id;
-   //         receivedMessage.From = messageEventArgs.Message.From.ToString();
-   //         receivedMessage.To = messageEventArgs.Message.To.ToString();
-   //         receivedMessage.MessageText = messageEventArgs.Message.Body;
-   //         //receivedMessage.Subject = messageEventArgs.Message.Subject;
-   //         receivedMessage.ChatDialogId = messageEventArgs.Message.Thread;
-   //         //receivedMessage.DateSent = messageEventArgs.Message.Timestamp.Ticks / 1000;
-   //         var extraParams = XElement.Parse(messageEventArgs.Message.ExtraParameters);
-
-			//var notificationType = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.notification_type));
-			//if (notificationType != null)
-			//{
-			//	int intValue;
-			//	if (int.TryParse(notificationType.Value, out intValue))
-			//	{
-			//		receivedMessage.NotificationType = (NotificationTypes)intValue;
-			//	}
-			//}
-
-   //         var dateSent = extraParams.Element(ExtraParams.GetXNameFor(ExtraParamsList.date_sent));
-   //         if (dateSent != null)
-   //         {
-   //             long longValue;
-
-   //             if (long.TryParse(dateSent.Value, out longValue))
-   //             {
-   //                 receivedMessage.DateSent = longValue;
-   //             }
-   //         }
-
-   //         receivedMessage.ExtraParameters = XElement.Parse(messageEventArgs.Message.ExtraParameters);
-
-   //         var wappedMessageType = (MessageType)Enum.Parse(typeof(MessageType), messageEventArgs.Message.Type.ToString());
-   //         //receivedMessage.MessageType = wappedMessageTyp;
-   //         //receivedMessage.XmlMessage = messageEventArgs.Message.ToString();
-
-   //         receivedMessage.SenderId = wappedMessageType == MessageType.Groupchat ? GetQbUserIdFromGroupJid(messageEventArgs.Message.From.ToString()) : 
-   //                                                                                GetQbUserIdFromJid(messageEventArgs.Message.From.ToString());
-
-   //         await LoggerHolder.Log(LogLevel.Debug, "XMPP: OnMessageReceived ====> " +
-   //                         " From: " + receivedMessage.SenderId +
-   //                         " To: " + receivedMessage.RecipientId +
-   //                         " Body: " + receivedMessage.MessageText +
-   //                         " DateSent " + receivedMessage.DateSent +
-   //                         " FullXmlMessage: " + messageEventArgs.Message.DataString);
-
-   //         var handler = MessageReceived;
-   //         if (handler != null)
-   //         {
-   //             handler.Invoke(this, new MessageEventArgs(new Jid(messageEventArgs.Jid.ToString()), receivedMessage, wappedMessageType));
-   //         }
-   //     }
-
+        
         #endregion
 
         #region Public methods
@@ -715,7 +660,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         #region Completed
 
-        public async void Connect(int userId, string password)
+        public async Task Connect(int userId, string password)
         {
             Contacts = new List<RosterItem>();
             Presences = new List<Jid>();
