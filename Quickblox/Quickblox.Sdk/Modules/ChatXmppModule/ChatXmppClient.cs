@@ -79,6 +79,24 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
         public List<Jid> Presences { get; private set; }
 
+        /// <summary>
+        /// Gets or sets a value that on\off debug message trace.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [debug stanzas]; otherwise, <c>false</c>.
+        /// </value>
+        public bool DebugStanzas
+        {
+            get
+            {
+                return xmppClient.DebugStanzas;
+            }
+            set
+            {
+                xmppClient.DebugStanzas = value;
+            }
+        }
+
         #endregion
 
         #region Events
@@ -553,16 +571,14 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             var jidString = BuildJid(userId, quickbloxClient.ApplicationId, quickbloxClient.ChatEndpoint);
             var jid = new Xmpp.Jid(jidString);
             var message = xmppClient.SendMessage(jid, messageId, body, subject, dialogId, extraParams, wrappedMessageType);
-
-            LoggerHolder.Log(LogLevel.Debug, "XMPP: SentMessage ====> " + message.DataString);
+            //LoggerHolder.Log(LogLevel.Debug, "XMPP: SentMessage ====> " + message.DataString);
         }
 
         public void SendMessage(string jid, string body, XElement extraParams = null, string dialogId = null, string subject = null, MessageType messageType = MessageType.Chat)
         {
             var messageId = MongoObjectIdGenerator.GetNewObjectIdString();
             var message = xmppClient.SendMessage(jid, messageId, body, subject, dialogId, extraParams, messageType);
-
-            LoggerHolder.Log(LogLevel.Debug, "XMPP: SentMessage ====> " + message.DataString);
+            //LoggerHolder.Log(LogLevel.Debug, "XMPP: SentMessage ====> " + message.DataString);
         }
 
         public void ReloadContacts()

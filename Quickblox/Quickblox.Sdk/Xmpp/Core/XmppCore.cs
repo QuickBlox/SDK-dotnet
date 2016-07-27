@@ -13,6 +13,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Sockets.Plugin;
 using Sockets.Plugin.Abstractions;
+using Quickblox.Sdk.Logger;
 
 namespace Xmpp.Core
 {
@@ -1260,7 +1261,8 @@ namespace Xmpp.Core
                 {
                     stream.Write(buf, 0, buf.Length);
                     //this.stream.Flush();
-                    if (debugStanzas) System.Diagnostics.Debug.WriteLine(xml);
+                    if (debugStanzas)
+                        LoggerHolder.Log(LogLevel.Debug, "XMPP: Send ====> " + xml); 
                 }
                 catch (IOException e)
                 {
@@ -1381,7 +1383,9 @@ namespace Xmpp.Core
                 try
                 {
                     stanza = stanzaQueue.Take(cancelDispatch.Token);
-                    if (debugStanzas) System.Diagnostics.Debug.WriteLine(stanza.ToString());
+                    if (debugStanzas)
+                        LoggerHolder.Log(LogLevel.Debug, "XMPP: DispatchEvents ====> " + stanza.ToString());
+
                     if (stanza is Iq)
                         Iq.Raise(this, new IqEventArgs(stanza as Iq));
                     else if (stanza is Message)

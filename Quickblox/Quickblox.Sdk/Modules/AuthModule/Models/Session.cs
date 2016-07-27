@@ -13,8 +13,8 @@ namespace Quickblox.Sdk.Modules.AuthModule.Models
         [JsonProperty("device_id")]
         public object DeviceId { get; set; }
 
-        [JsonProperty("id")]
-        public int Id { get; set; }
+        [JsonProperty("_id")]
+        public string Id { get; set; }
 
         [JsonProperty("nonce")]
         public int Nonce { get; set; }

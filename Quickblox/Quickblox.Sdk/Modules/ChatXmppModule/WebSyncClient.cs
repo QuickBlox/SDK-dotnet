@@ -4,15 +4,22 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters;
 using Xmpp.Im;
+using System.Collections.Generic;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule
 {
 	public class VideoChatMessage {
-		public string Guid { get; set; }
-		public int Caller { get; set; }
+        public string SessionId { get; set; }
+        public int Sender { get; set; }
 		public int Receiver {get; set;}
-		public SignalType Signal { get; set; }
+        public string Caller { get; set; }
+
+        public string Platform { get; set; }
+        public string UserInfo { get; set; }
+        public bool VideoCall { get; set; }
+        public SignalType Signal { get; set; }
 		public string Sdp {get; set;}
+        public Collection<string> OpponentsIds { get; set; }
 		public Collection<IceCandidate> IceCandidates {get; set;}
 	}
 
@@ -55,9 +62,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <param name="caller">The caller.</param>
         /// <param name="receiver">The receiver.</param>
         /// <returns></returns>
-		public CallExtraParameter Call(string sessionId, string sdp, string platform, int caller, int receiver, MessageType type = MessageType.Headline)
+		public CallExtraParameter Call(string sessionId, string sdp, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
-            var extraParameter = new CallExtraParameter(sessionId, sdp, platform, caller, receiver);
+            var extraParameter = new CallExtraParameter(sessionId, sdp, caller, opponentsIds, platform, isVideoCall, userInfo);
 			this.client.ChatXmppClient.SendMessage(receiver, "Call", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
@@ -80,11 +87,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <param name="platform">The platform.</param>
         /// <param name="caller">The caller.</param>
         /// <returns></returns>
-        public AcceptExtraParameter Accept(string sessionId, string sdp, string platform, int receiver)
+        public AcceptExtraParameter Accept(string sessionId, string sdp, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
-            var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
-            var extraParameter = new AcceptExtraParameter(sessionId, sdp, platform);
-			this.client.ChatXmppClient.SendMessage(receiver, "Accept", extraParameter.Build(), null, null, MessageType.Headline);
+            var extraParameter = new AcceptExtraParameter(sessionId, sdp, caller, opponentsIds, platform, isVideoCall, userInfo);
+            this.client.ChatXmppClient.SendMessage(receiver, "Accept", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
 
@@ -101,11 +107,10 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="caller">The caller.</param>
         /// <returns></returns>
-        public RejectExtraParameter Reject(string sessionId, int receiver)
+        public RejectExtraParameter Reject(string sessionId, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
-            var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
-            var extraParameter = new RejectExtraParameter(sessionId);
-			this.client.ChatXmppClient.SendMessage(receiver, "Reject", extraParameter.Build(), null, null, MessageType.Headline);
+            var extraParameter = new RejectExtraParameter(sessionId, caller, opponentsIds, platform, isVideoCall, userInfo);
+            this.client.ChatXmppClient.SendMessage(receiver, "Reject", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
 
@@ -123,11 +128,11 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <param name="sessionId">The session identifier.</param>
         /// <param name="caller">The caller.</param>
         /// <returns></returns>
-        public HangUpExtraParameter HangUp(string sessionId, int receiver)
+        public HangUpExtraParameter HangUp(string sessionId, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
-            var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
-            var extraParameter = new HangUpExtraParameter(sessionId);
-			this.client.ChatXmppClient.SendMessage(receiver, "HangUp", extraParameter.Build(), null, null, MessageType.Headline);
+            //var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
+            var extraParameter = new HangUpExtraParameter(sessionId, caller, opponentsIds, platform, isVideoCall, userInfo);
+            this.client.ChatXmppClient.SendMessage(receiver, "HangUp", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
 
@@ -157,14 +162,19 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <param name="iceCandidates">The ice candidates.</param>
         /// <param name="caller">The caller.</param>
         /// <returns></returns>
-        public IceCandidatesExtraParameter IceCandidates(string sessionId, int receiver, Collection<IceCandidate> iceCandidates)
+        public IceCandidatesExtraParameter IceCandidates(string sessionId, Collection<IceCandidate> iceCandidates, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
-            var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
-            var extraParameter = new IceCandidatesExtraParameter(sessionId, iceCandidates);
-			this.client.ChatXmppClient.SendMessage(receiver, "IceCandidates", extraParameter.Build(), null, null, MessageType.Headline);
+            //var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
+            var extraParameter = new IceCandidatesExtraParameter(sessionId, iceCandidates, caller, opponentsIds, platform, isVideoCall, userInfo);
+			this.client.ChatXmppClient.SendMessage(receiver, "IceCandidates", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
 
+        /// <summary>
+        /// Called when message received. Parse data and retun VideoChatMessage instance
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="MessageEventArgs"/> instance containing the event data.</param>
         private void OnMessageReceived(object sender, MessageEventArgs e)
         {
             if (e.MessageType == MessageType.Headline)
@@ -180,27 +190,52 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
 
 				var videoChatMessage = new VideoChatMessage ();
 
-				videoChatMessage.Caller = ChatXmppClient.GetQbUserIdFromJid(e.Message.From);
+				videoChatMessage.Sender = ChatXmppClient.GetQbUserIdFromJid(e.Message.From);
 				videoChatMessage.Receiver = ChatXmppClient.GetQbUserIdFromJid(e.Message.To);
 
 				var session = elements.Elements (XName.Get("sessionID", "jabber:client")).FirstOrDefault ();
-				videoChatMessage.Guid = session != null ? session.Value : null;
+				videoChatMessage.SessionId = session != null ? session.Value : null;
 				var sdp = elements.Elements (XName.Get("sdp", "jabber:client")).FirstOrDefault ();
 				videoChatMessage.Sdp = sdp != null ? sdp.Value : null;
 
-				var signalType =  elements.Elements (XName.Get("signalType", "jabber:client")).FirstOrDefault ();
-				videoChatMessage.Signal = (SignalType)Enum.Parse(typeof(SignalType), signalType.Value);
-					
-				var iceCandidates = elements.Elements (XName.Get("iceCandidates", "jabber:client")).FirstOrDefault ();
+                var callerID = elements.Elements(XName.Get("callerID", "jabber:client")).FirstOrDefault();
+                videoChatMessage.Caller = callerID != null ? callerID.Value : null;
+
+                var signalType =  elements.Elements (XName.Get("signalType", "jabber:client")).FirstOrDefault ();
+                videoChatMessage.Signal = (SignalType)Enum.Parse(typeof(SignalType), signalType.Value);
+
+                var userInfo = elements.Elements(XName.Get("userInfo", "jabber:client")).FirstOrDefault();
+                videoChatMessage.UserInfo = userInfo != null ? userInfo.Value : "";
+
+                var platform = elements.Elements(XName.Get("platform", "jabber:client")).FirstOrDefault();
+                videoChatMessage.Platform = platform != null ? platform.Value : "";
+
+                var videoCall = elements.Elements(XName.Get("callType", "jabber:client")).FirstOrDefault();
+                videoChatMessage.VideoCall = Int32.Parse(videoCall.Value) == 1 ? true : false;
+
+                var opponentsIds = elements.Elements(XName.Get("opponentsIDs", "jabber:client")).FirstOrDefault();
+                if (opponentsIds != null)
+                {
+                    var listIds = new Collection<string>();
+                    foreach (var idsElement in opponentsIds.Elements())
+                    {
+                        listIds.Add(idsElement.Value);
+                    }
+
+                    videoChatMessage.OpponentsIds = listIds;
+                }
+
+                var iceCandidates = elements.Elements (XName.Get("iceCandidates", "jabber:client")).FirstOrDefault ();
 				if (iceCandidates != null) {
 					var iceCandidatesList = new Collection<IceCandidate> ();
 					foreach (var iceCandidateElement in iceCandidates.Elements()) {
-						var candidateElement = iceCandidateElement.Elements(XName.Get("candidate", "jabber:client")).FirstOrDefault ();
+						var candidateElement = iceCandidateElement.Elements(
+                            XName.Get("candidate", "jabber:client")).FirstOrDefault ();
 						var sdpMLineIndexElement = iceCandidateElement.Elements(XName.Get("sdpMLineIndex", "jabber:client")).FirstOrDefault ();
-						//var sdpMidElement = iceCandidateElement.Elements(XName.Get("sdpMid", "jabber:client")).FirstOrDefault ();
+						var sdpMidElement = iceCandidateElement.Elements(XName.Get("sdpMid", "jabber:client")).FirstOrDefault ();
 						iceCandidatesList.Add (new IceCandidate () {
 							Candidate = candidateElement.Value,
-							//SdpMid = sdpMidElement.Value,
+							SdpMid = sdpMidElement.Value,
 							SdpMLineIndex = sdpMLineIndexElement.Value
 						});
 					} 

@@ -22,7 +22,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
         public XElement Build()
         {
             XDocument srcTree = new XDocument(
-                new XElement("extraParams",
+                new XElement(XName.Get("extraParams", "jabber:client"),
                     new XElement("save_to_history", IsSaveToHistory ? "1" : "0"),
                     new XElement("dialog_id", DialogId)
                 )

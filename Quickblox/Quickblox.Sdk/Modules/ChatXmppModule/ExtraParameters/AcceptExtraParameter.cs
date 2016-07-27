@@ -1,58 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
 {
     public class AcceptExtraParameter : IExtraParameter
     {
-        //private XDocument element;
-
         public string SessionId { get; private set; }
         public string Sdp { get; private set; }
         public string Platform { get; private set; }
+        public string UserInfo { get; private set; }
+        public string CallerId { get; private set; }
+        public List<string> ReceiversIds { get; private set; }
+        public bool VideoCall { get; private set; }
 
-        public AcceptExtraParameter(string sessionId, string sdp, string platform)
+        public AcceptExtraParameter(string sessionId, string sdp, string callerId, List<string> receiversIds, string platform, bool isVideoCall = true, string userInfo = null)
         {
             SessionId = sessionId;
             Sdp = sdp;
             Platform = platform;
-            //element = BuildAsXDocument();
+            CallerId = callerId;
+            ReceiversIds = receiversIds;
+            UserInfo = userInfo;
+            VideoCall = isVideoCall;
         }
 
         public XElement Build()
         {
-            XDocument srcTree = new XDocument(
-                new XElement("extraParams",
+            var extraParams = new XElement(XName.Get("extraParams", "jabber:client"),
                     new XElement("moduleIdentifier", "WebRTCVideoChat"),
                     new XElement("signalType", SignalType.accept),
                     new XElement("sessionID", SessionId),
-                    new XElement("callType", "1"),
+                    new XElement("callType", VideoCall ? "1" : "2"),
                     new XElement("sdp", Sdp),
-                    new XElement("platform", Platform)
-                )
-            );
+                    new XElement("callerID", CallerId),
+                    new XElement("platform", Platform),
+                    new XElement("userInfo", UserInfo)
+                    );
 
+            XElement opponentsIDs = new XElement("opponentsIDs");
+            foreach (var id in ReceiversIds)
+            {
+                opponentsIDs.Add(new XElement("opponentID", id));
+            }
+
+            extraParams.Add(opponentsIDs);
+
+            XDocument srcTree = new XDocument(extraParams);
             return srcTree.Root;
         }
-
-        //public XDocument BuildAsXDocument()
-        //{
-        //    XDocument srcTree = new XDocument(
-        //        new XElement("extraParams",
-        //            new XElement("moduleIdentifier", "WebRTCVideoChat"),
-        //            new XElement("signalType", SignalType.accept),
-        //            new XElement("sessionID", SessionId),
-        //            new XElement("callType", "1"),
-        //            new XElement("sdp", Sdp),
-        //            new XElement("platform", Platform)
-        //        )
-        //    );
-
-        //    return srcTree;
-        //}
     }
 }
