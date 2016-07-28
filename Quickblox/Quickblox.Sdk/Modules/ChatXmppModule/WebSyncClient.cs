@@ -64,8 +64,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <returns></returns>
 		public CallExtraParameter Call(string sessionId, string sdp, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
+            var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
             var extraParameter = new CallExtraParameter(sessionId, sdp, caller, opponentsIds, platform, isVideoCall, userInfo);
-			this.client.ChatXmppClient.SendMessage(receiver, "Call", extraParameter.Build(), null, null, type);
+			this.client.ChatXmppClient.SendMessage(jid, "Call", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
 
@@ -89,8 +90,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <returns></returns>
         public AcceptExtraParameter Accept(string sessionId, string sdp, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
+            var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
             var extraParameter = new AcceptExtraParameter(sessionId, sdp, caller, opponentsIds, platform, isVideoCall, userInfo);
-            this.client.ChatXmppClient.SendMessage(receiver, "Accept", extraParameter.Build(), null, null, type);
+            this.client.ChatXmppClient.SendMessage(jid, "Accept", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
 
@@ -109,8 +111,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <returns></returns>
         public RejectExtraParameter Reject(string sessionId, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
+            var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
             var extraParameter = new RejectExtraParameter(sessionId, caller, opponentsIds, platform, isVideoCall, userInfo);
-            this.client.ChatXmppClient.SendMessage(receiver, "Reject", extraParameter.Build(), null, null, type);
+            this.client.ChatXmppClient.SendMessage(jid, "Reject", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
 
@@ -130,9 +133,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <returns></returns>
         public HangUpExtraParameter HangUp(string sessionId, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
-            //var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
+            var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
             var extraParameter = new HangUpExtraParameter(sessionId, caller, opponentsIds, platform, isVideoCall, userInfo);
-            this.client.ChatXmppClient.SendMessage(receiver, "HangUp", extraParameter.Build(), null, null, type);
+            this.client.ChatXmppClient.SendMessage(jid, "HangUp", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
 
@@ -164,9 +167,9 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
         /// <returns></returns>
         public IceCandidatesExtraParameter IceCandidates(string sessionId, Collection<IceCandidate> iceCandidates, string caller, string receiver, List<string> opponentsIds, string platform, bool isVideoCall = true, MessageType type = MessageType.Headline, string userInfo = null)
         {
-            //var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
+            var jid = ChatXmppClient.BuildJid(receiver, client.ApplicationId, client.ChatEndpoint);
             var extraParameter = new IceCandidatesExtraParameter(sessionId, iceCandidates, caller, opponentsIds, platform, isVideoCall, userInfo);
-			this.client.ChatXmppClient.SendMessage(receiver, "IceCandidates", extraParameter.Build(), null, null, type);
+			this.client.ChatXmppClient.SendMessage(jid, "IceCandidates", extraParameter.Build(), null, null, type);
             return extraParameter;
         }
 

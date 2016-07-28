@@ -778,7 +778,19 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule
             return jid;
         }
 
+        public static string BuildJid(string userId, int appId, string chatEndpoint)
+        {
+            var jid = string.Format(JidPattern, userId, appId, chatEndpoint);
+            return jid;
+        }
+
         public static string BuildSmallJid(int userId, int appId)
+        {
+            var jid = string.Format(SmallJidPattern, userId, appId);
+            return jid;
+        }
+
+        public static string BuildSmallJid(string userId, int appId)
         {
             var jid = string.Format(SmallJidPattern, userId, appId);
             return jid;
