@@ -16,11 +16,11 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
     {
         private string CallXml = "<message to=\"15302139-92@chat.quickblox.com\" id=\"57988425fe038e4dfb005bc2\" type=\"headline\" from=\"15378008-92@chat.quickblox.com/1220770403-quickblox-237573\">" +
                                 "  <extraParams xmlns=\"jabber:client\">" +
-                                "    <moduleIdentifier>WebRTCVideoChat</moduleIdentifier>"+
-                                "    <signalType>call</signalType>"+
-                                "    <sessionID>d82b2214-d8bb-4319-bc94-43fef3922eef</sessionID>"+
-                                "    <callType>1</callType>"+
-                                "    <sdp>v=0"+
+                                "    <moduleIdentifier xmlns=\"\">WebRTCVideoChat</moduleIdentifier>"+
+                                "    <signalType xmlns=\"\">call</signalType>"+
+                                "    <sessionID xmlns=\"\">d82b2214-d8bb-4319-bc94-43fef3922eef</sessionID>"+
+                                "    <callType xmlns=\"\">1</callType>" +
+                                "    <sdp xmlns=\"\">v=0" +
                                 "    o=- 6050036565418973184 724069890 IN IP4 127.0.0.1"+
                                 "    s=IceLink"+
                                 "    t = 0 0"+
@@ -53,9 +53,9 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
                                 "    a = rtcp - fb:97 nack"+
                                 "    a = rtcp - fb:97 nack pli"+
                                 "    </sdp>"+
-                                "    <platform>android</platform>"+
-                                "    <callerID>15378008</callerID>"+
-                                "    <opponentsIDs>"+
+                                "    <platform xmlns=\"\">android</platform>" +
+                                "    <callerID xmlns=\"\">15378008</callerID>" +
+                                "    <opponentsIDs xmlns=\"\">" +
                                 "        <opponentID>15302139</opponentID>"+
                                 "        <opponentID>15302140</opponentID>" +
                                 "    </opponentsIDs>"+
@@ -90,6 +90,7 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
                                     "</message>";
 
 
+
         private string webRTCVideoChat = "WebRTCVideoChat";
 
         [TestMethod]
@@ -103,8 +104,8 @@ namespace Quickblox.Sdk.Test.Modules.MessagesModule
         [TestMethod]
         public void ParseCallXml ()
         {
-            var main = XElement.Parse(IceCandidateXml);
-            //var main = XElement.Parse(CallXml);
+            //var main = XElement.Parse(IceCandidateXml);
+            var main = XElement.Parse(CallXml);
             var elements = main.Elements(XName.Get("extraParams", "jabber:client")).FirstOrDefault();
             var element = elements.Elements(XName.Get("moduleIdentifier", "jabber:client")).FirstOrDefault();
             if (element == null || element.Value != webRTCVideoChat)

@@ -27,20 +27,20 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
         public XElement Build()
         {
             var extraParams = new XElement(XName.Get("extraParams", "jabber:client"),
-                    new XElement("moduleIdentifier", "WebRTCVideoChat"),
-                    new XElement("signalType", SignalType.accept),
-                    new XElement("sessionID", SessionId),
-                    new XElement("callType", VideoCall ? "1" : "2"),
-                    new XElement("sdp", Sdp),
-                    new XElement("callerID", CallerId),
-                    new XElement("platform", Platform),
-                    new XElement("userInfo", UserInfo)
+                    new XElement(XName.Get("moduleIdentifier", "jabber:client"), "WebRTCVideoChat"),
+                    new XElement(XName.Get("signalType", "jabber:client"), SignalType.accept),
+                    new XElement(XName.Get("sessionID", "jabber:client"), SessionId),
+                    new XElement(XName.Get("callType", "jabber:client"), VideoCall ? "1" : "2"),
+                    new XElement(XName.Get("sdp", "jabber:client"), Sdp),
+                    new XElement(XName.Get("callerID", "jabber:client"), CallerId),
+                    new XElement(XName.Get("platform", "jabber:client"), Platform),
+                    new XElement(XName.Get("userInfo", "jabber:client"), UserInfo)
                     );
 
-            XElement opponentsIDs = new XElement("opponentsIDs");
+            XElement opponentsIDs = new XElement(XName.Get("opponentsIDs", "jabber:client"));
             foreach (var id in ReceiversIds)
             {
-                opponentsIDs.Add(new XElement("opponentID", id));
+                opponentsIDs.Add(new XElement(XName.Get("opponentID", "jabber:client"), id));
             }
 
             extraParams.Add(opponentsIDs);

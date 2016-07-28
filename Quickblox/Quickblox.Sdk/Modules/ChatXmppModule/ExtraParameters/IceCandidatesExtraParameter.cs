@@ -28,30 +28,30 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
         public XElement Build()
         {
             var extraParams = new XElement(XName.Get("extraParams", "jabber:client"),
-                  new XElement("moduleIdentifier", "WebRTCVideoChat"),
-                   new XElement("signalType", SignalType.iceCandidates),
-                   new XElement("sessionID", SessionId),
-                   new XElement("callType", VideoCall ? "1" : "2"),
-                   new XElement("callerID", CallerId),
-                   new XElement("platform", Platform),
-                   new XElement("userInfo", UserInfo)
-                );
+                    new XElement(XName.Get("moduleIdentifier", "jabber:client"), "WebRTCVideoChat"),
+                    new XElement(XName.Get("signalType", "jabber:client"), SignalType.iceCandidates),
+                    new XElement(XName.Get("sessionID", "jabber:client"), SessionId),
+                    new XElement(XName.Get("callType", "jabber:client"), VideoCall ? "1" : "2"),
+                    new XElement(XName.Get("callerID", "jabber:client"), CallerId),
+                    new XElement(XName.Get("platform", "jabber:client"), Platform),
+                    new XElement(XName.Get("userInfo", "jabber:client"), UserInfo)
+                    );
 
-            XElement opponentsIDs = new XElement("opponentsIDs");
+            XElement opponentsIDs = new XElement(XName.Get("opponentsIDs", "jabber:client"));
             foreach (var id in ReceiversIds)
             {
-                opponentsIDs.Add(new XElement("opponentID", id));
+                opponentsIDs.Add(new XElement(XName.Get("opponentID", "jabber:client"), id));
             }
 
             extraParams.Add(opponentsIDs);
 
-            XElement iceCandidates = new XElement("iceCandidates");
+            XElement iceCandidates = new XElement("iceCandidates", "jabber:client");
                         foreach (var item in IceCandidates)
             {
-                iceCandidates.Add(new XElement("iceCandidate",
-                        new XElement("sdpMLineIndex", item.SdpMLineIndex),
-                        new XElement("sdpMid", item.SdpMid),
-                        new XElement("candidate", item.Candidate)));
+                iceCandidates.Add(new XElement(XName.Get("iceCandidate", "jabber:client"),
+                        new XElement(XName.Get("sdpMLineIndex", "jabber:client"), item.SdpMLineIndex),
+                        new XElement(XName.Get("sdpMid", "jabber:client"), item.SdpMid),
+                        new XElement(XName.Get("candidate", "jabber:client"), item.Candidate)));
             }
             extraParams.Add(iceCandidates);
 
