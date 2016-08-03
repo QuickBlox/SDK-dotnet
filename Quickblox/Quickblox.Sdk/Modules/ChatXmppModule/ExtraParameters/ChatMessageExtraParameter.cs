@@ -23,17 +23,17 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
         {
             XDocument srcTree = new XDocument(
                 new XElement(XName.Get("extraParams", "jabber:client"),
-                    new XElement("save_to_history", IsSaveToHistory ? "1" : "0"),
-                    new XElement("dialog_id", DialogId)
+				             new XElement(XName.Get("save_to_history", "jabber:client"), IsSaveToHistory ? "1" : "0"),
+				             new XElement(XName.Get("dialog_id", "jabber:client"), DialogId)
                 )
             );
 
             if (Attachment != null)
             {
-                var attachmentElement = new XElement("attachment");
-                attachmentElement.SetAttributeValue(XName.Get("id"), Attachment.Id);
-                attachmentElement.SetAttributeValue(XName.Get("type"), Attachment.Type.ToString());
-                var extraParams = srcTree.Descendants(XName.Get("extraParams")).First();
+				var attachmentElement = new XElement(XName.Get("attachment", "jabber:client"));
+                attachmentElement.SetAttributeValue(XName.Get("id", "jabber:client"), Attachment.Id);
+                attachmentElement.SetAttributeValue(XName.Get("type", "jabber:client"), Attachment.Type.ToString());
+                var extraParams = srcTree.Descendants(XName.Get("extraParams", "jabber:client")).First();
                 extraParams.Add(attachmentElement);
             }
 

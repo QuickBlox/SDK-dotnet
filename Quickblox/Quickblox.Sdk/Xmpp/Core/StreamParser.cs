@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
+using System.Text;
 
 namespace Xmpp.Core
 {
@@ -63,64 +64,62 @@ namespace Xmpp.Core
                 // Ignore restricted XML data (Refer to RFC 3920, 11.1 Restrictions).
                 IgnoreProcessingInstructions = true,
                 IgnoreComments = true,
-                IgnoreWhitespace = true
+				IgnoreWhitespace = true
             });
             // Read up to the opening stream tag.
             ReadRootElement();
         }
 
-        /// <summary>
-        /// Reads the next XML element from the input stream.
-        /// </summary>
-        /// <param name="expected">A list of element names, that are expected. If
-        /// provided, and the read element does not match any of the provided names,
-        /// an XmlException is thrown.</param>
-        /// <returns>The XML element read from the stream.</returns>
-        /// <exception cref="XmlException">The input stream contains invalid XML, or
-        /// the read element is not an XML node of type XElement, or the read element
-        /// is not a start element, or the read element is not one of the expected
-        /// elements.</exception>
-        /// <exception cref="IOException">An unrecoverable stream error condition
-        /// has been encountered and the server has closed the connection.</exception>
-        public XElement NextElement(params string[] expected)
-        {
-            // Advance reader to next node.
-            reader.Read();
-            if (reader.NodeType == XmlNodeType.EndElement && reader.Name ==
-                "stream:stream")
-                throw new IOException("The server has closed the XML stream.");
-            if (reader.NodeType != XmlNodeType.Element)
-                throw new XmlException("Unexpected node: '" + reader.Name +
-                    "' of type " + reader.NodeType);
-            if (!reader.IsStartElement())
-                throw new XmlException("Not a start element: " + reader.Name);
-            // We can't use the ReadOuterXml method of reader directly as it places
-            // the cursor on the next element which may result in a blocking read
-            // on the underlying network stream.
-            using (XmlReader inner = reader.ReadSubtree())
-            {
-                inner.Read();
-                string xml = inner.ReadOuterXml();
-                var doc = XDocument.Parse(xml);
-                //using (var sr = new StringReader(xml))
-                //using (var xtr = new XmlTextReader(sr))
-                //using (var xtr = XmlReader.Create(sr))
-                //  doc.Load(xtr);
-                XElement elem = (XElement)doc.FirstNode;
-                // Handle unrecoverable stream errors.
-                if (elem.Name.LocalName == "error")
-                {
-                    string condition = elem.FirstNode != null ?
-                        elem.FirstNode.Document.Root.Name.LocalName : "undefined";
-                    //throw new IOException("Unrecoverable stream error: " + condition);
-                    //This indicates a disconnection event
-                    throw new XmppDisconnectionException("Unrecoverable stream error: " + condition);
-                }
-                if (expected.Length > 0 && !expected.Contains(elem.Name.LocalName))
-                    throw new XmlException("Unexpected XML element: " + elem.Name);
-                return elem;
-            }
-        }
+		/// <summary>
+		/// Reads the next XML element from the input stream.
+		/// </summary>
+		/// <param name="expected">A list of element names, that are expected. If
+		/// provided, and the read element does not match any of the provided names,
+		/// an XmlException is thrown.</param>
+		/// <returns>The XML element read from the stream.</returns>
+		/// <exception cref="XmlException">The input stream contains invalid XML, or
+		/// the read element is not an XML node of type XElement, or the read element
+		/// is not a start element, or the read element is not one of the expected
+		/// elements.</exception>
+		/// <exception cref="IOException">An unrecoverable stream error condition
+		/// has been encountered and the server has closed the connection.</exception>
+		public XElement NextElement(params string[] expected)
+		{
+			// Advance reader to next node.
+			reader.Read();
+
+			if (reader.NodeType == XmlNodeType.EndElement && reader.Name ==
+				"stream:stream")
+				throw new IOException("The server has closed the XML stream.");
+			if (reader.NodeType != XmlNodeType.Element)
+				throw new XmlException("Unexpected node: '" + reader.Name +
+					"' of type " + reader.NodeType);
+			if (!reader.IsStartElement())
+				throw new XmlException("Not a start element: " + reader.Name);
+			// We can't use the ReadOuterXml method of reader directly as it places
+			// the cursor on the next element which may result in a blocking read
+			// on the underlying network stream.
+			using (XmlReader inner = reader.ReadSubtree())
+			{
+				inner.Read();
+				string xml = inner.ReadOuterXml();
+				var doc = XDocument.Parse(xml);
+				var elem = (XElement)doc.FirstNode;
+				// Handle unrecoverable stream errors.
+				if (elem.Name.LocalName == "error")
+				{
+					string condition = elem.FirstNode != null ?
+						elem.FirstNode.Document.Root.Name.LocalName : "undefined";
+					//throw new IOException("Unrecoverable stream error: " + condition);
+					//This indicates a disconnection event
+					throw new XmppDisconnectionException("Unrecoverable stream error: " + condition);
+				}
+				if (expected.Length > 0 && !expected.Contains(elem.Name.LocalName))
+					throw new XmlException("Unexpected XML element: " + elem.Name);
+
+				return elem;
+			}
+		}
 
         /// <summary>
         /// Closes the stream parser.

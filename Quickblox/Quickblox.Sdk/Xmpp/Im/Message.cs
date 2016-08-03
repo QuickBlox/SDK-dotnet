@@ -47,7 +47,7 @@ namespace Xmpp.Im
             get
             {
                 // Refer to XEP-0203.
-                var delay = element.Element(XName.Get("delay", "jabber:client"));
+                var delay = element.Element(XName.Get("delay"));
                 if (delay != null && delay.GetDefaultNamespace().NamespaceName == "urn:xmpp:delay")
                 {
                     DateTime result;
@@ -65,14 +65,14 @@ namespace Xmpp.Im
         {
             get
             {
-                if (element.Element(XName.Get("thread", "jabber:client")) != null)
-                    return element.Element(XName.Get("thread", "jabber:client")).Value;
+                if (element.Element(XName.Get("thread")) != null)
+                    return element.Element(XName.Get("thread")).Value;
                 return null;
             }
 
             set
             {
-                var e = element.Element(XName.Get("thread", "jabber:client"));
+                var e = element.Element(XName.Get("thread"));
                 if (e != null)
                 {
                     if (value == null)
@@ -83,7 +83,7 @@ namespace Xmpp.Im
                 else
                 {
                     if (value != null)
-                        element.Child(Xml.Element("thread", "jabber:client").Text(value));
+                        element.Child(Xml.Element("thread").Text(value));
                 }
             }
         }
@@ -156,11 +156,11 @@ namespace Xmpp.Im
         {
             get
             {
-                return GetBare("extraParams");
+                return GetBare("extraParams", "jabber:client");
             }
             set
             {
-                XElement bare = GetBare("extraParams");
+                XElement bare = GetBare("extraParams", "jabber:client");
                 if (bare != null)
                 {
                     if (value == null)
@@ -179,6 +179,8 @@ namespace Xmpp.Im
                 }
             }
         }
+
+
 
         /// <summary>
         /// A dictionary of alternate forms of the Message subjects. The keys of the
@@ -226,6 +228,19 @@ namespace Xmpp.Im
             Body = body;
             Subject = subject;
             Thread = thread;
+
+			//var el = new XElement(XName.Get("temp123"),
+			//			new XElement(XName.Get("opponentID"), 12312321),//,
+			//			new XElement(XName.Get("temps"),
+			//						 new XElement(XName.Get("temp"), 2343242),
+			//					 new XElement(XName.Get("temp"), 2342342),
+			//								 new XElement(XName.Get("temps2"),
+			//									 new XElement(XName.Get("temp2"), 2343242),
+			//								 new XElement(XName.Get("temp2"), 2342342)
+
+			//                                             )));
+
+			//element.Child(el);
         }
 
         ///// <summary>
@@ -307,9 +322,9 @@ namespace Xmpp.Im
         /// </summary>
         /// <param name="tag">The tag name of the element to retrieve.</param>
         /// <returns>The located element or null if no such element exists.</returns>
-        private XElement GetBare(string tag)
+        private XElement GetBare(string tag, string namespaceValue = "")
         {
-            foreach (XElement e in element.Descendants(XName.Get(tag, "jabber:client")))
+            foreach (XElement e in element.Descendants(XName.Get(tag, namespaceValue)))
             {
                 string k = e.GetAttribute(XName.Get("lang", XNamespace.Xml.NamespaceName));
                 if (String.IsNullOrEmpty(k))

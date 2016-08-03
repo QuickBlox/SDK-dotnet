@@ -1259,7 +1259,7 @@ namespace Xmpp.Core
                 //If we have an IOexception immediatelly we make a disconnection, is it correct?
                 try
                 {
-                    stream.Write(buf, 0, buf.Length);
+					stream.Write(buf, 0, buf.Length);
                     //this.stream.Flush();
                     if (debugStanzas)
                         LoggerHolder.Log(LogLevel.Debug, "XMPP: Send ====> " + xml); 
