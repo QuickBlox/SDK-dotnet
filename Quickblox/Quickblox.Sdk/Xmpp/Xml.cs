@@ -167,44 +167,51 @@ namespace Xmpp
         public static string ToXmlString(this XElement e, bool xmlDeclaration = false,
             bool leaveOpen = false)
         {
-            // Can't use e.OuterXml because it "messes up" namespaces for elements with
-            // a prefix, i.e. stream:stream (What it does is probably correct, but just
-            // not what we need for XMPP).
-            //StringBuilder b = new StringBuilder("<" + e.Name.LocalName);
-            //if (!String.IsNullOrEmpty(e.GetDefaultNamespace().NamespaceName))
-            //    b.Append(" xmlns='" + e.GetDefaultNamespace().NamespaceName + "'");
-            //foreach (XAttribute a in e.Attributes())
-            //{
-            //    if (a.Name.LocalName == "xmlns")
-            //        continue;
-            //    if (a.Value != null)
-            //        b.Append(" " + a.Name.LocalName + "='" + a.Value.ToString()
-            //            + "'");
-            //}
-            //if (!e.Descendants().Any())
-            //    b.Append("/>");
-            //else
-            //{
-            //    b.Append(">");
-            //    foreach (var child in e.Nodes())
-            //    {
-            //        if (child is XElement)
-            //            b.Append(((XElement)child).ToXmlString());
-            //        else if (child is XText)
-            //            b.Append(((XText)child).Value);
-            //    }
-            //    b.Append("</" + e.Name.LocalName + ">");
-            //}
+			//Can't use e.OuterXml because it "messes up" namespaces for elements with
+			//a prefix, i.e. stream:stream (What it does is probably correct, but just
+			//not what we need for XMPP).
+			//StringBuilder b = null;
+			//var attNamesapce = e.Attributes().FirstOrDefault(att => att.Value == e.Name.NamespaceName);
 
+			//if (attNamesapce != null)
+			//	b = new StringBuilder("<" + attNamesapce.Name.LocalName + ":" + e.Name.LocalName);
+			//else
+			//	b = new StringBuilder("<" + e.Name.LocalName);
+   //         if (!String.IsNullOrEmpty(e.GetDefaultNamespace().NamespaceName))
+   //             b.Append(" xmlns='" + e.GetDefaultNamespace().NamespaceName + "'");
+   //         foreach (XAttribute a in e.Attributes())
+   //         {
+   //             if (a.Name.LocalName == "xmlns")
+   //                 continue;
+   //             if (a.Value != null)
+   //                 b.Append(" " + a.Name.LocalName + "='" + a.Value
+   //                     + "'");
+   //         }
+			//if (!e.HasElements)
+   //             b.Append("/>");
+   //         else
+   //         {
+   //             b.Append(">");
+   //             foreach (var child in e.Nodes())
+   //             {
+   //                 if (child is XElement)
+   //                     b.Append(((XElement)child).ToXmlString());
+   //                 else if (child is XText)
+   //                     b.Append(((XText)child).Value);
+   //             }
+   //             b.Append("</" + e.Name.LocalName + ">");
+   //         }
 
-            //string xml = b.ToString();
-            string xml = e.ToString();
+   //         string xml = b.ToString();
+
+			string xml = Regex.Replace(e.ToString(), ">\\s*<", "><"); 
             if (xmlDeclaration)
                 xml = "<?xml version='1.0' encoding='UTF-8'?>" + xml;
             if (leaveOpen)
             {
-                //var returnResult = Regex.Replace(xml, "/>$", ">");
                 var returnResult = Regex.Replace(xml, @"\<\/.+\>", "");
+
+				Debug.WriteLine(returnResult);
                 return returnResult;
             }
             return xml;
