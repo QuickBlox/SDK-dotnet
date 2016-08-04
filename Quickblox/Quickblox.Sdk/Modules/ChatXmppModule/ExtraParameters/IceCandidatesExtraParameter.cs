@@ -45,7 +45,7 @@ namespace Quickblox.Sdk.Modules.ChatXmppModule.ExtraParameters
 
             extraParams.Add(opponentsIDs);
 
-            XElement iceCandidates = new XElement("iceCandidates", "jabber:client");
+            XElement iceCandidates = new XElement(XName.Get("iceCandidates", "jabber:client"));
                         foreach (var item in IceCandidates)
             {
                 iceCandidates.Add(new XElement(XName.Get("iceCandidate", "jabber:client"),
